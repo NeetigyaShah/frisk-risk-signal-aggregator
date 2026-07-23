@@ -1,0 +1,9 @@
+pandas>=2.0
+numpy>=1.26
+Faker>=25.0
+pydantic>=2.6
+instructor>=1.5
+anthropic>=0.40
+streamlit>=1.36
+pytest>=8.0
+python-dotenv>=1.0
