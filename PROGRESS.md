@@ -4,22 +4,30 @@
 **Overview:** see `CLAUDE.md`. **Design:** `docs/DESIGN.md`. **Research:** `docs/research/RESEARCH_BRIEF.md`.
 
 ## Current phase
-**Phase 0 — foundations** (persistence infra + research brief saved). Next: Phase 1 spine.
+**Phase 2 — leaves** (Streamlit UI · nlquery · README/deck). Spine complete + tested.
 
 ## Status board
 - [x] Brainstorm + agreed design
 - [x] Deep research brief (ultracode Workflow) → `docs/research/RESEARCH_BRIEF.md`
 - [x] Approved plan (`~/.claude/plans/ok-do-so-as-shimmering-pizza.md`)
-- [~] Phase 0: persistence infra (CLAUDE.md, PROGRESS.md, DESIGN.md, bugs/, requirements.txt)
-- [ ] Phase 1 spine: `config.py` → `models.py` → `data/generate.py` → `rules.py` → `llm.py` → `engine.py` + `audit.py`
-- [ ] Phase 1: golden tests
-- [ ] Phase 2 leaves: Streamlit UI · nlquery · README + 5-slide deck
+- [x] Phase 0: persistence infra (CLAUDE.md, PROGRESS.md, DESIGN.md, bugs/, requirements.txt)
+- [x] Phase 1 spine: `config.py` → `models.py` → `data/generate.py` → `rules.py` → `llm.py` → `engine.py` + `audit.py`
+- [x] Phase 1: golden tests (12 pass)
+- [~] Phase 2 leaves: Streamlit UI · nlquery · README + 5-slide deck
 - [ ] Phase 3: integrate, verify on all 20, record ≤3-min demo
 
+## Verified so far
+- Generator deterministic; 20 dossiers; bands aligned to expectations.
+- Rules drivers sum to score; overrides force HIGH/ESCALATE.
+- Engine dispositions: 5 AUTO_CLEAR / 9 REVIEW / 6 ESCALATE (offline sim path).
+- Never-fails: no-key + raising-client both fall back to a valid finding.
+- Kill-switch and missing-data never auto-clear.
+
 ## Next actions
-1. Finish Phase 0 (this: DESIGN.md, bugs/BUGS.md, requirements.txt).
-2. Phase 1 spine, sequential (shared schema). Build `config.py` + `models.py` first.
-3. After each module: run its check, update this file.
+1. Build `src/nlquery.py` (NL → whitelisted filter spec).
+2. Build `src/app/` Streamlit UI (Queue / Case detail / Audit).
+3. README + 5-slide deck (parallel subagent).
+4. Phase 3: e2e verify + demo.
 
 ## Key design decisions (see DESIGN.md / RESEARCH_BRIEF.md for full)
 - Multi-source dossier per person (5 data families), not per-transaction-row.
@@ -37,3 +45,5 @@
 - 2026-07-24: Ultracode research Workflow (6 agents + synthesis) completed; brief saved.
 - 2026-07-24: Plan approved; task list created (#1–#11).
 - 2026-07-24: Phase 0 started — RESEARCH_BRIEF.md, CLAUDE.md, PROGRESS.md written.
+- 2026-07-24: Phase 1 spine built + calibrated (config, models, generate, rules, llm, engine, audit).
+- 2026-07-24: 12 golden tests pass. Phase 1 complete. Starting Phase 2.
