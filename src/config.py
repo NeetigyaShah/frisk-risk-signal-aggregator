@@ -63,6 +63,10 @@ CONFIG = {
 
     # --- LLM cross-check ---
     "llm": {
+        # mode: "auto" -> real Claude if ANTHROPIC_API_KEY set, else deterministic simulated
+        #       second opinion (so the demo shows confidence + auto-clear offline);
+        #       "off" -> pure rules-only (degraded, never auto-clears).
+        "mode": "auto",
         "model": "claude-haiku-4-5-20251001",
         "temperature": 0,
         "max_retries": 3,
