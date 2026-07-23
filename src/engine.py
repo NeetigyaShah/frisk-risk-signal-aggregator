@@ -40,6 +40,9 @@ class Decision:
     rationale: str        # LLM (or rules-only) rationale
     llm_score: int
     fingerprint: str
+    country: str = ""
+    pep: bool = False
+    occupation: str = ""
 
 
 def _fingerprint(d: Dossier) -> str:
@@ -109,6 +112,8 @@ def assess(d: Dossier, actor: str | None = None, persist: bool = True) -> Decisi
         engine_path=meta["path"], flags=sorted(rr.flags), drivers=rr.drivers,
         findings=[asdict(f) for f in rr.findings], rationale=lf.rationale,
         llm_score=lf.score, fingerprint=fp,
+        country=d.profile.get("country", ""), pep=bool(d.profile.get("pep")),
+        occupation=d.kyc.get("occupation", ""),
     )
 
 
