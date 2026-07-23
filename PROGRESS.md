@@ -4,7 +4,8 @@
 **Overview:** see `CLAUDE.md`. **Design:** `docs/DESIGN.md`. **Research:** `docs/research/RESEARCH_BRIEF.md`.
 
 ## Current phase
-**Phase 2 — leaves** (Streamlit UI · nlquery · README/deck). Spine complete + tested.
+**COMPLETE** — all phases done and verified. Remaining human step: record the ≤3-min demo
+(script in `docs/DEMO_SCRIPT.md`) and submit.
 
 ## Status board
 - [x] Brainstorm + agreed design
@@ -13,8 +14,9 @@
 - [x] Phase 0: persistence infra (CLAUDE.md, PROGRESS.md, DESIGN.md, bugs/, requirements.txt)
 - [x] Phase 1 spine: `config.py` → `models.py` → `data/generate.py` → `rules.py` → `llm.py` → `engine.py` + `audit.py`
 - [x] Phase 1: golden tests (12 pass)
-- [~] Phase 2 leaves: Streamlit UI · nlquery · README + 5-slide deck
-- [ ] Phase 3: integrate, verify on all 20, record ≤3-min demo
+- [x] Phase 2 leaves: Streamlit UI (verified in-browser) · nlquery · README + 5-slide deck (deck.pptx)
+- [x] Phase 3: e2e verified (generator, tests, engine, self-checks, UI screenshots)
+- [ ] Human: record ≤3-min demo (see `docs/DEMO_SCRIPT.md`), submit deck + README + demo
 
 ## Verified so far
 - Generator deterministic; 20 dossiers; bands aligned to expectations.
@@ -47,3 +49,5 @@
 - 2026-07-24: Phase 0 started — RESEARCH_BRIEF.md, CLAUDE.md, PROGRESS.md written.
 - 2026-07-24: Phase 1 spine built + calibrated (config, models, generate, rules, llm, engine, audit).
 - 2026-07-24: 12 golden tests pass. Phase 1 complete. Starting Phase 2.
+- 2026-07-24: Phase 2 — nlquery (safe whitelisted filter), Streamlit UI (Queue/Case/Audit) verified in-browser, README + 5-slide deck (deck.pptx) via subagent.
+- 2026-07-24: Phase 3 — full e2e verification green (5/9/6 dispositions); screenshots + DEMO_SCRIPT.md. BUILD COMPLETE.

@@ -36,6 +36,10 @@ with additive-driver explainability and an append-only audit trail.
 | `src/nlquery.py` | NL → whitelisted Pydantic filter spec → pandas mask (stretch). |
 | `src/app/` | Streamlit UI (Queue / Case detail / Audit). |
 | `tests/` | Golden tests (one per typology + override + fallback + driver-sum). |
+| `README.md` | One-page submission README (setup, approach, worked example). |
+| `docs/deck/SLIDES.md` · `deck.pptx` | 5-slide submission deck (+ `build_pptx.py` renderer). |
+| `docs/DEMO_SCRIPT.md` | 3-minute demo recording script. |
+| `docs/screenshots/` | UI screenshots (queue, case, audit). |
 | `~/.claude/plans/ok-do-so-as-shimmering-pizza.md` | The approved implementation plan. |
 
 ## Working rules (STRICT — persistence behaviour)
