@@ -1,0 +1,5661 @@
+[
+  {
+    "customer_id": "CUST_000",
+    "kyc": {
+      "name": "William Jennings",
+      "dob": "1974-04-10",
+      "nationality": "GB",
+      "occupation": "teacher",
+      "id_doc": "P79656044",
+      "onboarded": "2025-05-01",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 449
+    },
+    "transactions": [
+      {
+        "id": "CUST_000-T000",
+        "date": "2026-07-21",
+        "amount": "4264.72",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_000-T001",
+        "date": "2026-06-21",
+        "amount": "4237.6",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_000-T002",
+        "date": "2026-05-22",
+        "amount": "4136.16",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_000-T003",
+        "date": "2026-04-22",
+        "amount": "4284.4",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_000-T004",
+        "date": "2026-03-23",
+        "amount": "4248.33",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_000-T005",
+        "date": "2026-02-21",
+        "amount": "4252.52",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_000-T006",
+        "date": "2026-07-19",
+        "amount": "702.49",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_000-T007",
+        "date": "2026-06-19",
+        "amount": "960.31",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_000-T008",
+        "date": "2026-05-20",
+        "amount": "896.64",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_000-T009",
+        "date": "2026-04-20",
+        "amount": "1341.41",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_000-T010",
+        "date": "2026-03-21",
+        "amount": "1115.09",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_000-T011",
+        "date": "2026-02-19",
+        "amount": "1258.21",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_000-T012",
+        "date": "2026-07-07",
+        "amount": "13.91",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wilson Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T013",
+        "date": "2026-04-15",
+        "amount": "60.51",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Davies PLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T014",
+        "date": "2026-06-04",
+        "amount": "25.84",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wright Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T015",
+        "date": "2026-04-01",
+        "amount": "17.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Green and Sons",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T016",
+        "date": "2026-07-11",
+        "amount": "26.48",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Foster, Moore and Edwards",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T017",
+        "date": "2026-01-31",
+        "amount": "21.27",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Kaur, Quinn and Wright",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T018",
+        "date": "2026-03-09",
+        "amount": "45.87",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Reed and Sons",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T019",
+        "date": "2026-06-19",
+        "amount": "40.14",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Oliver, White and Stevens",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T020",
+        "date": "2026-04-17",
+        "amount": "42.29",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Warner-Palmer",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T021",
+        "date": "2026-06-26",
+        "amount": "166.22",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Baker-Butler",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T022",
+        "date": "2026-05-19",
+        "amount": "19.89",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Elliott PLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T023",
+        "date": "2026-01-31",
+        "amount": "15.63",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Simpson Group",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_000-T024",
+        "date": "2026-07-10",
+        "amount": "73.93",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fisher Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "LOW",
+      "severity": "low",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_001",
+    "kyc": {
+      "name": "Jeremy Mellor",
+      "dob": "1960-04-16",
+      "nationality": "GB",
+      "occupation": "nurse",
+      "id_doc": "P51664651",
+      "onboarded": "2022-06-01",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 1514
+    },
+    "transactions": [
+      {
+        "id": "CUST_001-T000",
+        "date": "2026-07-21",
+        "amount": "4275.04",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_001-T001",
+        "date": "2026-06-21",
+        "amount": "4351.61",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_001-T002",
+        "date": "2026-05-22",
+        "amount": "4311.39",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_001-T003",
+        "date": "2026-04-22",
+        "amount": "4379.77",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_001-T004",
+        "date": "2026-03-23",
+        "amount": "4356.88",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_001-T005",
+        "date": "2026-02-21",
+        "amount": "4289.82",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_001-T006",
+        "date": "2026-07-19",
+        "amount": "1265.81",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_001-T007",
+        "date": "2026-06-19",
+        "amount": "1243.81",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_001-T008",
+        "date": "2026-05-20",
+        "amount": "909.98",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_001-T009",
+        "date": "2026-04-20",
+        "amount": "830.66",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_001-T010",
+        "date": "2026-03-21",
+        "amount": "1146.0",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_001-T011",
+        "date": "2026-02-19",
+        "amount": "711.8",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_001-T012",
+        "date": "2026-06-30",
+        "amount": "37.76",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Adams LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T013",
+        "date": "2026-03-06",
+        "amount": "9.34",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Davis Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T014",
+        "date": "2026-03-26",
+        "amount": "23.2",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "White-Woods",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T015",
+        "date": "2026-04-15",
+        "amount": "17.97",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Marsden-Evans",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T016",
+        "date": "2026-05-02",
+        "amount": "24.04",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Phillips, Cross and Miah",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T017",
+        "date": "2026-06-10",
+        "amount": "14.99",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Thomson, Wilkinson and Smith",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T018",
+        "date": "2026-07-03",
+        "amount": "65.02",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Lamb-Scott",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T019",
+        "date": "2026-02-20",
+        "amount": "22.92",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Holmes, Lloyd and Duncan",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T020",
+        "date": "2026-04-13",
+        "amount": "34.13",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wilson Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_001-T021",
+        "date": "2026-04-13",
+        "amount": "52.93",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Alexander-Collins",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "LOW",
+      "severity": "low",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_002",
+    "kyc": {
+      "name": "Charles Kelly",
+      "dob": "1989-07-13",
+      "nationality": "IE",
+      "occupation": "software engineer",
+      "id_doc": "P81542135",
+      "onboarded": "2021-10-08",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "IE",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 1750
+    },
+    "transactions": [
+      {
+        "id": "CUST_002-T000",
+        "date": "2026-07-21",
+        "amount": "2891.28",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_002-T001",
+        "date": "2026-06-21",
+        "amount": "2865.52",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_002-T002",
+        "date": "2026-05-22",
+        "amount": "2888.01",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_002-T003",
+        "date": "2026-04-22",
+        "amount": "2939.59",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_002-T004",
+        "date": "2026-03-23",
+        "amount": "2867.77",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_002-T005",
+        "date": "2026-02-21",
+        "amount": "2847.4",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_002-T006",
+        "date": "2026-07-19",
+        "amount": "825.11",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_002-T007",
+        "date": "2026-06-19",
+        "amount": "834.88",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_002-T008",
+        "date": "2026-05-20",
+        "amount": "1129.53",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_002-T009",
+        "date": "2026-04-20",
+        "amount": "1045.63",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_002-T010",
+        "date": "2026-03-21",
+        "amount": "1227.12",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_002-T011",
+        "date": "2026-02-19",
+        "amount": "1131.45",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_002-T012",
+        "date": "2026-05-30",
+        "amount": "17.65",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Young-Graham",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T013",
+        "date": "2026-05-25",
+        "amount": "22.08",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Pritchard and Sons",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T014",
+        "date": "2026-07-19",
+        "amount": "11.51",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Moore, Smith and Jackson",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T015",
+        "date": "2026-03-21",
+        "amount": "20.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Matthews, Lloyd and Turner",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T016",
+        "date": "2026-05-02",
+        "amount": "30.27",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hughes, Davey and Taylor",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T017",
+        "date": "2026-02-06",
+        "amount": "42.83",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Johnson Ltd",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T018",
+        "date": "2026-06-26",
+        "amount": "51.02",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Anderson-Cooper",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T019",
+        "date": "2026-06-24",
+        "amount": "21.36",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Turner, Hill and Coates",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T020",
+        "date": "2026-05-16",
+        "amount": "28.11",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Davies Inc",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T021",
+        "date": "2026-04-06",
+        "amount": "9.42",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Young, Myers and Read",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T022",
+        "date": "2026-05-20",
+        "amount": "10.4",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Griffiths-Williams",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T023",
+        "date": "2026-05-24",
+        "amount": "41.26",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Harper-Atkinson",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_002-T024",
+        "date": "2026-02-01",
+        "amount": "14.52",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Smith, Knight and Carpenter",
+        "counterparty_country": "IE",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "LOW",
+      "severity": "low",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_003",
+    "kyc": {
+      "name": "Aimee Burns",
+      "dob": "1999-01-15",
+      "nationality": "GB",
+      "occupation": "accountant",
+      "id_doc": "P33928296",
+      "onboarded": "2022-07-05",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 1480
+    },
+    "transactions": [
+      {
+        "id": "CUST_003-T000",
+        "date": "2026-07-21",
+        "amount": "5967.16",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_003-T001",
+        "date": "2026-06-21",
+        "amount": "5952.56",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_003-T002",
+        "date": "2026-05-22",
+        "amount": "5889.41",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_003-T003",
+        "date": "2026-04-22",
+        "amount": "5847.6",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_003-T004",
+        "date": "2026-03-23",
+        "amount": "5806.09",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_003-T005",
+        "date": "2026-02-21",
+        "amount": "5996.4",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_003-T006",
+        "date": "2026-07-19",
+        "amount": "964.62",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_003-T007",
+        "date": "2026-06-19",
+        "amount": "761.89",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_003-T008",
+        "date": "2026-05-20",
+        "amount": "844.77",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_003-T009",
+        "date": "2026-04-20",
+        "amount": "1063.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_003-T010",
+        "date": "2026-03-21",
+        "amount": "741.42",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_003-T011",
+        "date": "2026-02-19",
+        "amount": "1285.29",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_003-T012",
+        "date": "2026-03-27",
+        "amount": "30.49",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "John, Gould and Carter",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T013",
+        "date": "2026-05-07",
+        "amount": "107.92",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Watson, Preston and Bell",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T014",
+        "date": "2026-07-07",
+        "amount": "13.21",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Duncan, Brown and Murray",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T015",
+        "date": "2026-03-29",
+        "amount": "34.59",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Smith-Smith",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T016",
+        "date": "2026-03-05",
+        "amount": "88.89",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "May, Cunningham and Jones",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T017",
+        "date": "2026-07-16",
+        "amount": "58.45",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Stewart PLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T018",
+        "date": "2026-03-27",
+        "amount": "96.61",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Clarke Group",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T019",
+        "date": "2026-06-28",
+        "amount": "11.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "O'Brien, Hill and Jenkins",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T020",
+        "date": "2026-03-03",
+        "amount": "14.28",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Murray Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T021",
+        "date": "2026-06-23",
+        "amount": "21.94",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Lawson, Webster and Turner",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T022",
+        "date": "2026-05-04",
+        "amount": "49.81",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Patel, Lyons and Price",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T023",
+        "date": "2026-05-22",
+        "amount": "25.08",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wilson LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T024",
+        "date": "2026-06-26",
+        "amount": "13.3",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fox and Sons",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T025",
+        "date": "2026-02-02",
+        "amount": "38.51",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Quinn, Hammond and Yates",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T026",
+        "date": "2026-07-12",
+        "amount": "148.03",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Townsend Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T027",
+        "date": "2026-07-09",
+        "amount": "308.31",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Bruce-Smith",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_003-T028",
+        "date": "2026-05-06",
+        "amount": "13.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones, Powell and Wood",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "LOW",
+      "severity": "low",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_004",
+    "kyc": {
+      "name": "Gerard Jones",
+      "dob": "1987-09-29",
+      "nationality": "GB",
+      "occupation": "retail manager",
+      "id_doc": "P58802020",
+      "onboarded": "2018-10-29",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 2825
+    },
+    "transactions": [],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "LOW",
+      "severity": "low",
+      "typology": null,
+      "missing_docs": [
+        "transactions"
+      ],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_005",
+    "kyc": {
+      "name": "Suzanne Poole",
+      "dob": "1966-10-06",
+      "nationality": "FR",
+      "occupation": "chef",
+      "id_doc": "P90171324",
+      "onboarded": "2019-07-14",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "FR",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 2567
+    },
+    "transactions": [
+      {
+        "id": "CUST_005-T000",
+        "date": "2026-07-21",
+        "amount": "5663.3",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "FR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_005-T001",
+        "date": "2026-06-21",
+        "amount": "5617.36",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "FR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_005-T002",
+        "date": "2026-05-22",
+        "amount": "5720.6",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "FR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_005-T003",
+        "date": "2026-04-22",
+        "amount": "5695.62",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "FR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_005-T004",
+        "date": "2026-03-23",
+        "amount": "5630.43",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "FR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_005-T005",
+        "date": "2026-02-21",
+        "amount": "5567.23",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "FR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_005-T006",
+        "date": "2026-07-19",
+        "amount": "1197.43",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "FR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_005-T007",
+        "date": "2026-06-19",
+        "amount": "809.97",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "FR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_005-T008",
+        "date": "2026-05-20",
+        "amount": "1349.45",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "FR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_005-T009",
+        "date": "2026-04-20",
+        "amount": "792.78",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "FR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_005-T010",
+        "date": "2026-03-21",
+        "amount": "698.21",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "FR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_005-T011",
+        "date": "2026-02-19",
+        "amount": "1264.89",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "FR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_005-T012",
+        "date": "2026-05-19",
+        "amount": "12.36",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Metcalfe-Black",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T013",
+        "date": "2026-04-07",
+        "amount": "14.65",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hussain-Booth",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T014",
+        "date": "2026-01-26",
+        "amount": "21.85",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Turner, Humphreys and Edwards",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T015",
+        "date": "2026-03-06",
+        "amount": "29.84",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Barrett and Sons",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T016",
+        "date": "2026-05-07",
+        "amount": "39.25",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jackson PLC",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T017",
+        "date": "2026-06-28",
+        "amount": "92.39",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Morris Inc",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T018",
+        "date": "2026-06-04",
+        "amount": "50.16",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jackson PLC",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T019",
+        "date": "2026-06-30",
+        "amount": "5.81",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fraser, Hunt and Francis",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_005-T020",
+        "date": "2026-05-31",
+        "amount": "15.26",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Rees Inc",
+        "counterparty_country": "FR",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "LOW",
+      "severity": "low",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_006",
+    "kyc": {
+      "name": "Terence Ahmed",
+      "dob": "1994-04-29",
+      "nationality": "RU",
+      "occupation": "consultant",
+      "id_doc": "P78956931",
+      "onboarded": "2022-02-18",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "RU",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 1617
+    },
+    "transactions": [
+      {
+        "id": "CUST_006-T000",
+        "date": "2026-07-21",
+        "amount": "3481.12",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_006-T001",
+        "date": "2026-06-21",
+        "amount": "3468.92",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_006-T002",
+        "date": "2026-05-22",
+        "amount": "3472.16",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_006-T003",
+        "date": "2026-04-22",
+        "amount": "3388.53",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_006-T004",
+        "date": "2026-03-23",
+        "amount": "3387.52",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_006-T005",
+        "date": "2026-02-21",
+        "amount": "3498.1",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_006-T006",
+        "date": "2026-07-19",
+        "amount": "918.06",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_006-T007",
+        "date": "2026-06-19",
+        "amount": "840.76",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_006-T008",
+        "date": "2026-05-20",
+        "amount": "990.87",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_006-T009",
+        "date": "2026-04-20",
+        "amount": "1130.29",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_006-T010",
+        "date": "2026-03-21",
+        "amount": "1364.5",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_006-T011",
+        "date": "2026-02-19",
+        "amount": "829.16",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_006-T012",
+        "date": "2026-04-10",
+        "amount": "36.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jackson Inc",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T013",
+        "date": "2026-06-27",
+        "amount": "12.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Reeves, Moss and Armstrong",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T014",
+        "date": "2026-04-01",
+        "amount": "32.21",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hudson-Martin",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T015",
+        "date": "2026-03-11",
+        "amount": "224.52",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "McLean, Phillips and Clarke",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T016",
+        "date": "2026-05-09",
+        "amount": "134.49",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hodgson, Saunders and Mitchell",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T017",
+        "date": "2026-06-21",
+        "amount": "23.81",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Bailey PLC",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T018",
+        "date": "2026-02-06",
+        "amount": "9.29",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Turner, Ford and Dobson",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T019",
+        "date": "2026-04-01",
+        "amount": "38.57",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Daniels-Stone",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T020",
+        "date": "2026-03-05",
+        "amount": "78.62",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Shaw LLC",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T021",
+        "date": "2026-06-02",
+        "amount": "17.76",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fraser-Lee",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T022",
+        "date": "2026-02-25",
+        "amount": "5.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Stokes, Robinson and Gough",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T023",
+        "date": "2026-05-25",
+        "amount": "12.81",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Bailey, Warren and Burns",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T024",
+        "date": "2026-04-19",
+        "amount": "19.62",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Webb, Shaw and Pritchard",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T025",
+        "date": "2026-07-02",
+        "amount": "73.63",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cox and Sons",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T026",
+        "date": "2026-05-18",
+        "amount": "27.79",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Bird-Kelly",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T027",
+        "date": "2026-02-01",
+        "amount": "9.27",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Martin-Thomson",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T028",
+        "date": "2026-02-18",
+        "amount": "164.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Lowe-Smith",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T029",
+        "date": "2026-06-05",
+        "amount": "12.46",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Green Group",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T030",
+        "date": "2026-06-11",
+        "amount": "130.26",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Thomas-Shepherd",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T031",
+        "date": "2026-02-02",
+        "amount": "11.74",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Todd LLC",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_006-T032",
+        "date": "2026-07-05",
+        "amount": "22.32",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cox PLC",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": [
+        {
+          "headline": "Terence Ahmed named in fraud investigation",
+          "sentiment": "negative",
+          "date": "2026-06-09"
+        }
+      ]
+    },
+    "meta": {
+      "expected_band": "MED",
+      "severity": "med",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_007",
+    "kyc": {
+      "name": "Allan Moore-Clark",
+      "dob": "1965-09-13",
+      "nationality": "GB",
+      "occupation": "politician",
+      "id_doc": "P23155591",
+      "onboarded": "2026-06-19",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": true,
+      "tenure_days": 35
+    },
+    "transactions": [
+      {
+        "id": "CUST_007-T000",
+        "date": "2026-07-21",
+        "amount": "5397.66",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_007-T001",
+        "date": "2026-06-21",
+        "amount": "5361.45",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_007-T002",
+        "date": "2026-05-22",
+        "amount": "5530.51",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_007-T003",
+        "date": "2026-04-22",
+        "amount": "5366.16",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_007-T004",
+        "date": "2026-03-23",
+        "amount": "5392.09",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_007-T005",
+        "date": "2026-02-21",
+        "amount": "5363.57",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_007-T006",
+        "date": "2026-07-19",
+        "amount": "692.39",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_007-T007",
+        "date": "2026-06-19",
+        "amount": "616.92",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_007-T008",
+        "date": "2026-05-20",
+        "amount": "644.32",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_007-T009",
+        "date": "2026-04-20",
+        "amount": "739.71",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_007-T010",
+        "date": "2026-03-21",
+        "amount": "642.71",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_007-T011",
+        "date": "2026-02-19",
+        "amount": "1072.92",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_007-T012",
+        "date": "2026-02-25",
+        "amount": "31.27",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fowler, Connolly and Fisher",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T013",
+        "date": "2026-05-28",
+        "amount": "29.97",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Clarke-Brookes",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T014",
+        "date": "2026-03-04",
+        "amount": "38.6",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Sutton and Sons",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T015",
+        "date": "2026-02-21",
+        "amount": "27.72",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Smith, Webb and Porter",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T016",
+        "date": "2026-06-13",
+        "amount": "105.5",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Simpson-Morris",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T017",
+        "date": "2026-06-09",
+        "amount": "40.8",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Taylor and Sons",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T018",
+        "date": "2026-06-03",
+        "amount": "12.31",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jennings-Pratt",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T019",
+        "date": "2026-07-15",
+        "amount": "77.7",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Gill-Ali",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T020",
+        "date": "2026-07-04",
+        "amount": "44.0",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Taylor, Barker and Phillips",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T021",
+        "date": "2026-07-14",
+        "amount": "7.42",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Griffiths, Carr and Taylor",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T022",
+        "date": "2026-02-24",
+        "amount": "43.1",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Ryan Group",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T023",
+        "date": "2026-02-23",
+        "amount": "12.33",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Rogers-James",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T024",
+        "date": "2026-05-27",
+        "amount": "37.0",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wilson Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T025",
+        "date": "2026-03-02",
+        "amount": "31.25",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Matthews LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T026",
+        "date": "2026-04-04",
+        "amount": "27.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Morgan LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_007-T027",
+        "date": "2026-03-06",
+        "amount": "24.49",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hart-Matthews",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": true,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "MED",
+      "severity": "med",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_008",
+    "kyc": {
+      "name": "Dr Stephen Clark",
+      "dob": "1973-05-02",
+      "nationality": "GB",
+      "occupation": "money exchange",
+      "id_doc": "P56280058",
+      "onboarded": "2023-07-16",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 1104
+    },
+    "transactions": [
+      {
+        "id": "CUST_008-T000",
+        "date": "2026-07-21",
+        "amount": "5535.98",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_008-T001",
+        "date": "2026-06-21",
+        "amount": "5518.75",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_008-T002",
+        "date": "2026-05-22",
+        "amount": "5575.18",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_008-T003",
+        "date": "2026-04-22",
+        "amount": "5492.44",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_008-T004",
+        "date": "2026-03-23",
+        "amount": "5464.34",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_008-T005",
+        "date": "2026-02-21",
+        "amount": "5539.32",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_008-T006",
+        "date": "2026-07-19",
+        "amount": "933.51",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_008-T007",
+        "date": "2026-06-19",
+        "amount": "786.06",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_008-T008",
+        "date": "2026-05-20",
+        "amount": "894.01",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_008-T009",
+        "date": "2026-04-20",
+        "amount": "893.11",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_008-T010",
+        "date": "2026-03-21",
+        "amount": "862.0",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_008-T011",
+        "date": "2026-02-19",
+        "amount": "903.57",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_008-T012",
+        "date": "2026-03-04",
+        "amount": "47.76",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jackson LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T013",
+        "date": "2026-02-04",
+        "amount": "119.8",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Griffiths Group",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T014",
+        "date": "2026-03-08",
+        "amount": "42.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Briggs-Sinclair",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T015",
+        "date": "2026-05-26",
+        "amount": "120.92",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Robinson, Clark and Sutton",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T016",
+        "date": "2026-04-27",
+        "amount": "58.11",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Smith Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T017",
+        "date": "2026-03-29",
+        "amount": "23.64",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Winter-Bennett",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T018",
+        "date": "2026-03-08",
+        "amount": "17.15",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Holmes, Singh and Pratt",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T019",
+        "date": "2026-04-01",
+        "amount": "66.13",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hargreaves Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T020",
+        "date": "2026-07-17",
+        "amount": "56.03",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wall, Johnson and Adams",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T021",
+        "date": "2026-06-17",
+        "amount": "25.73",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Peters LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T022",
+        "date": "2026-02-03",
+        "amount": "54.64",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Gordon, Miles and Ahmed",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T023",
+        "date": "2026-04-05",
+        "amount": "128.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Naylor-Lucas",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T024",
+        "date": "2026-04-11",
+        "amount": "8.52",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Singh, Davies and Poole",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T025",
+        "date": "2026-07-08",
+        "amount": "28.4",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Pearce, Stevenson and Lee",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T026",
+        "date": "2026-02-02",
+        "amount": "19.79",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hussain-Sykes",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_008-T027",
+        "date": "2026-02-02",
+        "amount": "100.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jenkins, Stanley and Williams",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": [
+        {
+          "headline": "Dr Stephen Clark named in fraud investigation",
+          "sentiment": "negative",
+          "date": "2026-06-09"
+        }
+      ]
+    },
+    "meta": {
+      "expected_band": "MED",
+      "severity": "med",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_009",
+    "kyc": {
+      "name": "Kenneth Lewis",
+      "dob": "1967-02-08",
+      "nationality": "VE",
+      "occupation": "importer",
+      "id_doc": null,
+      "onboarded": "2022-08-08",
+      "kyc_complete": false
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "VE",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 1446
+    },
+    "transactions": [
+      {
+        "id": "CUST_009-T000",
+        "date": "2026-07-21",
+        "amount": "5439.72",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_009-T001",
+        "date": "2026-06-21",
+        "amount": "5291.65",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_009-T002",
+        "date": "2026-05-22",
+        "amount": "5363.62",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_009-T003",
+        "date": "2026-04-22",
+        "amount": "5257.8",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_009-T004",
+        "date": "2026-03-23",
+        "amount": "5369.2",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_009-T005",
+        "date": "2026-02-21",
+        "amount": "5274.1",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_009-T006",
+        "date": "2026-07-19",
+        "amount": "1051.96",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "VE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_009-T007",
+        "date": "2026-06-19",
+        "amount": "1057.94",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "VE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_009-T008",
+        "date": "2026-05-20",
+        "amount": "972.79",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "VE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_009-T009",
+        "date": "2026-04-20",
+        "amount": "1018.11",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "VE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_009-T010",
+        "date": "2026-03-21",
+        "amount": "1211.14",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "VE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_009-T011",
+        "date": "2026-02-19",
+        "amount": "1239.4",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "VE",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_009-T012",
+        "date": "2026-06-29",
+        "amount": "48.07",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cunningham, Lewis and Parkinson",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T013",
+        "date": "2026-02-07",
+        "amount": "8.45",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Green-Watson",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T014",
+        "date": "2026-03-16",
+        "amount": "40.23",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Davies and Sons",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T015",
+        "date": "2026-07-08",
+        "amount": "58.98",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Kennedy Inc",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T016",
+        "date": "2026-02-09",
+        "amount": "57.46",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Robinson PLC",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T017",
+        "date": "2026-03-07",
+        "amount": "70.44",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Murphy Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T018",
+        "date": "2026-03-13",
+        "amount": "36.14",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Chamberlain, Booth and Hughes",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T019",
+        "date": "2026-02-13",
+        "amount": "37.2",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Kennedy Ltd",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T020",
+        "date": "2026-03-03",
+        "amount": "26.63",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Lawrence Inc",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T021",
+        "date": "2026-05-19",
+        "amount": "26.52",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Lloyd-Roberts",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T022",
+        "date": "2026-02-01",
+        "amount": "66.68",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Weston, Parker and Smith",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T023",
+        "date": "2026-06-27",
+        "amount": "12.85",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Murphy Group",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T024",
+        "date": "2026-03-13",
+        "amount": "98.02",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hill, Moore and Stephens",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_009-T025",
+        "date": "2026-05-16",
+        "amount": "16.53",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Osborne-Peters",
+        "counterparty_country": "VE",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": [
+        {
+          "headline": "Kenneth Lewis named in fraud investigation",
+          "sentiment": "negative",
+          "date": "2026-06-09"
+        }
+      ]
+    },
+    "meta": {
+      "expected_band": "MED",
+      "severity": "med",
+      "typology": null,
+      "missing_docs": [
+        "kyc_id"
+      ],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_010",
+    "kyc": {
+      "name": "Allan Burke",
+      "dob": "1992-11-03",
+      "nationality": "GB",
+      "occupation": "landlord",
+      "id_doc": "P94252598",
+      "onboarded": "2018-09-27",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": true,
+      "tenure_days": 2857
+    },
+    "transactions": [
+      {
+        "id": "CUST_010-T000",
+        "date": "2026-07-21",
+        "amount": "5292.59",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_010-T001",
+        "date": "2026-06-21",
+        "amount": "5270.77",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_010-T002",
+        "date": "2026-05-22",
+        "amount": "5400.07",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_010-T003",
+        "date": "2026-04-22",
+        "amount": "5343.1",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_010-T004",
+        "date": "2026-03-23",
+        "amount": "5392.56",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_010-T005",
+        "date": "2026-02-21",
+        "amount": "5216.13",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_010-T006",
+        "date": "2026-07-19",
+        "amount": "1280.43",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_010-T007",
+        "date": "2026-06-19",
+        "amount": "1109.66",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_010-T008",
+        "date": "2026-05-20",
+        "amount": "697.54",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_010-T009",
+        "date": "2026-04-20",
+        "amount": "1070.61",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_010-T010",
+        "date": "2026-03-21",
+        "amount": "1148.88",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_010-T011",
+        "date": "2026-02-19",
+        "amount": "609.84",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_010-T012",
+        "date": "2026-05-07",
+        "amount": "8.32",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Bartlett-Reid",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T013",
+        "date": "2026-06-01",
+        "amount": "15.87",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Power-Mitchell",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T014",
+        "date": "2026-07-21",
+        "amount": "45.57",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "White, Hobbs and Jones",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T015",
+        "date": "2026-05-30",
+        "amount": "37.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Robertson Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T016",
+        "date": "2026-04-17",
+        "amount": "4.72",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hussain, Dixon and Newton",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T017",
+        "date": "2026-07-04",
+        "amount": "31.3",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Francis, Hayes and Cooper",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T018",
+        "date": "2026-03-23",
+        "amount": "43.27",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cole Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T019",
+        "date": "2026-06-03",
+        "amount": "52.54",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Miles-Freeman",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T020",
+        "date": "2026-03-26",
+        "amount": "17.64",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Farmer-Lee",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T021",
+        "date": "2026-01-26",
+        "amount": "33.47",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Franklin-Jackson",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T022",
+        "date": "2026-04-03",
+        "amount": "35.99",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Brown, Shaw and Allen",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T023",
+        "date": "2026-07-07",
+        "amount": "45.79",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Bailey-Parsons",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_010-T024",
+        "date": "2026-06-09",
+        "amount": "25.95",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Davis-Watson",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": true,
+      "adverse_media": [
+        {
+          "headline": "Allan Burke named in fraud investigation",
+          "sentiment": "negative",
+          "date": "2026-06-09"
+        }
+      ]
+    },
+    "meta": {
+      "expected_band": "MED",
+      "severity": "med",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_011",
+    "kyc": {
+      "name": "Ms June Lloyd",
+      "dob": "1985-03-20",
+      "nationality": "RU",
+      "occupation": "precious metals trader",
+      "id_doc": "P86891197",
+      "onboarded": "2024-03-02",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "RU",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 874
+    },
+    "transactions": [
+      {
+        "id": "CUST_011-T000",
+        "date": "2026-07-21",
+        "amount": "3490.66",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_011-T001",
+        "date": "2026-06-21",
+        "amount": "3455.72",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_011-T002",
+        "date": "2026-05-22",
+        "amount": "3370.54",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_011-T003",
+        "date": "2026-04-22",
+        "amount": "3366.31",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_011-T004",
+        "date": "2026-03-23",
+        "amount": "3372.66",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_011-T005",
+        "date": "2026-02-21",
+        "amount": "3448.8",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_011-T006",
+        "date": "2026-07-19",
+        "amount": "1241.19",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_011-T007",
+        "date": "2026-06-19",
+        "amount": "790.84",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_011-T008",
+        "date": "2026-05-20",
+        "amount": "1279.53",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_011-T009",
+        "date": "2026-04-20",
+        "amount": "645.79",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_011-T010",
+        "date": "2026-03-21",
+        "amount": "1240.77",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_011-T011",
+        "date": "2026-02-19",
+        "amount": "1342.24",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_011-T012",
+        "date": "2026-03-06",
+        "amount": "86.67",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Day-Holt",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T013",
+        "date": "2026-05-05",
+        "amount": "16.19",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Roberts, Wood and Gray",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T014",
+        "date": "2026-07-16",
+        "amount": "88.49",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Robinson PLC",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T015",
+        "date": "2026-04-16",
+        "amount": "15.33",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Walker PLC",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T016",
+        "date": "2026-04-02",
+        "amount": "18.62",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Adams, Short and Rowe",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T017",
+        "date": "2026-02-28",
+        "amount": "14.72",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Clayton-Smith",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T018",
+        "date": "2026-03-14",
+        "amount": "22.5",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Kelly-Mills",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T019",
+        "date": "2026-07-06",
+        "amount": "118.7",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "White-Watson",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T020",
+        "date": "2026-03-18",
+        "amount": "9.92",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Smith-Reeves",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T021",
+        "date": "2026-04-23",
+        "amount": "13.03",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Morris Inc",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T022",
+        "date": "2026-07-14",
+        "amount": "43.81",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wilson-Rees",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T023",
+        "date": "2026-06-14",
+        "amount": "6.93",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Thomas, Holland and Smith",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T024",
+        "date": "2026-02-15",
+        "amount": "62.97",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Johnson and Sons",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T025",
+        "date": "2026-05-18",
+        "amount": "19.55",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones Inc",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T026",
+        "date": "2026-07-07",
+        "amount": "12.73",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "May, Hall and Smith",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T027",
+        "date": "2026-04-09",
+        "amount": "42.2",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Thompson-Jenkins",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_011-T028",
+        "date": "2026-05-02",
+        "amount": "25.75",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Edwards, Hobbs and O'Brien",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "MED",
+      "severity": "med",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_012",
+    "kyc": {
+      "name": "Michelle Whitehead-Murray",
+      "dob": "1994-09-28",
+      "nationality": "GB",
+      "occupation": "consultant",
+      "id_doc": "P61517183",
+      "onboarded": "2026-05-14",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": true,
+      "tenure_days": 71
+    },
+    "transactions": [
+      {
+        "id": "CUST_012-T000",
+        "date": "2026-07-21",
+        "amount": "3322.66",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_012-T001",
+        "date": "2026-06-21",
+        "amount": "3238.48",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_012-T002",
+        "date": "2026-05-22",
+        "amount": "3274.6",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_012-T003",
+        "date": "2026-04-22",
+        "amount": "3290.5",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_012-T004",
+        "date": "2026-03-23",
+        "amount": "3283.9",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_012-T005",
+        "date": "2026-02-21",
+        "amount": "3321.95",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_012-T006",
+        "date": "2026-07-19",
+        "amount": "718.75",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_012-T007",
+        "date": "2026-06-19",
+        "amount": "1006.68",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_012-T008",
+        "date": "2026-05-20",
+        "amount": "923.23",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_012-T009",
+        "date": "2026-04-20",
+        "amount": "979.33",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_012-T010",
+        "date": "2026-03-21",
+        "amount": "695.37",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_012-T011",
+        "date": "2026-02-19",
+        "amount": "707.28",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_012-T012",
+        "date": "2026-04-04",
+        "amount": "39.11",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Walker, Patel and Howarth",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T013",
+        "date": "2026-05-08",
+        "amount": "29.35",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Wallis Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T014",
+        "date": "2026-01-31",
+        "amount": "15.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Smith, Harrison and Atkins",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T015",
+        "date": "2026-05-11",
+        "amount": "8.4",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Foster, O'Neill and Robinson",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T016",
+        "date": "2026-02-04",
+        "amount": "12.26",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Ward Group",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T017",
+        "date": "2026-04-09",
+        "amount": "20.76",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Middleton, Lowe and Cook",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T018",
+        "date": "2026-05-31",
+        "amount": "141.14",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fuller-Webb",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T019",
+        "date": "2026-05-10",
+        "amount": "72.59",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Woods-Norton",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T020",
+        "date": "2026-07-06",
+        "amount": "39.57",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Gould, Noble and Bishop",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T021",
+        "date": "2026-04-12",
+        "amount": "21.64",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Dixon, Mann and Powell",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_012-T022",
+        "date": "2026-04-17",
+        "amount": "34.75",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hall-Mason",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": true,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "MED",
+      "severity": "med",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_013",
+    "kyc": {
+      "name": "Aaron Stanley",
+      "dob": "1972-04-06",
+      "nationality": "RU",
+      "occupation": "consultant",
+      "id_doc": "P65497953",
+      "onboarded": "2021-01-17",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "RU",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 2014
+    },
+    "transactions": [
+      {
+        "id": "CUST_013-T000",
+        "date": "2026-07-21",
+        "amount": "5330.24",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_013-T001",
+        "date": "2026-06-21",
+        "amount": "5305.19",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_013-T002",
+        "date": "2026-05-22",
+        "amount": "5346.6",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_013-T003",
+        "date": "2026-04-22",
+        "amount": "5290.13",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_013-T004",
+        "date": "2026-03-23",
+        "amount": "5322.49",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_013-T005",
+        "date": "2026-02-21",
+        "amount": "5370.15",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_013-T006",
+        "date": "2026-07-19",
+        "amount": "1309.12",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_013-T007",
+        "date": "2026-06-19",
+        "amount": "1336.85",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_013-T008",
+        "date": "2026-05-20",
+        "amount": "1002.91",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_013-T009",
+        "date": "2026-04-20",
+        "amount": "1016.22",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_013-T010",
+        "date": "2026-03-21",
+        "amount": "1239.9",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_013-T011",
+        "date": "2026-02-19",
+        "amount": "851.56",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "RU",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_013-T012",
+        "date": "2026-05-28",
+        "amount": "48.91",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "White Group",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T013",
+        "date": "2026-07-13",
+        "amount": "71.4",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Banks PLC",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T014",
+        "date": "2026-07-11",
+        "amount": "40.17",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "King, Holt and Hughes",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T015",
+        "date": "2026-07-10",
+        "amount": "43.08",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Clayton-Kelly",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T016",
+        "date": "2026-06-03",
+        "amount": "23.41",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cook-Shaw",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T017",
+        "date": "2026-03-15",
+        "amount": "6.92",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Shaw, Humphreys and Lewis",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T018",
+        "date": "2026-05-28",
+        "amount": "22.91",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cunningham Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T019",
+        "date": "2026-05-06",
+        "amount": "9.06",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones-Reed",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T020",
+        "date": "2026-02-25",
+        "amount": "89.22",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones, Ellis and Parkin",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T021",
+        "date": "2026-03-19",
+        "amount": "16.85",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Green and Sons",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T022",
+        "date": "2026-06-26",
+        "amount": "9.01",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Marshall-Rogers",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T023",
+        "date": "2026-04-24",
+        "amount": "19.4",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Connolly, Fisher and Ward",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T024",
+        "date": "2026-05-19",
+        "amount": "207.75",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Walton, Parsons and Price",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T025",
+        "date": "2026-05-04",
+        "amount": "19.15",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Smith-O'Neill",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T026",
+        "date": "2026-03-07",
+        "amount": "43.47",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Saunders Ltd",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T027",
+        "date": "2026-06-28",
+        "amount": "23.62",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Watson, Marshall and Bates",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T028",
+        "date": "2026-03-19",
+        "amount": "32.45",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones, Wood and Stewart",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T029",
+        "date": "2026-05-25",
+        "amount": "56.41",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Anderson, Robinson and Lee",
+        "counterparty_country": "RU",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_013-T030",
+        "date": "2026-04-24",
+        "amount": "1909.38",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_013-T031",
+        "date": "2026-05-22",
+        "amount": "1914.77",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_013-T032",
+        "date": "2026-06-04",
+        "amount": "3972.83",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_013-T033",
+        "date": "2026-04-15",
+        "amount": "2889.92",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_013-S00",
+        "date": "2026-06-14",
+        "amount": "9552.28",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_013-S01",
+        "date": "2026-06-16",
+        "amount": "9832.1",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_013-S02",
+        "date": "2026-06-18",
+        "amount": "8261.95",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_013-S03",
+        "date": "2026-06-20",
+        "amount": "8829.25",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "RU",
+        "txn_type": "cash"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "HIGH",
+      "severity": "high",
+      "typology": "structuring",
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_014",
+    "kyc": {
+      "name": "Pauline Evans-Stokes",
+      "dob": "1991-11-27",
+      "nationality": "GB",
+      "occupation": "crypto dealer",
+      "id_doc": "P45331544",
+      "onboarded": "2019-07-21",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 2560
+    },
+    "transactions": [
+      {
+        "id": "CUST_014-T000",
+        "date": "2026-07-21",
+        "amount": "3087.37",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_014-T001",
+        "date": "2026-06-21",
+        "amount": "3048.06",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_014-T002",
+        "date": "2026-05-22",
+        "amount": "3052.41",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_014-T003",
+        "date": "2026-04-22",
+        "amount": "3013.45",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_014-T004",
+        "date": "2026-03-23",
+        "amount": "3017.15",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_014-T005",
+        "date": "2026-02-21",
+        "amount": "3105.92",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_014-T006",
+        "date": "2026-07-19",
+        "amount": "635.72",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_014-T007",
+        "date": "2026-06-19",
+        "amount": "786.28",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_014-T008",
+        "date": "2026-05-20",
+        "amount": "833.65",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_014-T009",
+        "date": "2026-04-20",
+        "amount": "992.16",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_014-T010",
+        "date": "2026-03-21",
+        "amount": "1069.16",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_014-T011",
+        "date": "2026-02-19",
+        "amount": "994.63",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_014-T012",
+        "date": "2026-02-23",
+        "amount": "36.53",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Robertson Inc",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-T013",
+        "date": "2026-02-22",
+        "amount": "25.96",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Harris, Curtis and Dawson",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-T014",
+        "date": "2026-05-12",
+        "amount": "26.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Webb-Brown",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-T015",
+        "date": "2026-03-26",
+        "amount": "35.26",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones-Williams",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-T016",
+        "date": "2026-03-16",
+        "amount": "52.75",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Arnold LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-T017",
+        "date": "2026-05-19",
+        "amount": "50.91",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Clark-Collins",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-T018",
+        "date": "2026-02-07",
+        "amount": "46.77",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Ford-Johnson",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-T019",
+        "date": "2026-02-22",
+        "amount": "37.98",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hayes PLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_014-L00",
+        "date": "2026-06-24",
+        "amount": "192000.0",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Shell Co A",
+        "counterparty_country": "CY",
+        "txn_type": "transfer"
+      },
+      {
+        "id": "CUST_014-L01",
+        "date": "2026-06-26",
+        "amount": "153600.0",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Shell Co B",
+        "counterparty_country": "CY",
+        "txn_type": "transfer"
+      },
+      {
+        "id": "CUST_014-L02",
+        "date": "2026-06-28",
+        "amount": "122880.0",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Shell Co C",
+        "counterparty_country": "CY",
+        "txn_type": "transfer"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": [
+        {
+          "headline": "Pauline Evans-Stokes named in fraud investigation",
+          "sentiment": "negative",
+          "date": "2026-06-09"
+        },
+        {
+          "headline": "Regulator fines firm linked to Pauline Evans-Stokes for money laundering",
+          "sentiment": "negative",
+          "date": "2026-07-04"
+        }
+      ]
+    },
+    "meta": {
+      "expected_band": "HIGH",
+      "severity": "high",
+      "typology": "layering",
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_015",
+    "kyc": {
+      "name": "Patricia Turner-Iqbal",
+      "dob": "1983-11-18",
+      "nationality": "MM",
+      "occupation": "trader",
+      "id_doc": "P86681396",
+      "onboarded": "2020-09-24",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "MM",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 2129
+    },
+    "transactions": [
+      {
+        "id": "CUST_015-T000",
+        "date": "2026-07-21",
+        "amount": "4487.67",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "MM",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_015-T001",
+        "date": "2026-06-21",
+        "amount": "4430.72",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "MM",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_015-T002",
+        "date": "2026-05-22",
+        "amount": "4477.2",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "MM",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_015-T003",
+        "date": "2026-04-22",
+        "amount": "4387.18",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "MM",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_015-T004",
+        "date": "2026-03-23",
+        "amount": "4415.12",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "MM",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_015-T005",
+        "date": "2026-02-21",
+        "amount": "4420.88",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "MM",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_015-T006",
+        "date": "2026-07-19",
+        "amount": "683.98",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "MM",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_015-T007",
+        "date": "2026-06-19",
+        "amount": "918.84",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "MM",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_015-T008",
+        "date": "2026-05-20",
+        "amount": "1333.87",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "MM",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_015-T009",
+        "date": "2026-04-20",
+        "amount": "1104.67",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "MM",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_015-T010",
+        "date": "2026-03-21",
+        "amount": "742.01",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "MM",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_015-T011",
+        "date": "2026-02-19",
+        "amount": "871.08",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "MM",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_015-T012",
+        "date": "2026-04-06",
+        "amount": "46.47",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Anderson, Hurst and Russell",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T013",
+        "date": "2026-02-07",
+        "amount": "34.83",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Price-Williams",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T014",
+        "date": "2026-06-28",
+        "amount": "28.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Scott, Rogers and Houghton",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T015",
+        "date": "2026-04-07",
+        "amount": "36.95",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hunt, Gibson and Carter",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T016",
+        "date": "2026-06-23",
+        "amount": "34.88",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Kelly, Benson and Fraser",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T017",
+        "date": "2026-03-20",
+        "amount": "9.36",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fisher and Sons",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T018",
+        "date": "2026-03-02",
+        "amount": "81.32",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hanson Ltd",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T019",
+        "date": "2026-04-03",
+        "amount": "24.48",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones, Higgins and Barber",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T020",
+        "date": "2026-03-29",
+        "amount": "4.36",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Campbell-Price",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-T021",
+        "date": "2026-02-12",
+        "amount": "11.88",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Barnes, Pritchard and James",
+        "counterparty_country": "MM",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_015-R00",
+        "date": "2026-07-04",
+        "amount": "104740.36",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Offshore Nominee A",
+        "counterparty_country": "KY",
+        "txn_type": "wire"
+      },
+      {
+        "id": "CUST_015-R01",
+        "date": "2026-07-10",
+        "amount": "102645.55",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Offshore Nominee B",
+        "counterparty_country": "KY",
+        "txn_type": "wire"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "HIGH",
+      "severity": "high",
+      "typology": "round_trip",
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_016",
+    "kyc": {
+      "name": "Mohamed Roberts",
+      "dob": "1969-01-07",
+      "nationality": "GB",
+      "occupation": "precious metals trader",
+      "id_doc": "P88012129",
+      "onboarded": "2022-06-25",
+      "kyc_complete": true,
+      "extra_doc": "second_passport"
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 1490
+    },
+    "transactions": [
+      {
+        "id": "CUST_016-D00",
+        "date": "2025-12-06",
+        "amount": "78.53",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Clark-Wilson",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_016-D01",
+        "date": "2025-12-16",
+        "amount": "233.1",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Walker and Sons",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_016-D02",
+        "date": "2025-12-26",
+        "amount": "160.02",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Howard LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_016-B00",
+        "date": "2026-07-15",
+        "amount": "32933.8",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "New Counterparty",
+        "counterparty_country": "AE",
+        "txn_type": "wire"
+      },
+      {
+        "id": "CUST_016-B01",
+        "date": "2026-07-17",
+        "amount": "35660.77",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "New Counterparty",
+        "counterparty_country": "AE",
+        "txn_type": "wire"
+      },
+      {
+        "id": "CUST_016-B02",
+        "date": "2026-07-19",
+        "amount": "44185.01",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "New Counterparty",
+        "counterparty_country": "AE",
+        "txn_type": "wire"
+      },
+      {
+        "id": "CUST_016-B03",
+        "date": "2026-07-21",
+        "amount": "44583.61",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "New Counterparty",
+        "counterparty_country": "AE",
+        "txn_type": "wire"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": false,
+      "adverse_media": [
+        {
+          "headline": "Mohamed Roberts named in fraud investigation",
+          "sentiment": "negative",
+          "date": "2026-06-09"
+        }
+      ]
+    },
+    "meta": {
+      "expected_band": "HIGH",
+      "severity": "high",
+      "typology": "dormant_spike",
+      "missing_docs": [],
+      "extra_docs": [
+        "second_passport"
+      ]
+    }
+  },
+  {
+    "customer_id": "CUST_017",
+    "kyc": {
+      "name": "Glen Woodward",
+      "dob": "1985-06-11",
+      "nationality": "GB",
+      "occupation": "politician",
+      "id_doc": "P35940542",
+      "onboarded": "2024-10-31",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "GB",
+      "product": "current_account",
+      "pep": true,
+      "tenure_days": 631
+    },
+    "transactions": [
+      {
+        "id": "CUST_017-T000",
+        "date": "2026-07-21",
+        "amount": "5199.49",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_017-T001",
+        "date": "2026-06-21",
+        "amount": "5116.4",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_017-T002",
+        "date": "2026-05-22",
+        "amount": "5070.56",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_017-T003",
+        "date": "2026-04-22",
+        "amount": "5053.48",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_017-T004",
+        "date": "2026-03-23",
+        "amount": "5205.12",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_017-T005",
+        "date": "2026-02-21",
+        "amount": "5145.89",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_017-T006",
+        "date": "2026-07-19",
+        "amount": "1388.43",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_017-T007",
+        "date": "2026-06-19",
+        "amount": "971.98",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_017-T008",
+        "date": "2026-05-20",
+        "amount": "1382.33",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_017-T009",
+        "date": "2026-04-20",
+        "amount": "929.26",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_017-T010",
+        "date": "2026-03-21",
+        "amount": "1234.95",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_017-T011",
+        "date": "2026-02-19",
+        "amount": "667.86",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "GB",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_017-T012",
+        "date": "2026-06-06",
+        "amount": "55.17",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones LLC",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T013",
+        "date": "2026-02-08",
+        "amount": "42.88",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Ahmed, Dixon and Powell",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T014",
+        "date": "2026-07-14",
+        "amount": "46.08",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Francis-Thomas",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T015",
+        "date": "2026-05-18",
+        "amount": "13.1",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Hunter-Butler",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T016",
+        "date": "2026-02-07",
+        "amount": "9.59",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Green Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T017",
+        "date": "2026-03-25",
+        "amount": "42.82",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fox, Brown and Miller",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T018",
+        "date": "2026-07-22",
+        "amount": "10.74",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Allen-Miller",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T019",
+        "date": "2026-02-19",
+        "amount": "53.04",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones Ltd",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T020",
+        "date": "2026-05-16",
+        "amount": "18.34",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Chadwick-Clayton",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T021",
+        "date": "2026-07-15",
+        "amount": "95.67",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Williams, Bradley and Morgan",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T022",
+        "date": "2026-06-12",
+        "amount": "30.74",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Godfrey-Ross",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T023",
+        "date": "2026-02-20",
+        "amount": "37.16",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Webb, Walsh and Ali",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T024",
+        "date": "2026-06-06",
+        "amount": "43.68",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Barber-Harding",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T025",
+        "date": "2026-03-24",
+        "amount": "19.56",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Sims, Nicholson and Smith",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T026",
+        "date": "2026-03-20",
+        "amount": "89.13",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Morgan Group",
+        "counterparty_country": "GB",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_017-T027",
+        "date": "2026-06-23",
+        "amount": "3631.95",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-T028",
+        "date": "2026-06-25",
+        "amount": "2370.08",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-T029",
+        "date": "2026-04-22",
+        "amount": "2247.36",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-T030",
+        "date": "2026-04-13",
+        "amount": "2975.8",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-T031",
+        "date": "2026-05-31",
+        "amount": "2187.06",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-T032",
+        "date": "2026-06-06",
+        "amount": "3716.39",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-T033",
+        "date": "2026-04-11",
+        "amount": "1712.03",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-S00",
+        "date": "2026-06-14",
+        "amount": "8632.56",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-S01",
+        "date": "2026-06-16",
+        "amount": "9327.63",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-S02",
+        "date": "2026-06-18",
+        "amount": "9493.75",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_017-S03",
+        "date": "2026-06-20",
+        "amount": "9847.68",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "GB",
+        "txn_type": "cash"
+      }
+    ],
+    "screening": {
+      "sanctions": [],
+      "pep_confirmed": true,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "HIGH",
+      "severity": "high",
+      "typology": "structuring",
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_018",
+    "kyc": {
+      "name": "Mr Hugh Taylor",
+      "dob": "1986-12-30",
+      "nationality": "IR",
+      "occupation": "arms dealer",
+      "id_doc": "P67441673",
+      "onboarded": "2024-07-29",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "IR",
+      "product": "current_account",
+      "pep": false,
+      "tenure_days": 725
+    },
+    "transactions": [
+      {
+        "id": "CUST_018-T000",
+        "date": "2026-07-21",
+        "amount": "4045.77",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_018-T001",
+        "date": "2026-06-21",
+        "amount": "4117.71",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_018-T002",
+        "date": "2026-05-22",
+        "amount": "4187.13",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_018-T003",
+        "date": "2026-04-22",
+        "amount": "4138.4",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_018-T004",
+        "date": "2026-03-23",
+        "amount": "4121.05",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_018-T005",
+        "date": "2026-02-21",
+        "amount": "4087.74",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_018-T006",
+        "date": "2026-07-19",
+        "amount": "1332.24",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_018-T007",
+        "date": "2026-06-19",
+        "amount": "997.53",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_018-T008",
+        "date": "2026-05-20",
+        "amount": "707.49",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_018-T009",
+        "date": "2026-04-20",
+        "amount": "892.3",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_018-T010",
+        "date": "2026-03-21",
+        "amount": "653.73",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_018-T011",
+        "date": "2026-02-19",
+        "amount": "761.58",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "IR",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_018-T012",
+        "date": "2026-05-31",
+        "amount": "23.13",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Holloway-Joyce",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T013",
+        "date": "2026-02-15",
+        "amount": "29.55",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Davey, Johnson and Carter",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T014",
+        "date": "2026-02-02",
+        "amount": "14.56",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Phillips and Sons",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T015",
+        "date": "2026-01-29",
+        "amount": "28.07",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Williams-Harrison",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T016",
+        "date": "2026-06-03",
+        "amount": "7.66",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Day Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T017",
+        "date": "2026-04-14",
+        "amount": "44.06",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Roberts, Ellis and Kemp",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T018",
+        "date": "2026-05-26",
+        "amount": "19.72",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Fisher Inc",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T019",
+        "date": "2026-01-28",
+        "amount": "56.14",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Chambers Inc",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T020",
+        "date": "2026-03-13",
+        "amount": "37.26",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "May-Miah",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T021",
+        "date": "2026-07-19",
+        "amount": "10.45",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Morley Ltd",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T022",
+        "date": "2026-05-31",
+        "amount": "58.48",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Bond-Robertson",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T023",
+        "date": "2026-06-22",
+        "amount": "201.56",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Robinson-Smith",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T024",
+        "date": "2026-06-26",
+        "amount": "41.94",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Daly, Bates and Foster",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T025",
+        "date": "2026-06-09",
+        "amount": "26.22",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Shaw, Taylor and White",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-T026",
+        "date": "2026-03-04",
+        "amount": "57.59",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cook-Greenwood",
+        "counterparty_country": "IR",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_018-S00",
+        "date": "2026-06-14",
+        "amount": "8881.08",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "IR",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_018-S01",
+        "date": "2026-06-16",
+        "amount": "9840.2",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "IR",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_018-S02",
+        "date": "2026-06-18",
+        "amount": "9248.01",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "IR",
+        "txn_type": "cash"
+      },
+      {
+        "id": "CUST_018-S03",
+        "date": "2026-06-20",
+        "amount": "9507.08",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "Cash Deposit",
+        "counterparty_country": "IR",
+        "txn_type": "cash"
+      }
+    ],
+    "screening": {
+      "sanctions": [
+        {
+          "name": "Mr Hugh Taylor",
+          "match_score": 1.0,
+          "list": "OFAC SDN"
+        }
+      ],
+      "pep_confirmed": false,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "HIGH",
+      "severity": "critical",
+      "typology": "structuring",
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  },
+  {
+    "customer_id": "CUST_019",
+    "kyc": {
+      "name": "Susan Bird-Burns",
+      "dob": "1995-07-02",
+      "nationality": "SY",
+      "occupation": "shell company director",
+      "id_doc": "P91229857",
+      "onboarded": "2020-11-12",
+      "kyc_complete": true
+    },
+    "profile": {
+      "entity_type": "individual",
+      "country": "SY",
+      "product": "current_account",
+      "pep": true,
+      "tenure_days": 2080
+    },
+    "transactions": [
+      {
+        "id": "CUST_019-T000",
+        "date": "2026-07-21",
+        "amount": "5253.29",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "SY",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_019-T001",
+        "date": "2026-06-21",
+        "amount": "5333.52",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "SY",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_019-T002",
+        "date": "2026-05-22",
+        "amount": "5235.57",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "SY",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_019-T003",
+        "date": "2026-04-22",
+        "amount": "5352.83",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "SY",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_019-T004",
+        "date": "2026-03-23",
+        "amount": "5417.19",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "SY",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_019-T005",
+        "date": "2026-02-21",
+        "amount": "5323.0",
+        "currency": "GBP",
+        "direction": "in",
+        "counterparty": "ACME Payroll Ltd",
+        "counterparty_country": "SY",
+        "txn_type": "salary"
+      },
+      {
+        "id": "CUST_019-T006",
+        "date": "2026-07-19",
+        "amount": "946.38",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "SY",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_019-T007",
+        "date": "2026-06-19",
+        "amount": "628.67",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "SY",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_019-T008",
+        "date": "2026-05-20",
+        "amount": "1367.82",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "SY",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_019-T009",
+        "date": "2026-04-20",
+        "amount": "682.4",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "SY",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_019-T010",
+        "date": "2026-03-21",
+        "amount": "632.86",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "SY",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_019-T011",
+        "date": "2026-02-19",
+        "amount": "796.85",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Landlord DD",
+        "counterparty_country": "SY",
+        "txn_type": "direct_debit"
+      },
+      {
+        "id": "CUST_019-T012",
+        "date": "2026-06-06",
+        "amount": "72.99",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Watkins, Jones and Bray",
+        "counterparty_country": "SY",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_019-T013",
+        "date": "2026-04-22",
+        "amount": "24.63",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Jones, Ross and Miller",
+        "counterparty_country": "SY",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_019-T014",
+        "date": "2026-02-21",
+        "amount": "28.63",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Murphy-Storey",
+        "counterparty_country": "SY",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_019-T015",
+        "date": "2026-07-04",
+        "amount": "69.36",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Robinson and Sons",
+        "counterparty_country": "SY",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_019-T016",
+        "date": "2026-02-13",
+        "amount": "14.46",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cooper, Davis and Craig",
+        "counterparty_country": "SY",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_019-T017",
+        "date": "2026-03-21",
+        "amount": "46.84",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Morris-Cole",
+        "counterparty_country": "SY",
+        "txn_type": "card"
+      },
+      {
+        "id": "CUST_019-T018",
+        "date": "2026-04-27",
+        "amount": "50.3",
+        "currency": "GBP",
+        "direction": "out",
+        "counterparty": "Cooper-Adams",
+        "counterparty_country": "SY",
+        "txn_type": "card"
+      }
+    ],
+    "screening": {
+      "sanctions": [
+        {
+          "name": "Susan Bird-Burns",
+          "match_score": 1.0,
+          "list": "OFAC SDN"
+        }
+      ],
+      "pep_confirmed": true,
+      "adverse_media": []
+    },
+    "meta": {
+      "expected_band": "HIGH",
+      "severity": "critical",
+      "typology": null,
+      "missing_docs": [],
+      "extra_docs": []
+    }
+  }
+]
