@@ -31,10 +31,14 @@ with additive-driver explainability and an append-only audit trail.
 | `src/config.py` | THE tuning knob — all weights, floors, windows, band cutoffs, routing thresholds. |
 | `src/models.py` | Shared schemas (Dossier, Txn, Finding, RiskResult, RiskFinding, Disposition, AuditRecord). |
 | `src/rules.py` | Deterministic engine: FACTOR_RULES + TYPOLOGY_RULES + `score_customer()`. |
-| `src/llm.py` | Never-fails LLM cross-check (instructor+pydantic, retry→rules-only fallback). |
-| `src/engine.py` | Orchestrator: rules → llm → reconcile(confidence) → route() → AuditRecord. |
+| `src/llm.py` | Never-fails LLM boundary: multi-provider (nvidia/gemini/anthropic) + cache + retry/backoff + fallback + LangSmith `@traceable`. |
+| `src/orchestrator.py` | Multi-step LangGraph graph: 3 parallel domain analysts → synthesize → verify → finalize. |
+| `src/engine.py` | Orchestrator: rules → llm/graph → reconcile(confidence) → route() → Decision + AuditRecord. |
+| `src/pipeline.py` | Scale layer: parallel batch scoring (ThreadPool) + LLM gating (MED-band only). |
+| `src/store.py` | SQLite decisions store — scalable read path the UI/API query (→ Postgres). |
 | `src/audit.py` | Append-only decision store (sqlite3/JSONL). |
 | `src/nlquery.py` | NL → whitelisted Pydantic filter spec → pandas mask (stretch). |
+| `docs/SCALING.md` | How to run at 10k+/day: gating, parallelism, caching, read store, infra diagram. |
 | `src/app/` | Streamlit UI (Queue / Case detail / Audit). |
 | `tests/` | Golden tests (one per typology + override + fallback + driver-sum). |
 | `README.md` | One-page submission README (setup, approach, worked example). |

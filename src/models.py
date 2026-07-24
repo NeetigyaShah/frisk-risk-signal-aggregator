@@ -103,16 +103,30 @@ class RiskFinding(BaseModel):
     `customer_id` is pinned by us after the call, so it is optional here."""
     customer_id: str = ""
     score: int = Field(ge=0, le=100, description="AML risk 0-100, higher = riskier")
-    band: Literal["low", "medium", "high"] = "low"
+    # accept ANY band vocabulary the model uses ("Critical", "severe", …) then normalise from the score
+    band: str = "low"
     rationale: str = Field(min_length=1, description="one-line justification")
     key_signals: list[str] = Field(default_factory=list, description="signal names that drove the score")
 
     @model_validator(mode="after")
     def _coerce_band(self):
-        expected = BAND_LABEL[band_for(self.score)]
-        if self.band != expected:
-            object.__setattr__(self, "band", expected)  # deterministic band wins over the model's
+        object.__setattr__(self, "band", BAND_LABEL[band_for(self.score)])  # deterministic band always wins
         return self
+
+
+class SourceFinding(BaseModel):
+    """Output of one domain-analyst node in the multi-step graph."""
+    domain: Literal["kyc", "transactions", "screening"]
+    risk_level: Literal["low", "medium", "high"]
+    signals: list[str] = Field(default_factory=list, description="specific red flags found in this domain")
+    note: str = Field(min_length=1, description="one-line domain assessment")
+
+
+class Verdict(BaseModel):
+    """Output of the verification / critic node (chain-of-verification)."""
+    consistent: bool = Field(description="does the synthesis follow from the evidence?")
+    adjusted_score: int = Field(ge=0, le=100, description="score after adversarial re-check")
+    note: str = Field(min_length=1, description="what the check found")
 
 
 # --------------------------------------------------------------------------- #

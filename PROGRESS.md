@@ -53,5 +53,11 @@
 - 2026-07-24: Phase 3 — full e2e verification green (5/9/6 dispositions); screenshots + DEMO_SCRIPT.md. BUILD COMPLETE.
 - 2026-07-24: LLM cross-check made provider-configurable (nvidia|gemini|anthropic). Google free tier rate-limited (429s);
   switched default to **NVIDIA Nemotron-3-Ultra-550B** via instructor JSON (OpenAI-compatible endpoint). Disk cache
-  (data/llm_cache.json) warmed for all 20 -> instant. Added docs/PROJECT_EXPLAINER.html (Mermaid diagrams). API keys in
+  (data/llm_cache.json) warmed -> instant. Added docs/PROJECT_EXPLAINER.html (Mermaid diagrams). API keys in
   .env (gitignored) — ROTATE the pasted Gemini + NVIDIA keys.
+- 2026-07-24: MULTI-STEP orchestration — replaced the single LLM call with a 5-node **LangGraph** graph
+  (`orchestrator.py`): 3 parallel domain analysts → synthesize → verify (chain-of-verification) → finalize;
+  each node degrades independently; cascade graph→single→rules-only. RiskFinding.band now derived from score
+  (accepts any model vocabulary). SCALE layer: `pipeline.py` (parallel batch + MED-band gating), `store.py`
+  (SQLite decisions read store), LangSmith `@traceable` observability, `docs/SCALING.md` (10k/day infra).
+  16 tests pass. Multi-step cache warming in background.

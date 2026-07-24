@@ -75,6 +75,7 @@ CONFIG = {
         #       "off" -> pure rules-only (degraded, never auto-clears).
         "mode": "auto",
         "provider": "nvidia",                       # nvidia | gemini | anthropic
+        "multi_step": True,                         # True -> LangGraph 5-step orchestration; False -> single call
         "nvidia_model": "nvidia/nemotron-3-ultra-550b-a55b",
         "nvidia_base_url": "https://integrate.api.nvidia.com/v1",
         "gemini_model": "gemini-2.5-flash-lite",    # fast, high free-tier quota
@@ -84,6 +85,15 @@ CONFIG = {
         "max_retries": 3,
         "timeout_s": 60,
     },
+
+    # --- scale / throughput ---
+    "scale": {
+        "workers": 16,                 # parallel workers for I/O-bound LLM cross-checks
+        "crosscheck_policy": "all",    # "all" -> LLM on everyone; "gated" -> LLM only on the uncertain MED band
+        "gated_confidence": 0.85,      # confidence when rules are policy-authoritative and the LLM is skipped by the gate
+        "db_path": "data/decisions.db",  # scalable read store the dashboard queries instead of re-scoring
+    },
+    # Observability: set LANGSMITH_TRACING=true + LANGSMITH_API_KEY to stream traces to LangSmith (opt-in, no-op otherwise).
 }
 
 

@@ -12,6 +12,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import threading
 import time
 
 from config import CONFIG, BAND_LABEL
@@ -19,9 +20,24 @@ from models import Dossier, RiskResult, RiskFinding
 
 _LLM = CONFIG["llm"]
 
+# Opt-in LangSmith observability: real @traceable if installed + LANGSMITH_TRACING=true, else a no-op.
+try:
+    from langsmith import traceable as _ls_traceable
+
+    def traceable(*a, **k):
+        if a and callable(a[0]) and not k:
+            return _ls_traceable(a[0])
+        return _ls_traceable(*a, **k)
+except Exception:  # langsmith not installed -> decorator is a transparent no-op
+    def traceable(*a, **k):
+        if a and callable(a[0]) and not k:
+            return a[0]
+        return lambda f: f
+
 # disk cache of LLM findings keyed by prompt hash -> instant, rate-limit-proof re-runs
 _CACHE_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "llm_cache.json")
 _cache: dict | None = None
+_cache_lock = threading.Lock()  # cache is written from parallel workers
 
 
 def _load_cache() -> dict:
@@ -36,7 +52,7 @@ def _load_cache() -> dict:
 
 def _cache_save() -> None:
     try:
-        with open(_CACHE_PATH, "w", encoding="utf-8") as f:
+        with _cache_lock, open(_CACHE_PATH, "w", encoding="utf-8") as f:
             json.dump(_cache, f, indent=2)
     except Exception:
         pass
@@ -212,6 +228,12 @@ _PROVIDERS = {
 # the cross-check — the never-fails guarantee lives in the single try/except
 # --------------------------------------------------------------------------- #
 
+@traceable(
+    name="risk_crosscheck",
+    process_inputs=lambda inputs: {"customer_id": getattr(inputs.get("d"), "customer_id", "?"),
+                                   "rules_score": getattr(inputs.get("rr"), "score", None)},
+    process_outputs=lambda out: {"llm_score": out[0].score, "band": out[0].band, "path": out[1].get("path")},
+)
 def crosscheck(d: Dossier, rr: RiskResult) -> tuple[RiskFinding, dict]:
     """Return (finding, meta). meta.path in {'rules+llm','rules+sim','rules_only'}. Never raises."""
     prompt = build_prompt(d)
@@ -224,16 +246,40 @@ def crosscheck(d: Dossier, rr: RiskResult) -> tuple[RiskFinding, dict]:
 
     client_fn, call_fn, model_key = _PROVIDERS[provider]
     model_name = _LLM[model_key]
-    key = f"{provider}:{model_name}:{meta['prompt_hash']}"
-
-    # cache hit -> instant, no API call (survives rate limits and repeated runs)
+    ph = meta["prompt_hash"]
+    multistep = bool(_LLM.get("multi_step")) and provider == "nvidia"
     cache = _load_cache()
-    if key in cache:
-        finding = RiskFinding.model_validate(cache[key])
+    graph_key = f"{provider}:{model_name}:graph:{ph}"
+    single_key = f"{provider}:{model_name}:{ph}"
+
+    # --- cache (handles both single-call and multi-step entry shapes) ---
+    if multistep and graph_key in cache:
+        e = cache[graph_key]
+        finding = RiskFinding.model_validate(e["finding"])
+        finding.customer_id = d.customer_id
+        meta.update(path="rules+graph", model=model_name, cached=True, detail=e.get("detail"))
+        return finding, meta
+    if not multistep and single_key in cache:
+        finding = RiskFinding.model_validate(cache[single_key])
         finding.customer_id = d.customer_id
         meta.update(path="rules+llm", model=model_name, cached=True)
         return finding, meta
 
+    # --- multi-step LangGraph orchestration (primary when enabled) ---
+    if multistep:
+        try:
+            import orchestrator
+            if orchestrator.available():
+                finding, detail = orchestrator.assess_multistep(d, rr)
+                finding.customer_id = d.customer_id
+                cache[graph_key] = {"finding": finding.model_dump(), "detail": detail}
+                _cache_save()
+                meta.update(path="rules+graph", model=model_name, detail=detail)
+                return finding, meta
+        except Exception as e:  # graph engine died -> cascade to single call
+            meta["graph_error"] = type(e).__name__
+
+    # --- single call (fallback, or when multi_step is off) ---
     client = client_fn()
     if client is not None:
         last = None
@@ -241,7 +287,7 @@ def crosscheck(d: Dossier, rr: RiskResult) -> tuple[RiskFinding, dict]:
             try:
                 finding = call_fn(client, prompt)
                 finding.customer_id = d.customer_id  # pin; don't trust the model to echo it
-                cache[key] = finding.model_dump()
+                cache[single_key] = finding.model_dump()
                 _cache_save()
                 meta.update(path="rules+llm", attempt=attempt + 1, model=model_name)
                 return finding, meta

@@ -11,3 +11,6 @@ venv/
 
 # runtime audit log (regenerated on app start)
 data/audit_log.jsonl
+
+# runtime decisions store
+data/decisions.db

@@ -9,12 +9,12 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 
 import audit
 from config import CONFIG
-from llm import crosscheck
+from llm import crosscheck, rules_only_finding
 from models import AuditRecord, Disposition, Dossier
 from rules import score_customer
 
@@ -43,6 +43,7 @@ class Decision:
     country: str = ""
     pep: bool = False
     occupation: str = ""
+    llm_detail: dict = field(default_factory=dict)   # multi-step: per-source findings + verdict
 
 
 def _fingerprint(d: Dossier) -> str:
@@ -56,7 +57,9 @@ def _fingerprint(d: Dossier) -> str:
 
 def reconcile(rules_score: int, llm_score: int, path: str) -> float:
     if path == "rules_only":
-        return round(CONFIG["degraded_confidence_cap"], 2)  # degraded -> capped low
+        return round(CONFIG["degraded_confidence_cap"], 2)   # genuine degradation -> capped low
+    if path == "rules_gated":
+        return round(CONFIG["scale"]["gated_confidence"], 2)  # LLM skipped by policy, not by failure
     return round(1 - abs(rules_score - llm_score) / 100, 2)
 
 
@@ -81,9 +84,12 @@ def _incomplete(d: Dossier) -> bool:
     return bool(d.meta.get("missing_docs")) or not d.transactions or not d.kyc.get("kyc_complete", True)
 
 
-def assess(d: Dossier, actor: str | None = None, persist: bool = True) -> Decision:
+def assess(d: Dossier, actor: str | None = None, persist: bool = True, use_llm: bool = True) -> Decision:
     rr = score_customer(d)
-    lf, meta = crosscheck(d, rr)
+    if use_llm:
+        lf, meta = crosscheck(d, rr)
+    else:  # gated: rules are policy-authoritative for this case, LLM deliberately skipped
+        lf, meta = rules_only_finding(d, rr), {"path": "rules_gated", "provider": "none"}
     incomplete = _incomplete(d)
     conf = reconcile(rr.score, lf.score, meta["path"])
     if incomplete:                                     # missing data -> cap confidence
@@ -114,6 +120,7 @@ def assess(d: Dossier, actor: str | None = None, persist: bool = True) -> Decisi
         llm_score=lf.score, fingerprint=fp,
         country=d.profile.get("country", ""), pep=bool(d.profile.get("pep")),
         occupation=d.kyc.get("occupation", ""),
+        llm_detail=meta.get("detail") or {},
     )
 
 

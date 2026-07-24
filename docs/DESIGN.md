@@ -63,6 +63,20 @@ signoff_by + ruleset_version + input_fingerprint (sha256). Maker-checker on ESCA
 `on_select` single-row) → **Case detail** (dossier + driver bars + rationale + evidence + approve/escalate
 callbacks) → **Audit** (decision log). NL box → whitelisted Pydantic filter spec → pandas mask (never eval).
 
+## Multi-step LLM orchestration (`orchestrator.py`, LangGraph)
+
+The advisory second opinion is a **5-node LangGraph graph**, not one call: three domain analysts
+(KYC / transactions / screening) fan out in **parallel**, `synthesize` correlates them, `verify` does an
+adversarial chain-of-verification re-check, `finalize` packages deterministically. Each node degrades on its
+own; the whole thing cascades graph → single-call → rules-only. Toggle with `config.llm.multi_step`. Still
+confidence-gated against the rules — the graph sharpens the opinion, never overrides the auditable number.
+
+## Scale (`pipeline.py`, `store.py`)
+
+Rules score 100% of the population (~147M/day/core); the LLM is **gated** to the uncertain MED band only, run
+in **parallel** (ThreadPool), **cached** by prompt hash, with decisions written to an indexed **SQLite** store
+the UI/API read (→ Postgres in prod). See `docs/SCALING.md`. Observability via LangSmith `@traceable` (opt-in).
+
 ## Standout vs the crowd
 
 Multi-source dossier per person · never-fails engine with hard vetoes · confidence-gated HITL · additive

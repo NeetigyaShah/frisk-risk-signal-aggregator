@@ -56,7 +56,9 @@
       <span class="badge">Streamlit</span>
       <span class="badge">pandas · pydantic v2</span>
       <span class="badge">NVIDIA Nemotron 550B</span>
+      <span class="badge">LangGraph multi-step</span>
       <span class="badge">Never-fails engine</span>
+      <span class="badge">Scales to 10k/day</span>
       <span class="badge">HyperVerge take-home</span>
     </div>
   </div>
@@ -69,8 +71,10 @@
   <a href="#data">Data</a>
   <a href="#scoring">Scoring</a>
   <a href="#neverfails">Never-fails</a>
+  <a href="#multistep">Multi-step AI</a>
   <a href="#hitl">HITL routing</a>
   <a href="#audit">Explainability &amp; Audit</a>
+  <a href="#scale">Scaling</a>
   <a href="#built">How it was built</a>
   <a href="#plan">Plan vs Built</a>
   <a href="#files">File map</a>
@@ -106,9 +110,11 @@
         <tr><td>Data / numerics</td><td>pandas, numpy, Faker (seeded synthetic data)</td></tr>
         <tr><td>Engine + audit core</td><td>stdlib <code>dataclasses</code>, <code>decimal</code>, <code>hashlib</code>, <code>json</code></td></tr>
         <tr><td>Schema / validation</td><td>pydantic v2</td></tr>
-        <tr><td>LLM cross-check</td><td><b>instructor</b> + OpenAI-compatible (NVIDIA) · Gemini · Claude</td></tr>
+        <tr><td>LLM orchestration</td><td><b>LangGraph</b> (5-step graph) + <b>LangChain</b> · NVIDIA Nemotron · Gemini · Claude</td></tr>
+        <tr><td>Observability</td><td>LangSmith (opt-in <code>@traceable</code>)</td></tr>
+        <tr><td>Scale read store</td><td>SQLite decisions store (→ Postgres)</td></tr>
         <tr><td>UI</td><td>Streamlit (st.navigation, st.dataframe)</td></tr>
-        <tr><td>Tests</td><td>pytest (12 golden tests)</td></tr>
+        <tr><td>Tests</td><td>pytest (16 tests)</td></tr>
       </table>
     </div>
     <div>
@@ -121,6 +127,8 @@
       <p>The model is an <b>advisory, independent second opinion</b> — it is deliberately <i>not</i> told the rules
       score, so agreement is meaningful. It <b>never writes the score arithmetic</b>.</p>
       <ul>
+        <li><b>Multi-step</b> (see §6b): a 5-node LangGraph graph, not one call — three parallel domain analysts →
+        synthesis → adversarial verification.</li>
         <li><b>Provider-swappable</b> via <code>config.py</code> — <code>nvidia</code> ↔ <code>gemini</code>
         (Gemini 2.5/3 Flash) ↔ <code>anthropic</code> (Claude Haiku); the schema and never-fails wrapper are shared.</li>
         <li><b>Disk-cached</b> findings (keyed by provider+model+prompt hash) → instant, rate-limit-proof re-runs.</li>
@@ -213,7 +221,7 @@ flowchart TD
   XC --> CH{"cache hit?"}
   CH -- yes --> RF["RiskFinding (validated)"]
   CH -- no --> KEY{"provider key set?"}
-  KEY -- yes --> CALL["NVIDIA Nemotron 550B<br/>instructor JSON, temp 0"]
+  KEY -- yes --> CALL["5-step LangGraph orchestration<br/>3 parallel analysts → synthesis → verify"]
   CALL --> VAL{"valid JSON<br/>+ pydantic?"}
   VAL -- yes --> RF
   VAL -- "no / 429" --> RT{"retry ×3<br/>+ backoff"}
@@ -228,6 +236,33 @@ flowchart TD
   </pre>
   <p class="muted">Paths are labelled in the audit metadata: <code>rules+llm</code> (Gemini), <code>rules+sim</code>
   (offline), or <code>rules_only</code> (degraded — confidence capped, never auto-cleared).</p>
+</section>
+
+<section id="multistep">
+  <h2>6b · Multi-step AI orchestration (LangGraph)</h2>
+  <p>A single LLM call is fragile — one bad parse or hallucination and the whole assessment is wrong. Instead the
+  second opinion is a <b>5-step graph</b> where no single call decides the outcome and each node degrades independently.</p>
+  <pre class="mermaid">
+flowchart LR
+  S(("START")) --> K["analyze_kyc"]
+  S --> T["analyze_transactions"]
+  S --> SC["analyze_screening"]
+  K --> SY["synthesize<br/>correlate domains"]
+  T --> SY
+  SC --> SY
+  SY --> V["verify<br/>adversarial QA"]
+  V --> F["finalize<br/>deterministic package"]
+  F --> E(("END"))
+  </pre>
+  <ul>
+    <li><b>Fan-out (parallel):</b> three domain analysts — KYC, transactions, screening — each rate only their own domain.</li>
+    <li><b>Synthesize:</b> correlates the three, weighing how signals <i>reinforce</i> across domains (the real risk).</li>
+    <li><b>Verify (chain-of-verification):</b> a QA node adversarially re-checks the score against the evidence and corrects it.</li>
+    <li><b>Finalize:</b> deterministic packaging, robust to any missing upstream step.</li>
+  </ul>
+  <p class="muted">LangGraph <code>StateGraph</code> with parallel fan-out via <code>Annotated[list, operator.add]</code> reducers,
+  LangChain structured output, cascade graph → single-call → rules-only. Still confidence-gated against the deterministic
+  rules — the graph only sharpens the advisory opinion, it never overrides the auditable number.</p>
 </section>
 
 <section id="hitl">
@@ -274,6 +309,35 @@ flowchart TD
   </div>
 </section>
 
+<section id="scale">
+  <h2>8b · Scaling to 10,000+ / day</h2>
+  <p>The key move: separate the <b>cheap deterministic layer</b> from the <b>expensive LLM layer</b>, and only spend
+  the LLM where it changes the decision. Full detail in <code>docs/SCALING.md</code>.</p>
+  <table>
+    <tr><th>Layer</th><th>Cost / customer</th><th>10k/day</th></tr>
+    <tr><td>Deterministic rules</td><td>~0.6 ms</td><td><b>~6 seconds total</b> (measured: ~1,700/sec ≈ 147M/day/core)</td></tr>
+    <tr><td>Multi-step LLM graph</td><td>~60 s (5 calls)</td><td>infeasible on everyone → <b>gated</b> to the ~10–20% ambiguous middle</td></tr>
+  </table>
+  <p>Four levers, each already implemented as a working local stand-in:</p>
+  <ul>
+    <li><b>Gating</b> (<code>pipeline.should_crosscheck</code>) — rules auto-clear LOW and escalate HIGH; the LLM runs only on the MED band.</li>
+    <li><b>Parallelism</b> (<code>pipeline.py</code>, ThreadPoolExecutor) — overlap I/O-bound LLM calls; concurrency-capped for rate limits.</li>
+    <li><b>Caching</b> (<code>data/llm_cache.json</code> → Redis) — never re-score an unchanged customer.</li>
+    <li><b>Precomputed read store</b> (<code>store.py</code> SQLite → Postgres) — the dashboard queries results, never re-scores on load.</li>
+  </ul>
+  <pre class="mermaid">
+flowchart LR
+  ING["ingest<br/>CSV/JSON/Kafka"] --> Q[("work queue<br/>SQS / Kafka")]
+  Q --> W["autoscaled workers<br/>rules → gate → graph → route"]
+  W --> DS[("decisions store<br/>Postgres")]
+  W --> AU[("append-only audit<br/>Postgres / S3")]
+  W -.trace.-> LS["LangSmith"]
+  DS --> UI["dashboard / API"]
+  </pre>
+  <p class="muted">At 100k/day: swap SQLite→Postgres, threads→Celery/Kafka consumers, JSON cache→Redis. At 1M+/day:
+  shard by region, add a cheaper/distilled model for the gated tier, batch LLM calls.</p>
+</section>
+
 <section id="built">
   <h2>9 · How it was built</h2>
   <p>Brainstorm → deep research → approved plan → phased build, with an orchestrating agent and subagents
@@ -314,6 +378,9 @@ flowchart LR
     <tr><td>Confidence-gated HITL (auto-clear/review/escalate)</td><td class="ok">✔ built</td><td>kill-switch first; degraded/missing-data never auto-clears</td></tr>
     <tr><td>Additive explainability + append-only audit</td><td class="ok">✔ built</td><td>drivers sum to score; sha256 fingerprint</td></tr>
     <tr><td>LLM provider</td><td class="ok">✔ swapped</td><td>Plan assumed Claude Haiku; now <b>NVIDIA Nemotron-3-Ultra-550B</b> (provider-configurable: NVIDIA / Gemini / Claude)</td></tr>
+    <tr><td>Multi-step LLM orchestration</td><td class="ok">✔ added</td><td>5-node <b>LangGraph</b> graph (parallel analysts → synthesis → verification) — no single point of failure</td></tr>
+    <tr><td>Observability</td><td class="ok">✔ added</td><td>LangSmith opt-in <code>@traceable</code> on the graph</td></tr>
+    <tr><td>Scale to 10k+/day</td><td class="ok">✔ built</td><td>gating + parallel <code>pipeline.py</code> + SQLite <code>store.py</code>; infra in <code>docs/SCALING.md</code></td></tr>
     <tr><td>5-slide deck + README + screenshots</td><td class="ok">✔ built</td><td><code>deck.pptx</code>, <code>README.md</code>, <code>docs/screenshots/</code></td></tr>
     <tr><td>≤3-min demo recording</td><td class="a">◐ human step</td><td>Script ready in <code>docs/DEMO_SCRIPT.md</code></td></tr>
     <tr><td>Live adverse-media / sanctions API feeds</td><td class="a">✎ future</td><td>Explicitly scoped out of a 1-day POC; synthetic feeds used</td></tr>
@@ -329,8 +396,11 @@ flowchart LR
     <tr><td><code>src/config.py</code></td><td>The single tuning knob — weights, floors, windows, bands, routing, LLM</td></tr>
     <tr><td><code>src/models.py</code></td><td>Schemas: Dossier, Txn, Finding, RiskResult, RiskFinding, Disposition, AuditRecord</td></tr>
     <tr><td><code>src/rules.py</code></td><td>Deterministic engine: FACTOR_RULES + TYPOLOGY_RULES + score_customer()</td></tr>
-    <tr><td><code>src/llm.py</code></td><td>Never-fails cross-check: Gemini + cache + retry/backoff + fallback</td></tr>
-    <tr><td><code>src/engine.py</code></td><td>Orchestrator: reconcile(confidence) → route() → AuditRecord</td></tr>
+    <tr><td><code>src/llm.py</code></td><td>Never-fails cross-check boundary: multi-provider + cache + retry/backoff + fallback + LangSmith</td></tr>
+    <tr><td><code>src/orchestrator.py</code></td><td>5-step LangGraph graph: parallel analysts → synthesis → verification → finalize</td></tr>
+    <tr><td><code>src/engine.py</code></td><td>reconcile(confidence) → route() → Decision + AuditRecord</td></tr>
+    <tr><td><code>src/pipeline.py</code></td><td>Scale layer: parallel batch scoring + LLM gating</td></tr>
+    <tr><td><code>src/store.py</code></td><td>SQLite decisions store — the scalable read path (→ Postgres)</td></tr>
     <tr><td><code>src/audit.py</code></td><td>Append-only decision store (JSONL)</td></tr>
     <tr><td><code>src/nlquery.py</code></td><td>NL → whitelisted filter spec → pandas mask (safe)</td></tr>
     <tr><td><code>src/app/Home.py</code></td><td>Streamlit UI (Queue / Case detail / Audit)</td></tr>

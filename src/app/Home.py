@@ -16,6 +16,7 @@ import streamlit as st
 
 import audit
 import nlquery
+import store
 from config import CONFIG
 from engine import assess_all, log_analyst_action
 from models import load_dossiers
@@ -34,7 +35,8 @@ def bootstrap():
     """Score all customers once per session and seed the audit log."""
     audit.reset()
     ds = load_dossiers(DATA)
-    decs = assess_all(ds, persist=True)  # one engine AuditRecord per customer
+    decs = assess_all(ds, persist=True)  # sequential (cache-warm -> instant); one AuditRecord each
+    store.upsert_many(decs)              # also populate the scalable SQLite read store
     return decs, {d.customer_id: d for d in ds}
 
 
@@ -152,8 +154,10 @@ def case_page():
         st.error(f"🚨 Kill-switch: {', '.join(dec.flags)} — mandatory escalation regardless of score.", icon="🚨")
     if dec.engine_path == "rules_only":
         st.warning("Degraded path (LLM unavailable) — confidence capped; not auto-cleared.", icon="⚠️")
+    elif dec.engine_path == "rules+graph":
+        st.caption("ℹ️ Second opinion via a 5-step LangGraph orchestration (3 parallel domain analysts → synthesis → QA verification).")
     elif dec.engine_path == "rules+sim":
-        st.caption("ℹ️ Second opinion is a deterministic simulation (no API key). Set ANTHROPIC_API_KEY for live Claude.")
+        st.caption("ℹ️ Second opinion is a deterministic simulation (no API key set).")
 
     left, right = st.columns([3, 2])
 
@@ -167,6 +171,19 @@ def case_page():
                 st.json(f["evidence"])
         st.markdown("**Analyst rationale (model)**")
         st.info(dec.rationale)
+
+        sources = dec.llm_detail.get("source_findings") if dec.llm_detail else None
+        if sources:
+            st.markdown("**Multi-step AI reasoning** — parallel domain analysts → synthesis → verification (LangGraph)")
+            lv = {"low": "🟢", "medium": "🟡", "high": "🔴"}
+            cols = st.columns(len(sources))
+            for col, sf in zip(cols, sources):
+                col.markdown(f"**{sf['domain'].title()}** {lv.get(sf['risk_level'],'⚪')} {sf['risk_level']}")
+                col.caption(sf.get("note", ""))
+            verd = dec.llm_detail.get("verdict")
+            if verd:
+                tag = "✅ verified consistent" if verd.get("consistent") else "✏️ score adjusted by QA"
+                st.caption(f"QA verification: {tag} — {str(verd.get('note',''))[:220]}")
 
     with right:
         st.markdown("**Customer dossier**")
