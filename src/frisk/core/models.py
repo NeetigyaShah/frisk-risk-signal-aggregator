@@ -46,27 +46,6 @@ class Dossier:
     documents: list = field(default_factory=list)  # unstructured docs: [{name, kind, text}] (id doc, RM notes, news, email)
 
 
-@dataclass(frozen=True)
-class Finding:
-    """One fired rule. `evidence` IS the audit trail + analyst rationale."""
-    code: str
-    category: str        # KYC | PROFILE | SCREENING | TRANSACTION
-    weight: int          # points contributed if non-override
-    is_override: bool     # forces band=HIGH / ESCALATE
-    rationale: str
-    evidence: dict
-
-
-@dataclass
-class RiskResult:
-    customer_id: str
-    score: int
-    band: str            # LOW | MED | HIGH
-    findings: list       # list[Finding]
-    drivers: list        # list[dict]: {code, contribution, rationale} — contributions sum to score
-    flags: set           # set[str]: override/kill-switch codes present
-
-
 @dataclass
 class Disposition:
     action: str          # AUTO_CLEAR | REVIEW | ESCALATE
@@ -80,16 +59,17 @@ class AuditRecord:
     customer_id: str
     ts: str
     actor: str           # "engine:v1.0" | "analyst:<id>"
-    action: str          # AUTO_CLEAR | REVIEW | ESCALATE | OVERRIDE
+    action: str          # AUTO_CLEAR | REVIEW | ESCALATE | PENDING_REVIEW | OVERRIDE
     score: int
     confidence: float
-    engine_path: str     # rules+llm | rules_only
+    engine_path: str     # "agent" (the tool-calling orchestrator)
     band: str
     thresholds: dict     # config snapshot (why)
-    drivers: list        # sums to score
+    trace: list          # the ordered tool-call trace — the auditable "why" (replaces driver sums)
     rationale: str
     ruleset_version: str
     input_fingerprint: str
+    key_signals: list = field(default_factory=list)
     override_of: Optional[str] = None
     signoff_by: Optional[str] = None
 
@@ -133,21 +113,6 @@ class AgentStep:
     tool: str
     args: dict
     result_digest: str
-
-
-class SourceFinding(BaseModel):
-    """Output of one domain-analyst node in the multi-step graph."""
-    domain: Literal["kyc", "transactions", "screening"]
-    risk_level: Literal["low", "medium", "high"]
-    signals: list[str] = Field(default_factory=list, description="specific red flags found in this domain")
-    note: str = Field(min_length=1, description="one-line domain assessment")
-
-
-class Verdict(BaseModel):
-    """Output of the verification / critic node (chain-of-verification)."""
-    consistent: bool = Field(description="does the synthesis follow from the evidence?")
-    adjusted_score: int = Field(ge=0, le=100, description="score after adversarial re-check")
-    note: str = Field(min_length=1, description="what the check found")
 
 
 # --------------------------------------------------------------------------- #

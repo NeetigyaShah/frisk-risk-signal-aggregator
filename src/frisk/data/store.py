@@ -100,6 +100,7 @@ def record_many(decisions: list[dict]) -> int:
 
 def history(customer_id: str, k: int = 5) -> list[dict]:
     """Newest-first prior assessments for one customer — the per-customer memory tier."""
+    migrate()
     with _conn() as c:
         rows = c.execute(
             "SELECT * FROM assessments WHERE customer_id=? ORDER BY id DESC LIMIT ?", (customer_id, k)
@@ -109,6 +110,7 @@ def history(customer_id: str, k: int = 5) -> list[dict]:
 
 def latest_all() -> list[dict]:
     """The most-recent assessment per customer — the dashboard queue read path."""
+    migrate()
     with _conn() as c:
         rows = c.execute(
             "SELECT a.* FROM assessments a JOIN (SELECT customer_id, MAX(id) mid FROM assessments "
@@ -132,6 +134,7 @@ def add_lesson(text: str, from_corrections: list | None = None, created_ts: str 
 
 
 def top_lessons(k: int = 5) -> list[dict]:
+    migrate()
     with _conn() as c:
         rows = c.execute(
             "SELECT * FROM lessons ORDER BY weight DESC, id DESC LIMIT ?", (k,)

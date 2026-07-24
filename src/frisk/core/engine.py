@@ -1,9 +1,12 @@
-"""Orchestrator: rules (source of truth) -> LLM cross-check -> reconcile(confidence) -> route() -> audit.
+"""Orchestrator — retrieve memory → parallel specialists → agentic orchestrator → confidence-gate → persist.
 
-Routing invariants (all enforced here, tested in tests/):
-  - kill-switch (sanctions / PEP-in-high-risk-geo) escalates FIRST, regardless of score.
-  - the rules-only / degraded path never auto-clears.
-  - low confidence (rules<->LLM disagreement) never auto-clears.
+Fully LLM: no deterministic scoring, no sanctions rail. The agent's tool-call trace is the audit record.
+Per customer:
+  1. ``memory.retrieve`` pulls per-customer history + similar cases + lessons.
+  2. specialists score their domain in parallel (memory-fed).
+  3. the agent investigates with tools and emits a RiskFinding + confidence + trace.
+  4. ``route_llm`` disposes by band; LOW confidence → the human review queue.
+  5. write back to the relational store + episodic case-bank + append-only audit; ALWAYS evict the scratchpad.
 """
 from __future__ import annotations
 
@@ -12,15 +15,14 @@ import json
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 
-from frisk.data import audit
-from frisk.config import CONFIG, band_for
-from frisk.ai.crosscheck import crosscheck, rules_only_finding
+from frisk.ai import agent, memory
+from frisk.ai.specialists import run_specialists
+from frisk.config import CONFIG
 from frisk.core.models import AuditRecord, Disposition, Dossier
-from frisk.core.rules import score_customer
+from frisk.data import audit
+from frisk.hitl import queue, scratchpad
 
-HARD = set(CONFIG["hard_escalate"])
 RT = CONFIG["routing"]
-LOW_CONF = 0.60  # below this, an otherwise-clear case is held for review
 
 
 @dataclass
@@ -33,60 +35,31 @@ class Decision:
     action: str
     tier: str
     requires_signoff: bool
-    engine_path: str
-    flags: list
-    drivers: list
-    findings: list        # list[dict] for UI/audit
-    rationale: str        # LLM (or rules-only) rationale
-    llm_score: int
+    engine_path: str            # "agent"
+    key_signals: list
+    trace: list                 # ordered tool-call steps (the audit "why")
+    rationale: str
     fingerprint: str
     country: str = ""
     pep: bool = False
     occupation: str = ""
-    llm_detail: dict = field(default_factory=dict)   # multi-step: per-source findings + verdict
+    opinions: list = field(default_factory=list)         # parallel specialists' views
+    injected_memory: dict = field(default_factory=dict)  # what memory was fed in (auditability)
+    evidence_refs: list = field(default_factory=list)
 
 
 def _fingerprint(d: Dossier) -> str:
     payload = json.dumps({
         "customer_id": d.customer_id, "kyc": d.kyc, "profile": d.profile,
-        "transactions": [asdict(t) for t in d.transactions],
-        "screening": d.screening,
+        "transactions": [asdict(t) for t in d.transactions], "screening": d.screening,
     }, sort_keys=True, default=str)
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
-def reconcile(rules_score: int, llm_score: int, path: str) -> float:
-    if path == "rules_only":
-        return round(CONFIG["degraded_confidence_cap"], 2)   # genuine degradation -> capped low
-    if path == "rules_gated":
-        return round(CONFIG["scale"]["gated_confidence"], 2)  # LLM skipped by policy, not by failure
-    return round(1 - abs(rules_score - llm_score) / 100, 2)
-
-
-def route(score: int, flags: set, degraded: bool, confidence: float) -> Disposition:
-    if flags & HARD:                                   # kill-switch first
-        return Disposition("ESCALATE", "named_reviewer", True)
-    if score < RT["auto_clear"]:
-        disp = Disposition("AUTO_CLEAR", "none", False)
-    elif score < RT["junior"]:
-        disp = Disposition("REVIEW", "junior", False)
-    elif score < RT["senior"]:
-        disp = Disposition("REVIEW", "senior", False)
-    else:
-        disp = Disposition("ESCALATE", "senior", True)
-    # degraded (rules-only / missing data) or low-confidence results never silently auto-clear
-    if disp.action == "AUTO_CLEAR" and (degraded or confidence < LOW_CONF):
-        disp = Disposition("REVIEW", "junior", False)
-    return disp
-
-
-def route_llm(score: int, flags: set, confidence: float, path: str) -> Disposition:
-    """LLM-only routing: the model's score decides, but LOW CONFIDENCE (or a dead model) sends the case
-    to the human review queue. The sanctions kill-switch is the one hard rail that always escalates."""
-    if flags & HARD:                                       # sanctions rail — always, even if the LLM missed it
-        return Disposition("ESCALATE", "named_reviewer", True)
-    if path == "rules_only" or confidence < CONFIG["confidence_threshold"]:
-        return Disposition("PENDING_REVIEW", "human_queue", False)   # LLM unsure/unavailable -> human
+def route_llm(score: int, confidence: float) -> Disposition:
+    """The LLM's score decides; LOW confidence routes the case to a human. No deterministic rails."""
+    if confidence < CONFIG["confidence_threshold"]:
+        return Disposition("PENDING_REVIEW", "human_queue", False)
     if score < RT["auto_clear"]:
         return Disposition("AUTO_CLEAR", "none", False)
     if score < RT["junior"]:
@@ -96,67 +69,57 @@ def route_llm(score: int, flags: set, confidence: float, path: str) -> Dispositi
     return Disposition("ESCALATE", "senior", True)
 
 
-def _incomplete(d: Dossier) -> bool:
-    return bool(d.meta.get("missing_docs")) or not d.transactions or not d.kyc.get("kyc_complete", True)
+def assess(d: Dossier, actor: str | None = None, persist: bool = True) -> Decision:
+    cid = d.customer_id
+    mem = memory.retrieve(d)
+    scratchpad.start(cid, {"pep": bool(d.profile.get("pep")), "country": d.profile.get("country")})
+    try:
+        opinions = run_specialists(d, mem)
+        finding, detail = agent.score(d, mem, opinions)
+        conf = detail["confidence"]
+        disp = route_llm(finding.score, conf)
+        ts = datetime.now(timezone.utc).isoformat()
+        fp = _fingerprint(d)
 
+        dec_dict = {
+            "customer_id": cid, "name": d.kyc.get("name", cid), "entity_type": d.profile.get("entity_type"),
+            "country": d.profile.get("country", ""), "occupation": d.kyc.get("occupation", ""),
+            "pep": bool(d.profile.get("pep")), "ts": ts, "score": finding.score, "band": finding.band,
+            "confidence": conf, "disposition": disp.action, "key_signals": finding.key_signals,
+            "rationale": finding.rationale, "trace_ref": fp[:16], "human_verified": False, "corrected_score": None,
+        }
+        decision = Decision(
+            customer_id=cid, name=dec_dict["name"], score=finding.score, band=finding.band, confidence=conf,
+            action=disp.action, tier=disp.tier, requires_signoff=disp.requires_signoff, engine_path="agent",
+            key_signals=finding.key_signals, trace=detail["trace"], rationale=finding.rationale, fingerprint=fp,
+            country=dec_dict["country"], pep=dec_dict["pep"], occupation=dec_dict["occupation"],
+            opinions=[o.model_dump() for o in opinions], injected_memory=detail.get("injected_memory", {}),
+            evidence_refs=finding.evidence_refs,
+        )
 
-def assess(d: Dossier, actor: str | None = None, persist: bool = True, use_llm: bool = True) -> Decision:
-    rr = score_customer(d)
-    if use_llm:
-        lf, meta = crosscheck(d, rr)
-    else:  # gated: rules are policy-authoritative for this case, LLM deliberately skipped
-        lf, meta = rules_only_finding(d, rr), {"path": "rules_gated", "provider": "none"}
-    incomplete = _incomplete(d)
-    mode = CONFIG.get("engine_mode", "hybrid")
-    cap = round(CONFIG["degraded_confidence_cap"], 2)
-
-    if meta["path"] == "rules_gated":                  # LLM deliberately skipped -> rules-authoritative
-        score, band = rr.score, rr.band
-        conf = round(CONFIG["scale"]["gated_confidence"], 2)
-        if incomplete:
-            conf = min(conf, cap)
-        disp = route(rr.score, rr.flags, incomplete, conf)
-    elif mode == "llm":                                # LLM scores; low confidence -> human queue
-        score = lf.score
-        band = band_for(score)
-        detail = meta.get("detail") or {}
-        conf = {"rules+graph": float(detail.get("confidence", 0.5)),
-                "rules+llm": 0.65, "rules+sim": 0.7, "rules_only": cap}.get(meta["path"], 0.5)
-        if incomplete:
-            conf = min(conf, cap)
-        disp = route_llm(score, rr.flags, conf, meta["path"])
-    else:                                              # hybrid: deterministic rules are the source of truth
-        score, band = rr.score, rr.band
-        conf = reconcile(rr.score, lf.score, meta["path"])
-        if incomplete:
-            conf = min(conf, cap)
-        disp = route(rr.score, rr.flags, meta["path"] == "rules_only" or incomplete, conf)
-
-    ts = datetime.now(timezone.utc).isoformat()
-    fp = _fingerprint(d)
-    rec = AuditRecord(
-        record_id=hashlib.sha256(f"{d.customer_id}{ts}{disp.action}".encode()).hexdigest()[:16],
-        customer_id=d.customer_id, ts=ts,
-        actor=actor or f"engine:{CONFIG['ruleset_version']}",
-        action=disp.action, score=score, confidence=conf, engine_path=meta["path"],
-        band=band, thresholds={"routing": RT, "bands": CONFIG["bands"], "mode": mode},
-        drivers=rr.drivers, rationale=lf.rationale,
-        ruleset_version=CONFIG["ruleset_version"], input_fingerprint=fp,
-    )
-    if persist:
-        audit.append(rec)
-
-    return Decision(
-        customer_id=d.customer_id, name=d.kyc.get("name", d.customer_id),
-        score=score, band=band, confidence=conf,
-        action=disp.action, tier=disp.tier, requires_signoff=disp.requires_signoff,
-        engine_path=meta["path"], flags=sorted(rr.flags), drivers=rr.drivers,
-        findings=[asdict(f) for f in rr.findings], rationale=lf.rationale,
-        llm_score=lf.score, fingerprint=fp,
-        country=d.profile.get("country", ""), pep=bool(d.profile.get("pep")),
-        occupation=d.kyc.get("occupation", ""),
-        llm_detail=meta.get("detail") or {},
-    )
+        if persist:
+            rec = AuditRecord(
+                record_id=hashlib.sha256(f"{cid}{ts}{disp.action}".encode()).hexdigest()[:16],
+                customer_id=cid, ts=ts, actor=actor or f"engine:{CONFIG['policy_version']}",
+                action=disp.action, score=finding.score, confidence=conf, engine_path="agent",
+                band=finding.band, thresholds={"routing": RT, "bands": CONFIG["bands"]},
+                trace=detail["trace"], key_signals=finding.key_signals, rationale=finding.rationale,
+                ruleset_version=CONFIG["policy_version"], input_fingerprint=fp,
+            )
+            audit.append(rec)
+            memory.write_back(dec_dict, d)
+            if disp.action == "PENDING_REVIEW":
+                snap = scratchpad.read(cid)
+                queue.enqueue({
+                    "customer_id": cid, "name": dec_dict["name"], "occupation": dec_dict["occupation"],
+                    "country": dec_dict["country"], "llm_score": finding.score, "band": finding.band,
+                    "confidence": conf, "reason": finding.rationale,
+                    "opinions": decision.opinions, "trace": detail["trace"],
+                    "scratchpad": snap.get("notes", {}), "status": "pending",
+                })
+        return decision
+    finally:
+        scratchpad.evict(cid)   # working memory is thrown away on every exit
 
 
 def assess_all(dossiers: list[Dossier], persist: bool = True) -> list[Decision]:
@@ -170,35 +133,33 @@ def log_analyst_action(customer_id: str, action: str, actor: str, rationale: str
     rec = AuditRecord(
         record_id=hashlib.sha256(f"{customer_id}{ts}{action}{actor}".encode()).hexdigest()[:16],
         customer_id=customer_id, ts=ts, actor=actor, action=action, score=-1, confidence=-1.0,
-        engine_path="analyst", band="", thresholds={}, drivers=[], rationale=rationale,
-        ruleset_version=CONFIG["ruleset_version"], input_fingerprint="",
+        engine_path="analyst", band="", thresholds={}, trace=[], key_signals=[], rationale=rationale,
+        ruleset_version=CONFIG["policy_version"], input_fingerprint="",
         override_of=override_of, signoff_by=signoff_by,
     )
     audit.append(rec)
     return rec
 
 
-if __name__ == "__main__":
-    import os
+if __name__ == "__main__":  # self-check (mock provider): python -m frisk.core.engine
     from collections import Counter
-    from frisk.core.models import load_dossiers
 
-    audit.reset()
+    from frisk.core.models import load_dossiers
+    from frisk.data import store
+
+    audit.reset(); store.reset()
+    try:
+        from frisk.data import casebank
+        casebank.reset()
+    except Exception:
+        pass
     ds = load_dossiers()
     decisions = assess_all(ds)
     dist = Counter(dec.action for dec in decisions)
     for dec in sorted(decisions, key=lambda x: -x.score):
-        sign = "*" if dec.requires_signoff else " "
-        print(f"{dec.customer_id} {dec.band:4s} score={dec.score:3d} conf={dec.confidence:.2f} "
-              f"{dec.action:10s}{sign} [{dec.tier}] path={dec.engine_path}")
+        print(f"{dec.customer_id} {dec.band:7s} score={dec.score:3d} conf={dec.confidence:.2f} "
+              f"{dec.action:14s} steps={len(dec.trace)}")
     print("\ndisposition distribution:", dict(dist))
-    assert len(audit.read_all()) == 20, "audit log should have one record per customer"
-    # invariant checks
-    by_id = {d.customer_id: d for d in ds}
-    for dec in decisions:
-        if dec.flags:
-            assert dec.action == "ESCALATE", f"{dec.customer_id} has kill-switch flag but was {dec.action}"
-        d = by_id[dec.customer_id]
-        if d.meta.get("missing_docs") or not d.transactions:
-            assert dec.action != "AUTO_CLEAR", f"{dec.customer_id} has missing data but was auto-cleared"
-    print("engine self-check OK: 20 audit records, no kill-switch auto-clear, no missing-data auto-clear")
+    assert all(0 <= d.score <= 100 and d.engine_path == "agent" for d in decisions)
+    assert len(store.latest_all()) == len(ds), "every customer should have a stored assessment"
+    print("engine self-check OK: agent-scored, persisted, valid decisions")
