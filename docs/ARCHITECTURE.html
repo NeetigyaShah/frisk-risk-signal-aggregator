@@ -56,6 +56,7 @@
   <a href="#ingest">3 · Ingestion (scale)</a>
   <a href="#translate">4 · Read &amp; translate</a>
   <a href="#infer">5 · Inference</a>
+  <a href="#hitl">5b · Human-in-the-loop</a>
   <a href="#prompts">6 · Production prompts</a>
   <a href="#results">7 · Results / UI</a>
   <a href="#flow">8 · End-to-end</a>
@@ -233,6 +234,35 @@ flowchart TD
   <p><span class="pill g">AUTO_CLEAR</span> low+confident · <span class="pill a">REVIEW</span> uncertain ·
   <span class="pill r">ESCALATE</span> high / kill-switch / low-confidence. Every decision — clears and escalates alike —
   writes an append-only <code>AuditRecord</code> with a sha256 input fingerprint.</p>
+</section>
+
+<section id="hitl">
+  <h2>5b · LLM-only scoring &amp; the human-in-the-loop</h2>
+  <p>In the default <code>engine_mode=llm</code>, the LLM's score <b>is</b> the decision — but the system knows when
+  it's <i>unsure</i> and hands those cases to a person. The one deterministic rail kept is the sanctions kill-switch.</p>
+  <pre class="mermaid">
+flowchart TD
+  G["5-step graph score"] --> CONF["composite confidence =<br/>min(self-report, node-agreement, verifier)"]
+  CONF --> K{"sanctions match?"}
+  K -- yes --> ESC["🔴 ESCALATE (rail)"]
+  K -- no --> T{"confidence ≥ threshold?"}
+  T -- yes --> AUTO["auto-decide<br/>clear / review / escalate"]
+  T -- "no / LLM down" --> Q[("Redis review queue")]
+  Q --> PANEL["Human Review panel"]
+  PANEL --> HUMAN["reviewer sets correct<br/>score · band · action · note"]
+  HUMAN --> RES["resolve case"]
+  HUMAN --> FB[("feedback store")]
+  FB -. few-shot .-> G
+  </pre>
+  <table>
+    <tr><th>Piece</th><th>What it does</th></tr>
+    <tr><td><b>Composite confidence</b></td><td><code>min</code> of the model's self-reported confidence, how much the 5 graph nodes agree, and the verifier's consistency flag. Any one being low → unsure.</td></tr>
+    <tr><td><b>Review queue</b> (<code>hitl/queue.py</code>)</td><td>a <b>real Redis</b> broker — the engine is the producer, the panel is the consumer. Falls back to in-memory if Redis is down.</td></tr>
+    <tr><td><b>Review panel</b> (UI page)</td><td>shows <i>why</i> the model was unsure (which analysts disagreed) + the full dossier incl. unstructured docs; the reviewer sets the correct score.</td></tr>
+    <tr><td><b>Feedback loop</b> (<code>hitl/feedback.py</code>)</td><td>the correction is stored and injected into future synthesis prompts as a worked example — so the model calibrates toward human judgement. This is the "get the LLM to score correctly" loop.</td></tr>
+  </table>
+  <p class="muted">Offline (<code>LLM_MODE=off</code>) every non-sanctioned case has no real score → all route to the human
+  queue, which is a complete demo of the panel with zero API keys.</p>
 </section>
 
 <section id="prompts">

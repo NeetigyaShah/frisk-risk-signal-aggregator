@@ -17,3 +17,6 @@ data/decisions.db
 
 # editable-install build metadata
 src/*.egg-info/
+
+# runtime HITL feedback log
+data/feedback.jsonl

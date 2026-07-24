@@ -65,6 +65,16 @@
 - 2026-07-24: RESTRUCTURED into installable **`frisk/` package** (src-layout, pyproject.toml, `frisk` CLI) per
   production patterns in the research notes: `config/` (pydantic-settings + constants + paths) · `core/` ·
   `ai/` (providers ABC+factory+mock, crosscheck, orchestrator) · `data/` · `pipeline/` · `query/` ·
-  `observability/` · `ui/`. All imports updated, 16 tests pass. Run: `streamlit run src/frisk/ui/Home.py`.
-  NOTE: llm_cache.json was cleared during model tuning — re-warm (`frisk warm`) once the endpoint is free,
-  or run offline (provider=mock / LLM_MODE=off). App never-fails regardless.
+  `observability/` · `ui/`. All imports updated. Run: `streamlit run src/frisk/ui/Home.py`.
+- 2026-07-24: PIVOT to **LLM-only scoring + confidence-gated Human-in-the-Loop** (`engine_mode=llm`):
+  * Data regenerated as REAL per-customer folders (`data/customers/CUST_xxx/`) mixing STRUCTURED
+    (kyc.json, account.json, transactions.csv, screening.json) + UNSTRUCTURED (id_document.txt OCR,
+    rm_notes.txt, adverse_media_*.txt, correspondence.txt). `loaders.load_all()` + `parse_pasted()`.
+  * The LangGraph analysts now READ the unstructured docs. LLM score decides; composite confidence =
+    min(self-report, node-agreement, verifier-consistency). Low confidence / dead LLM → PENDING_REVIEW.
+  * REAL Redis broker (`docker run -d --name frisk-redis -p 6379:6379 redis:7-alpine`) via `frisk/hitl/queue.py`
+    (in-memory fallback). `frisk/hitl/feedback.py` = human corrections → few-shot examples in the synthesis prompt.
+  * Streamlit **Human Review Queue** page: reviewer sets correct score/band/action + note → resolve + teach.
+  * Sanctions kill-switch kept as the one hard rail. 16 tests pass. **Model still needs a reliable warm**
+    (deepseek endpoint was 503-ing); offline (LLM_MODE=off) sends all non-sanctioned to the queue — a full HITL demo.
+    Redis must be running for the queue (container `frisk-redis`).

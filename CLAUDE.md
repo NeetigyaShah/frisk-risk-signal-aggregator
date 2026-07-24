@@ -12,10 +12,13 @@ per-finding rationale. Domain: AML / financial-crime compliance. Deliverables: w
 Streamlit, instructor. LLM cross-check is provider-configurable in `config.py` — default
 **NVIDIA Nemotron-3-Ultra-550B** (OpenAI-compatible endpoint), with Gemini and Claude as alternates.
 
-**North star:** a "never-fails" engine — deterministic rules are the auditable **source of truth**, the LLM
-is an **advisory, confidence-gated cross-check**, and there is a **rules-only fallback** so the engine never
-returns nothing. Feeds a confidence-gated **Human-in-the-Loop** triage (auto-clear / review / escalate),
-with additive-driver explainability and an append-only audit trail.
+**North star (current — `engine_mode=llm`):** the **LLM scores** each customer via a 5-step LangGraph graph
+that reads BOTH structured + unstructured docs. A **composite confidence** = min(self-report, node-agreement,
+verifier-consistency). When the LLM is **unsure** (or unavailable), the case is routed to a **real Redis
+review queue** → a **Human Review panel**, where a reviewer sets the correct score; the correction is stored
+and **fed back as few-shot examples** that teach the model. The one hard rail kept from the deterministic
+engine is the **sanctions kill-switch** (a sanctions match always escalates). `engine_mode=hybrid` restores
+the earlier design (rules = source of truth, LLM = advisory) — both live in the code, switchable in config.
 
 ## Files — what to read for what
 
@@ -38,7 +41,10 @@ with additive-driver explainability and an append-only audit trail.
 | `src/frisk/ai/providers/` | Provider boundary: `base.py` (ABC), `factory.py` (`get_provider`), `nvidia/gemini/anthropic/mock.py`. |
 | `src/frisk/ai/crosscheck.py` | Never-fails boundary: cache → graph → single call → rules-only/sim; LangSmith `@traceable`. |
 | `src/frisk/ai/orchestrator.py` | Multi-step LangGraph graph: 3 parallel domain analysts → synthesize → verify → finalize. |
-| `src/frisk/data/generate.py` | Seeded synthetic 20-profile generator (+ `__main__` self-check). `python -m frisk.data.generate`. |
+| `src/frisk/data/generate.py` | Seeded generator → `data/customers/CUST_xxx/` folders (structured JSON/CSV + unstructured TXT). |
+| `src/frisk/data/loaders.py` | Ingestion: read a customer folder → Dossier (structured fields + `.documents`); `parse_pasted()`. |
+| `src/frisk/hitl/queue.py` | Real **Redis** review message queue (producer/consumer) + in-memory fallback. Needs `frisk-redis` container. |
+| `src/frisk/hitl/feedback.py` | Human corrections → few-shot examples injected into the synthesis prompt (teach-the-model loop). |
 | `src/frisk/data/store.py` | SQLite decisions store — scalable read path the UI/API query (→ Postgres). |
 | `src/frisk/data/audit.py` | Append-only decision store (JSONL). |
 | `src/frisk/pipeline/batch.py` | Scale layer: parallel batch scoring (ThreadPool) + LLM gating (MED-band only). |

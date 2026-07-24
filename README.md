@@ -18,8 +18,21 @@ streamlit run src/frisk/ui/Home.py # Queue -> Case detail -> Audit
 ```
 
 **Package layout** (`src/frisk/`): `config/` (pydantic-settings + tuning constants) · `core/` (models, rules,
-engine — the deterministic source of truth) · `ai/` (providers boundary, prompts, crosscheck, LangGraph
-orchestrator) · `data/` (generate, store, audit) · `pipeline/` (batch + gating) · `query/` · `ui/`.
+engine) · `ai/` (providers boundary, prompts, crosscheck, LangGraph orchestrator) · `data/` (generate,
+loaders, store, audit) · `hitl/` (Redis review queue + feedback) · `pipeline/` · `query/` · `ui/`.
+
+### Modes & the human-in-the-loop
+
+- **`engine_mode=llm`** (default): the LLM scores each customer via the 5-step graph (reading structured
+  *and* unstructured docs); a **composite confidence** decides routing. Low confidence → the case is pushed to a
+  **Redis review queue** and a human sets the correct score, which is fed back as a few-shot example.
+  `engine_mode=hybrid` restores deterministic rules as the source of truth.
+- **Data** lives in `data/customers/CUST_xxx/` — structured (`kyc.json`, `account.json`, `transactions.csv`,
+  `screening.json`) + unstructured (`id_document.txt`, `rm_notes.txt`, `adverse_media_*.txt`, `correspondence.txt`).
+  Regenerate with `frisk generate`.
+- **Review queue broker:** `docker run -d --name frisk-redis -p 6379:6379 redis:7-alpine` (falls back to an
+  in-memory queue if Redis is down). Offline (`LLM_MODE=off`) sends every non-sanctioned case to the human
+  queue — a full demo of the review panel with no API key.
 
 The demo runs **fully offline** — no API key required (see *Data assumptions*). To use the real
 LLM cross-check, set `ANTHROPIC_API_KEY`; the engine auto-detects it.

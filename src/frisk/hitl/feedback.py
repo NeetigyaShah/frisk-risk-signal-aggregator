@@ -29,7 +29,7 @@ def fewshot_block(k: int = 3) -> str:
     corr = all_corrections()[-k:]
     if not corr:
         return ""
-    lines = ["HUMAN REVIEWER CORRECTIONS — a senior analyst set these scores; calibrate to match this judgement:"]
+    lines = ["HUMAN REVIEWER CORRECTIONS - a senior analyst set these scores; calibrate to match this judgement:"]
     for c in corr:
         lines.append(f"- corrected to {c['human_score']}/100 ({c['band']}): {c['note']}")
     return "\n".join(lines) + "\n\n"
