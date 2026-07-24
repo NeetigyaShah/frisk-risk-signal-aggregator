@@ -70,10 +70,12 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
 
     cid = d.customer_id
     tool_objs, dispatch = build_tools(d, cid)
-    llm = get_provider().chat_model()
-    if llm is None:
+    base = get_provider().chat_model()
+    if base is None:
         raise RuntimeError("provider has no chat_model() — cannot run the agent")
-    llm = llm.bind_tools(tool_objs, parallel_tool_calls=False)
+    llm = base.bind_tools(tool_objs, parallel_tool_calls=False)
+    finalize_only = [t for t in tool_objs if getattr(t, "name", "") == "finalize"]
+    llm_final = base.bind_tools(finalize_only, parallel_tool_calls=False) if finalize_only else llm
 
     lessons = "\n".join("- " + x["text"] for x in mem.get("lessons", []))
     sysmsg = SYSTEM + (f"\n\nLESSONS LEARNED (apply these):\n{lessons}" if lessons else "")
@@ -90,7 +92,8 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
     max_steps = CONFIG["agent_max_steps"]
 
     for step in range(max_steps):
-        resp = llm.invoke(msgs)
+        # in the final turns, offer ONLY the finalize tool so the model must decide
+        resp = (llm_final if (max_steps - step) <= 2 else llm).invoke(msgs)
         tcs = getattr(resp, "tool_calls", None) or []
         if not tcs:
             msgs.append(resp)
@@ -137,8 +140,11 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
 
     injected = mem.get("injected", {})
     if final is None:  # bounded fallback: never blank, always resolves to a person
-        finding = RiskFinding(customer_id=cid, score=0, rationale="Agent did not finalize within the step "
-                              "budget; routed to human review.", confidence=0.0)
+        scores = [o.tentative_score for o in opinions if getattr(o, "tentative_score", 0)]
+        fb = round(sum(scores) / len(scores)) if scores else 0    # lean on the specialists, not 0
+        finding = RiskFinding(customer_id=cid, score=fb, rationale="Agent did not converge within the step "
+                              "budget; routed to human review with the specialists' provisional score.",
+                              key_signals=sorted({s for o in opinions for s in o.signals})[:6], confidence=0.0)
         return finding, {"confidence": 0.0, "trace": [_step_dict(s) for s in trace],
                          "tool_calls": len(trace), "injected_memory": injected, "maxed": True}
 
