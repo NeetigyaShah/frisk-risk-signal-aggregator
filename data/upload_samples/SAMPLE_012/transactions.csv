@@ -1,0 +1,29 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_012-T000,2026-07-21,3260.77,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_012-T001,2026-06-21,3184.47,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_012-T002,2026-05-22,3153.9,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_012-T003,2026-04-22,3166.18,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_012-T004,2026-03-23,3217.81,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_012-T005,2026-02-21,3233.53,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_012-T006,2026-07-19,956.49,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_012-T007,2026-06-19,724.78,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_012-T008,2026-05-20,1172.71,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_012-T009,2026-04-20,1213.51,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_012-T010,2026-03-21,1016.0,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_012-T011,2026-02-19,881.08,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_012-T012,2026-04-06,119.27,GBP,out,"Harris, Evans and Fisher",GB,card
+SAMPLE_012-T013,2026-05-10,80.22,GBP,out,"Nolan, Holmes and Wood",GB,card
+SAMPLE_012-T014,2026-05-11,6.74,GBP,out,Rhodes-Walker,GB,card
+SAMPLE_012-T015,2026-03-06,46.75,GBP,out,Ryan-Fraser,GB,card
+SAMPLE_012-T016,2026-06-18,15.95,GBP,out,Johnson Group,GB,card
+SAMPLE_012-T017,2026-07-15,119.88,GBP,out,Rowe-Dunn,GB,card
+SAMPLE_012-T018,2026-04-20,25.8,GBP,out,Patel-Hart,GB,card
+SAMPLE_012-T019,2026-06-08,26.31,GBP,out,Smith-Bell,GB,card
+SAMPLE_012-T020,2026-05-04,50.38,GBP,out,Macdonald-Smith,GB,card
+SAMPLE_012-T021,2026-04-26,25.22,GBP,out,Bell LLC,GB,card
+SAMPLE_012-T022,2026-02-18,15.46,GBP,out,Sinclair-Smith,GB,card
+SAMPLE_012-T023,2026-04-07,11.71,GBP,out,Butler LLC,GB,card
+SAMPLE_012-T024,2026-04-15,67.9,GBP,out,Miles-Clarke,GB,card
+SAMPLE_012-T025,2026-04-08,52.71,GBP,out,"Shah, Gray and Hussain",GB,card
+SAMPLE_012-T026,2026-06-04,8.61,GBP,out,"Adams, Read and Harding",GB,card
+SAMPLE_012-T027,2026-07-20,21.1,GBP,out,"Buckley, Smith and Smith",GB,card

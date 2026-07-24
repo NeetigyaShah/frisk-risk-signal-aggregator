@@ -1,0 +1,37 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_010-T000,2026-07-21,4551.35,GBP,in,ACME Payroll Ltd,NL,salary
+SAMPLE_010-T001,2026-06-21,4551.47,GBP,in,ACME Payroll Ltd,NL,salary
+SAMPLE_010-T002,2026-05-22,4525.9,GBP,in,ACME Payroll Ltd,NL,salary
+SAMPLE_010-T003,2026-04-22,4551.86,GBP,in,ACME Payroll Ltd,NL,salary
+SAMPLE_010-T004,2026-03-23,4474.74,GBP,in,ACME Payroll Ltd,NL,salary
+SAMPLE_010-T005,2026-02-21,4464.79,GBP,in,ACME Payroll Ltd,NL,salary
+SAMPLE_010-T006,2026-07-19,1235.15,GBP,out,Landlord DD,NL,direct_debit
+SAMPLE_010-T007,2026-06-19,879.76,GBP,out,Landlord DD,NL,direct_debit
+SAMPLE_010-T008,2026-05-20,832.62,GBP,out,Landlord DD,NL,direct_debit
+SAMPLE_010-T009,2026-04-20,1187.28,GBP,out,Landlord DD,NL,direct_debit
+SAMPLE_010-T010,2026-03-21,839.3,GBP,out,Landlord DD,NL,direct_debit
+SAMPLE_010-T011,2026-02-19,1237.52,GBP,out,Landlord DD,NL,direct_debit
+SAMPLE_010-T012,2026-02-01,175.96,GBP,out,"Warner, Hawkins and Johnson",NL,card
+SAMPLE_010-T013,2026-02-13,32.82,GBP,out,Kelly Ltd,NL,card
+SAMPLE_010-T014,2026-05-20,6.14,GBP,out,Bishop-Foster,NL,card
+SAMPLE_010-T015,2026-06-05,46.55,GBP,out,Hamilton-Cooper,NL,card
+SAMPLE_010-T016,2026-05-28,44.62,GBP,out,"Brown, Hughes and Howarth",NL,card
+SAMPLE_010-T017,2026-06-15,23.59,GBP,out,"Williams, James and Mitchell",NL,card
+SAMPLE_010-T018,2026-03-30,44.55,GBP,out,"Turner, Butler and Wilkinson",NL,card
+SAMPLE_010-T019,2026-04-20,11.65,GBP,out,Chadwick Group,NL,card
+SAMPLE_010-T020,2026-05-27,71.76,GBP,out,Townsend LLC,NL,card
+SAMPLE_010-T021,2026-01-31,19.93,GBP,out,Reid-Cook,NL,card
+SAMPLE_010-T022,2026-07-03,40.64,GBP,out,"Cunningham, Brown and Moore",NL,card
+SAMPLE_010-T023,2026-05-04,138.03,GBP,out,"Clarke, Bolton and Davison",NL,card
+SAMPLE_010-T024,2026-05-02,60.25,GBP,out,"Moss, Whitehead and Brown",NL,card
+SAMPLE_010-T025,2026-06-16,87.03,GBP,out,Lloyd-King,NL,card
+SAMPLE_010-T026,2026-03-15,117.77,GBP,out,Brown Group,NL,card
+SAMPLE_010-T027,2026-05-06,54.91,GBP,out,Akhtar-Macdonald,NL,card
+SAMPLE_010-T028,2026-04-22,13.24,GBP,out,"Hussain, Williamson and Allan",NL,card
+SAMPLE_010-T029,2026-05-30,27.79,GBP,out,Gray-Mitchell,NL,card
+SAMPLE_010-T030,2026-06-13,29.48,GBP,out,Mistry-Hamilton,NL,card
+SAMPLE_010-T031,2026-03-03,40.77,GBP,out,"Rogers, Baker and Wood",NL,card
+SAMPLE_010-T032,2026-07-22,26.54,GBP,out,Wood-Howells,NL,card
+SAMPLE_010-T033,2026-04-23,8.13,GBP,out,"Finch, Smith and Dickinson",NL,card
+SAMPLE_010-T034,2026-02-17,88.69,GBP,out,Anderson-Lloyd,NL,card
+SAMPLE_010-T035,2026-01-29,30.48,GBP,out,"Parkes, Parkin and Knight",NL,card

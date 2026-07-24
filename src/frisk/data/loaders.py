@@ -52,6 +52,22 @@ def load_all(path=None) -> list[Dossier]:
     return [load_customer(d) for d in sorted(p for p in root.iterdir() if p.is_dir())]
 
 
+def dossier_from_files(files: dict[str, str], customer_id: str = "UPLOAD_001") -> Dossier:
+    """Build a Dossier from in-memory uploaded files (name -> text). Same mapping as a folder."""
+    def j(name, default):
+        return json.loads(files[name]) if name in files else default
+
+    kyc = j("kyc.json", {})
+    account = j("account.json", {})
+    screening = j("screening.json", {"sanctions": [], "pep_confirmed": False, "adverse_media": []})
+    meta = j("_meta.json", {})
+    txns = _txns_from_csv(files["transactions.csv"]) if "transactions.csv" in files else []
+    documents = [{"name": n, "kind": "unstructured", "text": t} for n, t in files.items() if n.endswith(".txt")]
+    cid = account.get("customer_id") or customer_id
+    profile = {k: v for k, v in account.items() if k != "customer_id"}
+    return Dossier(cid, kyc, profile, txns, screening, meta, documents)
+
+
 def parse_pasted(text: str, customer_id: str = "PASTED_001") -> Dossier:
     """Best-effort ingestion of pasted JSON (a single dossier-shaped object) — for the upload/paste UI."""
     try:

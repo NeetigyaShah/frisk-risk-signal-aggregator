@@ -1,0 +1,9 @@
+{
+  "expected_band": "REVIEW",
+  "severity": "review",
+  "typology": null,
+  "review": true,
+  "conflict": "txn_borderline",
+  "missing_docs": [],
+  "extra_docs": []
+}

@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: HARRISON
+Given names: MR NORMAN
+Nationality: United Kingdom
+Date of birth: 1993-01-24
+Document no.: P66314431
+Expiry: 2031-05-01
+
+MRZ:
+P<GBHARRISON<<MR<NORMAN<<<<<<<<<<<<<<<<<<<<<
+P66314431<GB19930124<<<<<<<<<<<<<<<<<<<<<<<<

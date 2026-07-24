@@ -1,0 +1,30 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_036-T000,2026-07-21,4787.24,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_036-T001,2026-06-21,4834.57,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_036-T002,2026-05-22,4878.23,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_036-T003,2026-04-22,4872.57,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_036-T004,2026-03-23,4851.42,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_036-T005,2026-02-21,4903.73,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_036-T006,2026-07-19,726.38,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_036-T007,2026-06-19,1142.99,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_036-T008,2026-05-20,682.81,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_036-T009,2026-04-20,736.7,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_036-T010,2026-03-21,865.41,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_036-T011,2026-02-19,812.29,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_036-T012,2026-04-19,18.55,GBP,out,"Leach, Morrison and Bennett",RU,card
+SAMPLE_036-T013,2026-03-21,30.42,GBP,out,Brown-Roberts,RU,card
+SAMPLE_036-T014,2026-03-03,29.18,GBP,out,Martin-Lee,RU,card
+SAMPLE_036-T015,2026-05-29,49.3,GBP,out,Lambert Inc,RU,card
+SAMPLE_036-T016,2026-04-01,29.64,GBP,out,"Stephens, Saunders and Read",RU,card
+SAMPLE_036-T017,2026-07-23,10.69,GBP,out,Smith and Sons,RU,card
+SAMPLE_036-T018,2026-04-07,11.82,GBP,out,Stevens-Griffin,RU,card
+SAMPLE_036-T019,2026-05-17,82.57,GBP,out,"Akhtar, Green and Arnold",RU,card
+SAMPLE_036-T020,2026-02-05,25.64,GBP,out,Jones and Sons,RU,card
+SAMPLE_036-T021,2026-06-27,3.4,GBP,out,"Williams, Knight and James",RU,card
+SAMPLE_036-T022,2026-05-10,19.64,GBP,out,Conway and Sons,RU,card
+SAMPLE_036-T023,2026-05-11,11.32,GBP,out,Conway Group,RU,card
+SAMPLE_036-T024,2026-02-14,38.39,GBP,out,"Porter, Hawkins and Carr",RU,card
+SAMPLE_036-T025,2026-03-06,9.24,GBP,out,Jackson Ltd,RU,card
+SAMPLE_036-T026,2026-07-16,25.69,GBP,out,Murray-Miller,RU,card
+SAMPLE_036-R00,2026-07-04,90597.28,GBP,out,Offshore Nominee A,KY,wire
+SAMPLE_036-R01,2026-07-10,88785.33,GBP,in,Offshore Nominee B,KY,wire

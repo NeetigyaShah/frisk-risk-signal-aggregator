@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: NEWTON
+Given names: BRENDA
+Nationality: United Kingdom
+Date of birth: 2001-05-25
+Document no.: P69032677
+Expiry: 2031-05-01
+
+MRZ:
+P<GBNEWTON<<BRENDA<<<<<<<<<<<<<<<<<<<<<<<<<<
+P69032677<GB20010525<<<<<<<<<<<<<<<<<<<<<<<<

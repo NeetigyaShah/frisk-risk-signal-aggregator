@@ -1,0 +1,11 @@
+{
+  "expected_band": "LOW",
+  "severity": "low",
+  "typology": null,
+  "review": false,
+  "conflict": null,
+  "missing_docs": [
+    "transactions"
+  ],
+  "extra_docs": []
+}

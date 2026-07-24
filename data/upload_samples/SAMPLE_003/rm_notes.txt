@@ -1,0 +1,4 @@
+RELATIONSHIP MANAGER NOTES — Shaun Pearson (SAMPLE_003)
+Reviewed: 2026-07-09
+
+Client runs a legitimate import/export business in Russia. Source of funds and wealth are documented and independently verified; cross-border payments match declared trade. Russia is a higher-risk jurisdiction — retained for periodic review.

@@ -16,7 +16,8 @@ DATA_DIR = Path(os.environ.get("FRISK_DATA_DIR", str(PROJECT_ROOT / "data")))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 DOSSIERS = DATA_DIR / "dossiers.json"
-CUSTOMERS_DIR = DATA_DIR / "customers"          # per-customer folders of structured + unstructured docs
+CUSTOMERS_DIR = DATA_DIR / "customers"          # per-customer folders the app loads at startup
+UPLOAD_SAMPLES = DATA_DIR / "upload_samples"    # extra sample profiles for MANUAL upload (NOT auto-loaded)
 LLM_CACHE = DATA_DIR / "llm_cache.json"
 AUDIT_LOG = DATA_DIR / "audit_log.jsonl"
 DECISIONS_DB = DATA_DIR / "decisions.db"

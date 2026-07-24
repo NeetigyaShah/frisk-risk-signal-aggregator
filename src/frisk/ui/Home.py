@@ -17,7 +17,7 @@ from frisk.data import audit
 from frisk.query import nlquery
 from frisk.data import store
 from frisk.config import CONFIG
-from frisk.core.engine import assess_all, log_analyst_action
+from frisk.core.engine import assess, assess_all, log_analyst_action
 from frisk.core.models import load_dossiers
 from frisk.hitl import queue as review_queue, feedback
 from frisk.ai.crosscheck import _features
@@ -333,11 +333,64 @@ def review_page():
         st.rerun()
 
 
+# --------------------------------------------------------------------------- Ingest / Upload
+
+def upload_page():
+    st.title("📤 Ingest / Upload  (CSV · JSON · text)")
+    st.caption("Score a customer on demand from uploaded documents or a ready-made sample profile. "
+               "Low-confidence results are pushed to the Human Review Queue.")
+
+    from frisk.paths import UPLOAD_SAMPLES
+    from frisk.data.loaders import load_customer, dossier_from_files
+
+    src = st.radio("Source", ["Pick a sample profile", "Upload files"], horizontal=True)
+    dossier = None
+    if src == "Pick a sample profile":
+        if UPLOAD_SAMPLES.exists():
+            ids = sorted(p.name for p in UPLOAD_SAMPLES.iterdir() if p.is_dir())
+            pick = st.selectbox("Sample profile", ids, help=f"from {UPLOAD_SAMPLES}")
+            if pick:
+                dossier = load_customer(UPLOAD_SAMPLES / pick)
+        else:
+            st.info("No sample set found. Generate it with:  `frisk samples`")
+    else:
+        files = st.file_uploader("Upload a customer's files: kyc.json, account.json, transactions.csv, "
+                                 "screening.json, and any *.txt", accept_multiple_files=True)
+        if files:
+            dossier = dossier_from_files({f.name: f.getvalue().decode("utf-8", "ignore") for f in files})
+
+    if dossier:
+        st.caption(f"Ready: **{dossier.customer_id}** — {dossier.kyc.get('name', '?')} · "
+                   f"{len(dossier.transactions)} txns · {len(dossier.documents)} unstructured docs")
+        if st.button("▶ Score this customer", type="primary"):
+            with st.spinner("Scoring via the LLM multi-step graph…"):
+                dec = assess(dossier, persist=True)
+            store.upsert_many([dec])
+            m1, m2, m3 = st.columns(3)
+            m1.metric("Score", dec.score, dec.band)
+            m2.metric("Confidence", f"{dec.confidence:.2f}")
+            m3.metric("Disposition", dec.action.replace("_", " ").title())
+            st.info(dec.rationale)
+            srcs = (dec.llm_detail or {}).get("source_findings") or []
+            if srcs:
+                lv = {"low": "🟢", "medium": "🟡", "high": "🔴"}
+                cols = st.columns(len(srcs))
+                for col, sf in zip(cols, srcs):
+                    col.markdown(f"**{sf['domain'].title()}** {lv.get(sf['risk_level'], '⚪')} {sf['risk_level']}")
+                    col.caption(sf.get("note", ""))
+            if dec.action == "PENDING_REVIEW":
+                review_queue.enqueue_decision(dec)
+                st.warning("🟠 Low confidence — added to the **Human Review Queue** for a human decision.")
+            else:
+                st.success(f"Routed: {dec.action.replace('_', ' ').title()}")
+
+
 # --------------------------------------------------------------------------- nav
 
 QUEUE_PAGE = st.Page(queue_page, title="Triage Queue", icon="📋", default=True)
 CASE_PAGE = st.Page(case_page, title="Case Detail", icon="🔍")
+UPLOAD_PAGE = st.Page(upload_page, title="Ingest / Upload", icon="📤")
 REVIEW_PAGE = st.Page(review_page, title="Human Review Queue", icon="🟠")
 AUDIT_PAGE = st.Page(audit_page, title="Audit Trail", icon="📜")
 
-st.navigation([QUEUE_PAGE, CASE_PAGE, REVIEW_PAGE, AUDIT_PAGE]).run()
+st.navigation([QUEUE_PAGE, CASE_PAGE, UPLOAD_PAGE, REVIEW_PAGE, AUDIT_PAGE]).run()

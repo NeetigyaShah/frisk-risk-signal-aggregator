@@ -1,0 +1,27 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_000-T000,2026-07-21,4610.49,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_000-T001,2026-06-21,4695.33,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_000-T002,2026-05-22,4629.47,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_000-T003,2026-04-22,4620.88,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_000-T004,2026-03-23,4568.99,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_000-T005,2026-02-21,4618.34,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_000-T006,2026-07-19,974.02,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_000-T007,2026-06-19,1088.05,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_000-T008,2026-05-20,1344.35,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_000-T009,2026-04-20,796.71,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_000-T010,2026-03-21,847.55,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_000-T011,2026-02-19,912.86,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_000-T012,2026-03-07,28.88,GBP,out,Browne Inc,GB,card
+SAMPLE_000-T013,2026-02-06,40.67,GBP,out,Briggs-Hill,GB,card
+SAMPLE_000-T014,2026-03-09,53.37,GBP,out,"Powell, Singh and Jones",GB,card
+SAMPLE_000-T015,2026-07-16,22.61,GBP,out,Wood-Fox,GB,card
+SAMPLE_000-T016,2026-07-07,33.53,GBP,out,Fuller-Taylor,GB,card
+SAMPLE_000-T017,2026-05-04,43.38,GBP,out,Wyatt Ltd,GB,card
+SAMPLE_000-T018,2026-05-31,15.06,GBP,out,Baker LLC,GB,card
+SAMPLE_000-T019,2026-04-03,87.85,GBP,out,May PLC,GB,card
+SAMPLE_000-T020,2026-06-01,28.08,GBP,out,"Russell, Jones and Ahmed",GB,card
+SAMPLE_000-T021,2026-03-28,64.78,GBP,out,Bevan-Field,GB,card
+SAMPLE_000-T022,2026-07-08,28.86,GBP,out,Scott-Wilkinson,GB,card
+SAMPLE_000-C0,2026-06-24,9266.63,GBP,in,Cash Deposit,GB,cash
+SAMPLE_000-C1,2026-06-28,9279.19,GBP,in,Cash Deposit,GB,cash
+SAMPLE_000-C2,2026-07-02,9396.41,GBP,in,Cash Deposit,GB,cash

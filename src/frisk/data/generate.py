@@ -24,7 +24,7 @@ from faker import Faker
 
 from frisk.config import CONFIG
 from frisk.core.models import Dossier, Txn
-from frisk.paths import CUSTOMERS_DIR
+from frisk.paths import CUSTOMERS_DIR, UPLOAD_SAMPLES
 
 SEED = CONFIG["seed"]
 FLOOR = CONFIG["reporting_floor"]
@@ -34,7 +34,9 @@ fake = Faker("en_GB")
 
 COUNTRY = {"GB": "United Kingdom", "IE": "Ireland", "FR": "France", "RU": "Russia",
            "VE": "Venezuela", "MM": "Myanmar", "IR": "Iran", "SY": "Syria",
-           "CY": "Cyprus", "KY": "Cayman Islands", "AE": "United Arab Emirates"}
+           "CY": "Cyprus", "KY": "Cayman Islands", "AE": "United Arab Emirates",
+           "DE": "Germany", "ES": "Spain", "NL": "Netherlands", "IT": "Italy", "US": "United States",
+           "NG": "Nigeria", "AF": "Afghanistan", "YE": "Yemen", "KP": "North Korea", "PK": "Pakistan"}
 
 PROFILES = [
     {"sev": "low", "country": "GB", "occ": "teacher"},
@@ -63,7 +65,7 @@ PROFILES = [
     {"sev": "critical", "country": "SY", "occ": "shell company director", "sanctioned": True, "pep": True},
 ]
 
-EXPECTED_BAND = {"low": "LOW", "med": "MED", "high": "HIGH", "critical": "HIGH"}
+EXPECTED_BAND = {"low": "LOW", "med": "MED", "high": "HIGH", "critical": "HIGH", "review": "REVIEW"}
 
 
 # --------------------------------------------------------------------------- transactions (structured)
@@ -155,6 +157,27 @@ def doc_rm_notes(d, p):
     occ, cn = d.kyc["occupation"], COUNTRY.get(p["country"], p["country"])
     sev, typ = p["sev"], p.get("typology")
     head = f"RELATIONSHIP MANAGER NOTES — {d.kyc['name']} ({d.customer_id})\nReviewed: {_dstr(15)}\n\n"
+    conflict = p.get("conflict")
+    if conflict:
+        cbody = {
+            "txn_borderline": ("A few cash deposits just under the £10,000 reporting threshold were noted. Client "
+                               "says these are proceeds from a private house sale and provided partial documentation. "
+                               "Unclear whether legitimate or structuring — recommend a second opinion."),
+            "pep_benign": (f"Client is a low-profile local {occ} (PEP). Activity is limited to salary and routine "
+                           f"household spending; no unusual transactions and no adverse media. EDD applied as a "
+                           f"precaution — the case is genuinely borderline."),
+            "adverse_unproven": ("A single negative news item surfaced during periodic review (allegations UNPROVEN, "
+                                 "no charges filed). Client gave a plausible explanation; KYC and transactions are "
+                                 "otherwise clean. Hard to weigh."),
+            "geo_explained": (f"Client runs a legitimate import/export business in {cn}. Source of funds and wealth "
+                              f"are documented and independently verified; cross-border payments match declared trade. "
+                              f"{cn} is a higher-risk jurisdiction — retained for periodic review."),
+            "roundtrip_explained": ("A large outbound wire returned shortly afterwards from a related entity. Client "
+                                    "states this is a routine internal treasury settlement between his own companies "
+                                    "(see correspondence). Plausible but not independently verified."),
+        }.get(conflict)
+        if cbody:
+            return head + cbody + "\n"
     if sev == "critical":
         body = ("URGENT: sanctions screening returned an EXACT match (OFAC SDN). Account frozen pending "
                 "MLRO review. Do NOT process any transactions. Escalated immediately.")
@@ -199,7 +222,10 @@ def doc_adverse(d, p, n):
 
 def doc_correspondence(d, p):
     typ = d.meta.get("typology")
-    if typ == "layering":
+    if p.get("conflict") == "roundtrip_explained":
+        msg = ("The funds I sent out will come back this week from my other company — it's just an internal "
+               "treasury settlement between my two businesses, not a third-party payment. Please log it that way.")
+    elif typ == "layering":
         msg = ("Please action the three transfers to my business associates as discussed — these are "
                "consulting fees for the offshore project. Kindly expedite before month-end.")
     elif typ == "round_trip":
@@ -212,8 +238,8 @@ def doc_correspondence(d, p):
 
 # --------------------------------------------------------------------------- dossier + documents
 
-def build_dossier(idx, p, rng) -> Dossier:
-    cust = f"CUST_{idx:03d}"
+def build_dossier(idx, p, rng, prefix="CUST_") -> Dossier:
+    cust = f"{prefix}{idx:03d}"
     country, pep, typ = p["country"], p.get("pep", False), p.get("typology")
     name = fake.name()
     tenure = int(rng.integers(10, 80)) if p.get("new_account") else int(rng.integers(200, 3000))
@@ -231,6 +257,14 @@ def build_dossier(idx, p, rng) -> Dossier:
         if typ:
             txns += INJECTORS[typ](cust, rng, country, len(txns))
 
+    conflict = p.get("conflict")   # ambiguous signals -> analysts disagree -> low confidence -> human review
+    if conflict == "txn_borderline":  # a few sub-threshold cash deposits, but not a clear structuring cluster
+        for i in range(3):
+            txns.append(Txn(f"{cust}-C{i}", _dstr(30 - i * 4), _amt(rng.uniform(9200, 9900)),
+                            "GBP", "in", "Cash Deposit", country, "cash"))
+    elif conflict == "roundtrip_explained":  # a round-trip pattern with an innocent explanation on file
+        txns += inject_round_trip(cust, rng, country, len(txns))
+
     sanctions = [{"name": name, "match_score": 1.0, "list": "OFAC SDN"}] if p.get("sanctioned") else []
     adverse_media = []
     if p.get("adverse", 0) >= 1:
@@ -240,7 +274,7 @@ def build_dossier(idx, p, rng) -> Dossier:
     screening = {"sanctions": sanctions, "pep_confirmed": pep, "adverse_media": adverse_media}
 
     meta = {"expected_band": EXPECTED_BAND[p["sev"]], "severity": p["sev"], "typology": typ,
-            "missing_docs": [], "extra_docs": []}
+            "review": bool(conflict), "conflict": conflict, "missing_docs": [], "extra_docs": []}
 
     if p.get("missing") == "kyc_id":
         kyc["id_doc"] = None; kyc["kyc_complete"] = False; meta["missing_docs"].append("kyc_id")
@@ -271,6 +305,86 @@ def generate() -> list[Dossier]:
     Faker.seed(SEED); random.seed(SEED)
     rng = np.random.default_rng(SEED)
     return [build_dossier(i, p, rng) for i, p in enumerate(PROFILES)]
+
+
+# --------------------------------------------------------------------------- 40-profile UPLOAD sample set
+# A SEPARATE dataset (different seed → different people) for MANUAL upload. NOT auto-loaded by the app.
+# The 5 "review" rows carry deliberately CONFLICTING signals so the LLM's domain analysts disagree →
+# low composite confidence → routed to the human review queue.
+
+SAMPLE_SEED = 99
+
+SAMPLE_PROFILES = [
+    # --- 5 that NEED human review (ambiguous / conflicting evidence) ---
+    {"sev": "review", "country": "GB", "occ": "property developer", "conflict": "txn_borderline"},
+    {"sev": "review", "country": "GB", "occ": "parish councillor", "pep": True, "cash_heavy": True, "conflict": "pep_benign"},
+    {"sev": "review", "country": "IE", "occ": "restaurateur", "adverse": 1, "conflict": "adverse_unproven"},
+    {"sev": "review", "country": "RU", "occ": "import/export trader", "adverse": 1, "cash_heavy": True, "conflict": "geo_explained"},
+    {"sev": "review", "country": "GB", "occ": "company director", "conflict": "roundtrip_explained"},
+
+    # --- 13 low ---
+    {"sev": "low", "country": "GB", "occ": "doctor"},
+    {"sev": "low", "country": "IE", "occ": "architect"},
+    {"sev": "low", "country": "FR", "occ": "journalist"},
+    {"sev": "low", "country": "DE", "occ": "farmer"},
+    {"sev": "low", "country": "ES", "occ": "dentist"},
+    {"sev": "low", "country": "NL", "occ": "pharmacist"},
+    {"sev": "low", "country": "GB", "occ": "librarian"},
+    {"sev": "low", "country": "GB", "occ": "plumber"},
+    {"sev": "low", "country": "IT", "occ": "professor"},
+    {"sev": "low", "country": "GB", "occ": "graphic designer"},
+    {"sev": "low", "country": "GB", "occ": "baker", "missing": "transactions"},
+    {"sev": "low", "country": "GB", "occ": "mechanic"},
+    {"sev": "low", "country": "US", "occ": "software developer"},
+
+    # --- 12 med ---
+    {"sev": "med", "country": "RU", "occ": "oil trader", "adverse": 1},
+    {"sev": "med", "country": "GB", "occ": "mayor", "pep": True, "new_account": True},
+    {"sev": "med", "country": "GB", "occ": "money exchange", "adverse": 1},
+    {"sev": "med", "country": "VE", "occ": "importer", "adverse": 1},
+    {"sev": "med", "country": "MM", "occ": "gem trader", "adverse": 1},
+    {"sev": "med", "country": "GB", "occ": "landlord", "pep": True},
+    {"sev": "med", "country": "RU", "occ": "metals dealer"},
+    {"sev": "med", "country": "GB", "occ": "consultant", "pep": True, "new_account": True},
+    {"sev": "med", "country": "VE", "occ": "shipping agent", "cash_heavy": True},
+    {"sev": "med", "country": "GB", "occ": "casino operator"},
+    {"sev": "med", "country": "AF", "occ": "money exchange"},
+    {"sev": "med", "country": "PK", "occ": "textile exporter", "adverse": 1},
+
+    # --- 7 high (a typology + reinforcing flags) ---
+    {"sev": "high", "country": "RU", "occ": "consultant", "typology": "structuring", "cash_heavy": True},
+    {"sev": "high", "country": "GB", "occ": "crypto dealer", "typology": "layering", "adverse": 2},
+    {"sev": "high", "country": "YE", "occ": "trader", "typology": "round_trip"},
+    {"sev": "high", "country": "GB", "occ": "precious metals trader", "typology": "dormant_spike", "adverse": 1},
+    {"sev": "high", "country": "KP", "occ": "broker", "typology": "layering"},
+    {"sev": "high", "country": "GB", "occ": "art dealer", "typology": "structuring", "cash_heavy": True, "adverse": 1},
+    {"sev": "high", "country": "RU", "occ": "arms broker", "typology": "round_trip", "adverse": 1},
+
+    # --- 3 critical (sanctions match) ---
+    {"sev": "critical", "country": "IR", "occ": "arms dealer", "sanctioned": True, "typology": "structuring"},
+    {"sev": "critical", "country": "SY", "occ": "shell company director", "sanctioned": True, "pep": True},
+    {"sev": "critical", "country": "KP", "occ": "procurement agent", "sanctioned": True, "typology": "layering"},
+]
+
+
+def write_samples(out_dir=UPLOAD_SAMPLES, seed=SAMPLE_SEED, profiles=None, prefix="SAMPLE_"):
+    """Write the manual-upload sample set to a SEPARATE folder (not the app's data/customers/)."""
+    profiles = profiles or SAMPLE_PROFILES
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    Faker.seed(seed); random.seed(seed)
+    rng = np.random.default_rng(seed)
+    files = 0
+    review_ids = []
+    for i, p in enumerate(profiles):
+        d = build_dossier(i, p, rng, prefix=prefix)
+        if d.meta.get("review"):
+            review_ids.append(d.customer_id)
+        cdir = out_dir / d.customer_id
+        cdir.mkdir(parents=True, exist_ok=True)
+        for name, content in render_files(d).items():
+            (cdir / name).write_text(content, encoding="utf-8"); files += 1
+    return len(profiles), files, review_ids
 
 
 # --------------------------------------------------------------------------- render files

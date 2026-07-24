@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: AF (Afghanistan)
+Surname: READ
+Given names: MISS PAULINE
+Nationality: Afghanistan
+Date of birth: 1960-02-19
+Document no.: P86607334
+Expiry: 2031-05-01
+
+MRZ:
+P<AFREAD<<MISS<PAULINE<<<<<<<<<<<<<<<<<<<<<<
+P86607334<AF19600219<<<<<<<<<<<<<<<<<<<<<<<<

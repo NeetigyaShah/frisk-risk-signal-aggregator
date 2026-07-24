@@ -1,0 +1,33 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_011-T000,2026-07-21,3526.56,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_011-T001,2026-06-21,3636.76,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_011-T002,2026-05-22,3631.33,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_011-T003,2026-04-22,3545.87,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_011-T004,2026-03-23,3566.01,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_011-T005,2026-02-21,3528.35,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_011-T006,2026-07-19,1130.21,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_011-T007,2026-06-19,1395.4,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_011-T008,2026-05-20,662.37,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_011-T009,2026-04-20,606.37,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_011-T010,2026-03-21,620.4,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_011-T011,2026-02-19,1127.56,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_011-T012,2026-03-06,10.34,GBP,out,Mills and Sons,GB,card
+SAMPLE_011-T013,2026-04-03,21.98,GBP,out,"Wilson, Evans and Lewis",GB,card
+SAMPLE_011-T014,2026-02-14,26.82,GBP,out,Humphreys and Sons,GB,card
+SAMPLE_011-T015,2026-06-16,22.29,GBP,out,"Savage, Wood and Hunter",GB,card
+SAMPLE_011-T016,2026-04-12,12.54,GBP,out,"James, Boyle and Nicholson",GB,card
+SAMPLE_011-T017,2026-06-26,11.61,GBP,out,Dean-Burgess,GB,card
+SAMPLE_011-T018,2026-02-16,110.19,GBP,out,O'Donnell LLC,GB,card
+SAMPLE_011-T019,2026-07-13,93.76,GBP,out,Clark Ltd,GB,card
+SAMPLE_011-T020,2026-07-19,27.72,GBP,out,Walters-Lord,GB,card
+SAMPLE_011-T021,2026-02-22,99.09,GBP,out,"Davies, Barrett and Richards",GB,card
+SAMPLE_011-T022,2026-02-10,26.38,GBP,out,Payne-Smart,GB,card
+SAMPLE_011-T023,2026-04-11,16.92,GBP,out,Gibbons-Pollard,GB,card
+SAMPLE_011-T024,2026-04-30,44.88,GBP,out,Brooks-Smith,GB,card
+SAMPLE_011-T025,2026-04-15,33.41,GBP,out,"Richards, Lloyd and Clarke",GB,card
+SAMPLE_011-T026,2026-04-09,19.41,GBP,out,"Rose, Walker and Hewitt",GB,card
+SAMPLE_011-T027,2026-05-02,22.71,GBP,out,Barton Ltd,GB,card
+SAMPLE_011-T028,2026-07-07,32.38,GBP,out,"Butler, Edwards and Hunt",GB,card
+SAMPLE_011-T029,2026-05-09,29.22,GBP,out,"Godfrey, Noble and Weston",GB,card
+SAMPLE_011-T030,2026-04-10,7.85,GBP,out,"Parkes, Brown and Wright",GB,card
+SAMPLE_011-T031,2026-05-31,48.21,GBP,out,Clarke Inc,GB,card

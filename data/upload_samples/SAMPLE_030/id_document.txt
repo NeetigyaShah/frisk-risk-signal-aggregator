@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: RU (Russia)
+Surname: PARKER
+Given names: KELLY
+Nationality: Russia
+Date of birth: 1958-09-14
+Document no.: P17901385
+Expiry: 2031-05-01
+
+MRZ:
+P<RUPARKER<<KELLY<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P17901385<RU19580914<<<<<<<<<<<<<<<<<<<<<<<<

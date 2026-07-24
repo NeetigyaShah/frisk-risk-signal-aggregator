@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: SLATER
+Given names: BEN
+Nationality: United Kingdom
+Date of birth: 1963-12-18
+Document no.: P91048744
+Expiry: 2031-05-01
+
+MRZ:
+P<GBSLATER<<BEN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P91048744<GB19631218<<<<<<<<<<<<<<<<<<<<<<<<

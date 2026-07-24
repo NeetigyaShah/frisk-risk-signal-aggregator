@@ -1,0 +1,30 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_009-T000,2026-07-21,5261.68,GBP,in,ACME Payroll Ltd,ES,salary
+SAMPLE_009-T001,2026-06-21,5307.41,GBP,in,ACME Payroll Ltd,ES,salary
+SAMPLE_009-T002,2026-05-22,5322.3,GBP,in,ACME Payroll Ltd,ES,salary
+SAMPLE_009-T003,2026-04-22,5210.02,GBP,in,ACME Payroll Ltd,ES,salary
+SAMPLE_009-T004,2026-03-23,5145.56,GBP,in,ACME Payroll Ltd,ES,salary
+SAMPLE_009-T005,2026-02-21,5157.92,GBP,in,ACME Payroll Ltd,ES,salary
+SAMPLE_009-T006,2026-07-19,1171.27,GBP,out,Landlord DD,ES,direct_debit
+SAMPLE_009-T007,2026-06-19,960.1,GBP,out,Landlord DD,ES,direct_debit
+SAMPLE_009-T008,2026-05-20,1034.58,GBP,out,Landlord DD,ES,direct_debit
+SAMPLE_009-T009,2026-04-20,1396.25,GBP,out,Landlord DD,ES,direct_debit
+SAMPLE_009-T010,2026-03-21,1215.22,GBP,out,Landlord DD,ES,direct_debit
+SAMPLE_009-T011,2026-02-19,819.65,GBP,out,Landlord DD,ES,direct_debit
+SAMPLE_009-T012,2026-02-26,11.26,GBP,out,"Harris, Phillips and Preston",ES,card
+SAMPLE_009-T013,2026-03-15,22.49,GBP,out,Boyle-Hill,ES,card
+SAMPLE_009-T014,2026-06-07,34.18,GBP,out,Wood Inc,ES,card
+SAMPLE_009-T015,2026-05-18,87.06,GBP,out,Ward and Sons,ES,card
+SAMPLE_009-T016,2026-03-10,86.75,GBP,out,"Rogers, Smith and Price",ES,card
+SAMPLE_009-T017,2026-06-21,23.93,GBP,out,Evans and Sons,ES,card
+SAMPLE_009-T018,2026-01-30,31.83,GBP,out,"Ferguson, Taylor and Brown",ES,card
+SAMPLE_009-T019,2026-06-19,51.51,GBP,out,Ball-Smith,ES,card
+SAMPLE_009-T020,2026-07-17,11.41,GBP,out,Marsh Inc,ES,card
+SAMPLE_009-T021,2026-05-25,9.19,GBP,out,Noble and Sons,ES,card
+SAMPLE_009-T022,2026-06-30,68.19,GBP,out,Houghton-Carter,ES,card
+SAMPLE_009-T023,2026-03-02,45.28,GBP,out,Berry Group,ES,card
+SAMPLE_009-T024,2026-04-26,14.71,GBP,out,Moss Inc,ES,card
+SAMPLE_009-T025,2026-06-22,32.19,GBP,out,"Watts, Wood and Stephenson",ES,card
+SAMPLE_009-T026,2026-03-09,6.49,GBP,out,"Hawkins, Read and Cooke",ES,card
+SAMPLE_009-T027,2026-06-01,21.56,GBP,out,Mills-Ward,ES,card
+SAMPLE_009-T028,2026-03-15,36.2,GBP,out,Robertson and Sons,ES,card

@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: FR (France)
+Surname: WRIGHT-JACKSON
+Given names: SALLY
+Nationality: France
+Date of birth: 1956-12-11
+Document no.: P12862321
+Expiry: 2031-05-01
+
+MRZ:
+P<FRWRIGHT-JACKSON<<SALLY<<<<<<<<<<<<<<<<<<<
+P12862321<FR19561211<<<<<<<<<<<<<<<<<<<<<<<<

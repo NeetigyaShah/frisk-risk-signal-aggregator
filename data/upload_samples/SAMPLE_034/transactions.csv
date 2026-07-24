@@ -1,0 +1,29 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_034-T000,2026-07-21,3686.26,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_034-T001,2026-06-21,3761.79,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_034-T002,2026-05-22,3734.67,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_034-T003,2026-04-22,3742.43,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_034-T004,2026-03-23,3697.22,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_034-T005,2026-02-21,3715.23,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_034-T006,2026-07-19,697.62,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_034-T007,2026-06-19,809.63,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_034-T008,2026-05-20,892.53,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_034-T009,2026-04-20,669.67,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_034-T010,2026-03-21,1212.82,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_034-T011,2026-02-19,1201.94,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_034-T012,2026-02-13,33.12,GBP,out,Matthews Inc,KP,card
+SAMPLE_034-T013,2026-02-09,33.74,GBP,out,Lloyd-Sutton,KP,card
+SAMPLE_034-T014,2026-06-10,34.48,GBP,out,"Evans, Lewis and White",KP,card
+SAMPLE_034-T015,2026-02-22,16.92,GBP,out,"O'Neill, Smith and Brown",KP,card
+SAMPLE_034-T016,2026-06-07,19.15,GBP,out,Morgan-Khan,KP,card
+SAMPLE_034-T017,2026-03-03,18.1,GBP,out,"Butler, Turner and Williams",KP,card
+SAMPLE_034-T018,2026-02-07,103.17,GBP,out,"Davies, Farrell and Glover",KP,card
+SAMPLE_034-T019,2026-05-30,97.01,GBP,out,Gilbert and Sons,KP,card
+SAMPLE_034-T020,2026-06-26,33.75,GBP,out,"Hamilton, Russell and Gill",KP,card
+SAMPLE_034-T021,2026-06-07,55.79,GBP,out,Gilbert-Robinson,KP,card
+SAMPLE_034-T022,2026-06-30,15.31,GBP,out,Baker-Payne,KP,card
+SAMPLE_034-T023,2026-04-06,19.87,GBP,out,Smith-Booth,KP,card
+SAMPLE_034-T024,2026-02-15,19.1,GBP,out,George PLC,KP,card
+SAMPLE_034-L00,2026-06-24,192000.0,GBP,out,Shell Co A,CY,transfer
+SAMPLE_034-L01,2026-06-26,153600.0,GBP,out,Shell Co B,CY,transfer
+SAMPLE_034-L02,2026-06-28,122880.0,GBP,out,Shell Co C,CY,transfer

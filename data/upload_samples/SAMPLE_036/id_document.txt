@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: RU (Russia)
+Surname: WILSON
+Given names: DONNA
+Nationality: Russia
+Date of birth: 1971-10-14
+Document no.: P73050917
+Expiry: 2031-05-01
+
+MRZ:
+P<RUWILSON<<DONNA<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P73050917<RU19711014<<<<<<<<<<<<<<<<<<<<<<<<

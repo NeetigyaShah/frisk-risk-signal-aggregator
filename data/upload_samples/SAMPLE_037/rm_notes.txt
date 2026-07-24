@@ -1,0 +1,4 @@
+RELATIONSHIP MANAGER NOTES — Trevor Simmons (SAMPLE_037)
+Reviewed: 2026-07-09
+
+URGENT: sanctions screening returned an EXACT match (OFAC SDN). Account frozen pending MLRO review. Do NOT process any transactions. Escalated immediately.

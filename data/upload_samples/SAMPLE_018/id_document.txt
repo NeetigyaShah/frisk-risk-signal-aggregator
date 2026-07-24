@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: RU (Russia)
+Surname: PERKINS
+Given names: GEMMA
+Nationality: Russia
+Date of birth: 1958-03-18
+Document no.: P13403626
+Expiry: 2031-05-01
+
+MRZ:
+P<RUPERKINS<<GEMMA<<<<<<<<<<<<<<<<<<<<<<<<<<
+P13403626<RU19580318<<<<<<<<<<<<<<<<<<<<<<<<

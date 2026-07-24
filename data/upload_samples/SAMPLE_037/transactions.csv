@@ -1,0 +1,30 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_037-T000,2026-07-21,3038.13,GBP,in,ACME Payroll Ltd,IR,salary
+SAMPLE_037-T001,2026-06-21,3003.84,GBP,in,ACME Payroll Ltd,IR,salary
+SAMPLE_037-T002,2026-05-22,3013.5,GBP,in,ACME Payroll Ltd,IR,salary
+SAMPLE_037-T003,2026-04-22,2975.21,GBP,in,ACME Payroll Ltd,IR,salary
+SAMPLE_037-T004,2026-03-23,2971.59,GBP,in,ACME Payroll Ltd,IR,salary
+SAMPLE_037-T005,2026-02-21,2996.82,GBP,in,ACME Payroll Ltd,IR,salary
+SAMPLE_037-T006,2026-07-19,1368.07,GBP,out,Landlord DD,IR,direct_debit
+SAMPLE_037-T007,2026-06-19,1118.57,GBP,out,Landlord DD,IR,direct_debit
+SAMPLE_037-T008,2026-05-20,1162.29,GBP,out,Landlord DD,IR,direct_debit
+SAMPLE_037-T009,2026-04-20,1063.15,GBP,out,Landlord DD,IR,direct_debit
+SAMPLE_037-T010,2026-03-21,679.35,GBP,out,Landlord DD,IR,direct_debit
+SAMPLE_037-T011,2026-02-19,981.71,GBP,out,Landlord DD,IR,direct_debit
+SAMPLE_037-T012,2026-02-14,42.5,GBP,out,Baker-Hill,IR,card
+SAMPLE_037-T013,2026-03-19,40.96,GBP,out,Griffiths Ltd,IR,card
+SAMPLE_037-T014,2026-05-27,44.65,GBP,out,"Wilkinson, Williams and Bennett",IR,card
+SAMPLE_037-T015,2026-06-24,16.25,GBP,out,Martin-Patel,IR,card
+SAMPLE_037-T016,2026-03-27,79.57,GBP,out,Clark-Taylor,IR,card
+SAMPLE_037-T017,2026-02-13,30.45,GBP,out,Turnbull-Morris,IR,card
+SAMPLE_037-T018,2026-02-14,24.49,GBP,out,Cook-Elliott,IR,card
+SAMPLE_037-T019,2026-03-27,47.82,GBP,out,Taylor-Williams,IR,card
+SAMPLE_037-T020,2026-07-18,27.59,GBP,out,Griffiths-Gray,IR,card
+SAMPLE_037-T021,2026-03-04,152.91,GBP,out,Daniels Inc,IR,card
+SAMPLE_037-T022,2026-05-14,92.18,GBP,out,"Davies, Dale and Harrison",IR,card
+SAMPLE_037-T023,2026-04-24,36.86,GBP,out,"Morgan, Graham and Taylor",IR,card
+SAMPLE_037-T024,2026-07-22,20.67,GBP,out,Ward and Sons,IR,card
+SAMPLE_037-S00,2026-06-14,9332.66,GBP,in,Cash Deposit,IR,cash
+SAMPLE_037-S01,2026-06-16,9424.84,GBP,in,Cash Deposit,IR,cash
+SAMPLE_037-S02,2026-06-18,9343.75,GBP,in,Cash Deposit,IR,cash
+SAMPLE_037-S03,2026-06-20,8787.96,GBP,in,Cash Deposit,IR,cash

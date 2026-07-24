@@ -1,0 +1,26 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_002-T000,2026-07-21,4462.36,GBP,in,ACME Payroll Ltd,IE,salary
+SAMPLE_002-T001,2026-06-21,4395.1,GBP,in,ACME Payroll Ltd,IE,salary
+SAMPLE_002-T002,2026-05-22,4441.43,GBP,in,ACME Payroll Ltd,IE,salary
+SAMPLE_002-T003,2026-04-22,4487.54,GBP,in,ACME Payroll Ltd,IE,salary
+SAMPLE_002-T004,2026-03-23,4344.54,GBP,in,ACME Payroll Ltd,IE,salary
+SAMPLE_002-T005,2026-02-21,4360.73,GBP,in,ACME Payroll Ltd,IE,salary
+SAMPLE_002-T006,2026-07-19,1012.5,GBP,out,Landlord DD,IE,direct_debit
+SAMPLE_002-T007,2026-06-19,902.81,GBP,out,Landlord DD,IE,direct_debit
+SAMPLE_002-T008,2026-05-20,1241.22,GBP,out,Landlord DD,IE,direct_debit
+SAMPLE_002-T009,2026-04-20,1338.75,GBP,out,Landlord DD,IE,direct_debit
+SAMPLE_002-T010,2026-03-21,1058.1,GBP,out,Landlord DD,IE,direct_debit
+SAMPLE_002-T011,2026-02-19,706.17,GBP,out,Landlord DD,IE,direct_debit
+SAMPLE_002-T012,2026-03-31,29.42,GBP,out,Roberts-Baker,IE,card
+SAMPLE_002-T013,2026-03-30,88.89,GBP,out,Taylor LLC,IE,card
+SAMPLE_002-T014,2026-06-25,42.64,GBP,out,Davies PLC,IE,card
+SAMPLE_002-T015,2026-04-23,4.96,GBP,out,Brown-Lee,IE,card
+SAMPLE_002-T016,2026-04-18,38.93,GBP,out,Stevens-Matthews,IE,card
+SAMPLE_002-T017,2026-05-23,33.22,GBP,out,Cooper-Bradley,IE,card
+SAMPLE_002-T018,2026-07-23,11.92,GBP,out,"Green, Shaw and Preston",IE,card
+SAMPLE_002-T019,2026-03-15,23.86,GBP,out,"Baxter, Welch and Wilson",IE,card
+SAMPLE_002-T020,2026-03-25,15.34,GBP,out,"Wilson, Peters and Whitehouse",IE,card
+SAMPLE_002-T021,2026-01-26,21.19,GBP,out,"Atkinson, Lloyd and Law",IE,card
+SAMPLE_002-T022,2026-05-18,19.22,GBP,out,"Ellis, Cooper and Williams",IE,card
+SAMPLE_002-T023,2026-06-08,64.28,GBP,out,Young Group,IE,card
+SAMPLE_002-T024,2026-04-09,10.74,GBP,out,Rees-Harris,IE,card

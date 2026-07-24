@@ -1,0 +1,9 @@
+{
+  "expected_band": "REVIEW",
+  "severity": "review",
+  "typology": null,
+  "review": true,
+  "conflict": "geo_explained",
+  "missing_docs": [],
+  "extra_docs": []
+}

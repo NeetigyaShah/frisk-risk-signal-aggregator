@@ -1,0 +1,27 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_024-T000,2026-07-21,3606.92,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_024-T001,2026-06-21,3596.43,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_024-T002,2026-05-22,3660.43,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_024-T003,2026-04-22,3617.02,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_024-T004,2026-03-23,3637.42,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_024-T005,2026-02-21,3620.29,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_024-T006,2026-07-19,924.35,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_024-T007,2026-06-19,1116.06,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_024-T008,2026-05-20,1369.56,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_024-T009,2026-04-20,938.38,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_024-T010,2026-03-21,815.66,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_024-T011,2026-02-19,760.63,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_024-T012,2026-05-02,7.58,GBP,out,Jones PLC,RU,card
+SAMPLE_024-T013,2026-04-17,15.53,GBP,out,Rogers-Lowe,RU,card
+SAMPLE_024-T014,2026-04-29,137.75,GBP,out,O'Donnell-Shaw,RU,card
+SAMPLE_024-T015,2026-07-22,20.02,GBP,out,"Jones, Harper and Short",RU,card
+SAMPLE_024-T016,2026-06-07,73.52,GBP,out,"Taylor, Anderson and Smith",RU,card
+SAMPLE_024-T017,2026-04-02,21.76,GBP,out,Webb-Davies,RU,card
+SAMPLE_024-T018,2026-04-09,34.68,GBP,out,"Watson, Pearson and Morris",RU,card
+SAMPLE_024-T019,2026-02-23,9.97,GBP,out,"Kirby, Moore and Roberts",RU,card
+SAMPLE_024-T020,2026-04-13,13.91,GBP,out,"Jones, Thomas and Lloyd",RU,card
+SAMPLE_024-T021,2026-03-27,13.66,GBP,out,"Hall, Smith and Barton",RU,card
+SAMPLE_024-T022,2026-02-21,83.31,GBP,out,Noble PLC,RU,card
+SAMPLE_024-T023,2026-04-05,7.7,GBP,out,Short and Sons,RU,card
+SAMPLE_024-T024,2026-04-28,78.91,GBP,out,"Williams, Johnson and Kelly",RU,card
+SAMPLE_024-T025,2026-06-27,22.3,GBP,out,Norman-Barker,RU,card

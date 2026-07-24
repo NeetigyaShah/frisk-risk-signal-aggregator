@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: MORGAN
+Given names: GRAEME
+Nationality: United Kingdom
+Date of birth: 1959-07-16
+Document no.: P14941724
+Expiry: 2031-05-01
+
+MRZ:
+P<GBMORGAN<<GRAEME<<<<<<<<<<<<<<<<<<<<<<<<<<
+P14941724<GB19590716<<<<<<<<<<<<<<<<<<<<<<<<

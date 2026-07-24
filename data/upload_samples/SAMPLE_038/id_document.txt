@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: SY (Syria)
+Surname: SMITH
+Given names: ADRIAN
+Nationality: Syria
+Date of birth: 1958-05-18
+Document no.: P37564600
+Expiry: 2031-05-01
+
+MRZ:
+P<SYSMITH<<ADRIAN<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P37564600<SY19580518<<<<<<<<<<<<<<<<<<<<<<<<

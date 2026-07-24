@@ -1,0 +1,4 @@
+RELATIONSHIP MANAGER NOTES — Ben Slater (SAMPLE_033)
+Reviewed: 2026-07-09
+
+CONCERN: account largely dormant for ~8 months, then a sudden series of high-value inbound wires from a new counterparty. Source of funds unclear.

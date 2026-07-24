@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: ES (Spain)
+Surname: BARRETT
+Given names: SALLY
+Nationality: Spain
+Date of birth: 1958-12-17
+Document no.: P33904729
+Expiry: 2031-05-01
+
+MRZ:
+P<ESBARRETT<<SALLY<<<<<<<<<<<<<<<<<<<<<<<<<<
+P33904729<ES19581217<<<<<<<<<<<<<<<<<<<<<<<<

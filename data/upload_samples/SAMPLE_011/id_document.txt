@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: NICHOLLS
+Given names: COLIN
+Nationality: United Kingdom
+Date of birth: 1965-09-12
+Document no.: P64293732
+Expiry: 2031-05-01
+
+MRZ:
+P<GBNICHOLLS<<COLIN<<<<<<<<<<<<<<<<<<<<<<<<<
+P64293732<GB19650912<<<<<<<<<<<<<<<<<<<<<<<<

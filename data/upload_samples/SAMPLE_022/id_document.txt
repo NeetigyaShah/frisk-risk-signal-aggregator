@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: MM (Myanmar)
+Surname: PERRY-ANDERSON
+Given names: LYDIA
+Nationality: Myanmar
+Date of birth: 1998-12-17
+Document no.: P12507770
+Expiry: 2031-05-01
+
+MRZ:
+P<MMPERRY-ANDERSON<<LYDIA<<<<<<<<<<<<<<<<<<<
+P12507770<MM19981217<<<<<<<<<<<<<<<<<<<<<<<<

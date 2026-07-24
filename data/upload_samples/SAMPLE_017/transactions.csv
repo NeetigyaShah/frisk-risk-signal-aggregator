@@ -1,0 +1,23 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_017-T000,2026-07-21,5755.29,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T001,2026-06-21,5714.43,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T002,2026-05-22,5828.68,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T003,2026-04-22,5828.04,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T004,2026-03-23,5693.46,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T005,2026-02-21,5818.42,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T006,2026-07-19,745.07,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T007,2026-06-19,1077.07,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T008,2026-05-20,738.7,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T009,2026-04-20,823.35,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T010,2026-03-21,746.16,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T011,2026-02-19,1051.99,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T012,2026-03-04,14.81,GBP,out,Flynn-Marsh,US,card
+SAMPLE_017-T013,2026-04-17,18.25,GBP,out,Rhodes-Wall,US,card
+SAMPLE_017-T014,2026-02-18,68.97,GBP,out,"Price, O'Neill and Jones",US,card
+SAMPLE_017-T015,2026-06-24,21.1,GBP,out,Williams-Harding,US,card
+SAMPLE_017-T016,2026-05-24,28.13,GBP,out,Briggs and Sons,US,card
+SAMPLE_017-T017,2026-02-06,13.95,GBP,out,Begum PLC,US,card
+SAMPLE_017-T018,2026-02-01,21.43,GBP,out,Watson-Begum,US,card
+SAMPLE_017-T019,2026-06-01,50.07,GBP,out,Clark PLC,US,card
+SAMPLE_017-T020,2026-01-29,40.34,GBP,out,"Barrett, Watson and Vaughan",US,card
+SAMPLE_017-T021,2026-02-26,23.21,GBP,out,Brown-Cole,US,card

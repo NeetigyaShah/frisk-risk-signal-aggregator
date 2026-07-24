@@ -1,0 +1,27 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_008-T000,2026-07-21,3061.94,GBP,in,ACME Payroll Ltd,DE,salary
+SAMPLE_008-T001,2026-06-21,3063.98,GBP,in,ACME Payroll Ltd,DE,salary
+SAMPLE_008-T002,2026-05-22,3011.27,GBP,in,ACME Payroll Ltd,DE,salary
+SAMPLE_008-T003,2026-04-22,3104.6,GBP,in,ACME Payroll Ltd,DE,salary
+SAMPLE_008-T004,2026-03-23,3014.04,GBP,in,ACME Payroll Ltd,DE,salary
+SAMPLE_008-T005,2026-02-21,3037.25,GBP,in,ACME Payroll Ltd,DE,salary
+SAMPLE_008-T006,2026-07-19,1054.16,GBP,out,Landlord DD,DE,direct_debit
+SAMPLE_008-T007,2026-06-19,1139.39,GBP,out,Landlord DD,DE,direct_debit
+SAMPLE_008-T008,2026-05-20,917.77,GBP,out,Landlord DD,DE,direct_debit
+SAMPLE_008-T009,2026-04-20,752.77,GBP,out,Landlord DD,DE,direct_debit
+SAMPLE_008-T010,2026-03-21,943.31,GBP,out,Landlord DD,DE,direct_debit
+SAMPLE_008-T011,2026-02-19,962.45,GBP,out,Landlord DD,DE,direct_debit
+SAMPLE_008-T012,2026-03-03,47.98,GBP,out,Clarke-Bell,DE,card
+SAMPLE_008-T013,2026-04-18,9.41,GBP,out,Charlton and Sons,DE,card
+SAMPLE_008-T014,2026-03-30,13.81,GBP,out,Hunter Group,DE,card
+SAMPLE_008-T015,2026-04-08,38.78,GBP,out,Edwards Inc,DE,card
+SAMPLE_008-T016,2026-02-24,5.1,GBP,out,Talbot-Walker,DE,card
+SAMPLE_008-T017,2026-05-28,82.46,GBP,out,Macdonald Ltd,DE,card
+SAMPLE_008-T018,2026-06-14,7.06,GBP,out,Thompson Ltd,DE,card
+SAMPLE_008-T019,2026-01-28,14.71,GBP,out,Thompson-Lewis,DE,card
+SAMPLE_008-T020,2026-02-09,16.15,GBP,out,"Bell, Baker and Hamilton",DE,card
+SAMPLE_008-T021,2026-03-01,22.26,GBP,out,Whittaker Ltd,DE,card
+SAMPLE_008-T022,2026-04-10,6.95,GBP,out,"Oliver, Barry and Ford",DE,card
+SAMPLE_008-T023,2026-05-15,18.94,GBP,out,Duncan-Armstrong,DE,card
+SAMPLE_008-T024,2026-05-22,22.06,GBP,out,Barrett-James,DE,card
+SAMPLE_008-T025,2026-05-20,29.98,GBP,out,Hewitt Group,DE,card

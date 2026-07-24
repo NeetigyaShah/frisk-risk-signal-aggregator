@@ -1,0 +1,19 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_028-T000,2026-07-21,4920.79,GBP,in,ACME Payroll Ltd,AF,salary
+SAMPLE_028-T001,2026-06-21,5044.53,GBP,in,ACME Payroll Ltd,AF,salary
+SAMPLE_028-T002,2026-05-22,5101.47,GBP,in,ACME Payroll Ltd,AF,salary
+SAMPLE_028-T003,2026-04-22,4951.59,GBP,in,ACME Payroll Ltd,AF,salary
+SAMPLE_028-T004,2026-03-23,4980.66,GBP,in,ACME Payroll Ltd,AF,salary
+SAMPLE_028-T005,2026-02-21,5038.73,GBP,in,ACME Payroll Ltd,AF,salary
+SAMPLE_028-T006,2026-07-19,1075.41,GBP,out,Landlord DD,AF,direct_debit
+SAMPLE_028-T007,2026-06-19,760.21,GBP,out,Landlord DD,AF,direct_debit
+SAMPLE_028-T008,2026-05-20,1056.1,GBP,out,Landlord DD,AF,direct_debit
+SAMPLE_028-T009,2026-04-20,855.24,GBP,out,Landlord DD,AF,direct_debit
+SAMPLE_028-T010,2026-03-21,923.77,GBP,out,Landlord DD,AF,direct_debit
+SAMPLE_028-T011,2026-02-19,1112.15,GBP,out,Landlord DD,AF,direct_debit
+SAMPLE_028-T012,2026-06-27,97.47,GBP,out,Whitehead-O'Brien,AF,card
+SAMPLE_028-T013,2026-06-03,21.5,GBP,out,Carter Inc,AF,card
+SAMPLE_028-T014,2026-07-20,59.22,GBP,out,"Parsons, Sims and Holmes",AF,card
+SAMPLE_028-T015,2026-05-24,24.0,GBP,out,Shah-Kennedy,AF,card
+SAMPLE_028-T016,2026-07-06,8.23,GBP,out,Smith Inc,AF,card
+SAMPLE_028-T017,2026-06-08,107.47,GBP,out,Glover-Short,AF,card

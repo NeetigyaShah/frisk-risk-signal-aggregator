@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: JOHNSON
+Given names: MR ARTHUR
+Nationality: United Kingdom
+Date of birth: 1998-10-29
+Document no.: P56562828
+Expiry: 2031-05-01
+
+MRZ:
+P<GBJOHNSON<<MR<ARTHUR<<<<<<<<<<<<<<<<<<<<<<
+P56562828<GB19981029<<<<<<<<<<<<<<<<<<<<<<<<

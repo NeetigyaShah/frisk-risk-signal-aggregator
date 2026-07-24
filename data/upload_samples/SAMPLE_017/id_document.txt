@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: US (United States)
+Surname: WRIGHT
+Given names: JOEL
+Nationality: United States
+Date of birth: 1992-01-07
+Document no.: P72476177
+Expiry: 2031-05-01
+
+MRZ:
+P<USWRIGHT<<JOEL<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P72476177<US19920107<<<<<<<<<<<<<<<<<<<<<<<<

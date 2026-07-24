@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: VE (Venezuela)
+Surname: BROOKS
+Given names: DIANE
+Nationality: Venezuela
+Date of birth: 1976-11-12
+Document no.: P67295499
+Expiry: 2031-05-01
+
+MRZ:
+P<VEBROOKS<<DIANE<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P67295499<VE19761112<<<<<<<<<<<<<<<<<<<<<<<<

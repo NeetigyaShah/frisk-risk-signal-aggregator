@@ -1,0 +1,30 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_018-T000,2026-07-21,3077.52,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_018-T001,2026-06-21,3097.38,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_018-T002,2026-05-22,3068.39,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_018-T003,2026-04-22,3044.2,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_018-T004,2026-03-23,3094.33,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_018-T005,2026-02-21,3039.49,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_018-T006,2026-07-19,1148.03,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_018-T007,2026-06-19,1365.05,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_018-T008,2026-05-20,844.7,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_018-T009,2026-04-20,1323.05,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_018-T010,2026-03-21,895.23,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_018-T011,2026-02-19,1113.61,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_018-T012,2026-03-16,61.65,GBP,out,Lloyd PLC,RU,card
+SAMPLE_018-T013,2026-03-19,66.18,GBP,out,Dobson Inc,RU,card
+SAMPLE_018-T014,2026-05-15,105.85,GBP,out,Hall Group,RU,card
+SAMPLE_018-T015,2026-05-16,33.17,GBP,out,Norton-Ward,RU,card
+SAMPLE_018-T016,2026-02-05,35.17,GBP,out,Smith-Brown,RU,card
+SAMPLE_018-T017,2026-06-06,34.24,GBP,out,Webb-Jackson,RU,card
+SAMPLE_018-T018,2026-06-04,10.69,GBP,out,Fuller and Sons,RU,card
+SAMPLE_018-T019,2026-04-16,30.97,GBP,out,Johnston-Bird,RU,card
+SAMPLE_018-T020,2026-07-16,29.85,GBP,out,Cook-Goddard,RU,card
+SAMPLE_018-T021,2026-02-16,15.29,GBP,out,Shepherd-Atkins,RU,card
+SAMPLE_018-T022,2026-05-31,49.72,GBP,out,"Jones, Hughes and Jones",RU,card
+SAMPLE_018-T023,2026-03-14,45.36,GBP,out,Wilkinson-Green,RU,card
+SAMPLE_018-T024,2026-03-15,25.1,GBP,out,Robinson Inc,RU,card
+SAMPLE_018-T025,2026-03-13,8.78,GBP,out,Ellis-Bennett,RU,card
+SAMPLE_018-T026,2026-06-04,24.65,GBP,out,"Johnston, Cole and Jarvis",RU,card
+SAMPLE_018-T027,2026-03-20,84.63,GBP,out,Owen-Cook,RU,card
+SAMPLE_018-T028,2026-04-19,155.5,GBP,out,Schofield-Bell,RU,card

@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: DE (Germany)
+Surname: FOX
+Given names: JENNIFER
+Nationality: Germany
+Date of birth: 1978-10-14
+Document no.: P36395466
+Expiry: 2031-05-01
+
+MRZ:
+P<DEFOX<<JENNIFER<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P36395466<DE19781014<<<<<<<<<<<<<<<<<<<<<<<<

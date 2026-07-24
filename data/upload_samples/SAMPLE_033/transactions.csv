@@ -1,0 +1,8 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_033-D00,2025-12-06,143.19,GBP,out,"Donnelly, Williams and Harvey",GB,card
+SAMPLE_033-D01,2025-12-16,54.17,GBP,out,Dobson-Clarke,GB,card
+SAMPLE_033-D02,2025-12-26,163.23,GBP,out,Greenwood Inc,GB,card
+SAMPLE_033-B00,2026-07-15,23095.07,GBP,in,New Counterparty,AE,wire
+SAMPLE_033-B01,2026-07-17,25993.26,GBP,in,New Counterparty,AE,wire
+SAMPLE_033-B02,2026-07-19,41810.94,GBP,in,New Counterparty,AE,wire
+SAMPLE_033-B03,2026-07-21,36831.91,GBP,in,New Counterparty,AE,wire

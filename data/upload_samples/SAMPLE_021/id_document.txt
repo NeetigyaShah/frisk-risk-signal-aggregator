@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: VE (Venezuela)
+Surname: FISHER
+Given names: CAROL
+Nationality: Venezuela
+Date of birth: 1958-02-24
+Document no.: P52700919
+Expiry: 2031-05-01
+
+MRZ:
+P<VEFISHER<<CAROL<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P52700919<VE19580224<<<<<<<<<<<<<<<<<<<<<<<<

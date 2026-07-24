@@ -1,0 +1,20 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_016-T000,2026-07-21,3990.66,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_016-T001,2026-06-21,4055.58,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_016-T002,2026-05-22,3939.38,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_016-T003,2026-04-22,4083.69,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_016-T004,2026-03-23,4026.32,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_016-T005,2026-02-21,4038.67,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_016-T006,2026-07-19,1224.81,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_016-T007,2026-06-19,1070.04,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_016-T008,2026-05-20,1252.5,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_016-T009,2026-04-20,1317.0,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_016-T010,2026-03-21,1304.67,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_016-T011,2026-02-19,1126.49,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_016-T012,2026-02-07,18.43,GBP,out,Andrews Ltd,GB,card
+SAMPLE_016-T013,2026-05-08,9.36,GBP,out,"Chambers, Rowe and Carr",GB,card
+SAMPLE_016-T014,2026-07-17,18.89,GBP,out,Newton-Pratt,GB,card
+SAMPLE_016-T015,2026-06-01,24.68,GBP,out,Johnson and Sons,GB,card
+SAMPLE_016-T016,2026-07-17,41.24,GBP,out,Pearce-Marshall,GB,card
+SAMPLE_016-T017,2026-04-07,41.88,GBP,out,Nolan Group,GB,card
+SAMPLE_016-T018,2026-07-01,10.01,GBP,out,Akhtar-Holmes,GB,card

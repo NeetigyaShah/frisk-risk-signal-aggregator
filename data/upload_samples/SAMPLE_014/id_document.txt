@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: KIRBY
+Given names: DR JOSEPH
+Nationality: United Kingdom
+Date of birth: 1979-04-13
+Document no.: P14295097
+Expiry: 2031-05-01
+
+MRZ:
+P<GBKIRBY<<DR<JOSEPH<<<<<<<<<<<<<<<<<<<<<<<<
+P14295097<GB19790413<<<<<<<<<<<<<<<<<<<<<<<<

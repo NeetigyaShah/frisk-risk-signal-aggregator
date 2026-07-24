@@ -1,0 +1,11 @@
+{
+  "sanctions": [],
+  "pep_confirmed": false,
+  "adverse_media": [
+    {
+      "headline": "Shaun Pearson named in fraud investigation",
+      "sentiment": "negative",
+      "date": "2026-06-09"
+    }
+  ]
+}

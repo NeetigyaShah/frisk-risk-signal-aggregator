@@ -1,0 +1,4 @@
+RELATIONSHIP MANAGER NOTES — Miss Nicole Walker (SAMPLE_032)
+Reviewed: 2026-07-09
+
+CONCERN: large outbound wire followed by a near-identical inbound from a related offshore entity within days. Round-tripping suspected.

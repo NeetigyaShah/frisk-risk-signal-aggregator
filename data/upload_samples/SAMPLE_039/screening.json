@@ -1,0 +1,11 @@
+{
+  "sanctions": [
+    {
+      "name": "Sharon Rhodes",
+      "match_score": 1.0,
+      "list": "OFAC SDN"
+    }
+  ],
+  "pep_confirmed": false,
+  "adverse_media": []
+}

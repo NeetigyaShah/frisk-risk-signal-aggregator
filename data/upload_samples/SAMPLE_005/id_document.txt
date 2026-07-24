@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: WATSON
+Given names: DR HEATHER
+Nationality: United Kingdom
+Date of birth: 1967-09-23
+Document no.: P48517253
+Expiry: 2031-05-01
+
+MRZ:
+P<GBWATSON<<DR<HEATHER<<<<<<<<<<<<<<<<<<<<<<
+P48517253<GB19670923<<<<<<<<<<<<<<<<<<<<<<<<

@@ -1,0 +1,9 @@
+{
+  "expected_band": "MED",
+  "severity": "med",
+  "typology": null,
+  "review": false,
+  "conflict": null,
+  "missing_docs": [],
+  "extra_docs": []
+}

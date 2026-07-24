@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: PK (Pakistan)
+Surname: WHITEHOUSE
+Given names: DR ELLIOT
+Nationality: Pakistan
+Date of birth: 1989-11-26
+Document no.: P82939430
+Expiry: 2031-05-01
+
+MRZ:
+P<PKWHITEHOUSE<<DR<ELLIOT<<<<<<<<<<<<<<<<<<<
+P82939430<PK19891126<<<<<<<<<<<<<<<<<<<<<<<<

@@ -1,0 +1,4 @@
+RELATIONSHIP MANAGER NOTES — Jake Lewis (SAMPLE_004)
+Reviewed: 2026-07-09
+
+A large outbound wire returned shortly afterwards from a related entity. Client states this is a routine internal treasury settlement between his own companies (see correspondence). Plausible but not independently verified.

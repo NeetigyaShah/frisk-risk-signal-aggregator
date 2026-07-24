@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: BRYAN
+Given names: MR PAUL
+Nationality: United Kingdom
+Date of birth: 1987-02-10
+Document no.: P48064462
+Expiry: 2031-05-01
+
+MRZ:
+P<GBBRYAN<<MR<PAUL<<<<<<<<<<<<<<<<<<<<<<<<<<
+P48064462<GB19870210<<<<<<<<<<<<<<<<<<<<<<<<

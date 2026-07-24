@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: IR (Iran)
+Surname: SIMMONS
+Given names: TREVOR
+Nationality: Iran
+Date of birth: 1961-03-02
+Document no.: P88694749
+Expiry: 2031-05-01
+
+MRZ:
+P<IRSIMMONS<<TREVOR<<<<<<<<<<<<<<<<<<<<<<<<<
+P88694749<IR19610302<<<<<<<<<<<<<<<<<<<<<<<<

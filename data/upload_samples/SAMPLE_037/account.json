@@ -1,0 +1,8 @@
+{
+  "customer_id": "SAMPLE_037",
+  "entity_type": "individual",
+  "country": "IR",
+  "product": "current_account",
+  "pep": false,
+  "tenure_days": 2050
+}

@@ -13,7 +13,8 @@ import os
 def main(argv=None) -> None:
     p = argparse.ArgumentParser(prog="frisk", description="Financial Risk Signal Aggregator")
     sub = p.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("generate", help="regenerate the synthetic dossiers")
+    sub.add_parser("generate", help="regenerate the synthetic dossiers (the app's data/customers/)")
+    sub.add_parser("samples", help="write the 40-profile MANUAL-upload sample set (separate folder)")
     sc = sub.add_parser("score", help="score all customers and print the ranked queue")
     sc.add_argument("--offline", action="store_true", help="rules-only, no LLM")
     sub.add_parser("warm", help="warm the LLM cache over all customers")
@@ -22,6 +23,14 @@ def main(argv=None) -> None:
     if args.cmd == "generate":
         from frisk.data.generate import write, _selfcheck
         write(); _selfcheck()
+        return
+
+    if args.cmd == "samples":
+        from frisk.data.generate import write_samples
+        from frisk.paths import UPLOAD_SAMPLES
+        n, files, review_ids = write_samples()
+        print(f"wrote {n} sample profiles ({files} files) to:\n  {UPLOAD_SAMPLES}")
+        print(f"  {len(review_ids)} designed to NEED human review: {review_ids}")
         return
 
     if args.offline if args.cmd == "score" else False:

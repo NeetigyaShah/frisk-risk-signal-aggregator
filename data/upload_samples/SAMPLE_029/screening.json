@@ -1,0 +1,11 @@
+{
+  "sanctions": [],
+  "pep_confirmed": false,
+  "adverse_media": [
+    {
+      "headline": "Dr Elliot Whitehouse named in fraud investigation",
+      "sentiment": "negative",
+      "date": "2026-06-09"
+    }
+  ]
+}

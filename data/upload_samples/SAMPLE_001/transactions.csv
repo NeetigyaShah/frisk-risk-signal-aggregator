@@ -1,0 +1,35 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_001-T000,2026-07-21,3941.64,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_001-T001,2026-06-21,3970.88,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_001-T002,2026-05-22,3872.09,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_001-T003,2026-04-22,3857.19,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_001-T004,2026-03-23,3927.6,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_001-T005,2026-02-21,3909.64,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_001-T006,2026-07-19,1215.65,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_001-T007,2026-06-19,1093.53,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_001-T008,2026-05-20,823.61,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_001-T009,2026-04-20,1328.89,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_001-T010,2026-03-21,1058.35,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_001-T011,2026-02-19,1174.65,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_001-T012,2026-04-08,30.24,GBP,out,Stewart-Evans,GB,card
+SAMPLE_001-T013,2026-06-22,43.93,GBP,out,Watson Ltd,GB,card
+SAMPLE_001-T014,2026-05-11,51.98,GBP,out,Morris Group,GB,card
+SAMPLE_001-T015,2026-04-24,39.52,GBP,out,"Bennett, Williamson and Heath",GB,card
+SAMPLE_001-T016,2026-02-13,18.81,GBP,out,Sims Inc,GB,card
+SAMPLE_001-T017,2026-05-20,6.44,GBP,out,Jones Group,GB,card
+SAMPLE_001-T018,2026-03-28,11.71,GBP,out,Cross Ltd,GB,card
+SAMPLE_001-T019,2026-02-14,32.67,GBP,out,Wilkins PLC,GB,card
+SAMPLE_001-T020,2026-07-10,101.12,GBP,out,Palmer and Sons,GB,card
+SAMPLE_001-T021,2026-03-09,32.24,GBP,out,"Stevenson, Lyons and Simpson",GB,card
+SAMPLE_001-T022,2026-05-15,39.58,GBP,out,"Kelly, Smith and Ahmed",GB,card
+SAMPLE_001-T023,2026-01-29,31.15,GBP,out,Nixon Ltd,GB,card
+SAMPLE_001-T024,2026-03-15,14.96,GBP,out,Woodward-Clarke,GB,card
+SAMPLE_001-T025,2026-07-21,152.79,GBP,out,"Foster, Morris and Jenkins",GB,card
+SAMPLE_001-T026,2026-05-12,131.35,GBP,out,Harvey-Iqbal,GB,card
+SAMPLE_001-T027,2026-04-24,46.27,GBP,out,Coleman-Williamson,GB,card
+SAMPLE_001-T028,2026-07-12,3194.5,GBP,in,Cash Deposit,GB,cash
+SAMPLE_001-T029,2026-06-06,3605.42,GBP,in,Cash Deposit,GB,cash
+SAMPLE_001-T030,2026-06-16,1599.74,GBP,in,Cash Deposit,GB,cash
+SAMPLE_001-T031,2026-07-07,2649.05,GBP,in,Cash Deposit,GB,cash
+SAMPLE_001-T032,2026-07-22,3712.89,GBP,in,Cash Deposit,GB,cash
+SAMPLE_001-T033,2026-06-21,2159.58,GBP,in,Cash Deposit,GB,cash

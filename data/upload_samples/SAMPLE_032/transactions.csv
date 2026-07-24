@@ -1,0 +1,30 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_032-T000,2026-07-21,5291.87,GBP,in,ACME Payroll Ltd,YE,salary
+SAMPLE_032-T001,2026-06-21,5205.9,GBP,in,ACME Payroll Ltd,YE,salary
+SAMPLE_032-T002,2026-05-22,5200.16,GBP,in,ACME Payroll Ltd,YE,salary
+SAMPLE_032-T003,2026-04-22,5324.18,GBP,in,ACME Payroll Ltd,YE,salary
+SAMPLE_032-T004,2026-03-23,5167.57,GBP,in,ACME Payroll Ltd,YE,salary
+SAMPLE_032-T005,2026-02-21,5342.72,GBP,in,ACME Payroll Ltd,YE,salary
+SAMPLE_032-T006,2026-07-19,1337.87,GBP,out,Landlord DD,YE,direct_debit
+SAMPLE_032-T007,2026-06-19,1042.07,GBP,out,Landlord DD,YE,direct_debit
+SAMPLE_032-T008,2026-05-20,633.65,GBP,out,Landlord DD,YE,direct_debit
+SAMPLE_032-T009,2026-04-20,628.23,GBP,out,Landlord DD,YE,direct_debit
+SAMPLE_032-T010,2026-03-21,818.8,GBP,out,Landlord DD,YE,direct_debit
+SAMPLE_032-T011,2026-02-19,860.05,GBP,out,Landlord DD,YE,direct_debit
+SAMPLE_032-T012,2026-07-03,16.01,GBP,out,Duncan Group,YE,card
+SAMPLE_032-T013,2026-05-17,34.22,GBP,out,Young-Hopkins,YE,card
+SAMPLE_032-T014,2026-04-29,30.21,GBP,out,Berry-Goodwin,YE,card
+SAMPLE_032-T015,2026-07-18,41.85,GBP,out,Morley PLC,YE,card
+SAMPLE_032-T016,2026-06-18,17.34,GBP,out,Holden and Sons,YE,card
+SAMPLE_032-T017,2026-01-27,6.9,GBP,out,Lee Group,YE,card
+SAMPLE_032-T018,2026-02-16,36.37,GBP,out,Stone-Matthews,YE,card
+SAMPLE_032-T019,2026-07-13,106.75,GBP,out,Jones-Potter,YE,card
+SAMPLE_032-T020,2026-06-24,48.08,GBP,out,"Reed, Sutton and Kay",YE,card
+SAMPLE_032-T021,2026-06-24,34.88,GBP,out,Smith-Taylor,YE,card
+SAMPLE_032-T022,2026-03-13,45.71,GBP,out,"Benson, Nash and Davis",YE,card
+SAMPLE_032-T023,2026-03-13,11.06,GBP,out,Thompson-Sutton,YE,card
+SAMPLE_032-T024,2026-02-02,16.36,GBP,out,"Cooper, Brown and Preston",YE,card
+SAMPLE_032-T025,2026-03-20,13.24,GBP,out,Savage Inc,YE,card
+SAMPLE_032-T026,2026-03-25,31.75,GBP,out,"Bailey, Field and Mason",YE,card
+SAMPLE_032-R00,2026-07-04,103137.5,GBP,out,Offshore Nominee A,KY,wire
+SAMPLE_032-R01,2026-07-10,101074.75,GBP,in,Offshore Nominee B,KY,wire

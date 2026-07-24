@@ -1,0 +1,29 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+SAMPLE_007-T000,2026-07-21,5040.66,GBP,in,ACME Payroll Ltd,FR,salary
+SAMPLE_007-T001,2026-06-21,4950.81,GBP,in,ACME Payroll Ltd,FR,salary
+SAMPLE_007-T002,2026-05-22,5041.98,GBP,in,ACME Payroll Ltd,FR,salary
+SAMPLE_007-T003,2026-04-22,5004.79,GBP,in,ACME Payroll Ltd,FR,salary
+SAMPLE_007-T004,2026-03-23,5001.29,GBP,in,ACME Payroll Ltd,FR,salary
+SAMPLE_007-T005,2026-02-21,4989.21,GBP,in,ACME Payroll Ltd,FR,salary
+SAMPLE_007-T006,2026-07-19,717.8,GBP,out,Landlord DD,FR,direct_debit
+SAMPLE_007-T007,2026-06-19,1380.48,GBP,out,Landlord DD,FR,direct_debit
+SAMPLE_007-T008,2026-05-20,1149.58,GBP,out,Landlord DD,FR,direct_debit
+SAMPLE_007-T009,2026-04-20,1286.16,GBP,out,Landlord DD,FR,direct_debit
+SAMPLE_007-T010,2026-03-21,869.84,GBP,out,Landlord DD,FR,direct_debit
+SAMPLE_007-T011,2026-02-19,715.27,GBP,out,Landlord DD,FR,direct_debit
+SAMPLE_007-T012,2026-06-23,2.63,GBP,out,Wells-Daniels,FR,card
+SAMPLE_007-T013,2026-03-11,20.3,GBP,out,Wallace PLC,FR,card
+SAMPLE_007-T014,2026-04-01,9.8,GBP,out,Harris-Hughes,FR,card
+SAMPLE_007-T015,2026-02-16,12.7,GBP,out,Thomas and Sons,FR,card
+SAMPLE_007-T016,2026-03-22,48.65,GBP,out,"Richardson, Baker and Adams",FR,card
+SAMPLE_007-T017,2026-07-18,38.43,GBP,out,Patel LLC,FR,card
+SAMPLE_007-T018,2026-06-25,132.42,GBP,out,"Wilson, Hayes and Davies",FR,card
+SAMPLE_007-T019,2026-04-26,24.86,GBP,out,Hicks-Burton,FR,card
+SAMPLE_007-T020,2026-05-13,28.93,GBP,out,"Hutchinson, Wilson and Barry",FR,card
+SAMPLE_007-T021,2026-02-18,46.09,GBP,out,Kelly Ltd,FR,card
+SAMPLE_007-T022,2026-02-26,49.8,GBP,out,O'Brien-Sullivan,FR,card
+SAMPLE_007-T023,2026-05-06,118.39,GBP,out,Burgess-Curtis,FR,card
+SAMPLE_007-T024,2026-04-18,67.37,GBP,out,Clarke and Sons,FR,card
+SAMPLE_007-T025,2026-05-30,51.16,GBP,out,"Hodgson, Scott and Smith",FR,card
+SAMPLE_007-T026,2026-05-12,49.81,GBP,out,"Miller, Bray and Begum",FR,card
+SAMPLE_007-T027,2026-07-06,17.3,GBP,out,Heath Group,FR,card

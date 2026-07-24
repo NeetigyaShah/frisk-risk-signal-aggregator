@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: RU (Russia)
+Surname: MASON
+Given names: ANN
+Nationality: Russia
+Date of birth: 1990-05-22
+Document no.: P91541873
+Expiry: 2031-05-01
+
+MRZ:
+P<RUMASON<<ANN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P91541873<RU19900522<<<<<<<<<<<<<<<<<<<<<<<<

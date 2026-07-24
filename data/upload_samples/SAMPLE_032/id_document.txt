@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: YE (Yemen)
+Surname: WALKER
+Given names: MISS NICOLE
+Nationality: Yemen
+Date of birth: 1998-02-10
+Document no.: P25400270
+Expiry: 2031-05-01
+
+MRZ:
+P<YEWALKER<<MISS<NICOLE<<<<<<<<<<<<<<<<<<<<<
+P25400270<YE19980210<<<<<<<<<<<<<<<<<<<<<<<<
