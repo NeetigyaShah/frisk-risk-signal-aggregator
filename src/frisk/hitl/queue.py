@@ -30,14 +30,13 @@ def enqueue(case: dict) -> None:
 
 
 def enqueue_decision(dec) -> None:
-    """Produce a review case from a low-confidence engine Decision."""
-    detail = dec.llm_detail or {}
+    """Produce a review case from a low-confidence engine Decision (agent schema)."""
     enqueue({
         "customer_id": dec.customer_id, "name": dec.name, "occupation": dec.occupation,
         "country": dec.country, "llm_score": dec.score, "band": dec.band,
         "confidence": dec.confidence, "reason": dec.rationale,
-        "source_findings": detail.get("source_findings", []), "verdict": detail.get("verdict"),
-        "flags": dec.flags, "status": "pending",
+        "opinions": getattr(dec, "opinions", []), "trace": getattr(dec, "trace", []),
+        "scratchpad": {}, "status": "pending",
     })
 
 

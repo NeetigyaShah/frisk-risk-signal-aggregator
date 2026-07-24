@@ -84,6 +84,9 @@ class MockProvider(Provider):
             data["consistent"] = True
         if "adjusted_score" in fields:
             data["adjusted_score"] = score
+        if "lessons" in fields:
+            data["lessons"] = ["Do not over-flag ordinary domestic salary + card activity as risk.",
+                               "PEP status alone is not high risk without corroborating signals."]
         return schema.model_validate(data)
 
     def chat_model(self):
