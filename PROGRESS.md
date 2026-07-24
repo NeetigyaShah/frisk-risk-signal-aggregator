@@ -60,4 +60,11 @@
   each node degrades independently; cascade graph→single→rules-only. RiskFinding.band now derived from score
   (accepts any model vocabulary). SCALE layer: `pipeline.py` (parallel batch + MED-band gating), `store.py`
   (SQLite decisions read store), LangSmith `@traceable` observability, `docs/SCALING.md` (10k/day infra).
-  16 tests pass. Multi-step cache warming in background.
+- 2026-07-24: Model tuning — thinking disabled (config `nvidia_extra_body`), tried deepseek-v4-flash
+  (faster ~12s but free endpoint throws 503 ResourceExhausted under load). Model + thinking are config knobs.
+- 2026-07-24: RESTRUCTURED into installable **`frisk/` package** (src-layout, pyproject.toml, `frisk` CLI) per
+  production patterns in the research notes: `config/` (pydantic-settings + constants + paths) · `core/` ·
+  `ai/` (providers ABC+factory+mock, crosscheck, orchestrator) · `data/` · `pipeline/` · `query/` ·
+  `observability/` · `ui/`. All imports updated, 16 tests pass. Run: `streamlit run src/frisk/ui/Home.py`.
+  NOTE: llm_cache.json was cleared during model tuning — re-warm (`frisk warm`) once the endpoint is free,
+  or run offline (provider=mock / LLM_MODE=off). App never-fails regardless.

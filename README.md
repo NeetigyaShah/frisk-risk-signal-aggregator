@@ -9,11 +9,17 @@ and an append-only audit trail.
 
 ```bash
 python -m venv .venv && . .venv/Scripts/activate     # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python data/generate.py            # writes data/dossiers.json (seeded, deterministic) + self-check
-pytest tests/                      # golden tests: one per typology + override + fallback + driver-sum
-streamlit run src/app/Home.py      # Queue -> Case detail -> Audit
+pip install -e ".[llm,ui,observability,dev]"          # installable package + optional extras
+frisk generate                     # regenerate data/dossiers.json (seeded, deterministic) + self-check
+pytest                             # 16 tests: typologies, override, fallback, driver-sum, gating, store
+streamlit run src/frisk/ui/Home.py # Queue -> Case detail -> Audit
+
+# handy: frisk score --offline   (rules-only ranked queue)   ·   frisk warm   (populate the LLM cache)
 ```
+
+**Package layout** (`src/frisk/`): `config/` (pydantic-settings + tuning constants) · `core/` (models, rules,
+engine — the deterministic source of truth) · `ai/` (providers boundary, prompts, crosscheck, LangGraph
+orchestrator) · `data/` (generate, store, audit) · `pipeline/` (batch + gating) · `query/` · `ui/`.
 
 The demo runs **fully offline** — no API key required (see *Data assumptions*). To use the real
 LLM cross-check, set `ANTHROPIC_API_KEY`; the engine auto-detects it.

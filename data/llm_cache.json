@@ -84,5 +84,41 @@
       ],
       "steps": 5
     }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:d483fad624c2": {
+    "finding": {
+      "customer_id": "CUST_002",
+      "score": 0,
+      "band": "low",
+      "rationale": "multi-step synthesis unavailable; using deterministic rules score",
+      "key_signals": []
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Client is a software engineer from Ireland (IE/IE), a low-risk jurisdiction. KYC is complete, ID document is present, PEP status is false, and account age is mature (1750 days). No red flags or unusual patterns identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. KYC is complete and screening is clean. No red flags present."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "All 25 transactions are domestic (IE only) with no cash activity. Credits and debits are moderate and consistent with normal salary and spending patterns. No structuring, layering, round-tripping, or dormant-then-spike indicators observed. KYC and screening are assumed complete and clean."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "synthesize:OutputParserException"
+      ],
+      "steps": 5
+    }
   }
 }
