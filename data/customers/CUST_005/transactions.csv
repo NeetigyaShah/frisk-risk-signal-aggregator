@@ -1,0 +1,22 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_005-T000,2026-07-21,5663.3,GBP,in,ACME Payroll Ltd,FR,salary
+CUST_005-T001,2026-06-21,5617.36,GBP,in,ACME Payroll Ltd,FR,salary
+CUST_005-T002,2026-05-22,5720.6,GBP,in,ACME Payroll Ltd,FR,salary
+CUST_005-T003,2026-04-22,5695.62,GBP,in,ACME Payroll Ltd,FR,salary
+CUST_005-T004,2026-03-23,5630.43,GBP,in,ACME Payroll Ltd,FR,salary
+CUST_005-T005,2026-02-21,5567.23,GBP,in,ACME Payroll Ltd,FR,salary
+CUST_005-T006,2026-07-19,1197.43,GBP,out,Landlord DD,FR,direct_debit
+CUST_005-T007,2026-06-19,809.97,GBP,out,Landlord DD,FR,direct_debit
+CUST_005-T008,2026-05-20,1349.45,GBP,out,Landlord DD,FR,direct_debit
+CUST_005-T009,2026-04-20,792.78,GBP,out,Landlord DD,FR,direct_debit
+CUST_005-T010,2026-03-21,698.21,GBP,out,Landlord DD,FR,direct_debit
+CUST_005-T011,2026-02-19,1264.89,GBP,out,Landlord DD,FR,direct_debit
+CUST_005-T012,2026-05-19,12.36,GBP,out,Metcalfe-Black,FR,card
+CUST_005-T013,2026-04-07,14.65,GBP,out,Hussain-Booth,FR,card
+CUST_005-T014,2026-01-26,21.85,GBP,out,"Turner, Humphreys and Edwards",FR,card
+CUST_005-T015,2026-03-06,29.84,GBP,out,Barrett and Sons,FR,card
+CUST_005-T016,2026-05-07,39.25,GBP,out,Jackson PLC,FR,card
+CUST_005-T017,2026-06-28,92.39,GBP,out,Morris Inc,FR,card
+CUST_005-T018,2026-06-04,50.16,GBP,out,Jackson PLC,FR,card
+CUST_005-T019,2026-06-30,5.81,GBP,out,"Fraser, Hunt and Francis",FR,card
+CUST_005-T020,2026-05-31,15.26,GBP,out,Rees Inc,FR,card

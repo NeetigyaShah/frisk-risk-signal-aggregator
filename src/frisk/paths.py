@@ -16,7 +16,9 @@ DATA_DIR = Path(os.environ.get("FRISK_DATA_DIR", str(PROJECT_ROOT / "data")))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 DOSSIERS = DATA_DIR / "dossiers.json"
+CUSTOMERS_DIR = DATA_DIR / "customers"          # per-customer folders of structured + unstructured docs
 LLM_CACHE = DATA_DIR / "llm_cache.json"
 AUDIT_LOG = DATA_DIR / "audit_log.jsonl"
 DECISIONS_DB = DATA_DIR / "decisions.db"
+FEEDBACK_LOG = DATA_DIR / "feedback.jsonl"       # human corrections (few-shot loop)
 ENV_FILE = PROJECT_ROOT / ".env"

@@ -1,0 +1,27 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_009-T000,2026-07-21,5439.72,GBP,in,ACME Payroll Ltd,VE,salary
+CUST_009-T001,2026-06-21,5291.65,GBP,in,ACME Payroll Ltd,VE,salary
+CUST_009-T002,2026-05-22,5363.62,GBP,in,ACME Payroll Ltd,VE,salary
+CUST_009-T003,2026-04-22,5257.8,GBP,in,ACME Payroll Ltd,VE,salary
+CUST_009-T004,2026-03-23,5369.2,GBP,in,ACME Payroll Ltd,VE,salary
+CUST_009-T005,2026-02-21,5274.1,GBP,in,ACME Payroll Ltd,VE,salary
+CUST_009-T006,2026-07-19,1051.96,GBP,out,Landlord DD,VE,direct_debit
+CUST_009-T007,2026-06-19,1057.94,GBP,out,Landlord DD,VE,direct_debit
+CUST_009-T008,2026-05-20,972.79,GBP,out,Landlord DD,VE,direct_debit
+CUST_009-T009,2026-04-20,1018.11,GBP,out,Landlord DD,VE,direct_debit
+CUST_009-T010,2026-03-21,1211.14,GBP,out,Landlord DD,VE,direct_debit
+CUST_009-T011,2026-02-19,1239.4,GBP,out,Landlord DD,VE,direct_debit
+CUST_009-T012,2026-06-29,48.07,GBP,out,"Cunningham, Lewis and Parkinson",VE,card
+CUST_009-T013,2026-02-07,8.45,GBP,out,Green-Watson,VE,card
+CUST_009-T014,2026-03-16,40.23,GBP,out,Davies and Sons,VE,card
+CUST_009-T015,2026-07-08,58.98,GBP,out,Kennedy Inc,VE,card
+CUST_009-T016,2026-02-09,57.46,GBP,out,Robinson PLC,VE,card
+CUST_009-T017,2026-03-07,70.44,GBP,out,Murphy Ltd,VE,card
+CUST_009-T018,2026-03-13,36.14,GBP,out,"Chamberlain, Booth and Hughes",VE,card
+CUST_009-T019,2026-02-13,37.2,GBP,out,Kennedy Ltd,VE,card
+CUST_009-T020,2026-03-03,26.63,GBP,out,Lawrence Inc,VE,card
+CUST_009-T021,2026-05-19,26.52,GBP,out,Lloyd-Roberts,VE,card
+CUST_009-T022,2026-02-01,66.68,GBP,out,"Weston, Parker and Smith",VE,card
+CUST_009-T023,2026-06-27,12.85,GBP,out,Murphy Group,VE,card
+CUST_009-T024,2026-03-13,98.02,GBP,out,"Hill, Moore and Stephens",VE,card
+CUST_009-T025,2026-05-16,16.53,GBP,out,Osborne-Peters,VE,card

@@ -1,0 +1,34 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_006-T000,2026-07-21,3481.12,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_006-T001,2026-06-21,3468.92,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_006-T002,2026-05-22,3472.16,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_006-T003,2026-04-22,3388.53,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_006-T004,2026-03-23,3387.52,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_006-T005,2026-02-21,3498.1,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_006-T006,2026-07-19,918.06,GBP,out,Landlord DD,RU,direct_debit
+CUST_006-T007,2026-06-19,840.76,GBP,out,Landlord DD,RU,direct_debit
+CUST_006-T008,2026-05-20,990.87,GBP,out,Landlord DD,RU,direct_debit
+CUST_006-T009,2026-04-20,1130.29,GBP,out,Landlord DD,RU,direct_debit
+CUST_006-T010,2026-03-21,1364.5,GBP,out,Landlord DD,RU,direct_debit
+CUST_006-T011,2026-02-19,829.16,GBP,out,Landlord DD,RU,direct_debit
+CUST_006-T012,2026-04-10,36.38,GBP,out,Jackson Inc,RU,card
+CUST_006-T013,2026-06-27,12.58,GBP,out,"Reeves, Moss and Armstrong",RU,card
+CUST_006-T014,2026-04-01,32.21,GBP,out,Hudson-Martin,RU,card
+CUST_006-T015,2026-03-11,224.52,GBP,out,"McLean, Phillips and Clarke",RU,card
+CUST_006-T016,2026-05-09,134.49,GBP,out,"Hodgson, Saunders and Mitchell",RU,card
+CUST_006-T017,2026-06-21,23.81,GBP,out,Bailey PLC,RU,card
+CUST_006-T018,2026-02-06,9.29,GBP,out,"Turner, Ford and Dobson",RU,card
+CUST_006-T019,2026-04-01,38.57,GBP,out,Daniels-Stone,RU,card
+CUST_006-T020,2026-03-05,78.62,GBP,out,Shaw LLC,RU,card
+CUST_006-T021,2026-06-02,17.76,GBP,out,Fraser-Lee,RU,card
+CUST_006-T022,2026-02-25,5.38,GBP,out,"Stokes, Robinson and Gough",RU,card
+CUST_006-T023,2026-05-25,12.81,GBP,out,"Bailey, Warren and Burns",RU,card
+CUST_006-T024,2026-04-19,19.62,GBP,out,"Webb, Shaw and Pritchard",RU,card
+CUST_006-T025,2026-07-02,73.63,GBP,out,Cox and Sons,RU,card
+CUST_006-T026,2026-05-18,27.79,GBP,out,Bird-Kelly,RU,card
+CUST_006-T027,2026-02-01,9.27,GBP,out,Martin-Thomson,RU,card
+CUST_006-T028,2026-02-18,164.58,GBP,out,Lowe-Smith,RU,card
+CUST_006-T029,2026-06-05,12.46,GBP,out,Green Group,RU,card
+CUST_006-T030,2026-06-11,130.26,GBP,out,Thomas-Shepherd,RU,card
+CUST_006-T031,2026-02-02,11.74,GBP,out,Todd LLC,RU,card
+CUST_006-T032,2026-07-05,22.32,GBP,out,Cox PLC,RU,card

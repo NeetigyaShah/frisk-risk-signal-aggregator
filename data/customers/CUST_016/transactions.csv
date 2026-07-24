@@ -1,0 +1,8 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_016-D00,2025-12-06,78.53,GBP,out,Clark-Wilson,GB,card
+CUST_016-D01,2025-12-16,233.1,GBP,out,Walker and Sons,GB,card
+CUST_016-D02,2025-12-26,160.02,GBP,out,Howard LLC,GB,card
+CUST_016-B00,2026-07-15,32933.8,GBP,in,New Counterparty,AE,wire
+CUST_016-B01,2026-07-17,35660.77,GBP,in,New Counterparty,AE,wire
+CUST_016-B02,2026-07-19,44185.01,GBP,in,New Counterparty,AE,wire
+CUST_016-B03,2026-07-21,44583.61,GBP,in,New Counterparty,AE,wire

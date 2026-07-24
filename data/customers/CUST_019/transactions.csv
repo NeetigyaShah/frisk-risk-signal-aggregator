@@ -1,0 +1,20 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_019-T000,2026-07-21,5253.29,GBP,in,ACME Payroll Ltd,SY,salary
+CUST_019-T001,2026-06-21,5333.52,GBP,in,ACME Payroll Ltd,SY,salary
+CUST_019-T002,2026-05-22,5235.57,GBP,in,ACME Payroll Ltd,SY,salary
+CUST_019-T003,2026-04-22,5352.83,GBP,in,ACME Payroll Ltd,SY,salary
+CUST_019-T004,2026-03-23,5417.19,GBP,in,ACME Payroll Ltd,SY,salary
+CUST_019-T005,2026-02-21,5323.0,GBP,in,ACME Payroll Ltd,SY,salary
+CUST_019-T006,2026-07-19,946.38,GBP,out,Landlord DD,SY,direct_debit
+CUST_019-T007,2026-06-19,628.67,GBP,out,Landlord DD,SY,direct_debit
+CUST_019-T008,2026-05-20,1367.82,GBP,out,Landlord DD,SY,direct_debit
+CUST_019-T009,2026-04-20,682.4,GBP,out,Landlord DD,SY,direct_debit
+CUST_019-T010,2026-03-21,632.86,GBP,out,Landlord DD,SY,direct_debit
+CUST_019-T011,2026-02-19,796.85,GBP,out,Landlord DD,SY,direct_debit
+CUST_019-T012,2026-06-06,72.99,GBP,out,"Watkins, Jones and Bray",SY,card
+CUST_019-T013,2026-04-22,24.63,GBP,out,"Jones, Ross and Miller",SY,card
+CUST_019-T014,2026-02-21,28.63,GBP,out,Murphy-Storey,SY,card
+CUST_019-T015,2026-07-04,69.36,GBP,out,Robinson and Sons,SY,card
+CUST_019-T016,2026-02-13,14.46,GBP,out,"Cooper, Davis and Craig",SY,card
+CUST_019-T017,2026-03-21,46.84,GBP,out,Morris-Cole,SY,card
+CUST_019-T018,2026-04-27,50.3,GBP,out,Cooper-Adams,SY,card

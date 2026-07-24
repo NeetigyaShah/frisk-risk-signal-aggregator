@@ -1,0 +1,9 @@
+{
+  "expected_band": "LOW",
+  "severity": "low",
+  "typology": null,
+  "missing_docs": [
+    "transactions"
+  ],
+  "extra_docs": []
+}

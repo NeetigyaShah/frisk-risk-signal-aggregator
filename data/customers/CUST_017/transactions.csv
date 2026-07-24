@@ -1,0 +1,39 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_017-T000,2026-07-21,5199.49,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_017-T001,2026-06-21,5116.4,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_017-T002,2026-05-22,5070.56,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_017-T003,2026-04-22,5053.48,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_017-T004,2026-03-23,5205.12,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_017-T005,2026-02-21,5145.89,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_017-T006,2026-07-19,1388.43,GBP,out,Landlord DD,GB,direct_debit
+CUST_017-T007,2026-06-19,971.98,GBP,out,Landlord DD,GB,direct_debit
+CUST_017-T008,2026-05-20,1382.33,GBP,out,Landlord DD,GB,direct_debit
+CUST_017-T009,2026-04-20,929.26,GBP,out,Landlord DD,GB,direct_debit
+CUST_017-T010,2026-03-21,1234.95,GBP,out,Landlord DD,GB,direct_debit
+CUST_017-T011,2026-02-19,667.86,GBP,out,Landlord DD,GB,direct_debit
+CUST_017-T012,2026-06-06,55.17,GBP,out,Jones LLC,GB,card
+CUST_017-T013,2026-02-08,42.88,GBP,out,"Ahmed, Dixon and Powell",GB,card
+CUST_017-T014,2026-07-14,46.08,GBP,out,Francis-Thomas,GB,card
+CUST_017-T015,2026-05-18,13.1,GBP,out,Hunter-Butler,GB,card
+CUST_017-T016,2026-02-07,9.59,GBP,out,Green Ltd,GB,card
+CUST_017-T017,2026-03-25,42.82,GBP,out,"Fox, Brown and Miller",GB,card
+CUST_017-T018,2026-07-22,10.74,GBP,out,Allen-Miller,GB,card
+CUST_017-T019,2026-02-19,53.04,GBP,out,Jones Ltd,GB,card
+CUST_017-T020,2026-05-16,18.34,GBP,out,Chadwick-Clayton,GB,card
+CUST_017-T021,2026-07-15,95.67,GBP,out,"Williams, Bradley and Morgan",GB,card
+CUST_017-T022,2026-06-12,30.74,GBP,out,Godfrey-Ross,GB,card
+CUST_017-T023,2026-02-20,37.16,GBP,out,"Webb, Walsh and Ali",GB,card
+CUST_017-T024,2026-06-06,43.68,GBP,out,Barber-Harding,GB,card
+CUST_017-T025,2026-03-24,19.56,GBP,out,"Sims, Nicholson and Smith",GB,card
+CUST_017-T026,2026-03-20,89.13,GBP,out,Morgan Group,GB,card
+CUST_017-T027,2026-06-23,3631.95,GBP,in,Cash Deposit,GB,cash
+CUST_017-T028,2026-06-25,2370.08,GBP,in,Cash Deposit,GB,cash
+CUST_017-T029,2026-04-22,2247.36,GBP,in,Cash Deposit,GB,cash
+CUST_017-T030,2026-04-13,2975.8,GBP,in,Cash Deposit,GB,cash
+CUST_017-T031,2026-05-31,2187.06,GBP,in,Cash Deposit,GB,cash
+CUST_017-T032,2026-06-06,3716.39,GBP,in,Cash Deposit,GB,cash
+CUST_017-T033,2026-04-11,1712.03,GBP,in,Cash Deposit,GB,cash
+CUST_017-S00,2026-06-14,8632.56,GBP,in,Cash Deposit,GB,cash
+CUST_017-S01,2026-06-16,9327.63,GBP,in,Cash Deposit,GB,cash
+CUST_017-S02,2026-06-18,9493.75,GBP,in,Cash Deposit,GB,cash
+CUST_017-S03,2026-06-20,9847.68,GBP,in,Cash Deposit,GB,cash

@@ -1,0 +1,9 @@
+{
+  "expected_band": "MED",
+  "severity": "med",
+  "typology": null,
+  "missing_docs": [
+    "kyc_id"
+  ],
+  "extra_docs": []
+}

@@ -407,5 +407,489 @@
       ],
       "steps": 5
     }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:f850c7a11d45": {
+    "finding": {
+      "customer_id": "CUST_010",
+      "score": 50,
+      "band": "medium",
+      "rationale": "multi-step synthesis unavailable; using deterministic rules score",
+      "key_signals": [
+        "PEP confirmed",
+        "PEP status",
+        "adverse media: named in fraud investigation"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "PEP status"
+          ],
+          "note": "The client is a Politically Exposed Person (PEP), which inherently increases the risk of potential involvement in bribery or corruption. While KYC is complete and ID documents are present, PEP status requires enhanced due diligence and ongoing monitoring."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "PEP confirmed",
+            "adverse media: named in fraud investigation"
+          ],
+          "note": "The subject is a confirmed PEP and has adverse media linking them to a fraud investigation, both of which are significant red flags requiring enhanced due diligence."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "All transactions are domestic (GB), no cash activity, and the volume is consistent with normal personal or small business use. No red flags for structuring, layering, round-tripping, or dormant account spikes."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "synthesize:OutputParserException"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:58c14382e3e1": {
+    "finding": {
+      "customer_id": "CUST_011",
+      "score": 50,
+      "band": "medium",
+      "rationale": "The KYC domain identifies the client as a precious metals trader, a high-risk industry for money laundering, which elevates the overall risk to medium despite clean screening results. The screening domain shows no sanctions, PEP, or adverse media, indicating a low-risk pattern. However, the transaction analysis is unavailable, which limits the ability to detect suspicious activity. The high-risk industry signal from KYC reinforces the need for caution, as it is a recognized red flag that can be ",
+      "key_signals": [
+        "Russian nationality/country may be associated with higher financial crime risk in some jurisdictions",
+        "occupation as precious metals trader is a high-risk industry due to potential for money laundering and illicit trade"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "occupation as precious metals trader is a high-risk industry due to potential for money laundering and illicit trade",
+            "Russian nationality/country may be associated with higher financial crime risk in some jurisdictions"
+          ],
+          "note": "The client's occupation as a precious metals trader is a recognized high-risk industry for money laundering, which elevates the KYC risk. While KYC is complete and no PEP or screening issues are noted, the industry risk alone warrants a medium rating. No other red flags present."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. KYC is complete and screening is clean, indicating a normal low-risk pattern."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [],
+          "note": "transactions analysis unavailable"
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 50,
+        "note": "The synthesis score of 55 is slightly too high given the evidence. The KYC domain correctly identifies the high-risk industry (precious metals trader) as a medium risk, and the screening domain is clean (low risk). The transaction analysis is unavailable, which is a limitation but not a direct red flag. The synthesis overweights the industry risk, as the clean screening and lack of transaction data do not justify a score above 50. A score of 50 better reflects the medium risk from KYC alone, balanced by the low screening risk and missing transaction data."
+      },
+      "errors": [
+        "transactions:InternalServerError"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:26e43b39bc38": {
+    "finding": {
+      "customer_id": "CUST_012",
+      "score": 70,
+      "band": "high",
+      "rationale": "The PEP status from KYC and screening domains is the primary risk driver, elevating the overall risk above medium. However, the absence of sanctions, adverse media, and any transactional red flags (all domestic, low-value, pattern-consistent) tempers the risk from reaching high. The PEP signal reinforces across KYC and screening, but the clean transaction profile provides a mitigating factor, resulting in a medium-high band.",
+      "key_signals": [
+        "PEP confirmed",
+        "PEP status"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "PEP status"
+          ],
+          "note": "The client is a Politically Exposed Person (PEP), which inherently increases the risk of potential involvement in corruption or bribery. Enhanced due diligence is required."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "PEP confirmed"
+          ],
+          "note": "The subject is a confirmed Politically Exposed Person (PEP), which inherently increases the risk of involvement in bribery or corruption. However, no sanctions hits or adverse media were found, and no other red flags are present. The risk is elevated to medium due to the PEP status alone, but not high without additional adverse indicators."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "All 23 transactions are domestic to GB with no cash activity. Credits and debits are moderate and consistent with normal salary and spending patterns. No structuring, layering, round-tripping, or dormant-then-spike indicators observed."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "verify:OutputParserException"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:c5d54aad7f8b": {
+    "finding": {
+      "customer_id": "CUST_013",
+      "score": 65,
+      "band": "medium",
+      "rationale": "While KYC and screening domains are low risk, the transaction domain presents high-risk signals that partially override the low-risk profile. Cash deposits from Russia (high-risk jurisdiction) with structuring indicators and a high cash-to-credit ratio suggest potential money laundering through layering or accumulation. The lack of corresponding debits and account age (5+ years) may indicate a dormant account reactivated for illicit purposes. The low KYC and screening scores do not fully mitigat",
+      "key_signals": [
+        "geographic risk: all counterparties in Russia (RU), a high-risk jurisdiction for money laundering",
+        "high cash proportion: cash_in (47162) is 59.6% of total credits (79127), indicating heavy reliance on cash",
+        "imbalance: credits (79127) far exceed debits (7540), suggesting accumulation without clear economic purpose",
+        "structuring: cash_in=47162 with counterparty_countries=['RU'] suggests potential structuring to avoid reporting thresholds"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "KYC is complete, ID document is present, PEP status is false, and account age is over 5 years. No specific red flags identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. No red flags present."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "structuring: cash_in=47162 with counterparty_countries=['RU'] suggests potential structuring to avoid reporting thresholds",
+            "geographic risk: all counterparties in Russia (RU), a high-risk jurisdiction for money laundering",
+            "high cash proportion: cash_in (47162) is 59.6% of total credits (79127), indicating heavy reliance on cash",
+            "imbalance: credits (79127) far exceed debits (7540), suggesting accumulation without clear economic purpose"
+          ],
+          "note": "The transaction pattern shows significant cash deposits from Russia, a high-risk jurisdiction, with potential structuring indicators. The high cash-to-credit ratio and lack of corresponding debits suggest possible layering or accumulation for onward transfer. Further investigation into the source of funds and business rationale is warranted."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 65,
+        "note": "The synthesis is consistent with the evidence. The low-risk KYC and screening domains are correctly noted, and the high-risk transaction signals (cash deposits from Russia, structuring indicators, high cash-to-credit ratio, lack of debits, dormant account reactivation) justify an elevated score. The score of 65 appropriately reflects a moderate-to-high risk level without reaching critical, given the absence of sanctions or PEP issues. No adjustment needed."
+      },
+      "errors": [],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:349c2c870efc": {
+    "finding": {
+      "customer_id": "CUST_014",
+      "score": 85,
+      "band": "high",
+      "rationale": "The three domain assessments reinforce each other to create a high overall risk. The KYC high risk from being a crypto dealer is amplified by the screening high risk of adverse media linking the subject to a fraud investigation and a firm fined for money laundering. This nexus of sector vulnerability and direct criminal allegations significantly elevates the baseline. The transaction medium risk, showing outflows exceeding inflows and cross-border activity to Cyprus, adds a behavioral layer that",
+      "key_signals": [
+        "adverse_media: named in fraud investigation",
+        "adverse_media: regulator fines firm linked to subject for money laundering",
+        "counterparties in Cyprus (CY) and UK (GB)",
+        "crypto-related activities often lack transparency and are associated with higher regulatory scrutiny",
+        "high debit-to-credit ratio (474k vs 18k)",
+        "occupation is crypto dealer, which is inherently high-risk due to anonymity and potential for money laundering",
+        "potential layering via rapid onward transfers"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "occupation is crypto dealer, which is inherently high-risk due to anonymity and potential for money laundering",
+            "crypto-related activities often lack transparency and are associated with higher regulatory scrutiny"
+          ],
+          "note": "The subject is a UK national with complete KYC and no PEP status, but the occupation as a crypto dealer significantly elevates the risk profile due to the sector's vulnerability to financial crime."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "adverse_media: named in fraud investigation",
+            "adverse_media: regulator fines firm linked to subject for money laundering"
+          ],
+          "note": "Adverse media directly names the subject in a fraud investigation and links them to a firm fined for money laundering, indicating elevated screening risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [
+            "high debit-to-credit ratio (474k vs 18k)",
+            "counterparties in Cyprus (CY) and UK (GB)",
+            "potential layering via rapid onward transfers"
+          ],
+          "note": "The transaction pattern shows significant outflows relative to inflows, with counterparties in jurisdictions that may pose higher risk (Cyprus). While no cash deposits or structuring are observed, the imbalance and cross-border activity warrant further review."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "verify:OutputParserException"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:b7f431d33177": {
+    "finding": {
+      "customer_id": "CUST_015",
+      "score": 67,
+      "band": "high",
+      "rationale": "multi-step synthesis unavailable; using deterministic rules score",
+      "key_signals": [
+        "counterparty_countries include KY (Cayman Islands) and MM (Myanmar), both high-risk jurisdictions for money laundering",
+        "dormant-then-spike pattern not explicitly confirmed but implied by watch note",
+        "high volume of transactions (24) with significant total credits (129264) and debits (110708) relative to typical personal accounts",
+        "no cash_in reported but counterparty countries suggest potential layering or round-tripping",
+        "structuring risk: multiple transactions may be designed to avoid thresholds"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "KYC is complete, ID document is present, PEP status is false, and account age is over 5 years. No specific red flags identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. All screening indicators are clean."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "counterparty_countries include KY (Cayman Islands) and MM (Myanmar), both high-risk jurisdictions for money laundering",
+            "high volume of transactions (24) with significant total credits (129264) and debits (110708) relative to typical personal accounts",
+            "no cash_in reported but counterparty countries suggest potential layering or round-tripping",
+            "structuring risk: multiple transactions may be designed to avoid thresholds",
+            "dormant-then-spike pattern not explicitly confirmed but implied by watch note"
+          ],
+          "note": "The presence of transactions involving Cayman Islands (KY) and Myanmar (MM) is a major red flag, as these jurisdictions are associated with high money laundering risk. The transaction volume and amounts are elevated, and the watch note highlights structuring, layering, and round-tripping concerns. This combination warrants a high-risk assessment despite no cash deposits."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "synthesize:OutputParserException"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:5b6eef25522f": {
+    "finding": {
+      "customer_id": "CUST_016",
+      "score": 87,
+      "band": "high",
+      "rationale": "multi-step synthesis unavailable; using deterministic rules score",
+      "key_signals": [
+        "adverse_media: Mohamed Roberts named in fraud investigation",
+        "occupation as precious metals trader is a high-risk industry for money laundering due to high value, anonymity, and cross-border nature"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "occupation as precious metals trader is a high-risk industry for money laundering due to high value, anonymity, and cross-border nature"
+          ],
+          "note": "While KYC is complete and PEP status is negative, the occupation as a precious metals trader elevates risk due to inherent vulnerabilities in the sector."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "adverse_media: Mohamed Roberts named in fraud investigation"
+          ],
+          "note": "Adverse media hit for fraud investigation indicates potential financial crime risk, requiring further review."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Transactions show a normal pattern with credits significantly higher than debits, no cash deposits, and counterparties in UAE and UK. No structuring, layering, round-tripping, or dormant-then-spike indicators observed. KYC and screening are assumed complete based on facts."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "synthesize:OutputParserException"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:09fa1605bdcd": {
+    "finding": {
+      "customer_id": "CUST_017",
+      "score": 60,
+      "band": "medium",
+      "rationale": "The PEP status from KYC and screening elevates inherent risk, but the low transaction risk (domestic, no red flags) partially mitigates. The PEP signal reinforces across KYC and screening, but the absence of adverse media or suspicious transaction patterns prevents a higher score. Overall, the risk is medium-high, driven by the PEP designation requiring enhanced monitoring.",
+      "key_signals": [
+        "PEP confirmed",
+        "PEP status (politician)"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "PEP status (politician)"
+          ],
+          "note": "The client is a Politically Exposed Person (PEP) from the UK, which inherently increases KYC risk due to potential exposure to bribery, corruption, or money laundering. While KYC is complete and documentation is present, PEP status requires enhanced due diligence and ongoing monitoring."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "PEP confirmed"
+          ],
+          "note": "The subject is confirmed as a Politically Exposed Person (PEP), which inherently carries a higher risk of involvement in bribery or corruption. However, no sanctions hits or adverse media are present, and no other red flags are noted. The risk is elevated to medium due to the PEP status alone."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "The account shows 38 transactions with total credits of 86,933 and debits of 7,183, including cash in of 56,142. All counterparties are in GB (UK). No specific red flags such as structuring, layering, round-tripping, or dormant-then-spike patterns are evident from the provided facts. The activity appears consistent with a normal domestic pattern, and no unusual clustering or rapid onward transfers are indicated. Therefore, the risk is assessed as low."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "verify:OutputParserException"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:fcc0c5c5390a": {
+    "finding": {
+      "customer_id": "CUST_018",
+      "score": 100,
+      "band": "high",
+      "rationale": "multi-step synthesis unavailable; using deterministic rules score",
+      "key_signals": [
+        "cash_in=37476 from IR (Iran, a high-risk jurisdiction)",
+        "dormant-then-spike: account activity surge from low prior usage",
+        "high-risk jurisdiction (Iran)",
+        "high-risk occupation (arms dealer)",
+        "layering risk: rapid onward transfers after cash deposits",
+        "round-tripping potential: funds moved out to same or related accounts",
+        "sanctions_hit",
+        "structuring pattern: multiple cash deposits just under reporting threshold"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "high-risk jurisdiction (Iran)",
+            "high-risk occupation (arms dealer)"
+          ],
+          "note": "The combination of Iranian nationality/residence and occupation as an arms dealer presents significant KYC risk due to sanctions and proliferation financing concerns."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "sanctions_hit"
+          ],
+          "note": "Name match to sanctions list: 'Mr Hugh Taylor'. Requires further investigation to confirm or disprove identity match."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "cash_in=37476 from IR (Iran, a high-risk jurisdiction)",
+            "structuring pattern: multiple cash deposits just under reporting threshold",
+            "layering risk: rapid onward transfers after cash deposits",
+            "round-tripping potential: funds moved out to same or related accounts",
+            "dormant-then-spike: account activity surge from low prior usage"
+          ],
+          "note": "The combination of significant cash inflows from Iran (a sanctioned/high-risk jurisdiction), potential structuring of deposits to avoid reporting thresholds, and rapid onward transfers indicates a high risk of money laundering or sanctions evasion. Further investigation is required."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "synthesize:OutputParserException"
+      ],
+      "steps": 5
+    }
+  },
+  "nvidia:deepseek-ai/deepseek-v4-flash:graph:1bcdd6ea6040": {
+    "finding": {
+      "customer_id": "CUST_019",
+      "score": 95,
+      "band": "high",
+      "rationale": "All three domains (KYC, screening, transactions) independently rate as high, and their signals strongly reinforce each other. The Syrian nationality and shell company directorship from KYC align with the sanctions hit on Susan Bird-Burns and PEP status from screening, while the transaction pattern of large credit inflows from Syria with minimal debits suggests potential sanctions evasion or illicit fund flows. The absence of cash deposits does not mitigate the elevated risk from the counterparty",
+      "key_signals": [
+        "High-risk jurisdiction (SY)",
+        "PEP confirmed",
+        "Politically Exposed Person (PEP)",
+        "Shell company director occupation",
+        "cash_in=0 but counterparty country is high-risk, indicating potential non-cash layering",
+        "counterparty_countries includes Syria (SY), a high-risk jurisdiction",
+        "credits significantly exceed debits (31915 vs 5362), suggesting large inflows",
+        "sanctions hit",
+        "structuring watch: no cash deposits but high-risk country exposure"
+      ]
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "High-risk jurisdiction (SY)",
+            "Shell company director occupation",
+            "Politically Exposed Person (PEP)"
+          ],
+          "note": "The combination of Syrian nationality (high-risk jurisdiction), role as a shell company director, and PEP status presents significant KYC risk, despite complete documentation and account age."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "sanctions hit",
+            "PEP confirmed"
+          ],
+          "note": "Sanctions hit on Susan Bird-Burns and confirmed PEP status indicate high screening risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "counterparty_countries includes Syria (SY), a high-risk jurisdiction",
+            "credits significantly exceed debits (31915 vs 5362), suggesting large inflows",
+            "cash_in=0 but counterparty country is high-risk, indicating potential non-cash layering",
+            "structuring watch: no cash deposits but high-risk country exposure"
+          ],
+          "note": "Transactions involve a high-risk jurisdiction (Syria) with large credit inflows and minimal debits, raising concerns about potential sanctions evasion or illicit fund flows. No cash deposits observed, but the counterparty country alone elevates risk."
+        }
+      ],
+      "verdict": null,
+      "errors": [
+        "verify:OutputParserException"
+      ],
+      "steps": 5
+    }
   }
 }

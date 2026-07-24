@@ -1,0 +1,14 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: CY (Cyprus)
+Surname: ROBERTS
+Given names: MOHAMED
+Nationality: Cyprus
+Date of birth: 1969-01-07
+Document no.: P88012129
+Expiry: 2031-05-01
+
+MRZ:
+P<CYROBERTS<<MOHAMED<<<<<<<<<<<<<<<<<<<<<<<<
+P88012129<CY19690107<<<<<<<<<<<<<<<<<<<<<<<<
+
+[NOTE] Second travel document on file — different issuing state.

@@ -7,7 +7,7 @@ from frisk.core import rules
 from frisk.data import store
 from frisk.core.models import load_dossiers
 
-from frisk.paths import DOSSIERS as DATA
+from frisk.paths import CUSTOMERS_DIR as DATA
 
 
 def test_gating_skips_llm_on_decisive_bands():

@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: RU (Russia)
+Surname: STANLEY
+Given names: AARON
+Nationality: Russia
+Date of birth: 1972-04-06
+Document no.: P65497953
+Expiry: 2031-05-01
+
+MRZ:
+P<RUSTANLEY<<AARON<<<<<<<<<<<<<<<<<<<<<<<<<<
+P65497953<RU19720406<<<<<<<<<<<<<<<<<<<<<<<<

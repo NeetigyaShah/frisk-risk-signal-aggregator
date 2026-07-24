@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: MELLOR
+Given names: JEREMY
+Nationality: United Kingdom
+Date of birth: 1960-04-16
+Document no.: P51664651
+Expiry: 2031-05-01
+
+MRZ:
+P<GBMELLOR<<JEREMY<<<<<<<<<<<<<<<<<<<<<<<<<<
+P51664651<GB19600416<<<<<<<<<<<<<<<<<<<<<<<<

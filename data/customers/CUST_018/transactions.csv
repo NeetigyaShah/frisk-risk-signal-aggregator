@@ -1,0 +1,32 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_018-T000,2026-07-21,4045.77,GBP,in,ACME Payroll Ltd,IR,salary
+CUST_018-T001,2026-06-21,4117.71,GBP,in,ACME Payroll Ltd,IR,salary
+CUST_018-T002,2026-05-22,4187.13,GBP,in,ACME Payroll Ltd,IR,salary
+CUST_018-T003,2026-04-22,4138.4,GBP,in,ACME Payroll Ltd,IR,salary
+CUST_018-T004,2026-03-23,4121.05,GBP,in,ACME Payroll Ltd,IR,salary
+CUST_018-T005,2026-02-21,4087.74,GBP,in,ACME Payroll Ltd,IR,salary
+CUST_018-T006,2026-07-19,1332.24,GBP,out,Landlord DD,IR,direct_debit
+CUST_018-T007,2026-06-19,997.53,GBP,out,Landlord DD,IR,direct_debit
+CUST_018-T008,2026-05-20,707.49,GBP,out,Landlord DD,IR,direct_debit
+CUST_018-T009,2026-04-20,892.3,GBP,out,Landlord DD,IR,direct_debit
+CUST_018-T010,2026-03-21,653.73,GBP,out,Landlord DD,IR,direct_debit
+CUST_018-T011,2026-02-19,761.58,GBP,out,Landlord DD,IR,direct_debit
+CUST_018-T012,2026-05-31,23.13,GBP,out,Holloway-Joyce,IR,card
+CUST_018-T013,2026-02-15,29.55,GBP,out,"Davey, Johnson and Carter",IR,card
+CUST_018-T014,2026-02-02,14.56,GBP,out,Phillips and Sons,IR,card
+CUST_018-T015,2026-01-29,28.07,GBP,out,Williams-Harrison,IR,card
+CUST_018-T016,2026-06-03,7.66,GBP,out,Day Ltd,IR,card
+CUST_018-T017,2026-04-14,44.06,GBP,out,"Roberts, Ellis and Kemp",IR,card
+CUST_018-T018,2026-05-26,19.72,GBP,out,Fisher Inc,IR,card
+CUST_018-T019,2026-01-28,56.14,GBP,out,Chambers Inc,IR,card
+CUST_018-T020,2026-03-13,37.26,GBP,out,May-Miah,IR,card
+CUST_018-T021,2026-07-19,10.45,GBP,out,Morley Ltd,IR,card
+CUST_018-T022,2026-05-31,58.48,GBP,out,Bond-Robertson,IR,card
+CUST_018-T023,2026-06-22,201.56,GBP,out,Robinson-Smith,IR,card
+CUST_018-T024,2026-06-26,41.94,GBP,out,"Daly, Bates and Foster",IR,card
+CUST_018-T025,2026-06-09,26.22,GBP,out,"Shaw, Taylor and White",IR,card
+CUST_018-T026,2026-03-04,57.59,GBP,out,Cook-Greenwood,IR,card
+CUST_018-S00,2026-06-14,8881.08,GBP,in,Cash Deposit,IR,cash
+CUST_018-S01,2026-06-16,9840.2,GBP,in,Cash Deposit,IR,cash
+CUST_018-S02,2026-06-18,9248.01,GBP,in,Cash Deposit,IR,cash
+CUST_018-S03,2026-06-20,9507.08,GBP,in,Cash Deposit,IR,cash

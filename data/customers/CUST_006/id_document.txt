@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: RU (Russia)
+Surname: AHMED
+Given names: TERENCE
+Nationality: Russia
+Date of birth: 1994-04-29
+Document no.: P78956931
+Expiry: 2031-05-01
+
+MRZ:
+P<RUAHMED<<TERENCE<<<<<<<<<<<<<<<<<<<<<<<<<<
+P78956931<RU19940429<<<<<<<<<<<<<<<<<<<<<<<<

@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: IR (Iran)
+Surname: TAYLOR
+Given names: MR HUGH
+Nationality: Iran
+Date of birth: 1986-12-30
+Document no.: P67441673
+Expiry: 2031-05-01
+
+MRZ:
+P<IRTAYLOR<<MR<HUGH<<<<<<<<<<<<<<<<<<<<<<<<<
+P67441673<IR19861230<<<<<<<<<<<<<<<<<<<<<<<<

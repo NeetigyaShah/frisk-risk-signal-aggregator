@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: IE (Ireland)
+Surname: KELLY
+Given names: CHARLES
+Nationality: Ireland
+Date of birth: 1989-07-13
+Document no.: P81542135
+Expiry: 2031-05-01
+
+MRZ:
+P<IEKELLY<<CHARLES<<<<<<<<<<<<<<<<<<<<<<<<<<
+P81542135<IE19890713<<<<<<<<<<<<<<<<<<<<<<<<

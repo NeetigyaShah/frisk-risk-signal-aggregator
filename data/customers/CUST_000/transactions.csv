@@ -1,0 +1,26 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_000-T000,2026-07-21,4264.72,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_000-T001,2026-06-21,4237.6,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_000-T002,2026-05-22,4136.16,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_000-T003,2026-04-22,4284.4,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_000-T004,2026-03-23,4248.33,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_000-T005,2026-02-21,4252.52,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_000-T006,2026-07-19,702.49,GBP,out,Landlord DD,GB,direct_debit
+CUST_000-T007,2026-06-19,960.31,GBP,out,Landlord DD,GB,direct_debit
+CUST_000-T008,2026-05-20,896.64,GBP,out,Landlord DD,GB,direct_debit
+CUST_000-T009,2026-04-20,1341.41,GBP,out,Landlord DD,GB,direct_debit
+CUST_000-T010,2026-03-21,1115.09,GBP,out,Landlord DD,GB,direct_debit
+CUST_000-T011,2026-02-19,1258.21,GBP,out,Landlord DD,GB,direct_debit
+CUST_000-T012,2026-07-07,13.91,GBP,out,Wilson Ltd,GB,card
+CUST_000-T013,2026-04-15,60.51,GBP,out,Davies PLC,GB,card
+CUST_000-T014,2026-06-04,25.84,GBP,out,Wright Inc,GB,card
+CUST_000-T015,2026-04-01,17.38,GBP,out,Green and Sons,GB,card
+CUST_000-T016,2026-07-11,26.48,GBP,out,"Foster, Moore and Edwards",GB,card
+CUST_000-T017,2026-01-31,21.27,GBP,out,"Kaur, Quinn and Wright",GB,card
+CUST_000-T018,2026-03-09,45.87,GBP,out,Reed and Sons,GB,card
+CUST_000-T019,2026-06-19,40.14,GBP,out,"Oliver, White and Stevens",GB,card
+CUST_000-T020,2026-04-17,42.29,GBP,out,Warner-Palmer,GB,card
+CUST_000-T021,2026-06-26,166.22,GBP,out,Baker-Butler,GB,card
+CUST_000-T022,2026-05-19,19.89,GBP,out,Elliott PLC,GB,card
+CUST_000-T023,2026-01-31,15.63,GBP,out,Simpson Group,GB,card
+CUST_000-T024,2026-07-10,73.93,GBP,out,Fisher Ltd,GB,card

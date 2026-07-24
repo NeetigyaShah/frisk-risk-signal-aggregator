@@ -18,7 +18,7 @@ from frisk.core.models import Dossier, Txn, RiskFinding, load_dossiers
 
 REF = date(2026, 7, 24)
 FLOOR = CONFIG["reporting_floor"]
-from frisk.paths import DOSSIERS as DATA
+from frisk.paths import CUSTOMERS_DIR as DATA
 
 
 def _d(days_ago):
@@ -137,7 +137,7 @@ def test_missing_data_never_auto_clears():
 
 def test_generator_is_deterministic():
     import frisk.data.generate as gen
-    assert gen.to_json(gen.generate()) == gen.to_json(gen.generate())
+    assert gen._canon(gen.generate()) == gen._canon(gen.generate())
 
 
 def test_audit_is_append_only(tmp_path, monkeypatch):

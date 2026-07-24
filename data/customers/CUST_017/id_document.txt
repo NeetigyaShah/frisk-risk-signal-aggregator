@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: WOODWARD
+Given names: GLEN
+Nationality: United Kingdom
+Date of birth: 1985-06-11
+Document no.: P35940542
+Expiry: 2031-05-01
+
+MRZ:
+P<GBWOODWARD<<GLEN<<<<<<<<<<<<<<<<<<<<<<<<<<
+P35940542<GB19850611<<<<<<<<<<<<<<<<<<<<<<<<

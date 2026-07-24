@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: BURKE
+Given names: ALLAN
+Nationality: United Kingdom
+Date of birth: 1992-11-03
+Document no.: P94252598
+Expiry: 2031-05-01
+
+MRZ:
+P<GBBURKE<<ALLAN<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P94252598<GB19921103<<<<<<<<<<<<<<<<<<<<<<<<

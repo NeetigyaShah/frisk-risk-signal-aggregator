@@ -1,0 +1,29 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_007-T000,2026-07-21,5397.66,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_007-T001,2026-06-21,5361.45,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_007-T002,2026-05-22,5530.51,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_007-T003,2026-04-22,5366.16,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_007-T004,2026-03-23,5392.09,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_007-T005,2026-02-21,5363.57,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_007-T006,2026-07-19,692.39,GBP,out,Landlord DD,GB,direct_debit
+CUST_007-T007,2026-06-19,616.92,GBP,out,Landlord DD,GB,direct_debit
+CUST_007-T008,2026-05-20,644.32,GBP,out,Landlord DD,GB,direct_debit
+CUST_007-T009,2026-04-20,739.71,GBP,out,Landlord DD,GB,direct_debit
+CUST_007-T010,2026-03-21,642.71,GBP,out,Landlord DD,GB,direct_debit
+CUST_007-T011,2026-02-19,1072.92,GBP,out,Landlord DD,GB,direct_debit
+CUST_007-T012,2026-02-25,31.27,GBP,out,"Fowler, Connolly and Fisher",GB,card
+CUST_007-T013,2026-05-28,29.97,GBP,out,Clarke-Brookes,GB,card
+CUST_007-T014,2026-03-04,38.6,GBP,out,Sutton and Sons,GB,card
+CUST_007-T015,2026-02-21,27.72,GBP,out,"Smith, Webb and Porter",GB,card
+CUST_007-T016,2026-06-13,105.5,GBP,out,Simpson-Morris,GB,card
+CUST_007-T017,2026-06-09,40.8,GBP,out,Taylor and Sons,GB,card
+CUST_007-T018,2026-06-03,12.31,GBP,out,Jennings-Pratt,GB,card
+CUST_007-T019,2026-07-15,77.7,GBP,out,Gill-Ali,GB,card
+CUST_007-T020,2026-07-04,44.0,GBP,out,"Taylor, Barker and Phillips",GB,card
+CUST_007-T021,2026-07-14,7.42,GBP,out,"Griffiths, Carr and Taylor",GB,card
+CUST_007-T022,2026-02-24,43.1,GBP,out,Ryan Group,GB,card
+CUST_007-T023,2026-02-23,12.33,GBP,out,Rogers-James,GB,card
+CUST_007-T024,2026-05-27,37.0,GBP,out,Wilson Ltd,GB,card
+CUST_007-T025,2026-03-02,31.25,GBP,out,Matthews LLC,GB,card
+CUST_007-T026,2026-04-04,27.58,GBP,out,Morgan LLC,GB,card
+CUST_007-T027,2026-03-06,24.49,GBP,out,Hart-Matthews,GB,card

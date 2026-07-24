@@ -1,0 +1,11 @@
+{
+  "sanctions": [
+    {
+      "name": "Susan Bird-Burns",
+      "match_score": 1.0,
+      "list": "OFAC SDN"
+    }
+  ],
+  "pep_confirmed": true,
+  "adverse_media": []
+}

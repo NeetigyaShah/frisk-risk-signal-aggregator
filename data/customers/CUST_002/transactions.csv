@@ -1,0 +1,26 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_002-T000,2026-07-21,2891.28,GBP,in,ACME Payroll Ltd,IE,salary
+CUST_002-T001,2026-06-21,2865.52,GBP,in,ACME Payroll Ltd,IE,salary
+CUST_002-T002,2026-05-22,2888.01,GBP,in,ACME Payroll Ltd,IE,salary
+CUST_002-T003,2026-04-22,2939.59,GBP,in,ACME Payroll Ltd,IE,salary
+CUST_002-T004,2026-03-23,2867.77,GBP,in,ACME Payroll Ltd,IE,salary
+CUST_002-T005,2026-02-21,2847.4,GBP,in,ACME Payroll Ltd,IE,salary
+CUST_002-T006,2026-07-19,825.11,GBP,out,Landlord DD,IE,direct_debit
+CUST_002-T007,2026-06-19,834.88,GBP,out,Landlord DD,IE,direct_debit
+CUST_002-T008,2026-05-20,1129.53,GBP,out,Landlord DD,IE,direct_debit
+CUST_002-T009,2026-04-20,1045.63,GBP,out,Landlord DD,IE,direct_debit
+CUST_002-T010,2026-03-21,1227.12,GBP,out,Landlord DD,IE,direct_debit
+CUST_002-T011,2026-02-19,1131.45,GBP,out,Landlord DD,IE,direct_debit
+CUST_002-T012,2026-05-30,17.65,GBP,out,Young-Graham,IE,card
+CUST_002-T013,2026-05-25,22.08,GBP,out,Pritchard and Sons,IE,card
+CUST_002-T014,2026-07-19,11.51,GBP,out,"Moore, Smith and Jackson",IE,card
+CUST_002-T015,2026-03-21,20.58,GBP,out,"Matthews, Lloyd and Turner",IE,card
+CUST_002-T016,2026-05-02,30.27,GBP,out,"Hughes, Davey and Taylor",IE,card
+CUST_002-T017,2026-02-06,42.83,GBP,out,Johnson Ltd,IE,card
+CUST_002-T018,2026-06-26,51.02,GBP,out,Anderson-Cooper,IE,card
+CUST_002-T019,2026-06-24,21.36,GBP,out,"Turner, Hill and Coates",IE,card
+CUST_002-T020,2026-05-16,28.11,GBP,out,Davies Inc,IE,card
+CUST_002-T021,2026-04-06,9.42,GBP,out,"Young, Myers and Read",IE,card
+CUST_002-T022,2026-05-20,10.4,GBP,out,Griffiths-Williams,IE,card
+CUST_002-T023,2026-05-24,41.26,GBP,out,Harper-Atkinson,IE,card
+CUST_002-T024,2026-02-01,14.52,GBP,out,"Smith, Knight and Carpenter",IE,card

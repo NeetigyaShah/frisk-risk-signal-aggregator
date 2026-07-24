@@ -1,0 +1,16 @@
+{
+  "sanctions": [],
+  "pep_confirmed": false,
+  "adverse_media": [
+    {
+      "headline": "Pauline Evans-Stokes named in fraud investigation",
+      "sentiment": "negative",
+      "date": "2026-06-09"
+    },
+    {
+      "headline": "Regulator fines firm linked to Pauline Evans-Stokes for money laundering",
+      "sentiment": "negative",
+      "date": "2026-07-04"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: BURNS
+Given names: AIMEE
+Nationality: United Kingdom
+Date of birth: 1999-01-15
+Document no.: P33928296
+Expiry: 2031-05-01
+
+MRZ:
+P<GBBURNS<<AIMEE<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P33928296<GB19990115<<<<<<<<<<<<<<<<<<<<<<<<

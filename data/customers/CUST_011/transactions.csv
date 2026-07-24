@@ -1,0 +1,30 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_011-T000,2026-07-21,3490.66,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_011-T001,2026-06-21,3455.72,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_011-T002,2026-05-22,3370.54,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_011-T003,2026-04-22,3366.31,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_011-T004,2026-03-23,3372.66,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_011-T005,2026-02-21,3448.8,GBP,in,ACME Payroll Ltd,RU,salary
+CUST_011-T006,2026-07-19,1241.19,GBP,out,Landlord DD,RU,direct_debit
+CUST_011-T007,2026-06-19,790.84,GBP,out,Landlord DD,RU,direct_debit
+CUST_011-T008,2026-05-20,1279.53,GBP,out,Landlord DD,RU,direct_debit
+CUST_011-T009,2026-04-20,645.79,GBP,out,Landlord DD,RU,direct_debit
+CUST_011-T010,2026-03-21,1240.77,GBP,out,Landlord DD,RU,direct_debit
+CUST_011-T011,2026-02-19,1342.24,GBP,out,Landlord DD,RU,direct_debit
+CUST_011-T012,2026-03-06,86.67,GBP,out,Day-Holt,RU,card
+CUST_011-T013,2026-05-05,16.19,GBP,out,"Roberts, Wood and Gray",RU,card
+CUST_011-T014,2026-07-16,88.49,GBP,out,Robinson PLC,RU,card
+CUST_011-T015,2026-04-16,15.33,GBP,out,Walker PLC,RU,card
+CUST_011-T016,2026-04-02,18.62,GBP,out,"Adams, Short and Rowe",RU,card
+CUST_011-T017,2026-02-28,14.72,GBP,out,Clayton-Smith,RU,card
+CUST_011-T018,2026-03-14,22.5,GBP,out,Kelly-Mills,RU,card
+CUST_011-T019,2026-07-06,118.7,GBP,out,White-Watson,RU,card
+CUST_011-T020,2026-03-18,9.92,GBP,out,Smith-Reeves,RU,card
+CUST_011-T021,2026-04-23,13.03,GBP,out,Morris Inc,RU,card
+CUST_011-T022,2026-07-14,43.81,GBP,out,Wilson-Rees,RU,card
+CUST_011-T023,2026-06-14,6.93,GBP,out,"Thomas, Holland and Smith",RU,card
+CUST_011-T024,2026-02-15,62.97,GBP,out,Johnson and Sons,RU,card
+CUST_011-T025,2026-05-18,19.55,GBP,out,Jones Inc,RU,card
+CUST_011-T026,2026-07-07,12.73,GBP,out,"May, Hall and Smith",RU,card
+CUST_011-T027,2026-04-09,42.2,GBP,out,Thompson-Jenkins,RU,card
+CUST_011-T028,2026-05-02,25.75,GBP,out,"Edwards, Hobbs and O'Brien",RU,card

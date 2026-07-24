@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: JENNINGS
+Given names: WILLIAM
+Nationality: United Kingdom
+Date of birth: 1974-04-10
+Document no.: P79656044
+Expiry: 2031-05-01
+
+MRZ:
+P<GBJENNINGS<<WILLIAM<<<<<<<<<<<<<<<<<<<<<<<
+P79656044<GB19740410<<<<<<<<<<<<<<<<<<<<<<<<

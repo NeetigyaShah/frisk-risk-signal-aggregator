@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: SY (Syria)
+Surname: BIRD-BURNS
+Given names: SUSAN
+Nationality: Syria
+Date of birth: 1995-07-02
+Document no.: P91229857
+Expiry: 2031-05-01
+
+MRZ:
+P<SYBIRD-BURNS<<SUSAN<<<<<<<<<<<<<<<<<<<<<<<
+P91229857<SY19950702<<<<<<<<<<<<<<<<<<<<<<<<

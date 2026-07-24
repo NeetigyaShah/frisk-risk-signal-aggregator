@@ -1,0 +1,30 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_003-T000,2026-07-21,5967.16,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_003-T001,2026-06-21,5952.56,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_003-T002,2026-05-22,5889.41,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_003-T003,2026-04-22,5847.6,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_003-T004,2026-03-23,5806.09,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_003-T005,2026-02-21,5996.4,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_003-T006,2026-07-19,964.62,GBP,out,Landlord DD,GB,direct_debit
+CUST_003-T007,2026-06-19,761.89,GBP,out,Landlord DD,GB,direct_debit
+CUST_003-T008,2026-05-20,844.77,GBP,out,Landlord DD,GB,direct_debit
+CUST_003-T009,2026-04-20,1063.38,GBP,out,Landlord DD,GB,direct_debit
+CUST_003-T010,2026-03-21,741.42,GBP,out,Landlord DD,GB,direct_debit
+CUST_003-T011,2026-02-19,1285.29,GBP,out,Landlord DD,GB,direct_debit
+CUST_003-T012,2026-03-27,30.49,GBP,out,"John, Gould and Carter",GB,card
+CUST_003-T013,2026-05-07,107.92,GBP,out,"Watson, Preston and Bell",GB,card
+CUST_003-T014,2026-07-07,13.21,GBP,out,"Duncan, Brown and Murray",GB,card
+CUST_003-T015,2026-03-29,34.59,GBP,out,Smith-Smith,GB,card
+CUST_003-T016,2026-03-05,88.89,GBP,out,"May, Cunningham and Jones",GB,card
+CUST_003-T017,2026-07-16,58.45,GBP,out,Stewart PLC,GB,card
+CUST_003-T018,2026-03-27,96.61,GBP,out,Clarke Group,GB,card
+CUST_003-T019,2026-06-28,11.58,GBP,out,"O'Brien, Hill and Jenkins",GB,card
+CUST_003-T020,2026-03-03,14.28,GBP,out,Murray Ltd,GB,card
+CUST_003-T021,2026-06-23,21.94,GBP,out,"Lawson, Webster and Turner",GB,card
+CUST_003-T022,2026-05-04,49.81,GBP,out,"Patel, Lyons and Price",GB,card
+CUST_003-T023,2026-05-22,25.08,GBP,out,Wilson LLC,GB,card
+CUST_003-T024,2026-06-26,13.3,GBP,out,Fox and Sons,GB,card
+CUST_003-T025,2026-02-02,38.51,GBP,out,"Quinn, Hammond and Yates",GB,card
+CUST_003-T026,2026-07-12,148.03,GBP,out,Townsend Inc,GB,card
+CUST_003-T027,2026-07-09,308.31,GBP,out,Bruce-Smith,GB,card
+CUST_003-T028,2026-05-06,13.58,GBP,out,"Jones, Powell and Wood",GB,card

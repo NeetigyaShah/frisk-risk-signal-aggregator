@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: GB (United Kingdom)
+Surname: EVANS-STOKES
+Given names: PAULINE
+Nationality: United Kingdom
+Date of birth: 1991-11-27
+Document no.: P45331544
+Expiry: 2031-05-01
+
+MRZ:
+P<GBEVANS-STOKES<<PAULINE<<<<<<<<<<<<<<<<<<<
+P45331544<GB19911127<<<<<<<<<<<<<<<<<<<<<<<<

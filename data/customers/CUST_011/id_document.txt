@@ -1,0 +1,12 @@
+=== TRAVEL DOCUMENT — OCR EXTRACT ===
+Type: P   Issuing country: RU (Russia)
+Surname: LLOYD
+Given names: MS JUNE
+Nationality: Russia
+Date of birth: 1985-03-20
+Document no.: P86891197
+Expiry: 2031-05-01
+
+MRZ:
+P<RULLOYD<<MS<JUNE<<<<<<<<<<<<<<<<<<<<<<<<<<
+P86891197<RU19850320<<<<<<<<<<<<<<<<<<<<<<<<

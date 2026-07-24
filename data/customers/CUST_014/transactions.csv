@@ -1,0 +1,24 @@
+txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
+CUST_014-T000,2026-07-21,3087.37,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_014-T001,2026-06-21,3048.06,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_014-T002,2026-05-22,3052.41,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_014-T003,2026-04-22,3013.45,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_014-T004,2026-03-23,3017.15,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_014-T005,2026-02-21,3105.92,GBP,in,ACME Payroll Ltd,GB,salary
+CUST_014-T006,2026-07-19,635.72,GBP,out,Landlord DD,GB,direct_debit
+CUST_014-T007,2026-06-19,786.28,GBP,out,Landlord DD,GB,direct_debit
+CUST_014-T008,2026-05-20,833.65,GBP,out,Landlord DD,GB,direct_debit
+CUST_014-T009,2026-04-20,992.16,GBP,out,Landlord DD,GB,direct_debit
+CUST_014-T010,2026-03-21,1069.16,GBP,out,Landlord DD,GB,direct_debit
+CUST_014-T011,2026-02-19,994.63,GBP,out,Landlord DD,GB,direct_debit
+CUST_014-T012,2026-02-23,36.53,GBP,out,Robertson Inc,GB,card
+CUST_014-T013,2026-02-22,25.96,GBP,out,"Harris, Curtis and Dawson",GB,card
+CUST_014-T014,2026-05-12,26.38,GBP,out,Webb-Brown,GB,card
+CUST_014-T015,2026-03-26,35.26,GBP,out,Jones-Williams,GB,card
+CUST_014-T016,2026-03-16,52.75,GBP,out,Arnold LLC,GB,card
+CUST_014-T017,2026-05-19,50.91,GBP,out,Clark-Collins,GB,card
+CUST_014-T018,2026-02-07,46.77,GBP,out,Ford-Johnson,GB,card
+CUST_014-T019,2026-02-22,37.98,GBP,out,Hayes PLC,GB,card
+CUST_014-L00,2026-06-24,192000.0,GBP,out,Shell Co A,CY,transfer
+CUST_014-L01,2026-06-26,153600.0,GBP,out,Shell Co B,CY,transfer
+CUST_014-L02,2026-06-28,122880.0,GBP,out,Shell Co C,CY,transfer

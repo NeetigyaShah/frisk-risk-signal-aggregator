@@ -43,6 +43,7 @@ class Dossier:
     transactions: list  # list[Txn]
     screening: dict    # sanctions[list{name,match_score,list}], pep_confirmed(bool), adverse_media[list{headline,sentiment,date}]
     meta: dict = field(default_factory=dict)  # missing_docs[list], extra_docs[list], expected_band(str) for eval
+    documents: list = field(default_factory=list)  # unstructured docs: [{name, kind, text}] (id doc, RM notes, news, email)
 
 
 @dataclass(frozen=True)
@@ -146,14 +147,14 @@ def dossier_from_dict(d: dict) -> Dossier:
     return Dossier(
         customer_id=d["customer_id"], kyc=d["kyc"], profile=d["profile"],
         transactions=[_txn_from_dict(t) for t in d["transactions"]],
-        screening=d["screening"], meta=d.get("meta", {}),
+        screening=d["screening"], meta=d.get("meta", {}), documents=d.get("documents", []),
     )
 
 
 def load_dossiers(path=None) -> list[Dossier]:
-    from frisk.paths import DOSSIERS
-    raw = json.loads(Path(path or DOSSIERS).read_text(encoding="utf-8"))
-    return [dossier_from_dict(d) for d in raw]
+    """Load dossiers from the per-customer folders (or a legacy dossiers.json path)."""
+    from frisk.data.loaders import load_all
+    return load_all(path)
 
 
 class _DecimalEncoder(json.JSONEncoder):
