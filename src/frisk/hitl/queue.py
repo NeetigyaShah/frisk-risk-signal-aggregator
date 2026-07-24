@@ -8,31 +8,12 @@ from __future__ import annotations
 
 import json
 
-from frisk.config import CONFIG
+from frisk.hitl.redis_conn import backend, client as _r  # shared connection + fallback
 
 PENDING = "frisk:review:pending"     # Redis list of customer_ids awaiting review
 CASE = "frisk:review:case:"          # Redis hash per case
 
-_redis = None
-_use_redis = None
 _mem = {"pending": [], "cases": {}}  # in-process fallback
-
-
-def _r():
-    global _redis, _use_redis
-    if _use_redis is None:
-        try:
-            import redis
-            _redis = redis.Redis.from_url(CONFIG["redis_url"], decode_responses=True, socket_connect_timeout=1)
-            _redis.ping()
-            _use_redis = True
-        except Exception:
-            _use_redis = False
-    return _redis if _use_redis else None
-
-
-def backend() -> str:
-    return "redis" if _r() is not None else "in-memory (Redis unreachable)"
 
 
 def enqueue(case: dict) -> None:
