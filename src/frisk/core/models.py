@@ -108,12 +108,31 @@ class RiskFinding(BaseModel):
     band: str = "low"
     rationale: str = Field(min_length=1, description="one-line justification")
     key_signals: list[str] = Field(default_factory=list, description="signal names that drove the score")
+    evidence_refs: list[str] = Field(default_factory=list, description="txn ids / document names you actually saw")
     confidence: float = Field(default=0.6, ge=0.0, le=1.0, description="your own confidence 0-1 (low = unsure, send to human)")
 
     @model_validator(mode="after")
     def _coerce_band(self):
         object.__setattr__(self, "band", BAND_LABEL[band_for(self.score)])  # deterministic band always wins
         return self
+
+
+class SpecialistOpinion(BaseModel):
+    """One parallel domain specialist's memory-fed opinion (kyc | transactions | documents)."""
+    domain: str = "kyc"
+    risk_level: Literal["low", "medium", "high"] = "low"
+    signals: list[str] = Field(default_factory=list, description="specific red flags found in this domain")
+    note: str = Field(default="", description="one-line domain assessment")
+    tentative_score: int = Field(default=0, ge=0, le=100, description="this domain's tentative 0-100 risk")
+
+
+@dataclass
+class AgentStep:
+    """One turn of the orchestrator's tool-calling loop — the audit trace is a list of these."""
+    step: int
+    tool: str
+    args: dict
+    result_digest: str
 
 
 class SourceFinding(BaseModel):
