@@ -12,7 +12,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, model_validator
 
 from config import CONFIG, band_for, BAND_LABEL
 
@@ -98,24 +98,21 @@ class AuditRecord:
 # --------------------------------------------------------------------------- #
 
 class RiskFinding(BaseModel):
-    """Schema the LLM MUST fill. Constraints + validator = semantic cross-check;
-    a raised ValueError becomes instructor retry feedback automatically."""
-    customer_id: str
-    score: int = Field(ge=0, le=100)
-    band: Literal["low", "medium", "high"]
-    rationale: str = Field(min_length=10)
-    key_signals: list[str] = Field(default_factory=list)
+    """Schema the model MUST fill. `score` range is hard-enforced; `band` is DERIVED from the score
+    (coerced deterministically) so the band can never contradict the number, whatever the model says.
+    `customer_id` is pinned by us after the call, so it is optional here."""
+    customer_id: str = ""
+    score: int = Field(ge=0, le=100, description="AML risk 0-100, higher = riskier")
+    band: Literal["low", "medium", "high"] = "low"
+    rationale: str = Field(min_length=1, description="one-line justification")
+    key_signals: list[str] = Field(default_factory=list, description="signal names that drove the score")
 
-    @field_validator("band")
-    @classmethod
-    def band_matches_score(cls, v, info):
-        s = info.data.get("score")
-        if s is None:
-            return v  # score failed its own validation; don't mask that error
-        expected = BAND_LABEL[band_for(s)]
-        if v != expected:
-            raise ValueError(f"band '{v}' must agree with score {s} (expected '{expected}')")
-        return v
+    @model_validator(mode="after")
+    def _coerce_band(self):
+        expected = BAND_LABEL[band_for(self.score)]
+        if self.band != expected:
+            object.__setattr__(self, "band", expected)  # deterministic band wins over the model's
+        return self
 
 
 # --------------------------------------------------------------------------- #

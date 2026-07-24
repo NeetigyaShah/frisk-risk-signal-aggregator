@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financial Risk Signal Aggregator — Project Explainer</title>
+<style>
+  :root{
+    --blue:#2563eb; --ink:#0f172a; --slate:#475569; --line:#e2e8f0; --bg:#f8fafc;
+    --green:#16a34a; --amber:#d97706; --red:#dc2626; --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:48px 24px}
+  header .wrap{max-width:1040px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:2rem}
+  header p{margin:0;opacity:.92}
+  .badges{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+         padding:4px 10px;border-radius:999px;font-size:.8rem}
+  main{max-width:1040px;margin:0 auto;padding:24px}
+  nav{position:sticky;top:0;background:rgba(248,250,252,.95);backdrop-filter:blur(6px);
+      border-bottom:1px solid var(--line);padding:10px 0;margin-bottom:8px;z-index:5}
+  nav a{color:var(--slate);text-decoration:none;font-size:.85rem;margin-right:14px;white-space:nowrap}
+  nav a:hover{color:var(--blue)}
+  .navwrap{max-width:1040px;margin:0 auto;padding:0 24px;overflow-x:auto;white-space:nowrap}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;
+          padding:22px 26px;margin:18px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  h2{margin-top:4px;font-size:1.35rem;border-left:4px solid var(--blue);padding-left:10px}
+  h3{font-size:1.05rem;color:var(--ink);margin-bottom:6px}
+  p,li{color:#1e293b}
+  code{background:#f1f5f9;padding:1px 6px;border-radius:5px;font-size:.88em;
+       font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.92rem}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#f1f5f9}
+  .mermaid{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:14px;margin:14px 0;text-align:center}
+  .pill{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.78rem;font-weight:600}
+  .g{background:#dcfce7;color:var(--green)} .a{background:#fef3c7;color:var(--amber)} .r{background:#fee2e2;color:var(--red)}
+  .callout{border-left:4px solid var(--blue);background:#eff6ff;padding:12px 16px;border-radius:8px;margin:12px 0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .muted{color:var(--slate);font-size:.9rem}
+  .ok{color:var(--green);font-weight:600}
+  footer{max-width:1040px;margin:0 auto;padding:24px;color:var(--slate);font-size:.85rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>🛡️ Financial Risk Signal Aggregator</h1>
+    <p>An AML / financial-crime risk-triage prototype — how it was designed, built, and what powers it.</p>
+    <div class="badges">
+      <span class="badge">Python 3.13</span>
+      <span class="badge">Streamlit</span>
+      <span class="badge">pandas · pydantic v2</span>
+      <span class="badge">NVIDIA Nemotron 550B</span>
+      <span class="badge">Never-fails engine</span>
+      <span class="badge">HyperVerge take-home</span>
+    </div>
+  </div>
+</header>
+
+<nav><div class="navwrap">
+  <a href="#what">What &amp; Why</a>
+  <a href="#stack">Tech &amp; LLM</a>
+  <a href="#arch">Architecture</a>
+  <a href="#data">Data</a>
+  <a href="#scoring">Scoring</a>
+  <a href="#neverfails">Never-fails</a>
+  <a href="#hitl">HITL routing</a>
+  <a href="#audit">Explainability &amp; Audit</a>
+  <a href="#built">How it was built</a>
+  <a href="#plan">Plan vs Built</a>
+  <a href="#files">File map</a>
+  <a href="#verify">Verification</a>
+</div></nav>
+
+<main>
+
+<section id="what">
+  <h2>1 · What it is &amp; the problem it solves</h2>
+  <p>Compliance and risk analysts manually review huge volumes of fragmented signals — KYC records,
+  transaction streams, sanctions/PEP lists, adverse media — under roughly <b>95% false-positive noise</b>,
+  and scoring is inconsistent from one analyst to the next. This POC ingests a <b>multi-source dossier per
+  customer</b> and produces one <b>prioritised, risk-scored, explained, auditable triage queue</b>, so analysts
+  spend attention where it matters.</p>
+  <div class="callout">
+    <b>The standout idea:</b> danger rarely lives in one signal — it lives in the <i>correlation across</i> them
+    (a PEP + a high-risk-country wire + fresh adverse media). The engine aggregates <b>people</b>, not rows,
+    and never chokes — even on deliberately broken dossiers.
+  </div>
+  <p class="muted">Rubric optimised: 40% data-integration + AI-reasoning accuracy · 30% risk-summary clarity +
+  prioritisation · 15% presentation · 15% creativity/reflection.</p>
+</section>
+
+<section id="stack">
+  <h2>2 · Technology &amp; the LLM model</h2>
+  <div class="grid">
+    <div>
+      <h3>Stack</h3>
+      <table>
+        <tr><th>Layer</th><th>Tech</th></tr>
+        <tr><td>Language</td><td>Python 3.13</td></tr>
+        <tr><td>Data / numerics</td><td>pandas, numpy, Faker (seeded synthetic data)</td></tr>
+        <tr><td>Engine + audit core</td><td>stdlib <code>dataclasses</code>, <code>decimal</code>, <code>hashlib</code>, <code>json</code></td></tr>
+        <tr><td>Schema / validation</td><td>pydantic v2</td></tr>
+        <tr><td>LLM cross-check</td><td><b>instructor</b> + OpenAI-compatible (NVIDIA) · Gemini · Claude</td></tr>
+        <tr><td>UI</td><td>Streamlit (st.navigation, st.dataframe)</td></tr>
+        <tr><td>Tests</td><td>pytest (12 golden tests)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Which LLM?</h3>
+      <div class="callout">
+        <b>NVIDIA Nemotron-3-Ultra-550B</b> (<code>nvidia/nemotron-3-ultra-550b-a55b</code>) — a large reasoning
+        model served on NVIDIA's OpenAI-compatible endpoint, called via <b><code>instructor</code></b> in JSON mode
+        against our Pydantic schema. Temperature 0. Chosen for its high rate limits and strong reasoning.
+      </div>
+      <p>The model is an <b>advisory, independent second opinion</b> — it is deliberately <i>not</i> told the rules
+      score, so agreement is meaningful. It <b>never writes the score arithmetic</b>.</p>
+      <ul>
+        <li><b>Provider-swappable</b> via <code>config.py</code> — <code>nvidia</code> ↔ <code>gemini</code>
+        (Gemini 2.5/3 Flash) ↔ <code>anthropic</code> (Claude Haiku); the schema and never-fails wrapper are shared.</li>
+        <li><b>Disk-cached</b> findings (keyed by provider+model+prompt hash) → instant, rate-limit-proof re-runs.</li>
+        <li><b>Offline fallback</b>: no key → a deterministic simulated second opinion so the demo still shows
+        confidence + auto-clear.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="arch">
+  <h2>3 · System architecture</h2>
+  <p>A single-process Streamlit app over six focused modules. No services, no DB server; SQLite/JSONL for the
+  append-only audit log.</p>
+  <pre class="mermaid">
+flowchart LR
+  subgraph DATA["Data"]
+    G["generate.py<br/>seeded, deterministic"] --> J[("dossiers.json<br/>20 profiles")]
+  end
+  subgraph CORE["src/ — engine"]
+    CFG["config.py<br/>the tuning knob"]
+    R["rules.py<br/>deterministic · source of truth"]
+    L["llm.py<br/>Gemini cross-check + fallback"]
+    E["engine.py<br/>reconcile · route"]
+    AU["audit.py<br/>append-only store"]
+  end
+  J --> E
+  CFG -.-> R
+  CFG -.-> L
+  CFG -.-> E
+  R --> E
+  L --> E
+  E --> AU
+  E --> UI["app/ Home.py<br/>Streamlit: Queue · Case · Audit"]
+  NL["nlquery.py<br/>NL → safe filter"] --> UI
+  AU --> UI
+  </pre>
+  <p class="muted"><b>Invariant:</b> the rules score is the auditable number; the LLM is advisory and confidence-gated;
+  the engine never raises to the caller — it degrades to rules-only.</p>
+</section>
+
+<section id="data">
+  <h2>4 · The data — 5 families per customer</h2>
+  <p>20 seeded synthetic customers (<code>seed 42</code>, fixed reference date → byte-identical output; no real PII).
+  Class balance is deliberately inverted vs the real ~0.1% suspicious rate so every band is exercised
+  (<b>6 LOW · 7 MED · 5 HIGH · 2 critical</b>).</p>
+  <table>
+    <tr><th>Family</th><th>Contents</th><th>Example signals</th></tr>
+    <tr><td>KYC / identity</td><td>name, DOB, nationality, occupation, id doc, onboarded, completeness</td><td>missing ID, high-risk occupation</td></tr>
+    <tr><td>Customer risk factors</td><td>geography, product, PEP status, entity type, tenure</td><td>high-risk jurisdiction, PEP, new account</td></tr>
+    <tr><td>Transactions</td><td>benign base stream + at most one injected typology</td><td>structuring, layering, round-trip, dormant-spike</td></tr>
+    <tr><td>Screening</td><td>sanctions (exact vs fuzzy <code>match_score</code>), PEP, adverse media</td><td>OFAC match, negative news</td></tr>
+    <tr><td>Robustness metadata</td><td>missing / extra document flags</td><td>the "never-fails" testers</td></tr>
+  </table>
+  <p>Four typologies are injected as pure functions and detected <b>temporally</b> (proximity in time, not amount alone):
+  <b>structuring</b> (≥3 cash deposits just under a £10,000 floor within 7 days), <b>layering</b> (≥3 ~80%-forwarded
+  hops), <b>round-trip</b>, <b>dormant-then-spike</b>.</p>
+</section>
+
+<section id="scoring">
+  <h2>5 · Scoring — deterministic, order matters</h2>
+  <p>Each factor is a pure function returning a <code>Finding | None</code>. The order of operations is non-negotiable:
+  a hard signal must never be averaged away.</p>
+  <pre class="mermaid">
+flowchart TD
+  F["Findings from FACTOR_RULES + TYPOLOGY_RULES"] --> O{"Any override?<br/>sanctions exact match · PEP in high-risk geo"}
+  O -- yes --> H["score = 100 · band = HIGH"]
+  O -- no --> W["weighted additive sum → normalise 0–100"]
+  W --> B{"band cutoffs"}
+  B -->|"≤ 35"| LOW["🟢 LOW"]
+  B -->|"36–65"| MED["🟡 MED"]
+  B -->|"66–100"| HIGH["🔴 HIGH"]
+  H --> DR["drivers = contributions that SUM to the score"]
+  LOW --> DR
+  MED --> DR
+  HIGH --> DR
+  </pre>
+  <p>Every <code>Finding</code> carries <b>evidence</b> (transaction ids, amounts, window) — that is simultaneously the
+  analyst rationale and the audit trail. Money is <code>Decimal</code>; no wall-clock or randomness in any predicate.</p>
+</section>
+
+<section id="neverfails">
+  <h2>6 · The "never-fails" engine</h2>
+  <p>The LLM is treated as an untrusted component. Everything funnels through one boundary that <b>always returns a
+  valid result</b> — cache hit, live model, or deterministic fallback.</p>
+  <pre class="mermaid">
+flowchart TD
+  A["Dossier"] --> RUL["rules.py → score / band / findings<br/>(auditable source of truth)"]
+  A --> XC["llm.py crosscheck"]
+  XC --> CH{"cache hit?"}
+  CH -- yes --> RF["RiskFinding (validated)"]
+  CH -- no --> KEY{"provider key set?"}
+  KEY -- yes --> CALL["NVIDIA Nemotron 550B<br/>instructor JSON, temp 0"]
+  CALL --> VAL{"valid JSON<br/>+ pydantic?"}
+  VAL -- yes --> RF
+  VAL -- "no / 429" --> RT{"retry ×3<br/>+ backoff"}
+  RT -- "exhausted" --> FB["rules-only finding"]
+  KEY -- no --> SIM["simulated second opinion"]
+  RUL --> REC["reconcile<br/>confidence = 1 − |rules − llm| / 100"]
+  RF --> REC
+  FB --> REC
+  SIM --> REC
+  REC --> RTE["route() → HITL tier"]
+  RTE --> AUD[("append-only AuditRecord")]
+  </pre>
+  <p class="muted">Paths are labelled in the audit metadata: <code>rules+llm</code> (Gemini), <code>rules+sim</code>
+  (offline), or <code>rules_only</code> (degraded — confidence capped, never auto-cleared).</p>
+</section>
+
+<section id="hitl">
+  <h2>7 · Human-in-the-loop routing</h2>
+  <p>Confidence-gated triage with a kill-switch that fires <i>before</i> any score arithmetic.</p>
+  <pre class="mermaid">
+flowchart TD
+  S["score · flags · confidence · path"] --> K{"kill-switch flag?<br/>SANCTIONS_MATCH · PEP_HIGH_GEO"}
+  K -- yes --> ESC["🔴 ESCALATE → MLRO<br/>sign-off required"]
+  K -- no --> SC{"score"}
+  SC -->|"&lt; 15"| AC["🟢 AUTO_CLEAR"]
+  SC -->|"15–39"| JR["🟡 REVIEW · junior"]
+  SC -->|"40–69"| SR["🟡 REVIEW · senior"]
+  SC -->|"≥ 70"| ESC2["🔴 ESCALATE · senior<br/>sign-off required"]
+  AC --> D{"degraded path OR<br/>missing data OR low conf?"}
+  D -- yes --> JR
+  D -- no --> DONE["🟢 auto-cleared, logged"]
+  </pre>
+  <div class="grid">
+    <div><span class="pill g">AUTO_CLEAR</span> low risk + high confidence → handled with zero analyst time (human-on-the-loop).</div>
+    <div><span class="pill r">ESCALATE</span> high risk or kill-switch → mandatory human review + maker-checker sign-off (human-in-the-loop).</div>
+  </div>
+  <p><b>Confidence = rules↔model agreement.</b> Disagreement, a degraded path, or a dossier with missing data
+  <b>caps confidence and forbids auto-clear</b> — it degrades, it never blanks.</p>
+</section>
+
+<section id="audit">
+  <h2>8 · Explainability &amp; audit</h2>
+  <div class="grid">
+    <div>
+      <h3>Additive drivers (our SHAP)</h3>
+      <p>Each rule contributes signed points that <b>sum exactly to the score</b> (SHAP's local-accuracy property,
+      hand-rolled, zero dependencies, fully deterministic). Rendered as per-driver bars in the case view — this
+      <i>is</i> the analyst explanation and the audit evidence, unified. No <code>shap</code>/LIME (LIME is
+      non-deterministic → disqualifying for compliance).</p>
+    </div>
+    <div>
+      <h3>Append-only audit trail</h3>
+      <p>One <code>AuditRecord</code> per decision — <b>clears and escalates alike</b>, because regulators inspect
+      whether <i>closures</i> are defensible. Each record carries who / what / why / when, the driver breakdown,
+      the ruleset version, and a <b>sha256 input fingerprint</b> for reproducibility. Sign-off is captured on every
+      escalation.</p>
+    </div>
+  </div>
+</section>
+
+<section id="built">
+  <h2>9 · How it was built</h2>
+  <p>Brainstorm → deep research → approved plan → phased build, with an orchestrating agent and subagents
+  ("ultracode").</p>
+  <pre class="mermaid">
+flowchart LR
+  BR["Brainstorm<br/>+ domain research"] --> RS["Ultracode Workflow<br/>6 research agents → synthesis"]
+  RS --> PL["Approved plan"]
+  PL --> P0["Phase 0<br/>persistence infra<br/>(CLAUDE.md, PROGRESS.md, bugs/)"]
+  P0 --> P1["Phase 1 — SPINE (sequential)<br/>config → models → generate → rules → llm → engine → audit → tests"]
+  P1 --> P2["Phase 2 — LEAVES (parallel)<br/>Streamlit UI · nlquery · README + deck (subagent)"]
+  P2 --> P3["Phase 3<br/>e2e verify · screenshots · demo"]
+  </pre>
+  <ul>
+    <li><b>Research first:</b> a 6-agent parallel Workflow studied production AML scoring, deterministic rule
+    engines, LLM guardrails, HITL routing, Streamlit patterns, and synthetic-data generation, then synthesised a
+    single decision brief (<code>docs/research/RESEARCH_BRIEF.md</code>).</li>
+    <li><b>Spine sequential, leaves parallel:</b> the shared schema (spine) was built single-owner; the independent
+    leaves (docs/deck) were delegated to a background subagent.</li>
+    <li><b>Persistence discipline:</b> after every feature, <code>PROGRESS.md</code> is updated and bugs logged in
+    <code>bugs/BUGS.md</code>, so a fresh session after <code>/clear</code> resumes losslessly.</li>
+    <li><b>Every module ships a runnable check</b>; 6 commits, each green.</li>
+  </ul>
+</section>
+
+<section id="plan">
+  <h2>10 · Initial plan vs what was implemented</h2>
+  <table>
+    <tr><th>Planned in the brief / design</th><th>Status</th><th>Notes</th></tr>
+    <tr><td>Ingest CSV/JSON/pasted data</td><td class="ok">✔ built</td><td>Loads the seeded 20-profile dossier set; loader is Decimal-safe</td></tr>
+    <tr><td>Identify risk signals / anomalies</td><td class="ok">✔ built</td><td>FACTOR_RULES + 4 temporal typology detectors</td></tr>
+    <tr><td>Prioritised summary with reasoning</td><td class="ok">✔ built</td><td>Ranked queue + per-finding rationale + evidence</td></tr>
+    <tr><td>Risk score / priority ranking</td><td class="ok">✔ built</td><td>0–100, bands, overrides-first ordering</td></tr>
+    <tr><td>Multi-source data correlation (optional)</td><td class="ok">✔ built</td><td>5 data families joined per customer — the core differentiator</td></tr>
+    <tr><td>Visual risk dashboard (optional)</td><td class="ok">✔ built</td><td>Streamlit Queue / Case / Audit</td></tr>
+    <tr><td>Natural-language query (optional)</td><td class="ok">✔ built</td><td>NL → whitelisted Pydantic filter spec → safe mask (never eval)</td></tr>
+    <tr><td>Never-fails engine (design north star)</td><td class="ok">✔ built</td><td>rules + LLM cross-check + rules-only fallback; verified both ways</td></tr>
+    <tr><td>Confidence-gated HITL (auto-clear/review/escalate)</td><td class="ok">✔ built</td><td>kill-switch first; degraded/missing-data never auto-clears</td></tr>
+    <tr><td>Additive explainability + append-only audit</td><td class="ok">✔ built</td><td>drivers sum to score; sha256 fingerprint</td></tr>
+    <tr><td>LLM provider</td><td class="ok">✔ swapped</td><td>Plan assumed Claude Haiku; now <b>NVIDIA Nemotron-3-Ultra-550B</b> (provider-configurable: NVIDIA / Gemini / Claude)</td></tr>
+    <tr><td>5-slide deck + README + screenshots</td><td class="ok">✔ built</td><td><code>deck.pptx</code>, <code>README.md</code>, <code>docs/screenshots/</code></td></tr>
+    <tr><td>≤3-min demo recording</td><td class="a">◐ human step</td><td>Script ready in <code>docs/DEMO_SCRIPT.md</code></td></tr>
+    <tr><td>Live adverse-media / sanctions API feeds</td><td class="a">✎ future</td><td>Explicitly scoped out of a 1-day POC; synthetic feeds used</td></tr>
+    <tr><td>ML-tuned dynamic thresholds</td><td class="a">✎ future</td><td>Config knob is the calibration surface; ML tuning is a next step</td></tr>
+  </table>
+</section>
+
+<section id="files">
+  <h2>11 · File map</h2>
+  <table>
+    <tr><th>Path</th><th>Purpose</th></tr>
+    <tr><td><code>data/generate.py</code></td><td>Seeded 20-profile generator (+ self-check)</td></tr>
+    <tr><td><code>src/config.py</code></td><td>The single tuning knob — weights, floors, windows, bands, routing, LLM</td></tr>
+    <tr><td><code>src/models.py</code></td><td>Schemas: Dossier, Txn, Finding, RiskResult, RiskFinding, Disposition, AuditRecord</td></tr>
+    <tr><td><code>src/rules.py</code></td><td>Deterministic engine: FACTOR_RULES + TYPOLOGY_RULES + score_customer()</td></tr>
+    <tr><td><code>src/llm.py</code></td><td>Never-fails cross-check: Gemini + cache + retry/backoff + fallback</td></tr>
+    <tr><td><code>src/engine.py</code></td><td>Orchestrator: reconcile(confidence) → route() → AuditRecord</td></tr>
+    <tr><td><code>src/audit.py</code></td><td>Append-only decision store (JSONL)</td></tr>
+    <tr><td><code>src/nlquery.py</code></td><td>NL → whitelisted filter spec → pandas mask (safe)</td></tr>
+    <tr><td><code>src/app/Home.py</code></td><td>Streamlit UI (Queue / Case detail / Audit)</td></tr>
+    <tr><td><code>tests/test_spine.py</code></td><td>12 golden tests</td></tr>
+    <tr><td><code>docs/…</code></td><td>DESIGN, RESEARCH_BRIEF, DEMO_SCRIPT, deck, screenshots, this file</td></tr>
+    <tr><td><code>CLAUDE.md · PROGRESS.md · bugs/BUGS.md</code></td><td>Self-maintaining session memory</td></tr>
+  </table>
+</section>
+
+<section id="verify">
+  <h2>12 · Verification (all green)</h2>
+  <ul>
+    <li><span class="ok">✔</span> Generator deterministic — identical hash across runs; 20 dossiers; every band populated.</li>
+    <li><span class="ok">✔</span> <b>12/12 golden tests</b> pass — every typology, the sanctions override, the never-fails fallback,
+      driver-sum, missing-data routing, determinism.</li>
+    <li><span class="ok">✔</span> Engine distribution: <b>5 auto-clear · 9 review · 6 escalate</b>; no kill-switch or missing-data auto-clear.</li>
+    <li><span class="ok">✔</span> Live NVIDIA Nemotron calls validated end-to-end (structured output via instructor); disk cache makes re-runs instant.</li>
+    <li><span class="ok">✔</span> UI verified in-browser (queue ranking, case drill-down with driver bars, audit trail).</li>
+  </ul>
+  <p class="muted">Run it: <code>python data/generate.py</code> · <code>pytest tests/</code> ·
+  <code>streamlit run src/app/Home.py</code>. Set <code>GEMINI_API_KEY</code> for live Gemini; otherwise it runs offline.</p>
+</section>
+
+</main>
+<footer>
+  Financial Risk Signal Aggregator · HyperVerge take-home POC · deterministic rules are the auditable source of
+  truth, NVIDIA Nemotron is a confidence-gated second opinion, and the engine never returns nothing.
+</footer>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({startOnLoad:true, theme:'neutral', flowchart:{curve:'basis'}});
+</script>
+</body>
+</html>

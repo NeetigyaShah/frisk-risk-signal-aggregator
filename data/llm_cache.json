@@ -1,0 +1,262 @@
+{
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:4d5282f889ae": {
+    "customer_id": "CUST_000",
+    "score": 15,
+    "band": "low",
+    "rationale": "Low-risk domestic teacher with clean KYC, no sanctions/adverse media, purely domestic transactions.",
+    "key_signals": [
+      "GB jurisdiction",
+      "teacher occupation",
+      "no PEP",
+      "clean KYC",
+      "no sanctions",
+      "no adverse media",
+      "domestic-only counterparties",
+      "no cash deposits"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:166d88424376": {
+    "customer_id": "CUST_001",
+    "score": 15,
+    "band": "low",
+    "rationale": "Low-risk profile: UK nurse with mature account, full KYC, no PEP/sanctions/adverse media, purely domestic transactions, no cash deposits.",
+    "key_signals": [
+      "low-risk occupation",
+      "no PEP",
+      "no sanctions",
+      "no adverse media",
+      "domestic only counterparties",
+      "no cash deposits",
+      "mature account",
+      "full KYC"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:d483fad624c2": {
+    "customer_id": "CUST_002",
+    "score": 15,
+    "band": "low",
+    "rationale": "Low-risk profile: domestic transactions only, no sanctions/PEP/adverse media, mature KYC-complete account.",
+    "key_signals": [
+      "domestic_only_counterparties",
+      "no_sanctions_or_pep",
+      "mature_account",
+      "no_cash_deposits",
+      "clean_adverse_media"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:a07659532598": {
+    "customer_id": "CUST_003",
+    "score": 15,
+    "band": "low",
+    "rationale": "Low-risk profile: UK-based accountant with mature account, full KYC, no adverse signals, domestic transactions only.",
+    "key_signals": [
+      "GB jurisdiction",
+      "accountant occupation",
+      "no PEP",
+      "full KYC",
+      "no sanctions",
+      "no adverse media",
+      "domestic counterparties",
+      "no cash deposits"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:25943a00ca44": {
+    "customer_id": "CUST_004",
+    "score": 15,
+    "band": "low",
+    "rationale": "Long-standing account with complete KYC, no adverse signals, but zero transaction activity limits assessment confidence.",
+    "key_signals": [
+      "account_age_days",
+      "KYC_complete",
+      "no_sanctions",
+      "no_adverse_media",
+      "zero_transactions"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:4cfcb6b4b7ff": {
+    "customer_id": "CUST_005",
+    "score": 15,
+    "band": "low",
+    "rationale": "Low-risk domestic customer with clean profile, no adverse signals.",
+    "key_signals": [
+      "domestic_only",
+      "no_sanctions",
+      "no_adverse_media",
+      "kyc_complete",
+      "no_cash",
+      "low_volume"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:984f0528d24b": {
+    "customer_id": "CUST_006",
+    "score": 75,
+    "band": "high",
+    "rationale": "Russian national with adverse media fraud investigation and exclusively Russian counterparties indicates elevated money-laundering risk.",
+    "key_signals": [
+      "adverse_media_fraud",
+      "high_risk_jurisdiction_RU",
+      "counterparty_only_RU",
+      "high_credit_volume"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:e19dc0b13b09": {
+    "customer_id": "CUST_007",
+    "score": 75,
+    "band": "high",
+    "rationale": "PEP status as politician drives high risk despite clean KYC and domestic-only transactions.",
+    "key_signals": [
+      "PEP",
+      "occupation: politician",
+      "new_account_35_days",
+      "credit_debit_imbalance"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:b7c58b0e3646": {
+    "customer_id": "CUST_008",
+    "score": 68,
+    "band": "high",
+    "rationale": "Money exchange occupation combined with adverse media fraud investigation and imbalanced transaction flow (high credits, low debits) indicates elevated ML risk.",
+    "key_signals": [
+      "occupation: money exchange",
+      "adverse media: fraud investigation",
+      "transaction pattern: high credits low debits",
+      "no cash deposits",
+      "domestic counterparties only"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:9938193a3f70": {
+    "customer_id": "CUST_009",
+    "score": 80,
+    "band": "high",
+    "rationale": "Customer from high-risk Venezuela with incomplete KYC, adverse media fraud link, and importer role enabling trade-based laundering.",
+    "key_signals": [
+      "high-risk jurisdiction (VE)",
+      "incomplete KYC/no ID doc",
+      "adverse media (fraud investigation)",
+      "importer occupation (trade-based ML risk)",
+      "counterparty concentration in VE"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:f850c7a11d45": {
+    "customer_id": "CUST_010",
+    "score": 75,
+    "band": "high",
+    "rationale": "PEP status and adverse media fraud investigation elevate risk despite mature account and domestic-only activity.",
+    "key_signals": [
+      "PEP",
+      "adverse_media_fraud",
+      "occupation_landlord"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:58c14382e3e1": {
+    "customer_id": "CUST_011",
+    "score": 60,
+    "band": "medium",
+    "rationale": "High-risk jurisdiction and occupation offset by clean KYC and no adverse signals.",
+    "key_signals": [
+      "high-risk jurisdiction (RU)",
+      "high-risk occupation (precious metals trader)",
+      "credit-heavy transaction pattern"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:26e43b39bc38": {
+    "customer_id": "CUST_012",
+    "score": 70,
+    "band": "high",
+    "rationale": "PEP status with new account and credit-heavy domestic transaction pattern elevates risk.",
+    "key_signals": [
+      "PEP",
+      "short_account_age",
+      "credit_heavy_transactions",
+      "domestic_only_counterparties"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:c5d54aad7f8b": {
+    "customer_id": "CUST_013",
+    "score": 45,
+    "band": "medium",
+    "rationale": "Russian national with consultant occupation, high cash deposits, and exclusively domestic counterparties elevates risk despite clean KYC and no sanctions hits.",
+    "key_signals": [
+      "Russia jurisdiction",
+      "consultant occupation",
+      "high cash deposits relative to debits",
+      "single counterparty country (RU)"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:349c2c870efc": {
+    "customer_id": "CUST_014",
+    "score": 80,
+    "band": "high",
+    "rationale": "Crypto dealer with adverse media linking to fraud and money laundering, high outflows to Cyprus, elevated ML risk.",
+    "key_signals": [
+      "crypto_dealer",
+      "adverse_media_fraud",
+      "adverse_media_ml_fine",
+      "high_risk_counterparty_CY",
+      "high_debit_volume",
+      "low_transaction_count_high_value"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:b7f431d33177": {
+    "customer_id": "CUST_015",
+    "score": 55,
+    "band": "medium",
+    "rationale": "High-risk jurisdictions (Myanmar, Cayman Islands) elevate risk despite clean KYC and no adverse signals.",
+    "key_signals": [
+      "high-risk nationality (MM)",
+      "counterparty in high-risk jurisdiction (KY)",
+      "occupation: trader"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:5b6eef25522f": {
+    "customer_id": "CUST_016",
+    "score": 68,
+    "band": "high",
+    "rationale": "Precious metals trader with adverse media fraud investigation and UAE counterparties elevates risk despite clean KYC and no sanctions.",
+    "key_signals": [
+      "precious metals trader",
+      "adverse media: fraud investigation",
+      "counterparty country: AE",
+      "high credit volume vs low debits"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:09fa1605bdcd": {
+    "customer_id": "CUST_017",
+    "score": 75,
+    "band": "high",
+    "rationale": "PEP politician with high cash deposits (64% of credits) and large net inflow warrants enhanced monitoring.",
+    "key_signals": [
+      "PEP status",
+      "politician occupation",
+      "high cash deposit ratio",
+      "large net credit inflow",
+      "domestic counterparties only"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:fcc0c5c5390a": {
+    "customer_id": "CUST_018",
+    "score": 95,
+    "band": "high",
+    "rationale": "Iranian arms dealer with sanctions hit, high cash deposits (60% of credits), and exclusive Iran counterparties indicate severe proliferation financing and sanctions evasion risk.",
+    "key_signals": [
+      "nationality: IR",
+      "occupation: arms dealer",
+      "sanctions_hit: Mr Hugh Taylor",
+      "high_cash_deposits",
+      "counterparty_only_IR"
+    ]
+  },
+  "nvidia:nvidia/nemotron-3-ultra-550b-a55b:1bcdd6ea6040": {
+    "customer_id": "CUST_019",
+    "score": 95,
+    "band": "high",
+    "rationale": "Direct sanctions match, PEP status, shell company director, and exclusive Syria counterparties indicate extreme AML risk.",
+    "key_signals": [
+      "sanctions_hit",
+      "PEP",
+      "shell_company_director",
+      "high_risk_jurisdiction_SY",
+      "exclusive_SY_counterparties"
+    ]
+  }
+}

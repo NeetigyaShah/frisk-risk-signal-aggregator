@@ -8,3 +8,6 @@ venv/
 # playwright + local screenshots at root
 .playwright-mcp/
 /*.png
+
+# runtime audit log (regenerated on app start)
+data/audit_log.jsonl

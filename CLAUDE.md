@@ -9,7 +9,8 @@ An AI prototype that ingests fragmented financial data (KYC, transactions, sanct
 for ~20 synthetic customers and produces a **prioritised, risk-scored analyst triage queue** with
 per-finding rationale. Domain: AML / financial-crime compliance. Deliverables: working Streamlit demo
 (≤3-min recording) + 5-slide deck + README. Deadline: 2026-07-25. Pro-code: Python, pandas, pydantic v2,
-Streamlit, instructor + anthropic.
+Streamlit, instructor. LLM cross-check is provider-configurable in `config.py` — default
+**NVIDIA Nemotron-3-Ultra-550B** (OpenAI-compatible endpoint), with Gemini and Claude as alternates.
 
 **North star:** a "never-fails" engine — deterministic rules are the auditable **source of truth**, the LLM
 is an **advisory, confidence-gated cross-check**, and there is a **rules-only fallback** so the engine never

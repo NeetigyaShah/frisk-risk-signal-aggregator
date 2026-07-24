@@ -29,9 +29,11 @@ cross-check**; a **rules-only fallback** guarantees the engine never returns not
    Temporal **typology detectors**: structuring (≥3 sub-floor cash deposits in 7 days), layering
    (≥3 ~80%-forwarded hops), round-trip, dormant-then-spike. Every finding carries `evidence`
    (txn ids / amounts / window).
-2. **LLM cross-check** (`src/llm.py`) — Claude Haiku via `instructor` + Pydantic v2 (`temperature=0`,
-   `max_retries=3`, schema-locked, *not* told the rules score). One `try/except` falls back to a
-   rules-only finding, so nothing can raise into the engine.
+2. **LLM cross-check** (`src/llm.py`) — **NVIDIA Nemotron-3-Ultra-550B** (`nvidia/nemotron-3-ultra-550b-a55b`)
+   via its OpenAI-compatible endpoint through `instructor` (JSON mode) against our Pydantic schema
+   (`temperature=0`, *not* told the rules score). Provider-configurable in `config.py`
+   (`nvidia` / `gemini` / `anthropic`). Findings are disk-cached by prompt hash (rate-limit-proof re-runs);
+   one `try/except` with retry+backoff falls back to a rules-only finding, so nothing can raise into the engine.
 3. **Reconcile + route** (`src/engine.py`) — `confidence = 1 − |rules−llm|/100`. Routing is
    **kill-switch first** (sanctions/PEP-high-geo → ESCALATE + named reviewer + signoff), else
    auto-clear <15 / junior <40 / senior <70 / escalate ≥70. The rules-only or missing-data path

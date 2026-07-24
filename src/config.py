@@ -6,7 +6,14 @@ recalibrates; keeping it in one auditable place is the whole point.
 """
 from __future__ import annotations
 
+import os
 from decimal import Decimal
+
+try:  # load .env (API keys) so any entrypoint — scripts, streamlit, tests — sees them
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+except Exception:
+    pass
 
 CONFIG = {
     "seed": 42,
@@ -63,14 +70,19 @@ CONFIG = {
 
     # --- LLM cross-check ---
     "llm": {
-        # mode: "auto" -> real Claude if ANTHROPIC_API_KEY set, else deterministic simulated
+        # mode: "auto" -> real model if a provider key is set, else deterministic simulated
         #       second opinion (so the demo shows confidence + auto-clear offline);
         #       "off" -> pure rules-only (degraded, never auto-clears).
         "mode": "auto",
-        "model": "claude-haiku-4-5-20251001",
+        "provider": "nvidia",                       # nvidia | gemini | anthropic
+        "nvidia_model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "nvidia_base_url": "https://integrate.api.nvidia.com/v1",
+        "gemini_model": "gemini-2.5-flash-lite",    # fast, high free-tier quota
+        "model": "claude-haiku-4-5-20251001",       # anthropic model
         "temperature": 0,
+        "max_tokens": 8192,
         "max_retries": 3,
-        "timeout_s": 20,
+        "timeout_s": 60,
     },
 }
 

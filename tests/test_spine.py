@@ -95,13 +95,12 @@ def test_kill_switch_never_auto_clears_even_if_model_disagrees(monkeypatch):
 
 def test_llm_failure_falls_back_to_rules_only(monkeypatch):
     class Boom:
-        class chat:
-            class completions:
-                @staticmethod
-                def create(**_):
-                    raise RuntimeError("api down")
-    monkeypatch.setattr(llm, "_client", Boom())
-    monkeypatch.setattr(llm, "_client_tried", True)
+        class models:
+            @staticmethod
+            def generate_content(**_):
+                raise RuntimeError("api down")
+    monkeypatch.setattr(llm, "_clients", {"gemini": Boom()})
+    monkeypatch.setitem(llm._LLM, "provider", "gemini")
     monkeypatch.setenv("LLM_MODE", "auto")
     d = _dossier()
     finding, meta = llm.crosscheck(d, rules.score_customer(d))
