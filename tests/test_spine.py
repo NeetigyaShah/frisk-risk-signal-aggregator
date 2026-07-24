@@ -112,7 +112,7 @@ def test_engine_never_raises_and_always_returns_valid(monkeypatch):
     for d in load_dossiers(DATA):
         dec = engine.assess(d, persist=False)
         assert 0 <= dec.score <= 100
-        assert dec.action in {"AUTO_CLEAR", "REVIEW", "ESCALATE"}
+        assert dec.action in {"AUTO_CLEAR", "REVIEW", "ESCALATE", "PENDING_REVIEW"}
 
 
 # --------------------------------------------------------------------------- explainability + routing

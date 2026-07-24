@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     max_retries: int = 3
     timeout_s: int = 60
 
+    # --- engine mode + human-in-the-loop ---
+    engine_mode: str = "llm"               # llm -> LLM scores; hybrid -> rules are source of truth
+    confidence_threshold: float = 0.60     # below this the LLM is "unsure" -> route to the human review queue
+    redis_url: str = "redis://localhost:6379/0"   # review-queue broker
+
     # --- scale / throughput ---
     workers: int = 16                      # parallel workers for I/O-bound cross-checks
     crosscheck_policy: str = "all"         # all -> LLM on everyone; gated -> LLM only on the MED band

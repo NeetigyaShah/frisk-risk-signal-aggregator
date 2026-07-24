@@ -36,5 +36,8 @@ CONFIG["scale"] = {
     "crosscheck_policy": settings.crosscheck_policy,
     "gated_confidence": settings.gated_confidence,
 }
+CONFIG["engine_mode"] = settings.engine_mode
+CONFIG["confidence_threshold"] = settings.confidence_threshold
+CONFIG["redis_url"] = settings.redis_url
 
 __all__ = ["CONFIG", "band_for", "BAND_LABEL", "LABEL_BAND", "settings"]

@@ -60,11 +60,20 @@ def _invoke_retry(runnable, prompt, tries=3):
 
 # --------------------------------------------------------------------------- per-domain feature text
 
+def _docs(d, *substrings) -> str:
+    """Concatenate the UNSTRUCTURED documents whose filename matches any substring (id doc, RM notes, news)."""
+    picked = [x for x in getattr(d, "documents", []) if any(s in x["name"] for s in substrings)]
+    if not picked:
+        return ""
+    return "\n\nUNSTRUCTURED DOCUMENTS:\n" + "\n---\n".join(f"[{x['name']}]\n{x['text'].strip()}" for x in picked)
+
+
 def _kyc_text(d) -> str:
     p, k = d.profile, d.kyc
     return (f"nationality/country={k.get('nationality')}/{p.get('country')}; occupation={k.get('occupation')}; "
             f"PEP={p.get('pep')}; account_age_days={p.get('tenure_days')}; "
-            f"kyc_complete={k.get('kyc_complete')}; id_doc_present={k.get('id_doc') is not None}")
+            f"kyc_complete={k.get('kyc_complete')}; id_doc_present={k.get('id_doc') is not None}"
+            + _docs(d, "id_document", "rm_notes"))  # read the ID OCR + relationship-manager notes
 
 
 def _txn_text(d) -> str:
@@ -76,14 +85,16 @@ def _txn_text(d) -> str:
     return (f"{len(t)} transactions; credits={tin:.0f}; debits={tout:.0f}; cash_in={cash:.0f}; "
             f"counterparty_countries={cps}; "
             f"note: watch for structuring (many just-under-threshold cash deposits), layering "
-            f"(rapid onward transfers), round-tripping, dormant-then-spike.")
+            f"(rapid onward transfers), round-tripping, dormant-then-spike."
+            + _docs(d, "correspondence"))  # read emails that might explain (or expose) transfers
 
 
 def _screening_text(d) -> str:
     s = d.screening
     return (f"sanctions_hits={[h.get('name') for h in s.get('sanctions', [])]}; "
             f"pep_confirmed={s.get('pep_confirmed')}; "
-            f"adverse_media={[m.get('headline') for m in s.get('adverse_media', [])]}")
+            f"adverse_media={[m.get('headline') for m in s.get('adverse_media', [])]}"
+            + _docs(d, "adverse_media"))  # read the full news article text, not just the headline
 
 
 # --------------------------------------------------------------------------- graph state + nodes
@@ -117,14 +128,26 @@ def _analyst(domain: str, text_fn):
     return node
 
 
+def _fewshot() -> str:
+    """Recent human corrections injected as calibration examples (the closed feedback loop)."""
+    try:
+        from frisk.hitl.feedback import fewshot_block
+        return fewshot_block()
+    except Exception:
+        return ""
+
+
 def synthesize(state: RiskState):
     findings = state.get("source_findings", [])
     summary = "; ".join(f"[{f['domain']}={f['risk_level']}] {f['note']}" for f in findings)
     try:
         r = _invoke_retry(_get_runnables()["synth"],
+            _fewshot() +
             "You are a senior AML analyst. Correlate the three domain assessments below into ONE overall "
-            "money-laundering risk view. Weigh how signals REINFORCE across domains. Respond in JSON with keys "
-            "customer_id,score(0-100),band,rationale,key_signals(list).\n\n"
+            "money-laundering risk view. Weigh how signals REINFORCE across domains. Also report your OWN "
+            "confidence 0-1 — be honest: use LOW confidence if the domains disagree or the evidence is thin "
+            "(those cases go to a human reviewer). Respond in JSON with keys "
+            "customer_id,score(0-100),band,rationale,key_signals(list),confidence(0-1).\n\n"
             f"DOMAIN ASSESSMENTS: {summary}")
         return {"synthesis": r.model_dump()}
     except Exception as e:
@@ -198,18 +221,35 @@ def available() -> bool:
     return _get_runnables() is not None
 
 
+_LVL = {"low": 17, "medium": 50, "high": 85}
+
+
+def _composite_confidence(finding, out, detail) -> dict:
+    """confidence = min(self-report, node agreement, verifier consistency), penalised for node errors."""
+    synth = out.get("synthesis") or {}
+    self_c = float(synth.get("confidence", finding.confidence) or 0.6)
+    scores = [_LVL.get(sf.get("risk_level"), 50) for sf in detail["source_findings"]] + [finding.score]
+    node_agreement = round(1.0 - (max(scores) - min(scores)) / 100, 2) if scores else 0.5
+    verd = detail.get("verdict") or {}
+    verifier = 1.0 if verd.get("consistent") else 0.5
+    err_pen = 0.4 if detail["errors"] else 1.0
+    composite = round(max(0.0, min(self_c, node_agreement, verifier, err_pen)), 2)
+    return {"confidence": composite, "self_confidence": round(self_c, 2), "node_agreement": node_agreement}
+
+
 def assess_multistep(dossier, rules_result) -> tuple[RiskFinding, dict]:
-    """Run the multi-step graph. Returns (final RiskFinding, detail). Raises only if the graph engine dies."""
+    """Run the multi-step graph. Returns (final RiskFinding, detail incl. composite confidence)."""
     init = {"dossier": dossier, "rules_score": rules_result.score, "rules_band": rules_result.band,
             "source_findings": [], "errors": []}
     out = _get_graph().invoke(init, config={"configurable": {"max_concurrency": 3}})
     final_dict = (out.get("synthesis") or {}).get("_final")
     finding = RiskFinding.model_validate(final_dict) if final_dict else RiskFinding(
         customer_id="", score=rules_result.score, band=BAND_LABEL[rules_result.band],
-        rationale="graph produced no synthesis; rules score used", key_signals=[])
+        rationale="graph produced no synthesis; rules score used", key_signals=[], confidence=0.3)
     finding.customer_id = dossier.customer_id
     detail = {"source_findings": out.get("source_findings", []), "verdict": out.get("verdict"),
               "errors": out.get("errors", []), "steps": 5}
+    detail.update(_composite_confidence(finding, out, detail))
     return finding, detail
 
 

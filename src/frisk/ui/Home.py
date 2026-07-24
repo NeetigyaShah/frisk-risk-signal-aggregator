@@ -19,13 +19,16 @@ from frisk.data import store
 from frisk.config import CONFIG
 from frisk.core.engine import assess_all, log_analyst_action
 from frisk.core.models import load_dossiers
+from frisk.hitl import queue as review_queue, feedback
+from frisk.ai.crosscheck import _features
 
 st.set_page_config(page_title="Risk Signal Aggregator", page_icon="🛡️", layout="wide")
 
-from frisk.paths import DOSSIERS as DATA
+from frisk.paths import CUSTOMERS_DIR as DATA
 
 BAND_EMOJI = {"LOW": "🟢", "MED": "🟡", "HIGH": "🔴"}
-ACTION_EMOJI = {"AUTO_CLEAR": "🟢 Auto-clear", "REVIEW": "🟡 Review", "ESCALATE": "🔴 Escalate"}
+ACTION_EMOJI = {"AUTO_CLEAR": "🟢 Auto-clear", "REVIEW": "🟡 Review", "ESCALATE": "🔴 Escalate",
+                "PENDING_REVIEW": "🟠 Human review"}
 TIER_LABEL = {"none": "—", "junior": "Junior", "senior": "Senior", "named_reviewer": "MLRO"}
 
 
@@ -36,6 +39,10 @@ def bootstrap():
     ds = load_dossiers(DATA)
     decs = assess_all(ds, persist=True)  # sequential (cache-warm -> instant); one AuditRecord each
     store.upsert_many(decs)              # also populate the scalable SQLite read store
+    review_queue.reset()                 # (re)build the human review queue from this run
+    for dec in decs:
+        if dec.action == "PENDING_REVIEW":
+            review_queue.enqueue_decision(dec)
     return decs, {d.customer_id: d for d in ds}
 
 
@@ -68,13 +75,12 @@ def queue_page():
                f"Ruleset {CONFIG['ruleset_version']} · {len(DECISIONS)} customers.")
 
     counts = {a: sum(1 for d in DECISIONS if d.action == a) for a in ACTION_EMOJI}
-    escalated = counts["ESCALATE"]
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Total customers", len(DECISIONS))
-    c2.metric("🔴 Escalate", escalated)
+    c2.metric("🔴 Escalate", counts["ESCALATE"])
     c3.metric("🟡 Review", counts["REVIEW"])
-    c4.metric("🟢 Auto-cleared", counts["AUTO_CLEAR"],
-              help="Low-risk + high-confidence; handled without analyst time")
+    c4.metric("🟢 Auto-cleared", counts["AUTO_CLEAR"], help="Low-risk + high-confidence; no analyst time")
+    c5.metric("🟠 Human queue", counts["PENDING_REVIEW"], help="LLM was unsure → routed to a human reviewer")
 
     st.divider()
 
@@ -115,12 +121,15 @@ def queue_page():
 # --------------------------------------------------------------------------- Case detail view
 
 def _driver_bars(decision):
-    st.markdown("**Why this score** — driver contributions (sum to the score)")
+    if not decision.drivers:
+        return
+    llm = decision.engine_path in ("rules+graph", "rules+llm", "rules+sim")
+    st.markdown("**Deterministic rule cross-check** (reference)" if llm else "**Why this score** — driver contributions")
     total = sum(x["contribution"] for x in decision.drivers)
     for drv in decision.drivers:
-        pct = drv["contribution"] / 100
-        st.progress(pct, text=f"{drv['code']}  ·  +{drv['contribution']}  —  {drv['rationale']}")
-    st.caption(f"Σ drivers = {total}  =  score {decision.score}")
+        st.progress(min(1.0, drv["contribution"] / 100),
+                    text=f"{drv['code']}  ·  +{drv['contribution']}  —  {drv['rationale']}")
+    st.caption(f"rule points = {total}" + ("  (the shown score is the LLM's)" if llm else f"  =  score {decision.score}"))
 
 
 def case_page():
@@ -248,10 +257,87 @@ def audit_page():
                        file_name="audit_log.jsonl")
 
 
+# --------------------------------------------------------------------------- Human review queue
+
+def _why(c) -> str:
+    srcs = c.get("source_findings") or []
+    if srcs:
+        return "analysts: " + ", ".join(f"{s['domain'][:4]}={s['risk_level']}" for s in srcs)
+    return "LLM unavailable / low confidence"
+
+
+def review_page():
+    st.title("🟠 Human Review Queue")
+    st.caption("Cases where the LLM was **not confident** are routed here for an independent human decision. "
+               f"Broker: **{review_queue.backend()}**. Your decision resolves the case and *teaches the model* "
+               "(saved as a calibration example for future scoring).")
+
+    pend = review_queue.pending()
+    if not pend:
+        st.success("Queue empty — the model was confident on every case, nothing awaits human review.")
+        return
+
+    st.metric("Pending cases", len(pend))
+    df = pd.DataFrame([{
+        "ID": c["customer_id"], "Customer": c.get("name"), "LLM score": c.get("llm_score"),
+        "Band": c.get("band"), "Confidence": c.get("confidence", 0.0), "Why queued": _why(c),
+    } for c in pend])
+    st.dataframe(df, hide_index=True, use_container_width=True, column_config={
+        "Confidence": st.column_config.ProgressColumn("Confidence", min_value=0.0, max_value=1.0, format="%.2f")})
+
+    pick = st.selectbox("Open a case to review", [c["customer_id"] for c in pend])
+    case = next(c for c in pend if c["customer_id"] == pick)
+    st.divider()
+    st.subheader(f"{case['customer_id']} — {case.get('name')}  "
+                 f"(LLM said {case.get('llm_score')} · confidence {float(case.get('confidence', 0)):.2f})")
+
+    srcs = case.get("source_findings") or []
+    if srcs:
+        st.markdown("**Why the model was unsure — the domain analysts:**")
+        lv = {"low": "🟢", "medium": "🟡", "high": "🔴"}
+        cols = st.columns(len(srcs))
+        for col, sf in zip(cols, srcs):
+            col.markdown(f"**{sf['domain'].title()}** {lv.get(sf['risk_level'], '⚪')} {sf['risk_level']}")
+            col.caption(sf.get("note", ""))
+    verd = case.get("verdict")
+    if verd:
+        st.caption(f"QA verifier: {'consistent' if verd.get('consistent') else 'flagged/adjusted'} — "
+                   f"{str(verd.get('note', ''))[:200]}")
+    if case.get("reason"):
+        st.info(case["reason"])
+
+    d = DOSSIERS.get(pick)
+    if d:
+        with st.expander("Full dossier + unstructured documents (what the reviewer inspects)"):
+            st.markdown("*KYC*"); st.json(d.kyc)
+            st.markdown("*Screening*"); st.json(d.screening)
+            for doc in d.documents:
+                st.markdown(f"**📄 {doc['name']}**"); st.text(doc["text"])
+
+    st.divider()
+    st.markdown("### Your decision — sets the correct score and teaches the model")
+    r1, r2, r3 = st.columns(3)
+    score = r1.number_input("Correct score (0–100)", 0, 100, int(case.get("llm_score") or 50))
+    bands = ["LOW", "MED", "HIGH"]
+    band = r2.selectbox("Band", bands, index=bands.index(case.get("band", "MED")) if case.get("band") in bands else 1)
+    action = r3.selectbox("Action", ["AUTO_CLEAR", "REVIEW", "ESCALATE"], index=1)
+    note = st.text_input("Correction note (why — this is the lesson the model learns)", key=f"rev_{pick}")
+
+    if st.button("✅ Submit & teach the model", type="primary"):
+        review_queue.resolve(pick, {"human_score": score, "band": band, "action": action,
+                                    "note": note, "reviewer": "analyst:demo"})
+        feats = _features(DOSSIERS[pick]) if pick in DOSSIERS else case.get("reason", "")
+        feedback.record(pick, feats, int(score), band, action, note, "analyst:demo")
+        log_analyst_action(pick, action, actor="analyst:demo", rationale=note or "human review", signoff_by="analyst:demo")
+        st.success(f"Resolved {pick}. Correction saved — future scoring will calibrate toward it.")
+        st.rerun()
+
+
 # --------------------------------------------------------------------------- nav
 
 QUEUE_PAGE = st.Page(queue_page, title="Triage Queue", icon="📋", default=True)
 CASE_PAGE = st.Page(case_page, title="Case Detail", icon="🔍")
+REVIEW_PAGE = st.Page(review_page, title="Human Review Queue", icon="🟠")
 AUDIT_PAGE = st.Page(audit_page, title="Audit Trail", icon="📜")
 
-st.navigation([QUEUE_PAGE, CASE_PAGE, AUDIT_PAGE]).run()
+st.navigation([QUEUE_PAGE, CASE_PAGE, REVIEW_PAGE, AUDIT_PAGE]).run()

@@ -13,7 +13,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 
 from frisk.data import audit
-from frisk.config import CONFIG
+from frisk.config import CONFIG, band_for
 from frisk.ai.crosscheck import crosscheck, rules_only_finding
 from frisk.core.models import AuditRecord, Disposition, Dossier
 from frisk.core.rules import score_customer
@@ -80,6 +80,22 @@ def route(score: int, flags: set, degraded: bool, confidence: float) -> Disposit
     return disp
 
 
+def route_llm(score: int, flags: set, confidence: float, path: str) -> Disposition:
+    """LLM-only routing: the model's score decides, but LOW CONFIDENCE (or a dead model) sends the case
+    to the human review queue. The sanctions kill-switch is the one hard rail that always escalates."""
+    if flags & HARD:                                       # sanctions rail — always, even if the LLM missed it
+        return Disposition("ESCALATE", "named_reviewer", True)
+    if path == "rules_only" or confidence < CONFIG["confidence_threshold"]:
+        return Disposition("PENDING_REVIEW", "human_queue", False)   # LLM unsure/unavailable -> human
+    if score < RT["auto_clear"]:
+        return Disposition("AUTO_CLEAR", "none", False)
+    if score < RT["junior"]:
+        return Disposition("REVIEW", "junior", False)
+    if score < RT["senior"]:
+        return Disposition("REVIEW", "senior", False)
+    return Disposition("ESCALATE", "senior", True)
+
+
 def _incomplete(d: Dossier) -> bool:
     return bool(d.meta.get("missing_docs")) or not d.transactions or not d.kyc.get("kyc_complete", True)
 
@@ -91,11 +107,30 @@ def assess(d: Dossier, actor: str | None = None, persist: bool = True, use_llm: 
     else:  # gated: rules are policy-authoritative for this case, LLM deliberately skipped
         lf, meta = rules_only_finding(d, rr), {"path": "rules_gated", "provider": "none"}
     incomplete = _incomplete(d)
-    conf = reconcile(rr.score, lf.score, meta["path"])
-    if incomplete:                                     # missing data -> cap confidence
-        conf = min(conf, round(CONFIG["degraded_confidence_cap"], 2))
-    degraded = meta["path"] == "rules_only" or incomplete
-    disp = route(rr.score, rr.flags, degraded, conf)
+    mode = CONFIG.get("engine_mode", "hybrid")
+    cap = round(CONFIG["degraded_confidence_cap"], 2)
+
+    if meta["path"] == "rules_gated":                  # LLM deliberately skipped -> rules-authoritative
+        score, band = rr.score, rr.band
+        conf = round(CONFIG["scale"]["gated_confidence"], 2)
+        if incomplete:
+            conf = min(conf, cap)
+        disp = route(rr.score, rr.flags, incomplete, conf)
+    elif mode == "llm":                                # LLM scores; low confidence -> human queue
+        score = lf.score
+        band = band_for(score)
+        detail = meta.get("detail") or {}
+        conf = {"rules+graph": float(detail.get("confidence", 0.5)),
+                "rules+llm": 0.65, "rules+sim": 0.7, "rules_only": cap}.get(meta["path"], 0.5)
+        if incomplete:
+            conf = min(conf, cap)
+        disp = route_llm(score, rr.flags, conf, meta["path"])
+    else:                                              # hybrid: deterministic rules are the source of truth
+        score, band = rr.score, rr.band
+        conf = reconcile(rr.score, lf.score, meta["path"])
+        if incomplete:
+            conf = min(conf, cap)
+        disp = route(rr.score, rr.flags, meta["path"] == "rules_only" or incomplete, conf)
 
     ts = datetime.now(timezone.utc).isoformat()
     fp = _fingerprint(d)
@@ -103,8 +138,8 @@ def assess(d: Dossier, actor: str | None = None, persist: bool = True, use_llm: 
         record_id=hashlib.sha256(f"{d.customer_id}{ts}{disp.action}".encode()).hexdigest()[:16],
         customer_id=d.customer_id, ts=ts,
         actor=actor or f"engine:{CONFIG['ruleset_version']}",
-        action=disp.action, score=rr.score, confidence=conf, engine_path=meta["path"],
-        band=rr.band, thresholds={"routing": RT, "bands": CONFIG["bands"]},
+        action=disp.action, score=score, confidence=conf, engine_path=meta["path"],
+        band=band, thresholds={"routing": RT, "bands": CONFIG["bands"], "mode": mode},
         drivers=rr.drivers, rationale=lf.rationale,
         ruleset_version=CONFIG["ruleset_version"], input_fingerprint=fp,
     )
@@ -113,7 +148,7 @@ def assess(d: Dossier, actor: str | None = None, persist: bool = True, use_llm: 
 
     return Decision(
         customer_id=d.customer_id, name=d.kyc.get("name", d.customer_id),
-        score=rr.score, band=rr.band, confidence=conf,
+        score=score, band=band, confidence=conf,
         action=disp.action, tier=disp.tier, requires_signoff=disp.requires_signoff,
         engine_path=meta["path"], flags=sorted(rr.flags), drivers=rr.drivers,
         findings=[asdict(f) for f in rr.findings], rationale=lf.rationale,

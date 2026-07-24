@@ -108,6 +108,7 @@ class RiskFinding(BaseModel):
     band: str = "low"
     rationale: str = Field(min_length=1, description="one-line justification")
     key_signals: list[str] = Field(default_factory=list, description="signal names that drove the score")
+    confidence: float = Field(default=0.6, ge=0.0, le=1.0, description="your own confidence 0-1 (low = unsure, send to human)")
 
     @model_validator(mode="after")
     def _coerce_band(self):
