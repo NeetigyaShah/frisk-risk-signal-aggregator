@@ -72,7 +72,7 @@ Semantic = reference cheat-sheets (`data/reference/`) · Procedural = `lessons` 
 | `docs/SCALING.md` | How to run at 10k+/day: gating, parallelism, caching, read store, infra diagram. |
 | `docs/PROJECT_EXPLAINER.html` | Product-level visual walkthrough (Mermaid diagrams). |
 | `docs/ARCHITECTURE.html` | Engineering codebase walkthrough: structure, ingestion pipeline, read/translate, inference, prompts, UI. |
-| `docs/ARCHITECTURE_DIAGRAMS.html` | Beautiful dark-themed Mermaid diagrams: end-to-end flow, data input, **ingestion step-by-step (in/out per file)**, 5-call LLM orchestration graph, never-fails cascade, confidence gate + HITL loop. |
+| `docs/ARCHITECTURE_DIAGRAMS.html` | **Beautiful branded explainer of the CURRENT agentic architecture**: end-to-end flow, data input, specialists→orchestrator topology, the agent tool-loop, the **5-tier layered memory**, confidence-gate + HITL teach loop, and a before/after table. |
 | `tests/` | Golden tests (mock-driven): engine-always-valid, low-conf→review, scratchpad eviction, history, episodic recall, injected-memory, audit, specialists, nlquery safety, batch. |
 | `README.md` | One-page submission README (setup, approach, worked example). |
 | `docs/deck/SLIDES.md` · `deck.pptx` | 5-slide submission deck (+ `build_pptx.py` renderer). |
