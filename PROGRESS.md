@@ -51,3 +51,7 @@
 - 2026-07-24: 12 golden tests pass. Phase 1 complete. Starting Phase 2.
 - 2026-07-24: Phase 2 — nlquery (safe whitelisted filter), Streamlit UI (Queue/Case/Audit) verified in-browser, README + 5-slide deck (deck.pptx) via subagent.
 - 2026-07-24: Phase 3 — full e2e verification green (5/9/6 dispositions); screenshots + DEMO_SCRIPT.md. BUILD COMPLETE.
+- 2026-07-24: LLM cross-check made provider-configurable (nvidia|gemini|anthropic). Google free tier rate-limited (429s);
+  switched default to **NVIDIA Nemotron-3-Ultra-550B** via instructor JSON (OpenAI-compatible endpoint). Disk cache
+  (data/llm_cache.json) warmed for all 20 -> instant. Added docs/PROJECT_EXPLAINER.html (Mermaid diagrams). API keys in
+  .env (gitignored) — ROTATE the pasted Gemini + NVIDIA keys.
