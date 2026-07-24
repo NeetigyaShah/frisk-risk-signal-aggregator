@@ -47,7 +47,8 @@ with additive-driver explainability and an append-only audit trail.
 | `src/frisk/cli.py` | `frisk generate` / `frisk score [--offline]` / `frisk warm`. |
 | `src/frisk/ui/Home.py` | Streamlit UI (Queue / Case detail / Audit). Run: `streamlit run src/frisk/ui/Home.py`. |
 | `docs/SCALING.md` | How to run at 10k+/day: gating, parallelism, caching, read store, infra diagram. |
-| `docs/PROJECT_EXPLAINER.html` | Visual project walkthrough with Mermaid diagrams. |
+| `docs/PROJECT_EXPLAINER.html` | Product-level visual walkthrough (Mermaid diagrams). |
+| `docs/ARCHITECTURE.html` | Engineering codebase walkthrough: structure, ingestion pipeline, read/translate, inference, prompts, UI. |
 | `tests/` | Golden tests (one per typology + override + fallback + driver-sum). |
 | `README.md` | One-page submission README (setup, approach, worked example). |
 | `docs/deck/SLIDES.md` · `deck.pptx` | 5-slide submission deck (+ `build_pptx.py` renderer). |
