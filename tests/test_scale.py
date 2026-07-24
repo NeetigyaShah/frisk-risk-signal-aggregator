@@ -1,53 +1,28 @@
-"""Tests for the scale layer: gating policy, store round-trip, and gated auto-clear."""
-import os
-
-from frisk.core import engine
-from frisk.pipeline import batch as pipeline
-from frisk.core import rules
-from frisk.data import store
+"""Scale-layer tests — parallel batch scoring across customers + the relational store roundtrip."""
 from frisk.core.models import load_dossiers
-
-from frisk.paths import CUSTOMERS_DIR as DATA
-
-
-def test_gating_skips_llm_on_decisive_bands():
-    ds = load_dossiers(DATA)
-    decs = pipeline.assess_all_scaled(ds, policy="gated", persist_db=False)
-    for d, dec in zip(ds, decs):  # ThreadPoolExecutor.map preserves order
-        rr = rules.score_customer(d)
-        if rr.band in ("LOW", "HIGH") and not rr.flags:
-            assert dec.engine_path == "rules_gated", f"{d.customer_id} should be gated (no LLM)"
+from frisk.data import store
+from frisk.pipeline.batch import assess_all_scaled
 
 
-def test_gated_low_risk_auto_clears():
-    # a clean low-risk customer, gated, still auto-clears on rules alone (policy-authoritative, not degraded)
-    low = load_dossiers(DATA)[0]  # CUST_000, benign teacher
-    dec = engine.assess(low, persist=False, use_llm=False)
-    assert dec.engine_path == "rules_gated"
-    assert dec.action == "AUTO_CLEAR"
-    assert dec.confidence > 0.5  # not the degraded cap
+def test_batch_scores_all_and_persists():
+    store.reset()
+    ds = load_dossiers()
+    decs = assess_all_scaled(ds, workers=4, persist=True)
+    assert len(decs) == 20
+    assert store.count() == 20
+    assert len(store.latest_all()) == 20
+    assert all(0 <= d.score <= 100 and d.engine_path == "agent" for d in decs)
 
 
-def test_store_roundtrip(tmp_path, monkeypatch):
-    monkeypatch.setattr(store, "DB", str(tmp_path / "decisions.db"))
-    ds = load_dossiers(DATA)[:6]
-    decs = [engine.assess(d, persist=False, use_llm=False) for d in ds]
-    assert store.upsert_many(decs) == 6
-    assert store.count() == 6
-    top = store.query(limit=3)
-    assert len(top) == 3 and top[0]["score"] >= top[-1]["score"]  # ranked
-    # idempotent upsert (no duplicate rows)
-    store.upsert_many(decs)
-    assert store.count() == 6
-
-
-def test_throughput_smoke():
-    # rules score a big batch fast (no LLM) — guards the scale claim
-    import time
-    base = load_dossiers(DATA)
-    big = [base[i % len(base)] for i in range(2000)]
-    t = time.time()
-    for d in big:
-        rules.score_customer(d)
-    rate = 2000 / (time.time() - t)
-    assert rate > 200, f"rules throughput too low: {rate:.0f}/sec"
+def test_store_roundtrip_and_latest():
+    store.reset()
+    store.record_assessment({"customer_id": "Z", "name": "Z", "entity_type": "individual", "country": "GB",
+                             "occupation": "x", "pep": False, "ts": "2026-01-01T00:00:00Z", "score": 30,
+                             "band": "low", "confidence": 0.8, "disposition": "REVIEW", "key_signals": ["k"],
+                             "rationale": "r", "trace_ref": "t", "human_verified": False, "corrected_score": None})
+    store.record_assessment({"customer_id": "Z", "name": "Z", "entity_type": "individual", "country": "GB",
+                             "occupation": "x", "pep": False, "ts": "2026-02-01T00:00:00Z", "score": 70,
+                             "band": "high", "confidence": 0.9, "disposition": "ESCALATE", "key_signals": ["k2"],
+                             "rationale": "r", "trace_ref": "t", "human_verified": True, "corrected_score": 70})
+    assert store.get("Z")["score"] == 70                 # latest wins
+    assert [r["score"] for r in store.history("Z", 5)] == [70, 30]

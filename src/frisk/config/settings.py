@@ -18,9 +18,7 @@ class Settings(BaseSettings):
     )
 
     # --- LLM behaviour ---
-    llm_mode: str = "auto"                 # auto -> real if a key is set else simulated; off -> rules-only
     provider: str = "openrouter"           # openrouter | nvidia | gemini | anthropic | mock
-    multi_step: bool = True                # LangGraph 5-step orchestration vs single call
     # OpenRouter (OpenAI-compatible) — deepseek-v4-flash, preferring Baidu Qianfan (fastest) with fast fallbacks
     openrouter_model: str = "deepseek/deepseek-v4-flash"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
@@ -37,15 +35,12 @@ class Settings(BaseSettings):
     max_retries: int = 3
     timeout_s: int = 60
 
-    # --- engine mode + human-in-the-loop ---
-    engine_mode: str = "llm"               # llm -> LLM scores; hybrid -> rules are source of truth
-    confidence_threshold: float = 0.60     # below this the LLM is "unsure" -> route to the human review queue
-    redis_url: str = "redis://localhost:6379/0"   # review-queue broker
+    # --- human-in-the-loop ---
+    confidence_threshold: float = 0.60     # below this the agent is "unsure" -> route to the human review queue
+    redis_url: str = "redis://localhost:6379/0"   # review-queue broker + working-memory scratchpad
 
     # --- scale / throughput ---
-    workers: int = 16                      # parallel workers for I/O-bound cross-checks
-    crosscheck_policy: str = "all"         # DEPRECATED (removed after cutover) — kept so batch.py imports
-    gated_confidence: float = 0.85         # DEPRECATED (removed after cutover)
+    workers: int = 16                      # parallel workers (across customers) for batch scoring
 
     # --- agentic scorer + layered memory ---
     agent_max_steps: int = 12              # max tool-calling turns before the orchestrator must finalize / route to human

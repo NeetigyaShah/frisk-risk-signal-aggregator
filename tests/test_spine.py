@@ -1,149 +1,112 @@
-"""Golden tests for the deterministic spine.
+"""Golden tests for the full-LLM agentic spine (mock provider drives the tool loop).
 
-Covers: each typology detector, the override kill-switch, the never-fails fallback,
-driver contributions summing to score, missing-data routing, and generator determinism.
+Covers: generator determinism (no sanctions/adverse), engine always returns a valid Decision through the
+agent, low-confidence routing to the human queue, scratchpad eviction, per-customer history, episodic
+recall, injected-memory logging, append-only audit, parallel specialists, band coercion, and NL-query safety.
 """
-import os
-from datetime import date, timedelta
-from decimal import Decimal
-
-import pytest
-
-from frisk.data import audit
+from frisk.ai import memory
+from frisk.ai.specialists import run_specialists
 from frisk.core import engine
-from frisk.ai import crosscheck as llm
-from frisk.core import rules
-from frisk.config import CONFIG
-from frisk.core.models import Dossier, Txn, RiskFinding, load_dossiers
-
-REF = date(2026, 7, 24)
-FLOOR = CONFIG["reporting_floor"]
-from frisk.paths import CUSTOMERS_DIR as DATA
+from frisk.core.models import Dossier, RiskFinding, load_dossiers
+from frisk.data import audit, casebank, store
+from frisk.hitl import scratchpad
+from frisk.query import nlquery
 
 
-def _d(days_ago):
-    return (REF - timedelta(days=days_ago)).isoformat()
-
-
-def _txn(i, amount, direction, cp, cp_country="GB", ttype="cash", days_ago=10):
-    return Txn(f"T{i}", _d(days_ago), Decimal(str(amount)), "GBP", direction, cp, cp_country, ttype)
-
-
-def _dossier(txns=None, kyc=None, profile=None, screening=None, meta=None):
+def _dossier(cid="TST", occ="teacher", country="GB", pep=False, txns=None, docs=None,
+             kyc_complete=True, missing=None):
     return Dossier(
-        customer_id="TST",
-        kyc=kyc or {"name": "Test", "occupation": "teacher", "id_doc": "P1", "kyc_complete": True},
-        profile=profile or {"country": "GB", "pep": False, "tenure_days": 1000},
-        transactions=txns or [],
-        screening=screening or {"sanctions": [], "pep_confirmed": False, "adverse_media": []},
-        meta=meta or {},
+        cid, {"name": "Test", "occupation": occ, "id_doc": "P1", "kyc_complete": kyc_complete},
+        {"country": country, "entity_type": "individual", "pep": pep, "tenure_days": 1000},
+        txns or [], {"pep_confirmed": pep}, {"missing_docs": missing or []},
+        docs or [{"name": "rm_notes.txt", "kind": "unstructured", "text": "routine relationship"}],
     )
 
 
-# --------------------------------------------------------------------------- typologies
-
-def test_structuring_detected():
-    lo = float(CONFIG["structuring"]["low_frac"]) * float(FLOOR)
-    txns = [_txn(i, lo + 200, "in", "Cash Deposit", ttype="cash", days_ago=40 - i) for i in range(4)]
-    f = rules.typ_structuring(_dossier(txns))
-    assert f and f.code == "STRUCTURING"
-    # all clustered txns are below the reporting floor
-    assert all(Decimal(str(lo + 200)) < FLOOR for _ in txns)
-
-
-def test_layering_detected():
-    txns = [_txn(i, 100000 * (0.8 ** i), "out", f"Shell {chr(65+i)}", "CY", "transfer", days_ago=10 - i)
-            for i in range(3)]
-    f = rules.typ_layering(_dossier(txns))
-    assert f and f.code == "LAYERING"
+def test_generator_deterministic_and_no_sanctions():
+    import hashlib
+    from frisk.data.generate import _canon, generate
+    ds = generate()
+    assert len(ds) == 20
+    assert hashlib.sha256(_canon(generate()).encode()).hexdigest() == \
+           hashlib.sha256(_canon(generate()).encode()).hexdigest()
+    for d in ds:
+        assert set(d.screening) == {"pep_confirmed"}
+        assert not any(x["name"].startswith("adverse_media") for x in d.documents)
 
 
-def test_round_trip_detected():
-    txns = [_txn(0, 50000, "out", "Nominee A", "KY", "wire", days_ago=20),
-            _txn(1, 49500, "in", "Nominee B", "KY", "wire", days_ago=14)]
-    f = rules.typ_round_trip(_dossier(txns))
-    assert f and f.code == "ROUND_TRIP"
+def test_engine_returns_valid_decision_for_every_customer():
+    decs = engine.assess_all(load_dossiers(), persist=False)
+    assert len(decs) == 20
+    for d in decs:
+        assert 0 <= d.score <= 100
+        assert d.band in ("low", "medium", "high")
+        assert d.action in ("AUTO_CLEAR", "REVIEW", "ESCALATE", "PENDING_REVIEW")
+        assert d.engine_path == "agent"
+        assert d.trace and d.trace[-1]["tool"] == "finalize"
 
 
-def test_dormant_spike_detected():
-    old = [_txn(i, 100, "out", "Shop", ttype="card", days_ago=230 - i * 5) for i in range(3)]
-    burst = [_txn(10 + i, 30000, "in", "New CP", "AE", "wire", days_ago=9 - i * 2) for i in range(4)]
-    f = rules.typ_dormant_spike(_dossier(old + burst))
-    assert f and f.code == "DORMANT_SPIKE"
-
-
-# --------------------------------------------------------------------------- override / kill-switch
-
-def test_sanctions_override_forces_high_and_escalate():
-    d = _dossier(screening={"sanctions": [{"name": "Test", "match_score": 1.0, "list": "OFAC"}],
-                            "pep_confirmed": False, "adverse_media": []})
-    rr = rules.score_customer(d)
-    assert rr.score == 100 and rr.band == "HIGH" and "SANCTIONS_MATCH" in rr.flags
+def test_low_confidence_routes_to_human():
+    d = _dossier(cid="REVIEWME", docs=[{"name": "rm_notes.txt", "kind": "unstructured",
+                 "text": "This case is genuinely borderline; recommend a second opinion."}])
     dec = engine.assess(d, persist=False)
-    assert dec.action == "ESCALATE" and dec.requires_signoff
+    assert dec.confidence < 0.6
+    assert dec.action == "PENDING_REVIEW"
 
 
-def test_kill_switch_never_auto_clears_even_if_model_disagrees(monkeypatch):
-    # even a low simulated score cannot auto-clear a sanctioned customer
-    d = _dossier(screening={"sanctions": [{"name": "X", "match_score": 1.0, "list": "OFAC"}],
-                            "pep_confirmed": False, "adverse_media": []})
-    dec = engine.assess(d, persist=False)
-    assert dec.action == "ESCALATE"
+def test_scratchpad_evicted_after_assess():
+    engine.assess(_dossier(cid="EVICT"), persist=False)
+    assert scratchpad.read("EVICT") == {}
 
 
-# --------------------------------------------------------------------------- never-fails fallback
-
-def test_llm_failure_falls_back_to_rules_only(monkeypatch):
-    class Boom:
-        def available(self):
-            return True
-        def complete(self, *a, **k):
-            raise RuntimeError("api down")
-    monkeypatch.setattr(llm, "get_provider", lambda *a, **k: Boom())
-    monkeypatch.setitem(llm._LLM, "multi_step", False)  # exercise the single-call cascade
-    monkeypatch.setenv("LLM_MODE", "auto")
-    d = _dossier()
-    finding, meta = llm.crosscheck(d, rules.score_customer(d))
-    assert isinstance(finding, RiskFinding) and meta["path"] == "rules_only"
+def test_per_customer_history_appends():
+    store.reset()
+    engine.assess(_dossier(cid="HIST"), persist=True)
+    engine.assess(_dossier(cid="HIST"), persist=True)
+    assert len(store.history("HIST", k=5)) == 2
 
 
-def test_engine_never_raises_and_always_returns_valid(monkeypatch):
-    monkeypatch.setenv("LLM_MODE", "off")
-    for d in load_dossiers(DATA):
-        dec = engine.assess(d, persist=False)
-        assert 0 <= dec.score <= 100
-        assert dec.action in {"AUTO_CLEAR", "REVIEW", "ESCALATE", "PENDING_REVIEW"}
+def test_episodic_casebank_recall():
+    casebank.reset()
+    casebank.add("A", "arms dealer syria", {"country": "SY", "occupation": "director", "pep": True,
+                 "band": "HIGH"}, "HIGH", "ESCALATE", True)
+    top = casebank.similar({"country": "SY", "occupation": "director", "pep": True}, k=1)
+    assert top and top[0]["customer_id"] == "A"
 
 
-# --------------------------------------------------------------------------- explainability + routing
-
-def test_driver_contributions_sum_to_score():
-    for d in load_dossiers(DATA):
-        rr = rules.score_customer(d)
-        if rr.flags:  # override -> single 100 driver
-            assert sum(x["contribution"] for x in rr.drivers) == 100
-        else:
-            assert sum(x["contribution"] for x in rr.drivers) == rr.score
+def test_injected_memory_recorded_on_decision():
+    dec = engine.assess(_dossier(cid="MEMLOG"), persist=False)
+    assert "history_n" in dec.injected_memory
 
 
-def test_missing_data_never_auto_clears():
-    d = _dossier(meta={"missing_docs": ["transactions"]})  # clean but incomplete
-    dec = engine.assess(d, persist=False)
-    assert dec.action != "AUTO_CLEAR"
-    assert dec.confidence <= CONFIG["degraded_confidence_cap"]
+def test_audit_append_only_and_analyst_action():
+    audit.reset()
+    engine.assess(_dossier(cid="AUD"), persist=True)
+    n = len(audit.read_all())
+    engine.log_analyst_action("AUD", "ESCALATE", actor="analyst:test", rationale="manual")
+    assert len(audit.read_all()) == n + 1
 
 
-# --------------------------------------------------------------------------- determinism
-
-def test_generator_is_deterministic():
-    import frisk.data.generate as gen
-    assert gen._canon(gen.generate()) == gen._canon(gen.generate())
+def test_specialists_run_parallel_three_domains():
+    ops = run_specialists(_dossier(occ="arms dealer", country="IR"), {"injected": {}})
+    assert len(ops) == 3 and {o.domain for o in ops} == {"kyc", "transactions", "documents"}
 
 
-def test_audit_is_append_only(tmp_path, monkeypatch):
-    logfile = tmp_path / "audit.jsonl"
-    monkeypatch.setattr(audit, "LOG", str(logfile))
-    d = _dossier()
+def test_riskfinding_band_coerced_from_score():
+    assert RiskFinding(score=90, rationale="x").band == "high"
+    assert RiskFinding(score=10, rationale="x").band == "low"
+
+
+def test_memory_writeback_and_retrieve_roundtrip():
+    store.reset(); casebank.reset()
+    d = _dossier(cid="RT", occ="crypto dealer", country="RU")
     engine.assess(d, persist=True)
-    engine.assess(d, persist=True)
-    assert len(audit.read_all()) == 2
+    mem = memory.retrieve(d)
+    assert mem["injected"]["history_n"] >= 1   # its own prior assessment is retrievable
+
+
+def test_nlquery_is_safe_and_whitelisted():
+    spec = nlquery.keyword_parse("__import__('os').system('rm -rf /')")
+    assert nlquery.apply(spec, []) == []
+    spec2 = nlquery.keyword_parse("structuring cases escalated")
+    assert "structuring" in spec2.signals and "ESCALATE" in spec2.actions

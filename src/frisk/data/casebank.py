@@ -21,7 +21,8 @@ _WEIGHTS = {"country": 2, "occupation": 2, "pep": 1, "entity_type": 1, "band": 1
 
 def _conn() -> sqlite3.Connection:
     os.makedirs(os.path.dirname(str(DECISIONS_DB)), exist_ok=True)
-    c = sqlite3.connect(str(DECISIONS_DB))
+    c = sqlite3.connect(str(DECISIONS_DB), timeout=10)
+    c.execute("PRAGMA busy_timeout=10000")   # tolerate concurrent batch writers
     c.row_factory = sqlite3.Row
     return c
 

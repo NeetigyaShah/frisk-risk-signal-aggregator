@@ -18,9 +18,7 @@ from frisk.config.settings import settings  # noqa: E402
 # Assemble the runtime CONFIG: domain policy + env-bound sections (back-compat shape for all modules).
 CONFIG = dict(_DOMAIN)
 CONFIG["llm"] = {
-    "mode": settings.llm_mode,
     "provider": settings.provider,
-    "multi_step": settings.multi_step,
     "openrouter_model": settings.openrouter_model,
     "openrouter_base_url": settings.openrouter_base_url,
     "openrouter_extra_body": settings.openrouter_extra_body,
@@ -34,18 +32,12 @@ CONFIG["llm"] = {
     "max_retries": settings.max_retries,
     "timeout_s": settings.timeout_s,
 }
-CONFIG["scale"] = {
-    "workers": settings.workers,
-    "crosscheck_policy": settings.crosscheck_policy,
-    "gated_confidence": settings.gated_confidence,
-}
-CONFIG["engine_mode"] = settings.engine_mode
+CONFIG["scale"] = {"workers": settings.workers}
 CONFIG["confidence_threshold"] = settings.confidence_threshold
 CONFIG["redis_url"] = settings.redis_url
 # agentic scorer + layered memory knobs
 CONFIG["agent_max_steps"] = settings.agent_max_steps
 CONFIG["scratchpad_ttl_s"] = settings.scratchpad_ttl_s
 CONFIG["memory_topk"] = settings.memory_topk
-CONFIG["policy_version"] = _DOMAIN.get("ruleset_version", "v1.0")
 
 __all__ = ["CONFIG", "band_for", "BAND_LABEL", "LABEL_BAND", "settings"]
