@@ -14,7 +14,7 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, model_validator
 
-from config import CONFIG, band_for, BAND_LABEL
+from frisk.config import CONFIG, band_for, BAND_LABEL
 
 # --------------------------------------------------------------------------- #
 # Internal core (deterministic)
@@ -150,8 +150,9 @@ def dossier_from_dict(d: dict) -> Dossier:
     )
 
 
-def load_dossiers(path: str | Path) -> list[Dossier]:
-    raw = json.loads(Path(path).read_text(encoding="utf-8"))
+def load_dossiers(path=None) -> list[Dossier]:
+    from frisk.paths import DOSSIERS
+    raw = json.loads(Path(path or DOSSIERS).read_text(encoding="utf-8"))
     return [dossier_from_dict(d) for d in raw]
 
 

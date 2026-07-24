@@ -9,21 +9,20 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))  # src/ on path
 
 import pandas as pd
 import streamlit as st
 
-import audit
-import nlquery
-import store
-from config import CONFIG
-from engine import assess_all, log_analyst_action
-from models import load_dossiers
+from frisk.data import audit
+from frisk.query import nlquery
+from frisk.data import store
+from frisk.config import CONFIG
+from frisk.core.engine import assess_all, log_analyst_action
+from frisk.core.models import load_dossiers
 
 st.set_page_config(page_title="Risk Signal Aggregator", page_icon="🛡️", layout="wide")
 
-DATA = os.path.join(os.path.dirname(__file__), "..", "..", "data", "dossiers.json")
+from frisk.paths import DOSSIERS as DATA
 
 BAND_EMOJI = {"LOW": "🟢", "MED": "🟡", "HIGH": "🔴"}
 ACTION_EMOJI = {"AUTO_CLEAR": "🟢 Auto-clear", "REVIEW": "🟡 Review", "ESCALATE": "🔴 Escalate"}

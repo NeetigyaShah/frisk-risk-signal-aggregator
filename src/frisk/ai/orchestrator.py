@@ -18,8 +18,8 @@ import operator
 import os
 from typing import Annotated, Any, TypedDict
 
-from config import CONFIG
-from models import RiskFinding, SourceFinding, Verdict, band_for, BAND_LABEL
+from frisk.config import CONFIG
+from frisk.core.models import RiskFinding, SourceFinding, Verdict, band_for, BAND_LABEL
 
 _LLM = CONFIG["llm"]
 
@@ -31,20 +31,31 @@ _runnables: dict = {}
 def _get_runnables():
     if _runnables:
         return _runnables
-    key = os.environ.get("NVIDIA_API_KEY")
-    if not key:
+    from frisk.ai.providers import get_provider
+    prov = get_provider("nvidia")
+    if not prov.available():
         return None
     try:
-        from langchain_openai import ChatOpenAI
-        llm = ChatOpenAI(model=_LLM["nvidia_model"], base_url=_LLM["nvidia_base_url"],
-                         api_key=key, temperature=_LLM["temperature"], max_tokens=_LLM["max_tokens"],
-                         timeout=_LLM["timeout_s"])
+        llm = prov.chat_model()             # LangChain chat model from the provider boundary
+        if llm is None:
+            return None
         _runnables["source"] = llm.with_structured_output(SourceFinding, method="json_mode")
         _runnables["synth"] = llm.with_structured_output(RiskFinding, method="json_mode")
         _runnables["verdict"] = llm.with_structured_output(Verdict, method="json_mode")
     except Exception:
         return None
     return _runnables
+
+
+def _invoke_retry(runnable, prompt, tries=3):
+    """Retry structured invoke on transient API errors OR occasional bad-JSON parse failures."""
+    last = None
+    for _ in range(tries):
+        try:
+            return runnable.invoke(prompt)
+        except Exception as e:
+            last = e
+    raise last
 
 
 # --------------------------------------------------------------------------- per-domain feature text
@@ -91,7 +102,7 @@ def _analyst(domain: str, text_fn):
     """Build a domain-analyst node; each is one structured LLM call, degrading on error."""
     def node(state: RiskState):
         try:
-            r = _get_runnables()["source"].invoke(
+            r = _invoke_retry(_get_runnables()["source"],
                 f"You are an AML {domain} analyst. Assess ONLY the {domain} risk from the facts below and "
                 f"respond in JSON with keys domain,risk_level(low|medium|high),signals(list),note. "
                 f"Set domain='{domain}'. Be calibrated: rate LOW when no specific red flag is present. "
@@ -110,7 +121,7 @@ def synthesize(state: RiskState):
     findings = state.get("source_findings", [])
     summary = "; ".join(f"[{f['domain']}={f['risk_level']}] {f['note']}" for f in findings)
     try:
-        r = _get_runnables()["synth"].invoke(
+        r = _invoke_retry(_get_runnables()["synth"],
             "You are a senior AML analyst. Correlate the three domain assessments below into ONE overall "
             "money-laundering risk view. Weigh how signals REINFORCE across domains. Respond in JSON with keys "
             "customer_id,score(0-100),band,rationale,key_signals(list).\n\n"
@@ -127,7 +138,7 @@ def verify(state: RiskState):
     findings = state.get("source_findings", [])
     summary = "; ".join(f"[{f['domain']}={f['risk_level']}] {f['note']}" for f in findings)
     try:
-        r = _get_runnables()["verdict"].invoke(
+        r = _invoke_retry(_get_runnables()["verdict"],
             "You are a compliance QA reviewer. Adversarially check whether the SYNTHESIS is justified by the "
             "domain evidence. If the score is too high or too low given the evidence, correct it. Respond in JSON "
             "with keys consistent(bool),adjusted_score(0-100),note.\n\n"
@@ -203,9 +214,9 @@ def assess_multistep(dossier, rules_result) -> tuple[RiskFinding, dict]:
 
 
 if __name__ == "__main__":
-    from models import load_dossiers
-    from rules import score_customer
-    ds = load_dossiers(os.path.join(os.path.dirname(__file__), "..", "data", "dossiers.json"))
+    from frisk.core.models import load_dossiers
+    from frisk.core.rules import score_customer
+    ds = load_dossiers()
     for d in (ds[18], ds[0]):  # a critical one and a clean one
         rr = score_customer(d)
         f, detail = assess_multistep(d, rr)

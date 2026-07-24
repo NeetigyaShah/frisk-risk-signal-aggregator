@@ -1,13 +1,13 @@
 """Tests for the scale layer: gating policy, store round-trip, and gated auto-clear."""
 import os
 
-import engine
-import pipeline
-import rules
-import store
-from models import load_dossiers
+from frisk.core import engine
+from frisk.pipeline import batch as pipeline
+from frisk.core import rules
+from frisk.data import store
+from frisk.core.models import load_dossiers
 
-DATA = os.path.join(os.path.dirname(__file__), "..", "data", "dossiers.json")
+from frisk.paths import DOSSIERS as DATA
 
 
 def test_gating_skips_llm_on_decisive_bands():

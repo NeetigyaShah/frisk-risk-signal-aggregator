@@ -14,7 +14,7 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator
 
-from config import CONFIG
+from frisk.config import CONFIG
 
 # whitelist of signal codes a query may reference
 SIGNAL_CODES = set(CONFIG["weights"]) | {"SANCTIONS_MATCH", "PEP_HIGH_GEO"}
@@ -143,9 +143,9 @@ def explain(spec: FilterSpec) -> str:
 
 if __name__ == "__main__":
     import os as _os
-    from models import load_dossiers
-    from engine import assess_all
-    ds = load_dossiers(_os.path.join(_os.path.dirname(__file__), "..", "data", "dossiers.json"))
+    from frisk.core.models import load_dossiers
+    from frisk.core.engine import assess_all
+    ds = load_dossiers()
     decs = assess_all(ds, persist=False)
     for q in ["show high-risk customers with a sanctions hit",
               "everything escalated",

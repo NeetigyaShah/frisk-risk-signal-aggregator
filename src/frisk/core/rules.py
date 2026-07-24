@@ -13,8 +13,8 @@ from datetime import date
 from decimal import Decimal
 from typing import Optional
 
-from config import CONFIG, band_for
-from models import Dossier, Finding, RiskResult
+from frisk.config import CONFIG, band_for
+from frisk.core.models import Dossier, Finding, RiskResult
 
 W = CONFIG["weights"]
 
@@ -287,9 +287,9 @@ def score_customer(d: Dossier) -> RiskResult:
 
 if __name__ == "__main__":
     # quick manual view over the generated dataset
-    from models import load_dossiers
+    from frisk.core.models import load_dossiers
     import os
-    ds = load_dossiers(os.path.join(os.path.dirname(__file__), "..", "data", "dossiers.json"))
+    ds = load_dossiers()
     for d in ds:
         r = score_customer(d)
         exp = d.meta.get("expected_band")

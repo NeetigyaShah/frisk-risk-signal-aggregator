@@ -12,10 +12,10 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
 
-import engine
-import store
-from config import CONFIG
-from rules import score_customer
+from frisk.core import engine
+from frisk.data import store
+from frisk.config import CONFIG
+from frisk.core.rules import score_customer
 
 
 def should_crosscheck(rr, policy: str) -> bool:
@@ -46,9 +46,9 @@ if __name__ == "__main__":
     # throughput probe: prove the deterministic layer scales to millions/day on one core
     import os
     import time
-    from models import load_dossiers
+    from frisk.core.models import load_dossiers
 
-    base = load_dossiers(os.path.join(os.path.dirname(__file__), "..", "data", "dossiers.json"))
+    base = load_dossiers()
     N = 20000
     big = [base[i % len(base)] for i in range(N)]  # rules are pure -> safe to reuse objects
 

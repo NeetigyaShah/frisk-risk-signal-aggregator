@@ -1,0 +1,2 @@
+[console_scripts]
+frisk = frisk.cli:main

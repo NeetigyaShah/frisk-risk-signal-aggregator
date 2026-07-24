@@ -9,16 +9,16 @@ from decimal import Decimal
 
 import pytest
 
-import audit
-import engine
-import llm
-import rules
-from config import CONFIG
-from models import Dossier, Txn, RiskFinding, load_dossiers
+from frisk.data import audit
+from frisk.core import engine
+from frisk.ai import crosscheck as llm
+from frisk.core import rules
+from frisk.config import CONFIG
+from frisk.core.models import Dossier, Txn, RiskFinding, load_dossiers
 
 REF = date(2026, 7, 24)
 FLOOR = CONFIG["reporting_floor"]
-DATA = os.path.join(os.path.dirname(__file__), "..", "data", "dossiers.json")
+from frisk.paths import DOSSIERS as DATA
 
 
 def _d(days_ago):
@@ -95,12 +95,12 @@ def test_kill_switch_never_auto_clears_even_if_model_disagrees(monkeypatch):
 
 def test_llm_failure_falls_back_to_rules_only(monkeypatch):
     class Boom:
-        class models:
-            @staticmethod
-            def generate_content(**_):
-                raise RuntimeError("api down")
-    monkeypatch.setattr(llm, "_clients", {"gemini": Boom()})
-    monkeypatch.setitem(llm._LLM, "provider", "gemini")
+        def available(self):
+            return True
+        def complete(self, *a, **k):
+            raise RuntimeError("api down")
+    monkeypatch.setattr(llm, "get_provider", lambda *a, **k: Boom())
+    monkeypatch.setitem(llm._LLM, "multi_step", False)  # exercise the single-call cascade
     monkeypatch.setenv("LLM_MODE", "auto")
     d = _dossier()
     finding, meta = llm.crosscheck(d, rules.score_customer(d))
@@ -136,11 +136,7 @@ def test_missing_data_never_auto_clears():
 # --------------------------------------------------------------------------- determinism
 
 def test_generator_is_deterministic():
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "generate", os.path.join(os.path.dirname(__file__), "..", "data", "generate.py"))
-    gen = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(gen)
+    import frisk.data.generate as gen
     assert gen.to_json(gen.generate()) == gen.to_json(gen.generate())
 
 

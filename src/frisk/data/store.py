@@ -11,9 +11,9 @@ import os
 import sqlite3
 from datetime import datetime, timezone
 
-from config import CONFIG
+from frisk.config import CONFIG
 
-DB = os.path.join(os.path.dirname(__file__), "..", CONFIG["scale"]["db_path"])
+from frisk.paths import DECISIONS_DB as DB
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS decisions(

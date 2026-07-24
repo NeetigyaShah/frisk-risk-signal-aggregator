@@ -17,14 +17,13 @@ from decimal import Decimal
 import numpy as np
 from faker import Faker
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from config import CONFIG                      # noqa: E402
-from models import Dossier, Txn, dumps          # noqa: E402
+from frisk.config import CONFIG                      # noqa: E402
+from frisk.core.models import Dossier, Txn, dumps          # noqa: E402
 
 SEED = CONFIG["seed"]
 FLOOR = CONFIG["reporting_floor"]
 REF_DATE = date(2026, 7, 24)          # fixed anchor -> deterministic dates
-OUT = os.path.join(os.path.dirname(__file__), "dossiers.json")
+from frisk.paths import DOSSIERS as OUT
 
 fake = Faker("en_GB")
 

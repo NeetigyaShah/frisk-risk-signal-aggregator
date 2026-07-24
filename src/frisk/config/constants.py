@@ -1,19 +1,12 @@
-"""Single source of truth for all tunable knobs.
+"""Domain tuning knob — the calibratable risk model.
 
-Everything calibratable — weights, floors, windows, band cutoffs, routing thresholds —
-lives in CONFIG. No magic numbers anywhere else. This is what a real compliance team
-recalibrates; keeping it in one auditable place is the whole point.
+Weights, floors, windows, band cutoffs, routing thresholds, reference lists. No magic numbers
+anywhere else in the codebase. Infra/env-configurable settings (providers, keys, scale) live in
+`settings.py`; this module is pure domain policy a compliance team recalibrates.
 """
 from __future__ import annotations
 
-import os
 from decimal import Decimal
-
-try:  # load .env (API keys) so any entrypoint — scripts, streamlit, tests — sees them
-    from dotenv import load_dotenv
-    load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
-except Exception:
-    pass
 
 CONFIG = {
     "seed": 42,
@@ -67,33 +60,6 @@ CONFIG = {
     "agreement_tolerance": 20,
     # rules-only / degraded path can never exceed this confidence and never auto-clears
     "degraded_confidence_cap": 0.49,
-
-    # --- LLM cross-check ---
-    "llm": {
-        # mode: "auto" -> real model if a provider key is set, else deterministic simulated
-        #       second opinion (so the demo shows confidence + auto-clear offline);
-        #       "off" -> pure rules-only (degraded, never auto-clears).
-        "mode": "auto",
-        "provider": "nvidia",                       # nvidia | gemini | anthropic
-        "multi_step": True,                         # True -> LangGraph 5-step orchestration; False -> single call
-        "nvidia_model": "nvidia/nemotron-3-ultra-550b-a55b",
-        "nvidia_base_url": "https://integrate.api.nvidia.com/v1",
-        "gemini_model": "gemini-2.5-flash-lite",    # fast, high free-tier quota
-        "model": "claude-haiku-4-5-20251001",       # anthropic model
-        "temperature": 0,
-        "max_tokens": 8192,
-        "max_retries": 3,
-        "timeout_s": 60,
-    },
-
-    # --- scale / throughput ---
-    "scale": {
-        "workers": 16,                 # parallel workers for I/O-bound LLM cross-checks
-        "crosscheck_policy": "all",    # "all" -> LLM on everyone; "gated" -> LLM only on the uncertain MED band
-        "gated_confidence": 0.85,      # confidence when rules are policy-authoritative and the LLM is skipped by the gate
-        "db_path": "data/decisions.db",  # scalable read store the dashboard queries instead of re-scoring
-    },
-    # Observability: set LANGSMITH_TRACING=true + LANGSMITH_API_KEY to stream traces to LangSmith (opt-in, no-op otherwise).
 }
 
 

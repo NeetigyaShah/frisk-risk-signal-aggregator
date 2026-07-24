@@ -12,11 +12,11 @@ import json
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 
-import audit
-from config import CONFIG
-from llm import crosscheck, rules_only_finding
-from models import AuditRecord, Disposition, Dossier
-from rules import score_customer
+from frisk.data import audit
+from frisk.config import CONFIG
+from frisk.ai.crosscheck import crosscheck, rules_only_finding
+from frisk.core.models import AuditRecord, Disposition, Dossier
+from frisk.core.rules import score_customer
 
 HARD = set(CONFIG["hard_escalate"])
 RT = CONFIG["routing"]
@@ -146,10 +146,10 @@ def log_analyst_action(customer_id: str, action: str, actor: str, rationale: str
 if __name__ == "__main__":
     import os
     from collections import Counter
-    from models import load_dossiers
+    from frisk.core.models import load_dossiers
 
     audit.reset()
-    ds = load_dossiers(os.path.join(os.path.dirname(__file__), "..", "data", "dossiers.json"))
+    ds = load_dossiers()
     decisions = assess_all(ds)
     dist = Counter(dec.action for dec in decisions)
     for dec in sorted(decisions, key=lambda x: -x.score):

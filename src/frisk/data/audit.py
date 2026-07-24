@@ -12,9 +12,9 @@ import json
 import os
 from dataclasses import asdict
 
-from models import AuditRecord
+from frisk.core.models import AuditRecord
 
-LOG = os.path.join(os.path.dirname(__file__), "..", "data", "audit_log.jsonl")
+from frisk.paths import AUDIT_LOG as LOG
 
 
 def append(rec: AuditRecord) -> None:
