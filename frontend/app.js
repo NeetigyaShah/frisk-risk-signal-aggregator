@@ -1,431 +1,487 @@
-// ---------- Frisk frontend: calls the backend API, renders the views ----------
-const api = async (p, opts) => (await fetch(p, opts)).json();
+/* ============================================================
+   Frisk frontend — vanilla JS, no build step.
+   Views: dashboard · review · ingest · audit  (+ case drawer, ⌘K palette)
+   ============================================================ */
+const api   = async (p, o) => (await fetch(p, o)).json();
 const jpost = (p, body) => api(p, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
-const $ = id => document.getElementById(id);
-const esc = s => (s??'').toString().replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const $     = id => document.getElementById(id);
+const esc   = s => (s ?? '').toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const el    = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content; };
 
 const RISK = {LOW:'#22c55e', MED:'#f59e0b', HIGH:'#ef4444'};
-const ACT = {AUTO_CLEAR:['🟢','Auto-clear','#22c55e'], REVIEW:['🟡','Review','#f59e0b'],
-             ESCALATE:['🔴','Escalate','#ef4444'], PENDING_REVIEW:['🟠','Human review','#f97316']};
-const riskColor = b => RISK[b] || '#94a3b8';
+const ACT  = {AUTO_CLEAR:['●','Auto-clear','#22c55e'], REVIEW:['●','Review','#f59e0b'],
+              ESCALATE:['●','Escalate','#ef4444'], PENDING_REVIEW:['●','Human review','#f97316'], ERROR:['●','Error','#71717a']};
+const LVL  = {low:'#22c55e', medium:'#f59e0b', high:'#ef4444'};
+
+const bandUp    = b => ({low:'LOW', medium:'MED', high:'HIGH'}[String(b).toLowerCase()] || String(b).toUpperCase());
+const riskColor = b => RISK[bandUp(b)] || '#a1a1aa';
 const gauge = (score, band) => {
   const c = riskColor(band);
-  return `<div class="gauge shrink-0" style="background:conic-gradient(${c} ${score*3.6}deg,#1e293b 0)">
-    <div style="position:absolute;inset:5px;border-radius:50%;background:#111826;display:grid;place-items:center;color:${c}">${score}</div></div>`;
+  return `<div class="gauge" style="background:conic-gradient(${c} ${score*3.6}deg,#232326 0)">
+    <span style="color:${c}">${score}</span></div>`;
 };
-const actionBadge = a => { const [i,l,c]=ACT[a]||['⚪',a,'#94a3b8']; return `<span class="badge" style="background:${c}22;color:${c}">${i} ${l}</span>`; };
+const actionBadge = a => { const [i,l,c] = ACT[a] || ['●', a, '#a1a1aa'];
+  return `<span class="badge" style="background:${c}1f;color:${c}">${i} ${l}</span>`; };
 const confBar = c => `<div class="bar"><i style="width:${Math.round(c*100)}%;background:${c<0.6?'#f97316':'#22c55e'}"></i></div>`;
-// Plain-language meaning of each AML typology (shown as tooltips + in the case drawer).
-const PATTERN_DEFS = {
-  'Structuring':  'Many cash deposits just under the reporting floor, clustered in a short window and together exceeding it — splitting one big deposit to dodge reporting ("smurfing").',
-  'Layering':     'Rapid onward transfers to several distinct counterparties in a short window — moving money through hops to hide its origin.',
-  'Round-Trip':   'Money goes out, then a ~matching amount returns via a different counterparty within a window — circular flow to fake legitimacy.',
-  'Dormant-Spike':'A long inactive gap, then a sudden burst of large transactions — an account waking up abnormally.',
-};
-const patternDef = label => PATTERN_DEFS[label] || 'Transaction-pattern anomaly flagged by the typology detectors.';
-const patternChips = ps => (ps||[]).slice(0,3).map(p=>`<span class="chip shrink-0" title="${esc(patternDef(p.label))}" style="background:#ef444422;color:#fca5a5;cursor:help">⚠ ${esc(p.label)}</span>`).join('');
-const tile = (label,val,color) => `<div class="card px-4 py-3"><div class="text-2xl font-extrabold" style="color:${color||'#e8edf7'}">${val}</div><div class="text-xs text-muted">${label}</div></div>`;
 
-// ---------- router ----------
+const PATTERN_DEFS = {
+  'Structuring':   'Many cash deposits just under the reporting floor, clustered in a short window and together exceeding it — splitting one big deposit to dodge reporting ("smurfing").',
+  'Layering':      'Rapid onward transfers to several distinct counterparties in a short window — moving money through hops to hide its origin.',
+  'Round-Trip':    'Money goes out, then a ~matching amount returns via a different counterparty within a window — circular flow to fake legitimacy.',
+  'Dormant-Spike': 'A long inactive gap, then a sudden burst of large transactions — an account waking up abnormally.',
+};
+const patternDef = l => PATTERN_DEFS[l] || 'Transaction-pattern candidate surfaced by the advisory scan.';
+const patternChips = ps => (ps||[]).slice(0,3).map(p =>
+  `<span class="chip" title="${esc(patternDef(p.label))}" style="background:#ef44441f;color:#fca5a5;cursor:help">⚠ ${esc(p.label)}</span>`).join('');
+
+const emptyState = (ico, title, body) =>
+  `<div class="empty"><div class="e-ico">${ico}</div><h3>${title}</h3><p>${body}</p></div>`;
+
+/* ───────────── shell chrome ───────────── */
+function toggleRail(){
+  document.body.classList.toggle('rail');
+  localStorage.setItem('frisk_rail', document.body.classList.contains('rail') ? '1' : '');
+  Object.values(_CHARTS).forEach(c => c && c.resize());
+}
+if (localStorage.getItem('frisk_rail')) document.body.classList.add('rail');
+
 let STATS = {};
 async function refreshStats(){
   STATS = await api('/api/stats');
-  $('broker').innerHTML = `broker: <b class="${STATS.broker==='redis'?'text-low':'text-med'}">${STATS.broker||'…'}</b>`;
-  if(STATS.warming){
+  $('broker').textContent = 'broker: ' + (STATS.broker || '…');
+  if (STATS.warming){
     $('rqcount').textContent = '';
     $('topstats').innerHTML = `<span class="chip">⚙ scoring ${STATS.done||0}/${STATS.total||20}…</span>`;
     return;
   }
   $('rqcount').textContent = STATS.review_queue || '';
-  $('topstats').innerHTML = actionBadge('ESCALATE').replace('Escalate',`${STATS.escalate} Escalate`)
-    + actionBadge('PENDING_REVIEW').replace('Human review',`${STATS.review_queue} Human queue`);
+  $('topstats').innerHTML =
+    `<span class="badge" style="background:#ef44441f;color:#ef4444">● ${STATS.escalate} Escalate</span>
+     <span class="badge" style="background:#f973161f;color:#f97316">● ${STATS.review_queue} Human queue</span>`;
 }
-function showWarming(view){
-  const pct = STATS.total ? Math.round((STATS.done/STATS.total)*100) : 0;
-  $('content').innerHTML = `<div class="card p-8 mt-8 max-w-xl mx-auto text-center fade">
-    <div class="text-4xl mb-3">⚙️</div>
-    <div class="text-lg font-bold mb-1">Scoring customers live</div>
-    <div class="text-sm text-muted mb-5">Each customer runs the full agentic pipeline — memory → 3 parallel specialists → the tool-calling orchestrator. This happens once, on first start.</div>
-    <div class="bar mb-2" style="height:10px"><i style="width:${pct}%;background:linear-gradient(90deg,#3b82f6,#6366f1);transition:width .5s"></i></div>
-    <div class="text-sm text-muted">${STATS.done||0} / ${STATS.total||20} scored</div>
-    <div class="text-[11px] text-faint mt-3">Live LLM — the ranked queue appears automatically when it's done.</div></div>`;
-  clearTimeout(window._warmT);
-  window._warmT = setTimeout(()=>go(view), 2500);
-}
-const VIEWS = {dashboard:renderDashboard, review:renderReview, ingest:renderIngest, audit:renderAudit};
-const TITLES = {dashboard:['Dashboard','Prioritised, risk-scored triage queue'],
-  review:['Human Review Queue','Low-confidence cases the model routed to a person'],
-  ingest:['Ingest / Upload','Score any subset — or every profile — in parallel, review when they land'],
-  audit:['Audit Trail','Append-only record of every decision']};
+
+const VIEWS  = {dashboard:renderDashboard, review:renderReview, ingest:renderIngest, audit:renderAudit};
+const TITLES = {
+  dashboard:['Dashboard','Prioritised, risk-scored triage queue'],
+  review:['Review Queue','Low-confidence cases the agent routed to a person'],
+  ingest:['Ingest / Upload','Score any subset — or every profile — in parallel'],
+  audit:['Audit Trail','Append-only record of every decision'],
+};
 async function go(view){
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
-  $('title').textContent = TITLES[view][0]; $('subtitle').textContent = TITLES[view][1];
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+  $('title').textContent = TITLES[view][0];
+  $('subtitle').textContent = TITLES[view][1];
   await refreshStats();
-  if(STATS.warming){ showWarming(view); return; }
-  $('content').innerHTML = '<div class="text-muted">Loading…</div>';
+  if (STATS.warming) return showWarming(view);
   await VIEWS[view]();
 }
-document.getElementById('nav').addEventListener('click', e => { const a=e.target.closest('.nav-item'); if(a) go(a.dataset.view); });
+$('nav').addEventListener('click', e => { const a = e.target.closest('.nav-item'); if (a) go(a.dataset.view); });
 
-// ---------- sidebar rail (ported from 21st.dev "Dashboard Sidebar") ----------
-function toggleSidebar(){
-  document.body.classList.toggle('rail');
-  localStorage.setItem('frisk_rail', document.body.classList.contains('rail') ? '1' : '');
+function showWarming(view){
+  const pct = STATS.total ? Math.round((STATS.done / STATS.total) * 100) : 0;
+  $('content').innerHTML = `<div class="card card-pad fade" style="max-width:520px;margin:8vh auto;text-align:center">
+    <div style="font-size:34px;margin-bottom:10px">⚙️</div>
+    <h3 style="font-size:17px;font-weight:800;margin-bottom:6px">Scoring customers live</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Each customer runs the full agentic pipeline — memory → 3 parallel specialists → the tool-calling orchestrator. This happens once, on first start.</p>
+    <div class="bar" style="height:9px"><i style="width:${pct}%;background:linear-gradient(90deg,#a1a1aa,#e4e4e7);transition:width .5s"></i></div>
+    <p style="color:var(--muted);font-size:13px;margin-top:10px">${STATS.done||0} / ${STATS.total||20} scored</p></div>`;
+  clearTimeout(window._warmT);
+  window._warmT = setTimeout(() => go(view), 2500);
 }
-if(localStorage.getItem('frisk_rail')) document.body.classList.add('rail');
 
-// ---------- ⌘K command palette ----------
-let _PAL = [];
-async function openPalette(){
-  $('palette').classList.remove('hidden'); $('pq').value=''; $('pq').focus();
-  try { _PAL = await api('/api/queue'); } catch { _PAL = []; }
-  paletteFilter();
-}
-const closePalette = () => $('palette').classList.add('hidden');
-function paletteFilter(){
-  const q = ($('pq').value||'').toLowerCase();
-  const hits = _PAL.filter(d => !q || [d.id,d.name,d.occupation,d.country].join(' ').toLowerCase().includes(q)).slice(0,8);
-  $('presults').innerHTML = hits.length ? hits.map(d=>`
-    <div class="prow" onclick="closePalette();openCase('${d.id}')">
-      <span class="badge" style="background:${riskColor(d.band)}22;color:${riskColor(d.band)}">${d.score}</span>
-      <span class="font-medium">${esc(d.name)}</span>
-      <span class="text-faint text-xs">${d.id} · ${esc(d.occupation)}</span>
-      <span class="ml-auto">${actionBadge(d.action)}</span></div>`).join('')
-    : `<div class="text-sm text-faint text-center py-6">No matching customers.</div>`;
-}
-document.addEventListener('keydown', e => {
-  if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); openPalette(); }
-  if(e.key==='Escape'){ closePalette(); closeDrawer(); }
+/* ───────────── charts ───────────── */
+Chart.defaults.color = '#a1a1aa';
+Chart.defaults.font.family = 'Inter';
+Chart.defaults.borderColor = '#232326';
+Chart.defaults.plugins.legend.display = false;
+const _CHARTS = {};
+const chart = (id, cfg) => { _CHARTS[id]?.destroy(); if ($(id)) _CHARTS[id] = new Chart($(id), cfg); };
+const barChart = (id, labels, data, colors) => chart(id, {
+  type:'bar',
+  data:{labels, datasets:[{data, backgroundColor:colors, borderRadius:6, maxBarThickness:44}]},
+  options:{responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true}},
+    scales:{x:{grid:{display:false}, ticks:{font:{size:11}}},
+            y:{beginAtZero:true, ticks:{precision:0, font:{size:10}}, grid:{color:'#232326'}}}},
 });
 
-// ---------- scroll-reveal (ported from "Advanced Stats" TimelineAnimation) ----------
+/* ───────────── scroll reveal + count-up ───────────── */
 function revealAll(){
-  const els = document.querySelectorAll('.reveal:not(.in)');
-  const io = new IntersectionObserver((entries,obs)=>{
-    entries.forEach(en=>{ if(en.isIntersecting){
-      const d = +(en.target.dataset.delay||0);
-      setTimeout(()=>en.target.classList.add('in'), d);
-      obs.unobserve(en.target);
-    }});
-  }, {threshold:.12});
-  els.forEach(el=>io.observe(el));
+  const io = new IntersectionObserver((ents, obs) => ents.forEach(e => {
+    if (e.isIntersecting){ setTimeout(() => e.target.classList.add('in'), +(e.target.dataset.delay||0)); obs.unobserve(e.target); }
+  }), {threshold:.1});
+  document.querySelectorAll('.reveal:not(.in)').forEach(n => io.observe(n));
 }
-// count-up for KPI numbers
-function countUp(el, to, ms=700){
+function countUp(node, to, ms = 700){
   const t0 = performance.now();
-  const step = now => { const p = Math.min(1,(now-t0)/ms);
-    el.textContent = Math.round(to * (1-Math.pow(1-p,3)));
-    if(p<1) requestAnimationFrame(step); };
-  requestAnimationFrame(step);
+  const tick = now => { const p = Math.min(1, (now - t0)/ms);
+    node.textContent = Math.round(to * (1 - Math.pow(1-p, 3)));
+    if (p < 1) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
 }
 
-// ---------- charts ----------
-Chart.defaults.color = '#94a3b8'; Chart.defaults.font.family = 'Inter';
-Chart.defaults.borderColor = '#1e293b'; Chart.defaults.plugins.legend.display = false;
-const _CHARTS = {};
-function chart(id, cfg){ _CHARTS[id]?.destroy(); _CHARTS[id] = new Chart($(id), cfg); }
-const noAxes = {scales:{x:{grid:{display:false}},y:{display:false,grid:{display:false}}}};
-function bar(id, labels, data, colors){
-  chart(id, {type:'bar', data:{labels, datasets:[{data, backgroundColor:colors, borderRadius:5, maxBarThickness:46}]},
-    options:{responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{beginAtZero:true,ticks:{precision:0,font:{size:10}},grid:{color:'#1e293b'}}}}});
-}
-async function renderCharts(queue){
-  const a = await api('/api/analytics');
-  // hero: score distribution as a gradient area chart (Advanced Stats ClippedAreaChart)
-  if($('chDist') && queue){
-    const sorted = queue.slice().sort((x,y)=>x.score-y.score);
-    const cv = $('chDist').getContext('2d');
-    const g = cv.createLinearGradient(0,0,0,186);
-    g.addColorStop(0,'rgba(59,130,246,.45)'); g.addColorStop(1,'rgba(59,130,246,0)');
-    chart('chDist', {type:'line',
-      data:{labels:sorted.map(d=>d.id.replace(/^\w+_/,'#')),
-        datasets:[{data:sorted.map(d=>d.score), fill:true, backgroundColor:g, borderColor:'#6366f1',
-          borderWidth:2, tension:.4, pointRadius:3,
-          pointBackgroundColor:sorted.map(d=>riskColor(d.band)), pointBorderColor:'#111826', pointBorderWidth:2}]},
-      options:{responsive:true, maintainAspectRatio:false, animation:{duration:900},
-        plugins:{tooltip:{callbacks:{title:i=>sorted[i[0].dataIndex].name,
-          label:i=>`score ${i.raw} · ${sorted[i.dataIndex].action}`}}},
-        scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#475569'}},
-          y:{min:0,max:100,grid:{color:'#1e293b'},ticks:{stepSize:25,font:{size:10}}}}}});
-  }
-  bar('chBands', ['Low','Medium','High'], [a.bands.LOW,a.bands.MED,a.bands.HIGH], ['#22c55e','#f59e0b','#ef4444']);
-  const A = a.actions;
-  chart('chActions', {type:'doughnut', cutout:'62%',
-    data:{labels:['Auto-clear','Review','Escalate','Human queue'],
-      datasets:[{data:[A.AUTO_CLEAR,A.REVIEW,A.ESCALATE,A.PENDING_REVIEW],
-        backgroundColor:['#22c55e','#f59e0b','#ef4444','#f97316'], borderColor:'#111826', borderWidth:2}]},
-    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'right',labels:{boxWidth:10,font:{size:11}}}}}});
-  const pl = Object.keys(a.patterns), pv = Object.values(a.patterns);
-  if(pl.length) bar('chPats', pl, pv, pl.map(()=>'#6366f1'));
-  else $('chPats').closest('.card').innerHTML = '<div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns</div><div class="text-sm text-faint py-8 text-center">No typology anomalies in the population.</div>';
-}
-
-// ---------- Dashboard ----------
+/* ───────────── Dashboard ───────────── */
 async function renderDashboard(){
-  const q = await api('/api/queue');
-  // hero row: big score-distribution chart + accent "coverage" card  (Advanced Stats layout)
-  const hi = q.filter(d=>d.band==='HIGH').length, esc_ = STATS.escalate;
-  const autoPct = STATS.total ? Math.round(STATS.auto_clear/STATS.total*100) : 0;
-  const hero = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-    <div class="card-accent p-6 lg:col-span-2 reveal" data-delay="0">
-      <div class="flex items-start justify-between mb-1">
-        <div><div class="text-[10px] font-bold uppercase tracking-[.18em] text-faint mb-1">Population risk profile</div>
-          <h3 class="text-lg font-bold tracking-tight">Score distribution across ${STATS.total} customers</h3></div>
-        <span class="chip">${hi} high-risk</span>
-      </div>
-      <div style="height:186px" class="mt-3"><canvas id="chDist"></canvas></div>
-    </div>
-    <div class="card-accent p-6 flex flex-col justify-between reveal" data-delay="90">
-      <div><div class="text-[10px] font-bold uppercase tracking-[.18em] text-faint mb-2">Analyst load saved</div>
-        <h4 class="text-xl font-bold tracking-tight">Auto-cleared without review</h4></div>
-      <div class="mt-6">
-        <div class="flex justify-between items-end mb-2">
-          <span class="text-4xl font-black tracking-tighter text-low"><span id="apct">0</span>%</span>
-          <span class="text-xs text-faint mb-1">${STATS.auto_clear} of ${STATS.total} cases</span></div>
-        <div class="bar" style="height:7px"><i id="apbar" style="width:0%;background:linear-gradient(90deg,#22c55e,#16a34a);transition:width .9s cubic-bezier(.22,1,.36,1)"></i></div>
-        <div class="text-[11px] text-faint mt-3">${esc_} escalated to a senior reviewer · ${STATS.pending_review} sent to the human queue.</div>
-      </div>
-    </div></div>`;
+  const [q, a] = await Promise.all([api('/api/queue'), api('/api/analytics')]);
+  const autoPct = STATS.total ? Math.round(STATS.auto_clear / STATS.total * 100) : 0;
+  const high = q.filter(d => bandUp(d.band) === 'HIGH').length;
 
-  // KPI row with count-up + hover accent (Advanced Stats KPI cards)
-  const K = [
-    {label:'Total customers', val:STATS.total,        color:'#e8edf7', tone:''},
-    {label:'Escalate',        val:STATS.escalate,     color:'#ef4444', tone:'high'},
-    {label:'Review',          val:STATS.review,       color:'#f59e0b', tone:'med'},
-    {label:'Auto-cleared',    val:STATS.auto_clear,   color:'#22c55e', tone:'low'},
-    {label:'Human queue',     val:STATS.pending_review,color:'#f97316',tone:'review'},
+  const KPI = [
+    {label:'Total customers', v:STATS.total,          c:'var(--ink)'},
+    {label:'Escalate',        v:STATS.escalate,       c:'#ef4444'},
+    {label:'Review',          v:STATS.review,         c:'#f59e0b'},
+    {label:'Auto-cleared',    v:STATS.auto_clear,     c:'#22c55e'},
+    {label:'Human queue',     v:STATS.pending_review, c:'#f97316'},
   ];
-  const tiles = `<div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
-    ${K.map((k,i)=>`<div class="kpi reveal" data-delay="${120+i*70}" style="--c:${k.color}">
-      <div class="k-label">${k.label}</div>
-      <div class="flex items-baseline justify-between">
-        <div class="k-value" style="color:${k.color}"><span class="cu" data-to="${k.val}">0</span></div>
-        ${k.tone?`<span class="k-delta" style="background:${k.color}18;color:${k.color}">${STATS.total?Math.round(k.val/STATS.total*100):0}%</span>`:''}
-      </div></div>`).join('')}
-  </div>`;
 
-  const charts = `<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-    <div class="card p-4 reveal" data-delay="0"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Risk bands</div><div style="height:150px"><canvas id="chBands"></canvas></div></div>
-    <div class="card p-4 reveal" data-delay="80"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Disposition</div><div style="height:150px"><canvas id="chActions"></canvas></div></div>
-    <div class="card p-4 reveal" data-delay="160"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns <span title="AML transaction-pattern candidates the agent surfaces via its advisory scan — the LLM decides if each is real." style="cursor:help">ⓘ</span></div><div style="height:150px"><canvas id="chPats"></canvas></div></div>
-  </div>
-  <div class="card p-3 mb-6 text-xs text-muted grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 reveal">
-    ${Object.entries(PATTERN_DEFS).map(([k,v])=>`<div><b class="text-ink">${k}:</b> ${esc(v)}</div>`).join('')}
-  </div>`;
-  const rows = q.map((d,i)=>`
-    <div class="card p-4 flex items-center gap-4 cursor-pointer fade" onclick="openCase('${d.id}')">
-      <div class="text-faint text-sm w-7 text-center font-semibold">#${i+1}</div>
-      ${gauge(d.score,d.band)}
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 flex-wrap min-w-0">
-          <span class="font-semibold text-[15px]">${esc(d.name)}</span>
-          <span class="chip">${esc(d.occupation)}</span><span class="chip">${esc(d.country)}</span>
-          ${actionBadge(d.action)}${patternChips(d.patterns)}
-        </div>
-        <div class="text-sm text-muted line-clamp-2 mt-1.5">${esc(d.summary)}</div>
-        ${(d.key_signals&&d.key_signals.length)?`<div class="flex items-center gap-1.5 mt-2 flex-wrap">${
-          d.key_signals.slice(0,2).map(s=>`<span class="badge" style="background:#6366f118;color:#c4b5fd">${esc(s)}</span>`).join('')
-        }${d.key_signals.length>2?`<span class="chip text-faint">+${d.key_signals.length-2} more</span>`:''}</div>`:''}
+  $('content').innerHTML = `
+    <div class="grid grid-hero">
+      <div class="card-accent card-pad reveal">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px">
+          <div><p class="section-label" style="margin:0 0 4px">Population risk profile</p>
+            <h3 style="font-size:17px;font-weight:800;letter-spacing:-.02em">Score distribution across ${STATS.total} customers</h3></div>
+          <span class="chip">${high} high-risk</span></div>
+        <div style="height:190px;margin-top:12px"><canvas id="chDist"></canvas></div>
       </div>
-      <div class="w-24 shrink-0 text-right self-start">
-        <div class="text-[10px] uppercase tracking-wider text-faint mb-1">confidence</div>
-        <div class="text-sm font-bold mb-1.5" style="color:${d.confidence<0.6?'#f97316':'#22c55e'}">${d.confidence.toFixed(2)}</div>
-        ${confBar(d.confidence)}
+      <div class="card-accent card-pad reveal" data-delay="90">
+        <p class="section-label" style="margin:0 0 4px">Analyst load saved</p>
+        <h3 style="font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:18px">Auto-cleared without review</h3>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px">
+          <span style="font-size:40px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#22c55e"><span id="apct">0</span>%</span>
+          <span style="font-size:12px;color:var(--faint)">${STATS.auto_clear} of ${STATS.total} cases</span></div>
+        <div class="bar" style="height:8px"><i id="apbar" style="width:0%;background:linear-gradient(90deg,#22c55e,#15803d);transition:width .9s cubic-bezier(.22,1,.36,1)"></i></div>
+        <p style="font-size:12px;color:var(--faint);margin-top:12px;line-height:1.55">
+          ${STATS.escalate} escalated to a senior reviewer · ${STATS.pending_review} sent to the human queue.</p>
       </div>
-    </div>`).join('');
-  $('content').innerHTML = hero + tiles + charts
-    + `<div class="text-xs text-faint mb-2 uppercase tracking-wide">Prioritised risk queue — highest risk first</div><div class="grid gap-3">${rows}</div>`;
-  renderCharts(q);
+    </div>
+
+    <div class="grid grid-kpi" style="margin-top:14px">
+      ${KPI.map((k,i) => `<div class="kpi reveal" data-delay="${80+i*60}">
+        <div class="k-label">${k.label}</div>
+        <div class="k-row"><div class="k-value" style="color:${k.c}"><span class="cu" data-to="${k.v}">0</span></div>
+          ${i ? `<span class="k-delta" style="background:${k.c}1a;color:${k.c}">${STATS.total?Math.round(k.v/STATS.total*100):0}%</span>` : ''}
+        </div></div>`).join('')}
+    </div>
+
+    <div class="grid grid-charts" style="margin-top:14px">
+      <div class="card card-pad reveal"><p class="section-label" style="margin:0 0 10px">Risk bands</p>
+        <div style="height:160px"><canvas id="chBands"></canvas></div></div>
+      <div class="card card-pad reveal" data-delay="70"><p class="section-label" style="margin:0 0 10px">Disposition</p>
+        <div style="height:160px"><canvas id="chActions"></canvas></div></div>
+      <div class="card card-pad reveal" data-delay="140"><p class="section-label" style="margin:0 0 10px">Detected patterns</p>
+        <div style="height:160px"><canvas id="chPats"></canvas></div></div>
+    </div>
+
+    <div class="card card-pad reveal" style="margin-top:14px">
+      <div class="grid grid-2" style="gap:12px 26px">
+        ${Object.entries(PATTERN_DEFS).map(([k,v]) =>
+          `<p style="font-size:12.5px;color:var(--muted);line-height:1.6"><b style="color:var(--ink)">${k}:</b> ${esc(v)}</p>`).join('')}
+      </div></div>
+
+    <p class="section-label">Prioritised risk queue — highest risk first</p>
+    <div class="grid" style="gap:10px">
+      ${q.map((d,i) => `
+        <div class="card qrow fade" onclick="openCase('${d.id}')">
+          <div class="rank">#${i+1}</div>
+          ${gauge(d.score, d.band)}
+          <div class="qmain">
+            <div class="qhead">
+              <span class="qname">${esc(d.name)}</span>
+              <span class="chip">${esc(d.occupation)}</span><span class="chip">${esc(d.country)}</span>
+              ${actionBadge(d.action)}${patternChips(d.patterns)}
+            </div>
+            <p class="qsum">${esc(d.summary)}</p>
+            ${(d.key_signals?.length) ? `<div class="qsig">
+              ${d.key_signals.slice(0,2).map(s => `<span class="chip chip-soft">${esc(s)}</span>`).join('')}
+              ${d.key_signals.length > 2 ? `<span class="chip" style="color:var(--faint)">+${d.key_signals.length-2} more</span>` : ''}
+            </div>` : ''}
+          </div>
+          <div class="qconf">
+            <div class="c-label">Confidence</div>
+            <div class="c-val" style="color:${d.confidence<0.6?'#f97316':'#22c55e'}">${d.confidence.toFixed(2)}</div>
+            ${confBar(d.confidence)}
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  // hero distribution chart
+  const sorted = q.slice().sort((x,y) => x.score - y.score);
+  const ctx = $('chDist').getContext('2d');
+  const grad = ctx.createLinearGradient(0,0,0,190);
+  grad.addColorStop(0,'rgba(228,228,231,.22)'); grad.addColorStop(1,'rgba(228,228,231,0)');
+  chart('chDist', {type:'line',
+    data:{labels:sorted.map(d => d.id.replace(/^[A-Z]+_/,'#')),
+      datasets:[{data:sorted.map(d => d.score), fill:true, backgroundColor:grad, borderColor:'#a1a1aa',
+        borderWidth:2, tension:.4, pointRadius:4, pointHoverRadius:6,
+        pointBackgroundColor:sorted.map(d => riskColor(d.band)), pointBorderColor:'#141416', pointBorderWidth:2}]},
+    options:{responsive:true, maintainAspectRatio:false, animation:{duration:900},
+      plugins:{tooltip:{callbacks:{title:i => sorted[i[0].dataIndex].name,
+        label:i => `score ${i.raw} · ${sorted[i.dataIndex].action}`}}},
+      scales:{x:{grid:{display:false}, ticks:{font:{size:9}, color:'#52525b'}},
+              y:{min:0, max:100, grid:{color:'#232326'}, ticks:{stepSize:25, font:{size:10}}}}}});
+
+  barChart('chBands', ['Low','Medium','High'], [a.bands.LOW, a.bands.MED, a.bands.HIGH], ['#22c55e','#f59e0b','#ef4444']);
+  chart('chActions', {type:'doughnut', data:{labels:['Auto-clear','Review','Escalate','Human queue'],
+      datasets:[{data:[a.actions.AUTO_CLEAR, a.actions.REVIEW, a.actions.ESCALATE, a.actions.PENDING_REVIEW],
+        backgroundColor:['#22c55e','#f59e0b','#ef4444','#f97316'], borderColor:'#141416', borderWidth:2}]},
+    options:{cutout:'62%', responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:true, position:'right', labels:{boxWidth:9, font:{size:11}, padding:9}}}}});
+  const pl = Object.keys(a.patterns);
+  if (pl.length) barChart('chPats', pl, Object.values(a.patterns), pl.map(() => '#71717a'));
+  else $('chPats').closest('.card').innerHTML = `<p class="section-label" style="margin:0 0 10px">Detected patterns</p>
+    <p style="color:var(--faint);font-size:13px;text-align:center;padding:44px 0">No typology candidates in this population.</p>`;
+
   revealAll();
-  document.querySelectorAll('.cu').forEach(el=>countUp(el, +el.dataset.to));
-  setTimeout(()=>{ const b=$('apbar'); if(b) b.style.width = autoPct+'%';
-                   const p=$('apct');  if(p) countUp(p, autoPct, 900); }, 220);
+  document.querySelectorAll('.cu').forEach(n => countUp(n, +n.dataset.to));
+  setTimeout(() => { if ($('apbar')) $('apbar').style.width = autoPct + '%'; if ($('apct')) countUp($('apct'), autoPct, 900); }, 260);
 }
 
-// ---------- Case drawer ----------
+/* ───────────── Case drawer ───────────── */
 async function openCase(cid){
-  const [d, hist] = await Promise.all([api('/api/case/'+cid), api('/api/case/'+cid+'/history').catch(()=>[])]);
-  const lv = {low:'🟢',medium:'🟡',high:'🔴'};
-  const cap = s => (s||'').replace(/^\w/, c=>c.toUpperCase());
-  const ops = d.opinions||[];
-  const opinions = ops.length ? `<div class="grid grid-cols-3 gap-2">${ops.map(s=>`
-     <div class="card p-3"><div class="font-semibold text-sm">${lv[s.risk_level]||'⚪'} ${esc(cap(s.domain))} <span class="text-faint text-xs">${s.tentative_score??''}</span></div>
-       <div class="text-xs text-muted mt-1">${esc(s.note||'')}</div>
-       ${(s.signals&&s.signals.length)?`<div class="mt-1 flex flex-wrap gap-1">${s.signals.slice(0,4).map(x=>`<span class="chip text-[10px]">${esc(x)}</span>`).join('')}</div>`:''}</div>`).join('')}</div>` : '<span class="text-sm text-faint">No specialist opinions.</span>';
-  const trace = d.trace||[];
-  const traceHtml = trace.length ? `<ol class="space-y-1 text-sm">${trace.map(t=>`
-     <li class="flex gap-2 items-start"><span class="text-faint w-6 text-right shrink-0">${(t.step??0)+1}.</span>
-       <span class="chip shrink-0">${esc(t.tool)}</span>
-       <span class="text-muted text-xs truncate">${esc(JSON.stringify(t.args||{}))}</span></li>`).join('')}</ol>` : '<div class="text-sm text-faint">No trace recorded.</div>';
-  const im = d.injected_memory||{};
-  const memHtml = `<div class="flex gap-2 flex-wrap"><span class="chip">history: ${im.history_n??0}</span>
-     <span class="chip">similar cases: ${im.similar_n??0}</span><span class="chip">lessons: ${im.lessons_n??0}</span></div>
-     ${im.history_summary?`<div class="text-xs text-faint mt-2">${esc(im.history_summary)}</div>`:''}`;
-  const histHtml = (hist&&hist.length>1) ? `<div class="text-xs text-muted space-y-1">${hist.map(h=>`
-     <div class="flex gap-2"><span class="text-faint">${(h.ts||'').slice(0,10)}</span>
-       <span>${esc((h.band||'').toUpperCase())} (${h.score})</span>
-       <span class="text-faint">${esc(h.disposition||'')}</span>${h.human_verified?'<span class="text-low">✓ reviewer</span>':''}</div>`).join('')}</div>`
-     : '<div class="text-xs text-faint">First assessment on file — history builds as this customer is re-scored.</div>';
-  const patterns = d.patterns.length ? d.patterns.map(p=>`
-     <div class="mb-3"><div class="flex items-start gap-2"><span class="badge" style="background:#ef444422;color:#fca5a5">⚠ ${esc(p.label)} ${p.strength!=null?`<span class="text-faint">str ${p.strength}</span>`:''}</span>
-       <span class="text-sm text-muted">${esc(p.rationale)}</span></div>
-       <div class="text-xs text-faint mt-1 pl-1 italic">${esc(patternDef(p.label))}</div></div>`).join('')
-     : `<div class="text-sm text-faint">No transaction-pattern candidates surfaced by the advisory scan.</div>`;
-  const tx = (d.dossier.transactions||[]);
-  const txRows = tx.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,40).map(t=>`
-     <tr class="${t.anomalous?'bg-high/10':''}">
-       <td class="py-1 pr-3 text-faint">${t.date}</td>
-       <td class="pr-3">${t.direction==='in'?'▲':'▼'} £${t.amount.toLocaleString()}</td>
-       <td class="pr-3 text-muted">${esc(t.type)}</td>
-       <td class="pr-3 text-muted truncate max-w-[160px]">${esc(t.counterparty)} <span class="text-faint">${esc(t.cp_country)}</span></td>
-       <td>${t.anomalous?'<span class="chip" style="background:#ef444422;color:#fca5a5">anomaly</span>':''}</td></tr>`).join('');
-  const docs = (d.dossier.documents||[]).map(x=>`
-     <details class="card p-3 mb-2"><summary class="cursor-pointer text-sm font-medium">📄 ${esc(x.name)}</summary>
-       <pre class="text-xs text-muted whitespace-pre-wrap mt-2">${esc(x.text)}</pre></details>`).join('');
-
-  $('drawer-body').innerHTML = `<div class="slide">
-    <div class="p-5 border-b border-line flex items-start gap-4 sticky top-0 bg-panel z-10">
-      ${gauge(d.score,d.band)}
-      <div class="flex-1"><div class="text-lg font-bold">${esc(d.name)}</div>
-        <div class="text-sm text-muted">${d.id} · ${esc(d.occupation)} · ${esc(d.country)}</div>
-        <div class="mt-2 flex gap-2 items-center flex-wrap">${actionBadge(d.action)}
-          <span class="chip">confidence ${d.confidence.toFixed(2)}</span>
-          <span class="chip">${esc(d.engine_path)}</span></div></div>
-      <button onclick="closeDrawer()" class="text-faint hover:text-ink text-xl">✕</button>
-    </div>
-    <div class="p-5 space-y-5">
-      <div><div class="text-xs uppercase tracking-wide text-faint mb-1">AI risk summary</div>
-        <div class="card p-4 text-sm leading-relaxed">${esc(d.summary)}</div>
-        ${(d.key_signals&&d.key_signals.length)?`<div class="mt-2 flex flex-wrap gap-1">${d.key_signals.map(s=>`<span class="chip" style="background:#6366f122;color:#c4b5fd">${esc(s)}</span>`).join('')}</div>`:''}</div>
-      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Parallel specialists — KYC · transactions · documents</div>
-        <div class="card p-4">${opinions}</div></div>
-      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Agent investigation — serial tool-call trace</div>
-        <div class="card p-4">${traceHtml}${(d.evidence_refs&&d.evidence_refs.length)?`<div class="text-xs text-faint mt-2">cited evidence: ${d.evidence_refs.map(esc).join(', ')}</div>`:''}</div></div>
-      <div class="grid grid-cols-2 gap-3">
-        <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Memory injected</div><div class="card p-4">${memHtml}</div></div>
-        <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Per-customer history</div><div class="card p-4">${histHtml}</div></div></div>
-      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Detected patterns &amp; anomalies (advisory)</div>
-        <div class="card p-4">${patterns}</div></div>
-      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Transactions ${tx.length?`(${tx.length}, anomalies highlighted)`:'(none on file)'}</div>
-        <div class="card p-3 overflow-x-auto"><table class="w-full text-sm">${txRows}</table></div></div>
-      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Dossier</div>
-        <div class="card p-3 mb-2"><div class="text-xs text-faint mb-1">KYC / Screening</div>
-          <pre class="text-xs text-muted whitespace-pre-wrap">${esc(JSON.stringify({kyc:d.dossier.kyc, screening:d.dossier.screening}, null, 1))}</pre></div>
-        ${docs}</div>
-    </div></div>`;
   $('drawer').classList.remove('hidden');
+  $('drawer-body').innerHTML = `<div class="empty"><div class="e-ico">⏳</div><p>Loading case…</p></div>`;
+  const [d, hist] = await Promise.all([api('/api/case/'+cid), api(`/api/case/${cid}/history`).catch(() => [])]);
+  const cap = s => (s||'').replace(/^\w/, c => c.toUpperCase());
+  const ops = d.opinions || [], trace = d.trace || [], im = d.injected_memory || {};
+  const tx  = d.dossier?.transactions || [], docs = d.dossier?.documents || [];
+
+  $('drawer-body').innerHTML = `
+    <div class="dhead">
+      ${gauge(d.score, d.band)}
+      <div style="flex:1;min-width:0">
+        <h3 style="font-size:18px;font-weight:800;letter-spacing:-.02em">${esc(d.name)}</h3>
+        <p style="color:var(--muted);font-size:13px;margin-top:2px">${d.id} · ${esc(d.occupation)} · ${esc(d.country)}</p>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px">
+          ${actionBadge(d.action)}<span class="chip">confidence ${d.confidence.toFixed(2)}</span><span class="chip">${esc(d.engine_path)}</span></div>
+      </div>
+      <button class="icon-btn" onclick="closeDrawer()" style="font-size:17px">✕</button>
+    </div>
+
+    <div class="dbody">
+      <div class="dsec"><h4>AI risk summary</h4>
+        <div class="card card-pad" style="font-size:13.5px;line-height:1.65">${esc(d.summary)}</div>
+        ${(d.key_signals?.length) ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+          ${d.key_signals.map(s => `<span class="chip chip-soft">${esc(s)}</span>`).join('')}</div>` : ''}
+      </div>
+
+      <div class="dsec"><h4>Parallel specialists — KYC · transactions · documents</h4>
+        <div class="grid grid-3">${ops.length ? ops.map(o => `
+          <div class="card card-pad">
+            <div style="display:flex;align-items:center;gap:7px;font-weight:700;font-size:13.5px">
+              <span style="width:8px;height:8px;border-radius:50%;background:${LVL[o.risk_level]||'#71717a'}"></span>
+              ${esc(cap(o.domain))}<span style="color:var(--faint);font-weight:500">${o.tentative_score ?? ''}</span></div>
+            <p style="color:var(--muted);font-size:12.5px;margin-top:7px;line-height:1.55">${esc(o.note||'')}</p>
+            ${(o.signals?.length) ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">
+              ${o.signals.slice(0,3).map(s => `<span class="chip chip-soft" style="font-size:10.5px">${esc(s)}</span>`).join('')}</div>` : ''}
+          </div>`).join('') : `<p style="color:var(--faint);font-size:13px">No specialist opinions.</p>`}</div>
+      </div>
+
+      <div class="dsec"><h4>Agent investigation — serial tool-call trace</h4>
+        <div class="card card-pad">
+          ${trace.length ? `<div class="trace-list">${trace.map((t,i) => `
+            <div class="trace-item"><span class="t-n">${i+1}.</span>
+              <span class="chip">${esc(t.tool)}</span>
+              <span class="t-args">${esc(JSON.stringify(t.args||{}))}</span></div>`).join('')}</div>` :
+            `<p style="color:var(--faint);font-size:13px">No trace recorded.</p>`}
+          ${(d.evidence_refs?.length) ? `<p style="font-size:12px;color:var(--faint);margin-top:11px">
+            Cited evidence: ${d.evidence_refs.map(esc).join(', ')}</p>` : ''}
+        </div></div>
+
+      <div class="grid grid-2">
+        <div class="dsec"><h4>Memory injected</h4>
+          <div class="card card-pad">
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+              <span class="chip">history: ${im.history_n ?? 0}</span>
+              <span class="chip">similar cases: ${im.similar_n ?? 0}</span>
+              <span class="chip">lessons: ${im.lessons_n ?? 0}</span></div>
+            ${im.history_summary ? `<p style="font-size:12px;color:var(--faint);margin-top:9px">${esc(im.history_summary)}</p>` : ''}
+          </div></div>
+        <div class="dsec"><h4>Per-customer history</h4>
+          <div class="card card-pad">${(hist?.length > 1) ? hist.map(h => `
+            <div style="display:flex;gap:9px;font-size:12.5px;color:var(--muted);padding:3px 0">
+              <span style="color:var(--faint)">${(h.ts||'').slice(0,10)}</span>
+              <b style="color:${riskColor(h.band)}">${bandUp(h.band)} (${h.score})</b>
+              <span style="color:var(--faint)">${esc(h.disposition||'')}</span>
+              ${h.human_verified ? '<span style="color:#22c55e">✓ reviewer</span>' : ''}</div>`).join('')
+            : `<p style="font-size:12.5px;color:var(--faint)">First assessment on file — history builds as this customer is re-scored.</p>`}
+          </div></div>
+      </div>
+
+      <div class="dsec"><h4>Detected patterns (advisory)</h4>
+        <div class="card card-pad">${d.patterns?.length ? d.patterns.map(p => `
+          <div style="margin-bottom:12px">
+            <div style="display:flex;gap:9px;align-items:flex-start;flex-wrap:wrap">
+              <span class="badge" style="background:#ef44441f;color:#fca5a5">⚠ ${esc(p.label)}${p.strength!=null?` · ${p.strength}`:''}</span>
+              <span style="font-size:12.5px;color:var(--muted);flex:1;min-width:200px">${esc(p.rationale)}</span></div>
+            <p style="font-size:11.5px;color:var(--faint);font-style:italic;margin-top:5px">${esc(patternDef(p.label))}</p>
+          </div>`).join('') : `<p style="font-size:13px;color:var(--faint)">No transaction-pattern candidates surfaced.</p>`}
+        </div></div>
+
+      <div class="dsec"><h4>Transactions ${tx.length ? `(${tx.length}, anomalies highlighted)` : '(none on file)'}</h4>
+        <div class="card card-pad" style="overflow-x:auto">
+          <table class="tx">${tx.slice().sort((a,b) => a.date < b.date ? 1 : -1).slice(0,40).map(t => `
+            <tr class="${t.anomalous?'anom':''}">
+              <td style="color:var(--faint)">${t.date}</td>
+              <td>${t.direction==='in'?'▲':'▼'} £${t.amount.toLocaleString()}</td>
+              <td style="color:var(--muted)">${esc(t.type)}</td>
+              <td style="color:var(--muted)">${esc(t.counterparty)} <span style="color:var(--faint)">${esc(t.cp_country)}</span></td>
+              <td>${t.anomalous?'<span class="chip" style="background:#ef44441f;color:#fca5a5">anomaly</span>':''}</td></tr>`).join('')}
+          </table></div></div>
+
+      <div class="dsec"><h4>Dossier &amp; documents</h4>
+        <details class="doc card card-pad"><summary>📋 KYC / screening (structured)</summary>
+          <pre>${esc(JSON.stringify({kyc:d.dossier?.kyc, screening:d.dossier?.screening}, null, 1))}</pre></details>
+        ${docs.map(x => `<details class="doc card card-pad"><summary>📄 ${esc(x.name)}</summary>
+          <pre>${esc(x.text)}</pre></details>`).join('')}
+      </div>
+    </div>`;
 }
 const closeDrawer = () => $('drawer').classList.add('hidden');
 
-// ---------- Review Queue ----------
+/* ───────────── Review Queue ───────────── */
 async function renderReview(){
   const pend = await api('/api/review');
   window._PEND = pend;
-  if(!pend.length){ $('content').innerHTML = `<div class="card p-8 text-center text-muted">Queue empty — the model was confident on every case.</div>`; return; }
-  const why = c => (c.opinions||[]).map(s=>`${(s.domain||'').slice(0,4)}=${s.risk_level}`).join(', ') || 'low confidence';
-  const cards = pend.map((c,i)=>`
-    <div class="card p-4 fade">
-      <div class="flex items-center gap-3">
-        <div class="gauge" style="background:conic-gradient(#f97316 ${(c.llm_score||0)*3.6}deg,#1e293b 0)"><div style="position:absolute;inset:5px;border-radius:50%;background:#111826;display:grid;place-items:center;color:#f97316">${c.llm_score??'?'}</div></div>
-        <div class="flex-1"><div class="font-semibold">${esc(c.name)} <span class="text-faint text-sm">${c.customer_id}</span></div>
-          <div class="text-sm text-muted">LLM unsure — confidence ${(c.confidence||0).toFixed(2)} · analysts: ${esc(why(c))}</div>
-          <div class="text-sm text-muted mt-1">${esc(c.reason||'')}</div></div>
-        <button class="act bg-brand text-white px-3 py-2 rounded-lg text-sm font-medium" onclick="openReview(${i})">Review →</button>
-      </div>
-      <div class="grid grid-cols-3 gap-2 mt-3">${(c.opinions||[]).map(s=>{const lv={low:'🟢',medium:'🟡',high:'🔴'};
-        return `<div class="card p-2 text-xs"><b>${lv[s.risk_level]||'⚪'} ${esc(s.domain)}</b><div class="text-muted mt-0.5">${esc(s.note)}</div></div>`}).join('')}</div>
-    </div>`).join('');
-  $('content').innerHTML = `<div class="text-sm text-muted mb-3">${pend.length} case(s) awaiting a human decision. Set the correct score — it teaches the model.</div><div class="grid gap-3">${cards}</div>`;
+  if (!pend.length){
+    $('content').innerHTML = emptyState('✅','Queue is empty',
+      'The agent was confident on every case — nothing needs a human decision right now. Low-confidence cases appear here automatically.');
+    return;
+  }
+  $('content').innerHTML = `
+    <p style="color:var(--muted);font-size:13.5px;margin-bottom:14px">
+      <b style="color:var(--ink)">${pend.length}</b> case(s) awaiting a human decision. Setting the correct score teaches the model.</p>
+    <div class="grid" style="gap:12px">
+      ${pend.map((c,i) => `
+        <div class="card card-pad fade">
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            ${gauge(c.llm_score ?? 0, 'MED')}
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <b style="font-size:15px">${esc(c.name)}</b><span class="chip">${c.customer_id}</span>
+                <span class="badge" style="background:#f973161f;color:#f97316">confidence ${(c.confidence||0).toFixed(2)}</span></div>
+              <p style="color:var(--muted);font-size:13px;margin-top:7px;
+                 display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(c.reason||'')}</p>
+            </div>
+            <button class="btn btn-primary" onclick="openReview(${i})" style="flex:0 0 auto">Review →</button>
+          </div>
+          <div class="grid grid-3" style="margin-top:14px">
+            ${(c.opinions||[]).map(o => `<div class="card card-pad" style="background:var(--panel2)">
+              <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700">
+                <span style="width:7px;height:7px;border-radius:50%;background:${LVL[o.risk_level]||'#71717a'}"></span>${esc(o.domain)}</div>
+              <p style="color:var(--muted);font-size:12px;margin-top:5px;line-height:1.5">${esc(o.note||'')}</p></div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
 }
 function openReview(i){
   const c = window._PEND[i];
-  $('drawer-body').innerHTML = `<div class="slide p-6 space-y-4">
-    <div class="flex items-center justify-between"><div class="text-lg font-bold">${esc(c.name)} <span class="text-faint text-sm">${c.customer_id}</span></div>
-      <button onclick="closeDrawer()" class="text-faint hover:text-ink text-xl">✕</button></div>
-    <div class="card p-3 text-sm">LLM proposed <b>${c.llm_score}</b> at confidence <b class="text-review">${(c.confidence||0).toFixed(2)}</b>. ${esc(c.reason||'')}</div>
-    <div class="grid grid-cols-3 gap-2">${(c.opinions||[]).map(s=>{const lv={low:'🟢',medium:'🟡',high:'🔴'};
-      return `<div class="card p-2 text-xs"><b>${lv[s.risk_level]||'⚪'} ${esc(s.domain)}</b><div class="text-muted mt-0.5">${esc(s.note)}</div></div>`}).join('')}</div>
-    <div class="pt-2 border-t border-line"><div class="text-xs uppercase tracking-wide text-faint mb-2">Your decision — teaches the model</div>
-      <label class="text-sm text-muted">Correct score: <b id="rvS">${c.llm_score||50}</b></label>
-      <input id="rvScore" type="range" min="0" max="100" value="${c.llm_score||50}" class="w-full" oninput="$('rvS').textContent=this.value">
-      <div class="grid grid-cols-2 gap-3 mt-2">
-        <select id="rvBand" class="bg-panel2 border border-line rounded-lg px-3 py-2 text-sm"><option>LOW</option><option selected>MED</option><option>HIGH</option></select>
-        <select id="rvAction" class="bg-panel2 border border-line rounded-lg px-3 py-2 text-sm"><option>AUTO_CLEAR</option><option selected>REVIEW</option><option>ESCALATE</option></select>
-      </div>
-      <textarea id="rvNote" placeholder="Correction note — why (the lesson the model learns)" class="w-full bg-panel2 border border-line rounded-lg px-3 py-2 text-sm mt-2" rows="2"></textarea>
-      <button class="act w-full mt-3 bg-brand text-white py-2.5 rounded-lg font-semibold" onclick="submitReview('${c.customer_id}')">✓ Submit &amp; teach the model</button>
-    </div></div>`;
   $('drawer').classList.remove('hidden');
+  $('drawer-body').innerHTML = `
+    <div class="dhead">
+      ${gauge(c.llm_score ?? 0, 'MED')}
+      <div style="flex:1;min-width:0"><h3 style="font-size:18px;font-weight:800">${esc(c.name)}</h3>
+        <p style="color:var(--muted);font-size:13px">${c.customer_id}</p></div>
+      <button class="icon-btn" onclick="closeDrawer()" style="font-size:17px">✕</button>
+    </div>
+    <div class="dbody">
+      <div class="card card-pad" style="font-size:13.5px;line-height:1.6">
+        The agent proposed <b>${c.llm_score}</b> at confidence
+        <b style="color:#f97316">${(c.confidence||0).toFixed(2)}</b> — below the threshold, so it asked for a human.
+        <p style="color:var(--muted);font-size:13px;margin-top:9px">${esc(c.reason||'')}</p></div>
+
+      <div class="dsec"><h4>Specialist opinions</h4>
+        <div class="grid grid-3">${(c.opinions||[]).map(o => `
+          <div class="card card-pad"><div style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700">
+            <span style="width:7px;height:7px;border-radius:50%;background:${LVL[o.risk_level]||'#71717a'}"></span>${esc(o.domain)}</div>
+            <p style="color:var(--muted);font-size:12px;margin-top:5px">${esc(o.note||'')}</p></div>`).join('')}</div></div>
+
+      <div class="dsec"><h4>Your decision — this teaches the model</h4>
+        <div class="card card-pad">
+          <label style="font-size:13px;color:var(--muted)">Correct score: <b id="rvS" style="color:var(--ink)">${c.llm_score||50}</b></label>
+          <input id="rvScore" type="range" min="0" max="100" value="${c.llm_score||50}" style="width:100%;margin:10px 0"
+            oninput="document.getElementById('rvS').textContent=this.value">
+          <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:6px">
+            <select id="rvBand" class="field"><option>LOW</option><option selected>MED</option><option>HIGH</option></select>
+            <select id="rvAction" class="field"><option>AUTO_CLEAR</option><option selected>REVIEW</option><option>ESCALATE</option></select>
+          </div>
+          <textarea id="rvNote" rows="3" class="field" style="margin-top:10px;resize:vertical"
+            placeholder="Correction note — why? (this becomes a lesson the model learns)"></textarea>
+          <button class="btn btn-primary btn-block" style="margin-top:12px"
+            onclick="submitReview('${c.customer_id}')">✓ Submit &amp; teach the model</button>
+        </div></div>
+    </div>`;
 }
 async function submitReview(cid){
-  await jpost(`/api/review/${cid}/resolve`, {score:+$('rvScore').value, band:$('rvBand').value, action:$('rvAction').value, note:$('rvNote').value});
+  await jpost(`/api/review/${cid}/resolve`, {score:+$('rvScore').value, band:$('rvBand').value,
+    action:$('rvAction').value, note:$('rvNote').value});
   closeDrawer(); go('review');
 }
 
-// ---------- Ingest ----------
+/* ───────────── Ingest ───────────── */
 async function renderIngest(){
   const samples = await api('/api/samples');
   $('content').innerHTML = `
-    <div class="grid grid-cols-3 gap-4">
-      <div class="card p-5 col-span-2">
-        <div class="flex items-center justify-between mb-3">
-          <div><div class="font-semibold">Sample profiles</div>
-            <div class="text-xs text-muted">${samples.length} available — tick any subset, or select all and score them in parallel.</div></div>
-          <label class="text-sm text-muted flex items-center gap-2 cursor-pointer"><input type="checkbox" id="selAll" onchange="toggleAll(this.checked)"> Select all</label>
+    <div class="grid grid-2" style="align-items:start">
+      <div class="card card-pad">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
+          <div><b style="font-size:15px">Sample profiles</b>
+            <p style="color:var(--muted);font-size:12.5px;margin-top:3px">${samples.length} available — tick any subset, or select all.</p></div>
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap">
+            <input type="checkbox" id="selAll" onchange="toggleAll(this.checked)"> Select all</label>
         </div>
-        <div class="max-h-[300px] overflow-y-auto grid grid-cols-2 gap-1 mb-4 pr-1">
-          ${samples.map(s=>`<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-panel2 text-sm cursor-pointer">
-            <input type="checkbox" class="smp" value="${s}" onchange="updateSel()"> <span class="truncate">${esc(s)}</span></label>`).join('')}
+        <div style="max-height:290px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2px;margin-bottom:14px">
+          ${samples.map(s => `<label style="display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:7px;font-size:12.5px;cursor:pointer"
+            onmouseover="this.style.background='var(--panel2)'" onmouseout="this.style.background=''">
+            <input type="checkbox" class="smp" value="${s}" onchange="updateSel()"><span>${esc(s)}</span></label>`).join('')}
         </div>
-        <button class="act w-full bg-brand text-white py-2.5 rounded-lg font-semibold" onclick="scoreSelected()">
-          ▶ Score selected (<span id="selCount">0</span>) in parallel</button>
-        <div class="text-[11px] text-faint mt-2 text-center">Each customer runs parallel specialists + an agentic orchestrator · bounded concurrency · results stream in below</div>
+        <button class="btn btn-primary btn-block" onclick="scoreSelected()">▶ Score selected (<span id="selCount">0</span>) in parallel</button>
+        <p style="font-size:11.5px;color:var(--faint);text-align:center;margin-top:9px">
+          Each customer runs parallel specialists + an agentic orchestrator · bounded concurrency · keeps running if you switch pages.</p>
       </div>
-      <div class="card p-5"><div class="font-semibold mb-2">📤 Upload files</div>
-        <div class="text-xs text-muted mb-1">Drop one customer's documents:</div>
-        <div class="text-[11px] text-faint mb-3 leading-relaxed"><code class="chip">kyc.json</code> <code class="chip">account.json</code> <code class="chip">transactions.csv</code> <code class="chip">screening.json</code> <code class="chip">*.txt</code></div>
-        <input id="upFiles" type="file" multiple class="text-sm w-full">
-        <button class="act w-full mt-3 bg-brand2 text-white py-2.5 rounded-lg font-semibold" onclick="ingestFiles()">▶ Score uploaded files</button>
-        <div class="text-[11px] text-faint mt-2 text-center">Missing files are fine — the agent works with what's there.</div></div>
+
+      <div class="card card-pad">
+        <b style="font-size:15px">📤 Upload files</b>
+        <p style="color:var(--muted);font-size:12.5px;margin:6px 0 10px">Drop one customer's documents:</p>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px">
+          ${['kyc.json','account.json','transactions.csv','screening.json','*.txt'].map(f => `<span class="chip">${f}</span>`).join('')}</div>
+        <input id="upFiles" type="file" multiple style="font-size:12.5px;width:100%">
+        <button class="btn btn-alt btn-block" style="margin-top:12px" onclick="ingestFiles()">▶ Score uploaded files</button>
+        <p style="font-size:11.5px;color:var(--faint);text-align:center;margin-top:9px">Missing files are fine — the agent works with what's there.</p>
+      </div>
     </div>
-    <div id="batchArea" class="mt-6"></div>
-    <div id="ingestResult" class="mt-5"></div>`;
-  restoreBatch();          // a run started earlier keeps rendering after you navigate away and back
+    <div id="batchArea" style="margin-top:16px"></div>
+    <div id="ingestResult" style="margin-top:16px"></div>`;
+  restoreBatch();
 }
+const _selected = () => [...document.querySelectorAll('.smp:checked')].map(c => c.value);
+const updateSel = () => { if ($('selCount')) $('selCount').textContent = _selected().length; };
+const toggleAll = on => { document.querySelectorAll('.smp').forEach(c => c.checked = on); updateSel(); };
 
-// ---- persistent batch state (survives view switches) ----
-const JOB = {              // lives on window for the session
-  get id(){ return sessionStorage.getItem('frisk_job') || ''; },
-  set id(v){ v ? sessionStorage.setItem('frisk_job', v) : sessionStorage.removeItem('frisk_job'); },
-};
-function restoreBatch(){
-  if(!JOB.id) return;
-  $('batchArea').innerHTML = batchShell(window._bTotal||0, window._bWorkers||6);
-  pollBatch(JOB.id);
-}
-const _selected = () => [...document.querySelectorAll('.smp:checked')].map(c=>c.value);
-function updateSel(){ $('selCount').textContent = _selected().length; }
-function toggleAll(on){ document.querySelectorAll('.smp').forEach(c=>c.checked=on); updateSel(); }
+const JOB = { get id(){ return sessionStorage.getItem('frisk_job') || ''; },
+              set id(v){ v ? sessionStorage.setItem('frisk_job', v) : sessionStorage.removeItem('frisk_job'); } };
+function restoreBatch(){ if (JOB.id){ $('batchArea').innerHTML = batchShell(window._bTotal||0, window._bWorkers||6); pollBatch(JOB.id); } }
 
-const batchShell = (total, workers) => `<div class="card p-5">
-  <div class="flex items-center justify-between mb-2">
-    <div><div class="font-semibold">⚙ Batch scoring <span class="text-faint text-sm font-normal">— up to ${workers} customers at once</span></div>
-      <div class="text-[11px] text-faint">Keeps running if you switch pages — come back any time.</div></div>
-    <div id="bpText" class="text-sm text-muted">0 / ${total} scored</div></div>
-  <div class="bar mb-1" style="height:9px"><i id="bpBar" style="width:0%;background:linear-gradient(90deg,#3b82f6,#6366f1);transition:width .4s"></i></div>
-  <div id="bpDone" class="text-xs text-faint mb-4">Scoring… fire-and-review.</div>
-  <div id="bResults" class="grid grid-cols-2 gap-2"></div></div>`;
-function batchCard(r){
-  if(r.error) return `<div class="card p-3 text-sm border-high/50"><b>${esc(r.name)}</b> <span class="text-high">✕ ${esc(r.error).slice(0,60)}</span></div>`;
-  return `<div class="card p-3 flex items-center gap-3 fade cursor-pointer" onclick="openCase('${r.id}')">
-    ${gauge(r.score,r.band)}
-    <div class="flex-1 min-w-0"><div class="font-semibold text-sm truncate">${esc(r.name)} <span class="text-faint">${r.id}</span></div>
-      <div class="mt-1 flex gap-1.5 items-center flex-wrap">${actionBadge(r.action)}<span class="chip">conf ${(r.confidence||0).toFixed(2)}</span>${patternChips(r.patterns)}</div></div></div>`;
-}
+const batchShell = (total, workers) => `<div class="card card-pad">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px">
+    <div><b style="font-size:14.5px">⚙ Batch scoring</b>
+      <span style="color:var(--faint);font-size:12.5px"> — up to ${workers} at once</span>
+      <p style="font-size:11.5px;color:var(--faint);margin-top:2px">Keeps running if you switch pages.</p></div>
+    <span id="bpText" style="font-size:13px;color:var(--muted);white-space:nowrap">0 / ${total} scored</span></div>
+  <div class="bar" style="height:9px"><i id="bpBar" style="width:0%;background:linear-gradient(90deg,#a1a1aa,#e4e4e7);transition:width .4s"></i></div>
+  <p id="bpDone" style="font-size:12px;color:var(--faint);margin:9px 0 14px">Scoring…</p>
+  <div id="bResults" class="grid grid-2" style="gap:9px"></div></div>`;
+
+const batchCard = r => r.error
+  ? `<div class="card card-pad" style="font-size:13px;border-color:#ef444455"><b>${esc(r.name)}</b> <span style="color:#ef4444">✕ ${esc(r.error).slice(0,60)}</span></div>`
+  : `<div class="card qrow fade" style="padding:12px" onclick="openCase('${r.id}')">
+      ${gauge(r.score, r.band)}
+      <div class="qmain"><div class="qhead"><b style="font-size:13.5px">${esc(r.name)}</b>
+        <span class="chip">${r.id}</span></div>
+        <div class="qsig" style="margin-top:6px">${actionBadge(r.action)}<span class="chip">conf ${(r.confidence||0).toFixed(2)}</span>${patternChips(r.patterns)}</div>
+      </div></div>`;
+
 async function scoreSelected(){
   const ids = _selected();
-  if(!ids.length){ $('batchArea').innerHTML = `<div class="text-sm text-med">Select at least one profile.</div>`; return; }
+  if (!ids.length){ $('batchArea').innerHTML = `<p style="font-size:13px;color:#f59e0b">Select at least one profile.</p>`; return; }
   const j = await jpost('/api/ingest/batch', {ids});
   JOB.id = j.job_id; window._bTotal = j.total; window._bWorkers = j.workers;
   $('batchArea').innerHTML = batchShell(j.total, j.workers);
@@ -433,48 +489,74 @@ async function scoreSelected(){
 }
 async function pollBatch(job_id){
   const j = await api('/api/ingest/batch/'+job_id);
-  if(j.error){ JOB.id = ''; return; }
+  if (j.error){ JOB.id = ''; return; }
   window._bTotal = j.total; window._bWorkers = j.workers;
-  const pct = j.total ? Math.round(j.done/j.total*100) : 0;
-  const onPage = !!$('bpBar');
-  if(onPage){ $('bpBar').style.width = pct+'%'; $('bpText').textContent = `${j.done} / ${j.total} scored`;
-    $('bResults').innerHTML = (j.results||[]).map(batchCard).join(''); }
-  if(j.status !== 'complete'){
-    clearTimeout(window._bT);
-    window._bT = setTimeout(()=>pollBatch(job_id), 1500);   // keeps polling even off-page
-    return;
+  const pct = j.total ? Math.round(j.done / j.total * 100) : 0;
+  if ($('bpBar')){
+    $('bpBar').style.width = pct + '%';
+    $('bpText').textContent = `${j.done} / ${j.total} scored`;
+    $('bResults').innerHTML = (j.results||[]).map(batchCard).join('');
   }
+  if (j.status !== 'complete'){ clearTimeout(window._bT); window._bT = setTimeout(() => pollBatch(job_id), 1500); return; }
   refreshStats();
-  const rev = (j.results||[]).filter(r=>r.action==='PENDING_REVIEW').length;
-  if(onPage) $('bpDone').innerHTML = `✓ Complete · ${j.total} scored${rev?` · <b class="text-review">${rev} routed to Human Review →</b>`:''} · click any card to open the case.`;
-}
-function ingestResult(d){
-  const src=(d.opinions)||[]; const lv={low:'🟢',medium:'🟡',high:'🔴'};
-  $('ingestResult').innerHTML = `<div class="card p-5 fade">
-    <div class="flex items-center gap-4">${gauge(d.score,d.band)}
-      <div class="flex-1"><div class="font-bold">${esc(d.name)} <span class="text-faint text-sm">${d.id}</span></div>
-        <div class="mt-1 flex gap-2 items-center">${actionBadge(d.action)}<span class="chip">confidence ${d.confidence.toFixed(2)}</span>${patternChips(d.patterns)}</div></div>
-      <button class="act bg-panel2 border border-line px-3 py-2 rounded-lg text-sm" onclick="openCase('${d.id}')">Open case →</button></div>
-    <div class="card p-3 mt-3 text-sm">${esc(d.summary)}</div>
-    ${src.length?`<div class="grid grid-cols-3 gap-2 mt-3">${src.map(s=>`<div class="card p-2 text-xs"><b>${lv[s.risk_level]||'⚪'} ${esc(s.domain)}</b><div class="text-muted mt-0.5">${esc(s.note)}</div></div>`).join('')}</div>`:''}
-    ${d.action==='PENDING_REVIEW'?`<div class="mt-3 text-review text-sm">🟠 Low confidence — added to the Human Review Queue.</div>`:''}</div>`;
+  const rev = (j.results||[]).filter(r => r.action === 'PENDING_REVIEW').length;
+  if ($('bpDone')) $('bpDone').innerHTML = `✓ Complete · ${j.total} scored${rev?` · <b style="color:#f97316">${rev} routed to Human Review</b>`:''} · click a card to open the case.`;
 }
 async function ingestFiles(){
-  const fs = $('upFiles').files; if(!fs.length) return;
-  const fd = new FormData(); for(const f of fs) fd.append('files', f);
-  $('ingestResult').innerHTML = '<div class="text-muted">Scoring uploaded files…</div>';
-  ingestResult(await api('/api/ingest/files', {method:'POST', body:fd})); refreshStats();
+  const fs = $('upFiles').files; if (!fs.length) return;
+  const fd = new FormData(); for (const f of fs) fd.append('files', f);
+  $('ingestResult').innerHTML = `<p style="color:var(--muted);font-size:13px">Scoring uploaded files…</p>`;
+  const d = await api('/api/ingest/files', {method:'POST', body:fd});
+  $('ingestResult').innerHTML = `<div class="card qrow fade" onclick="openCase('${d.id}')">
+    ${gauge(d.score, d.band)}
+    <div class="qmain"><div class="qhead"><b style="font-size:15px">${esc(d.name)}</b><span class="chip">${d.id}</span>
+      ${actionBadge(d.action)}<span class="chip">conf ${d.confidence.toFixed(2)}</span></div>
+      <p class="qsum">${esc(d.summary)}</p></div></div>`;
+  refreshStats();
 }
 
-// ---------- Audit ----------
+/* ───────────── Audit ───────────── */
 async function renderAudit(){
   const rows = await api('/api/audit');
-  $('content').innerHTML = `<div class="card overflow-x-auto"><table class="w-full text-sm">
-    <thead><tr class="text-faint text-left border-b border-line">${['time','customer','actor','action','score','conf','path'].map(h=>`<th class="p-3">${h}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(r=>`<tr class="border-b border-line/50"><td class="p-3 text-faint">${(r.ts||'').slice(0,19).replace('T',' ')}</td>
-      <td class="p-3">${esc(r.customer_id)}</td><td class="p-3 text-muted">${esc(r.actor)}</td>
-      <td class="p-3">${esc(r.action)}</td><td class="p-3">${r.score}</td><td class="p-3">${(r.confidence||0).toFixed?.(2)??r.confidence}</td>
-      <td class="p-3 text-faint">${esc(r.engine_path)}</td></tr>`).join('')}</tbody></table></div>`;
+  if (!rows.length){ $('content').innerHTML = emptyState('📜','No audit records yet','Every decision — cleared or escalated — is appended here with its tool-call trace.'); return; }
+  $('content').innerHTML = `<div class="card" style="overflow-x:auto">
+    <table class="tx" style="min-width:720px">
+      <thead><tr style="color:var(--faint);text-align:left">
+        ${['Time','Customer','Actor','Action','Score','Conf','Path'].map(h => `<th style="padding:12px;font-size:11px;text-transform:uppercase;letter-spacing:.1em">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody>${rows.map(r => `<tr>
+        <td style="padding:11px 12px;color:var(--faint)">${(r.ts||'').slice(0,19).replace('T',' ')}</td>
+        <td style="padding:11px 12px">${esc(r.customer_id)}</td>
+        <td style="padding:11px 12px;color:var(--muted)">${esc(r.actor)}</td>
+        <td style="padding:11px 12px">${actionBadge(r.action)}</td>
+        <td style="padding:11px 12px">${r.score >= 0 ? r.score : '—'}</td>
+        <td style="padding:11px 12px">${r.confidence >= 0 ? Number(r.confidence).toFixed(2) : '—'}</td>
+        <td style="padding:11px 12px;color:var(--faint)">${esc(r.engine_path)}</td></tr>`).join('')}
+      </tbody></table></div>`;
 }
+
+/* ───────────── ⌘K palette ───────────── */
+let _PAL = [];
+async function openPalette(){
+  $('palette').classList.remove('hidden'); $('pq').value = ''; $('pq').focus();
+  try { _PAL = await api('/api/queue'); } catch { _PAL = []; }
+  paletteFilter();
+}
+const closePalette = () => $('palette').classList.add('hidden');
+function paletteFilter(){
+  const q = ($('pq').value || '').toLowerCase();
+  const hits = _PAL.filter(d => !q || [d.id,d.name,d.occupation,d.country].join(' ').toLowerCase().includes(q)).slice(0,8);
+  $('presults').innerHTML = hits.length ? hits.map(d => `
+    <div class="prow" onclick="closePalette();openCase('${d.id}')">
+      <span class="badge" style="background:${riskColor(d.band)}1f;color:${riskColor(d.band)}">${d.score}</span>
+      <span class="p-name">${esc(d.name)}</span>
+      <span class="p-meta">${d.id} · ${esc(d.occupation)}</span>
+      <span class="p-act">${actionBadge(d.action)}</span></div>`).join('')
+    : `<p style="color:var(--faint);font-size:13px;text-align:center;padding:22px">No matching customers.</p>`;
+}
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); openPalette(); }
+  if (e.key === 'Escape'){ closePalette(); closeDrawer(); }
+});
 
 go('dashboard');
