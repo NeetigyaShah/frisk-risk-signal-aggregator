@@ -1,113 +1,112 @@
 # Financial Risk Signal Aggregator — 5-Slide Deck
 
-AML / financial-crime risk triage. HyperVerge take-home POC. Python · Streamlit · pydantic v2 ·
-instructor · anthropic.
+AML / financial-crime risk triage. HyperVerge take-home POC. Fully-LLM agentic scorer with layered memory.
+Python · pydantic v2 · LangChain (tool-calling over OpenRouter) · FastAPI · custom JS frontend.
 
 ---
 
 ## Slide 1 — Problem Understanding and Objective
 
-- Compliance analysts triage **fragmented signals** (KYC, transactions, sanctions/PEP, adverse media)
-  under ~95% false-positive noise, with inconsistent per-analyst scoring.
-- **Objective:** join per-customer signals into one dossier, score them **deterministically and
-  defensibly**, rank them, and explain every finding — a prioritised triage queue, not a black box.
-- **Design tension:** a false negative (a missed sanctioned entity) is catastrophic; a false positive
-  is expensive. The system must be **auditable to a regulator** and **calibratable by a risk team**.
-- **North star:** a *never-fails* engine — rules are the source of truth, the LLM is an advisory
-  cross-check, and a rules-only fallback means the engine never returns nothing.
+- Compliance analysts triage **fragmented signals** (KYC, account, transactions, external alerts) under
+  heavy false-positive noise, with inconsistent per-analyst scoring.
+- **Objective:** join each customer's fragmented signals into one dossier, **score and prioritise** them,
+  and **explain** every decision — a triage queue an analyst can act on, not a black box.
+- **Design tension:** a false negative is catastrophic, a false positive is expensive, and the reasoning
+  must be **reconstructable** for review.
+- **North star:** a *fully-LLM, agentic* investigator that reads the whole dossier, is **honest about its
+  confidence**, routes what it is unsure about to a **human**, and **learns from the correction**.
 
-> Speaker note: We optimise for defensible, consistent triage under regulatory scrutiny — not raw model accuracy.
+> Speaker note: We optimise for a defensible, self-improving investigation — the model does the judging, a human closes the gap, memory makes it better.
 
 ---
 
 ## Slide 2 — Solution Architecture and Design Flow
 
 ```
-  data/generate.py ─► dossiers.json ─┐
-  (20 seeded synthetic profiles)     │
-                                     ▼
-  config.py ──────►  ┌─────────────────────────────────────────────┐
-  (the tuning knob)  │              engine.py (orchestrator)         │
-                     │                                               │
-   rules.py  ───────►│  score_customer()   SOURCE OF TRUTH           │
-   (deterministic)   │   overrides FIRST ─► weighted 0-100 ─► band   │
-                     │          │                                    │
-   llm.py  ─────────►│  crosscheck()  advisory, schema-locked        │
-   (never-fails)     │   instructor+pydantic, temp 0, retry x3       │
-                     │   └─ try/except ─► rules-only fallback        │
-                     │          │                                    │
-                     │  reconcile(confidence) = 1-|rules-llm|/100    │
-                     │  route()  kill-switch ─► band thresholds      │
-                     └───────────────┬───────────────────────────────┘
-                        drivers (sum │ to score)      ▼
-                        for explain  │        audit.py (append-only,
-                                     ▼        sha256 fingerprint)
-                            src/app/ (Streamlit)
-                        Queue ─► Case detail ─► Audit
+  data/customers/CUST_xxx/  (structured + unstructured)
+                 │
+                 ▼
+   memory.retrieve  ── per-customer history (relational) · similar cases (episodic)
+                 │        · semantic cheat-sheets · lessons (procedural)
+                 ▼
+   3 PARALLEL specialists  (KYC · transactions · documents)  memory-fed, one call each
+                 │  opinions
+                 ▼
+   AGENTIC ORCHESTRATOR  (serial tool-calling ReAct loop, temperature 0)
+     read_kyc · query/aggregate_transactions · find_txn_patterns (advisory)
+     · read_document · note/read_notes (Redis scratchpad) · finalize
+                 │  RiskFinding (score/band/confidence/evidence)
+                 ▼
+   route_llm  ── confidence < 0.60 ─► Redis review queue ─► Human panel ─► correction
+                 │                                                  │ (human-verified episode + lessons)
+                 ▼                                                  └─────────────► memory (write-back)
+   SQLite store (history) · append-only audit (the TOOL-CALL TRACE) · FastAPI + JS frontend
 ```
 
-- **Per-customer flow:** dossier → rules `score/band/findings` → independent LLM `score/confidence/
-  rationale` → reconcile (agreement = confidence) → route (HITL disposition) → one `AuditRecord`.
-- **Invariant:** the rules score is the auditable number; the LLM **never writes the arithmetic**.
+- **Per-customer flow:** retrieve memory → parallel specialists → agentic orchestrator → confidence-gate →
+  persist + evict working memory. **No deterministic scoring, no sanctions rail, no fallback rules.**
+- **5-tier memory across 3 stores:** working (Redis) · per-customer (relational) · episodic (case-bank) ·
+  semantic (reference files) · procedural (lessons).
 
-> Speaker note: Single-process app, six modules — rules produce the number, the LLM only cross-checks it.
+> Speaker note: Parallel specialists for speed and focus; one agentic orchestrator with tools + full context for depth; memory makes each run smarter than the last.
 
 ---
 
 ## Slide 3 — Implementation Highlights
 
-- **Rules as a registry of pure functions** (~stdlib, no rules-engine DSL): overrides/vetoes
-  evaluated **before** the weighted sum, so a sanctions hit is never averaged away.
-- **Typology detectors are temporal**, not amount-only — flagged on every customer *and* independently hunted by the LLM:
-  **structuring** (sub-floor cash clustered short-window), **layering** (rapid hops to distinct counterparties),
-  **round-trip** (out then ~matching amount back via a different counterparty), **dormant-spike** (inactivity then burst).
-  Every finding carries evidence (txn IDs, amounts, window).
-- **LLM boundary = instructor + Pydantic v2:** `Field(ge=0,le=100)`, `Literal` band, `field_validator`
-  asserting band↔score; `max_retries=3` feeds validation errors back for self-healing; `temperature=0`.
-  The model is **not** told the rules score, so agreement is meaningful.
-- **Never-fails guarantee:** one `try/except` funnels every failure (no key, network, schema-invalid)
-  into a deterministic rules-only finding. Offline, a *labelled simulated* second opinion stands in.
-- **Explainability = additive drivers that sum exactly to the score** (hand-rolled SHAP local-accuracy,
-  zero deps, deterministic — LIME rejected as non-reproducible). Largest-remainder apportionment
-  keeps integer drivers summing to the score even when capped at 100.
-- **Audit:** append-only `AuditRecord` per decision with sha256 input fingerprint + config snapshot.
+- **Hybrid topology:** three memory-fed **specialists** run in parallel (fast, focused), then a single
+  **agentic orchestrator** — a serial ReAct loop (`parallel_tool_calls=False`) over LangChain tool-calling —
+  gets their opinions + the original documents + tools and does the deep investigation.
+- **Tools return facts, never verdicts.** `find_txn_patterns` surfaces typology **candidates** with a
+  strength 0-1 (structuring / layering / round-trip / dormant-spike) and evidence txn ids — the LLM decides
+  if a candidate is real. `query_transactions` uses a whitelisted spec (never eval).
+- **Layered memory:** a Redis **scratchpad** as working memory (evicted on every exit); a relational
+  **assessments** table for per-customer history ("what changed"); an episodic **case-bank** (feature-match,
+  vector-pluggable) drawing few-shot only from **human-verified** cases; semantic cheat-sheets; and
+  **lessons** distilled from corrections.
+- **Confidence-gated HITL + teach-the-model loop:** low confidence → Redis review queue → the reviewer's
+  score becomes a human-verified episode and feeds `frisk reflect` → lessons injected into future prompts.
+- **Auditability without arithmetic drivers:** the **ordered tool-call trace** + `evidence_refs` +
+  injected-memory log is the append-only record — reconstructable and tied to evidence.
+- **Reliability as loop hygiene:** citation-check on evidence; a bounded loop / exception routes to a human
+  at confidence 0 — never blank. Offline, a **mock provider drives the same tool loop** deterministically.
 
-> Speaker note: Determinism and auditability are engineered in — Decimal money, seeded data, no wall-clock in predicates.
+> Speaker note: The engineering is the harness around the model — tools, memory, the confidence gate, and the trace-as-audit — not a prompt.
 
 ---
 
 ## Slide 4 — Challenges and Learnings
 
-- **False-positive vs false-negative:** we bias toward escalation — the rules-only and low-confidence
-  paths **never auto-clear**, and kill-switch flags escalate first. Missing a sanctioned entity is
-  the unacceptable error; extra review is the accepted cost.
-- **LLM non-determinism → deterministic guardrails:** an LLM can hallucinate a score, so it is
-  advisory only. Pydantic validation + retry + a rules-only fallback bound it; the auditable number
-  always comes from code, never the model.
-- **Explainability is a hard requirement, not a nice-to-have:** regulators inspect *closures* too, so
-  every decision — clear and escalate alike — carries drivers that reconcile exactly to the score.
-- **Calibration is a first-class surface:** all weights, floors, windows, bands, and routing
-  thresholds live in one `config.py` dict — the knob a real risk team recalibrates against outcomes.
-- **Honest reflection:** offline the "second opinion" is a *deterministic simulation*, clearly labelled
-  in audit metadata — it demonstrates the confidence/auto-clear mechanics without pretending to be a
-  live model. With a real key the same seam calls Claude Haiku unchanged.
+- **Removing the deterministic safety net:** the earlier design used rules as the source of truth. Going
+  fully-LLM means the model owns the number — so the guardrails move to *investigation hygiene* (mandatory
+  fact-gathering, citation checks, bounded loop → human) rather than a scoring formula.
+- **Echo-chamber risk:** if the system learns from its own outputs, mistakes compound. We draw episodic
+  few-shot **only from human-verified cases**, so the memory calibrates toward expert judgement.
+- **Serial vs parallel:** most models emit parallel tool calls; we force serial (`parallel_tool_calls=False`)
+  and execute only the first call per turn, so the trace is a clean, auditable investigation.
+- **Reproducibility:** a fully-LLM score isn't byte-identical run-to-run. We set `temperature=0` and **log
+  which memory was injected + the full tool trace**, so every decision is explainable after the fact.
+- **Scoping to the brief:** sanctions and adverse-media were **deliberately cut** — the brief names only
+  "external alerts / external data sources"; we kept PEP and note sanctions as a clear future extension.
 
-> Speaker note: The interesting engineering is the guardrails — making a non-deterministic model safe inside a deterministic, auditable pipeline.
+> Speaker note: The interesting problem is making an autonomous investigator safe and auditable without a deterministic backstop.
 
 ---
 
 ## Slide 5 — Demo Summary and Next Steps
 
-- **End-to-end demo:** generate 20 dossiers → ranked triage **Queue** (risk bars) → **Case detail**
-  (driver bars + rationale + evidence + approve/escalate) → append-only **Audit** log. Current split:
-  **5 AUTO_CLEAR / 9 REVIEW / 6 ESCALATE**.
-- **Worked contrast:** `CUST_018` (Iranian arms dealer, exact OFAC match + structuring) →
-  `SANCTIONS_MATCH` override → score 100 / ESCALATE / signoff required; `CUST_000` (domestic teacher,
-  benign) → score 0 / AUTO_CLEAR. Same engine, both ends of the queue.
+- **End-to-end demo:** the dashboard ranks 20 customers (gauges, confidence, pattern chips + charts); open a
+  case to see the **parallel specialist opinions**, the **serial tool-call trace** with cited evidence, the
+  **injected memory**, and the **per-customer history**; low-confidence cases land in the **Human Review**
+  queue where a correction **teaches** the system; the **Audit** tab is the append-only trace. Ingest lets you
+  **batch-score** any subset of samples in parallel.
+- **Worked contrast:** `CUST_018` (Iranian arms dealer) → the agent runs `read_kyc → query_transactions →
+  find_txn_patterns (structuring, strength 1.0) → read_document → finalize` → **HIGH / ESCALATE** citing the
+  structuring txn ids; `CUST_000` (domestic teacher) → **LOW / AUTO_CLEAR**. Same agent, both ends of the queue.
 - **Next steps, given more time:**
-  - Real **adverse-media / sanctions API feeds** (World-Check, OFAC, Dow Jones) replacing fixtures.
-  - **ML-tuned thresholds** — calibrate weights/cutoffs against labelled outcomes instead of hand-set values.
-  - **Case management** — assignment, SLAs, disposition history, escalation workflow.
-  - **Feedback loop** — analyst decisions retrain scoring and recalibrate confidence over time.
+  - **Vector-embedding** episodic recall (drop-in behind the case-bank's `similar()`), + per-customer change alerts.
+  - Re-add **external-alert feeds** (sanctions / adverse-media / World-Check) as tools the agent queries.
+  - **Confidence calibration** against labelled outcomes; richer reviewer analytics.
+  - **Case management** — assignment, SLAs, escalation workflow, and a fuller reflection cadence.
 
-> Speaker note: The POC proves the safe pipeline end-to-end; production is swapping fixtures for live feeds and closing the analyst feedback loop.
+> Speaker note: The POC proves the agentic loop + layered memory end-to-end; production is vector memory, live feeds, and tuned confidence.

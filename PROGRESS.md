@@ -4,8 +4,13 @@
 **Overview:** see `CLAUDE.md`. **Design:** `docs/DESIGN.md`. **Research:** `docs/research/RESEARCH_BRIEF.md`.
 
 ## Current phase
-**COMPLETE** — all phases done and verified. Remaining human step: record the ≤3-min demo
-(script in `docs/DEMO_SCRIPT.md`) and submit.
+**FULL-LLM AGENTIC REBUILD — code complete on branch `fullllm-agentic-rebuild`.** Deterministic scoring
+removed; replaced by parallel memory-fed specialists → an agentic tool-calling orchestrator + a 5-tier
+memory system (Redis working / relational per-customer / episodic case-bank / semantic refs / procedural
+lessons). Sanctions + adverse-media scoped out; PEP kept. 14 tests green (mock provider drives the tool
+loop); real OpenRouter path verified live; frontend rewired (specialist opinions + tool-call trace + memory
++ history). Remaining: record the demo; optionally refresh `docs/PROJECT_EXPLAINER.html` / `ARCHITECTURE*.html`
+(still describe the old graph).
 
 ## Status board
 - [x] Brainstorm + agreed design
@@ -102,3 +107,16 @@
   end-to-end flow, data input/which-analyst-reads-what, **ingestion step-by-step** (per-file parser → typed output
   tables + the exact fact-strings each LLM sees), the 5-call LangGraph orchestration, the never-fails cascade, and the
   confidence-gate + teach-the-model HITL loop. Every node traced to real code; verified rendering in-browser (no Mermaid errors).
+- 2026-07-25: **FULL-LLM AGENTIC REBUILD** (branch `fullllm-agentic-rebuild`, spec+plan under `docs/superpowers/`).
+  Removed the deterministic engine entirely (deleted `core/rules.py`, `ai/crosscheck.py`, `ai/orchestrator.py`,
+  `ui/Home.py`). New scoring path: `memory.retrieve` → parallel `specialists` (KYC/txn/docs) → agentic
+  `agent.py` (serial tool-calling ReAct loop, `parallel_tool_calls=False`, tools in `ai/tools.py`) → `route_llm`
+  confidence-gate → persist + evict scratchpad. **5-tier memory**: `hitl/scratchpad.py` (Redis working, evicted
+  on every exit) · `data/store.py` rewritten to relational `customers/assessments/lessons` (per-customer history)
+  · `data/casebank.py` (episodic feature-match) · `data/reference/` (semantic cheat-sheets) · `hitl/reflection.py`
+  (procedural lessons from corrections). Sanctions + adverse-media removed from the generator (PEP kept);
+  `screening.json` is pep-only. `mock` provider now drives the tool loop for offline determinism. Config trimmed
+  to seed/bands/routing + agent/memory knobs. API rewired (trace/opinions/injected_memory + `/api/case/{cid}/history`);
+  frontend case drawer shows specialist opinions + serial tool-call trace + memory + per-customer history.
+  Verified: 14 tests pass, real OpenRouter path works end-to-end (CUST_018 arms-dealer → structuring → ESCALATE 83),
+  full app green in-browser. Docs (CLAUDE.md/README.md/PROGRESS.md) rewritten; deck updated.
