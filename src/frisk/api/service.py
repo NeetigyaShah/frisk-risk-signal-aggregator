@@ -9,7 +9,7 @@ from __future__ import annotations
 import threading
 import uuid
 from collections import Counter
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 
 from fastapi import Body, FastAPI, File, UploadFile
@@ -33,12 +33,22 @@ _BATCH_WORKERS = min(CONFIG["scale"]["workers"], 6)
 app = FastAPI(title="frisk API", version="0.2.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-_STATE: dict = {}
+_STATE: dict = {"dossiers": {}, "decisions": {}}
+_WARM = {"ready": False, "done": 0, "total": 0}
+_START_LOCK = threading.Lock()
+_started = False
 
 
-def _bootstrap() -> dict:
-    if _STATE:
-        return _STATE
+def _score_one(d):
+    try:
+        dec = assess(d, persist=True)
+        _STATE["decisions"][dec.customer_id] = dec
+    except Exception:
+        pass
+
+
+def _bootstrap_bg():
+    """Score the 20 customers in the BACKGROUND (parallel) so the UI never blocks on a cold load."""
     audit.reset(); review_queue.reset(); store.reset()
     try:
         from frisk.data import casebank
@@ -46,10 +56,31 @@ def _bootstrap() -> dict:
     except Exception:
         pass
     ds = load_dossiers()
-    decs = assess_all(ds, persist=True)   # engine persists to store + enqueues PENDING_REVIEW
+    _WARM["total"] = len(ds)
     _STATE["dossiers"] = {x.customer_id: x for x in ds}
-    _STATE["decisions"] = {d.customer_id: d for d in decs}
+    _STATE["decisions"] = {}
+    with ThreadPoolExecutor(max_workers=_BATCH_WORKERS) as ex:
+        for _ in as_completed([ex.submit(_score_one, d) for d in ds]):
+            _WARM["done"] += 1
+    _WARM["ready"] = True
+
+
+def _ensure_started():
+    global _started
+    with _START_LOCK:
+        if not _started:
+            _started = True
+            threading.Thread(target=_bootstrap_bg, daemon=True).start()
+
+
+def _bootstrap() -> dict:
+    _ensure_started()
     return _STATE
+
+
+@app.on_event("startup")
+def _startup():
+    _ensure_started()
 
 
 def _patterns(dossier) -> list[dict]:
@@ -73,10 +104,15 @@ def _summary(d, dossier=None) -> dict:
 
 @app.get("/api/stats")
 def stats():
-    decs = list(_bootstrap()["decisions"].values())
+    _ensure_started()
+    if not _WARM["ready"]:
+        return {"warming": True, "done": _WARM["done"],
+                "total": _WARM["total"] or len(_STATE["dossiers"]), "broker": review_queue.backend()}
+    decs = list(_STATE["decisions"].values())
     c = Counter(d.action for d in decs)
-    return {"total": len(decs), "auto_clear": c.get("AUTO_CLEAR", 0), "review": c.get("REVIEW", 0),
-            "escalate": c.get("ESCALATE", 0), "pending_review": c.get("PENDING_REVIEW", 0),
+    return {"warming": False, "total": len(decs), "auto_clear": c.get("AUTO_CLEAR", 0),
+            "review": c.get("REVIEW", 0), "escalate": c.get("ESCALATE", 0),
+            "pending_review": c.get("PENDING_REVIEW", 0),
             "review_queue": review_queue.count(), "broker": review_queue.backend()}
 
 

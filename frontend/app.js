@@ -30,10 +30,27 @@ const tile = (label,val,color) => `<div class="card px-4 py-3"><div class="text-
 let STATS = {};
 async function refreshStats(){
   STATS = await api('/api/stats');
-  $('broker').innerHTML = `broker: <b class="${STATS.broker==='redis'?'text-low':'text-med'}">${STATS.broker}</b>`;
+  $('broker').innerHTML = `broker: <b class="${STATS.broker==='redis'?'text-low':'text-med'}">${STATS.broker||'…'}</b>`;
+  if(STATS.warming){
+    $('rqcount').textContent = '';
+    $('topstats').innerHTML = `<span class="chip">⚙ scoring ${STATS.done||0}/${STATS.total||20}…</span>`;
+    return;
+  }
   $('rqcount').textContent = STATS.review_queue || '';
   $('topstats').innerHTML = actionBadge('ESCALATE').replace('Escalate',`${STATS.escalate} Escalate`)
     + actionBadge('PENDING_REVIEW').replace('Human review',`${STATS.review_queue} Human queue`);
+}
+function showWarming(view){
+  const pct = STATS.total ? Math.round((STATS.done/STATS.total)*100) : 0;
+  $('content').innerHTML = `<div class="card p-8 mt-8 max-w-xl mx-auto text-center fade">
+    <div class="text-4xl mb-3">⚙️</div>
+    <div class="text-lg font-bold mb-1">Scoring customers live</div>
+    <div class="text-sm text-muted mb-5">Each customer runs the full agentic pipeline — memory → 3 parallel specialists → the tool-calling orchestrator. This happens once, on first start.</div>
+    <div class="bar mb-2" style="height:10px"><i style="width:${pct}%;background:linear-gradient(90deg,#3b82f6,#6366f1);transition:width .5s"></i></div>
+    <div class="text-sm text-muted">${STATS.done||0} / ${STATS.total||20} scored</div>
+    <div class="text-[11px] text-faint mt-3">Live LLM — the ranked queue appears automatically when it's done.</div></div>`;
+  clearTimeout(window._warmT);
+  window._warmT = setTimeout(()=>go(view), 2500);
 }
 const VIEWS = {dashboard:renderDashboard, review:renderReview, ingest:renderIngest, audit:renderAudit};
 const TITLES = {dashboard:['Dashboard','Prioritised, risk-scored triage queue'],
@@ -43,8 +60,9 @@ const TITLES = {dashboard:['Dashboard','Prioritised, risk-scored triage queue'],
 async function go(view){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
   $('title').textContent = TITLES[view][0]; $('subtitle').textContent = TITLES[view][1];
-  $('content').innerHTML = '<div class="text-muted">Loading…</div>';
   await refreshStats();
+  if(STATS.warming){ showWarming(view); return; }
+  $('content').innerHTML = '<div class="text-muted">Loading…</div>';
   await VIEWS[view]();
 }
 document.getElementById('nav').addEventListener('click', e => { const a=e.target.closest('.nav-item'); if(a) go(a.dataset.view); });
