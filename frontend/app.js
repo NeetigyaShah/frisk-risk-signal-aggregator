@@ -23,7 +23,7 @@ const PATTERN_DEFS = {
   'Dormant-Spike':'A long inactive gap, then a sudden burst of large transactions — an account waking up abnormally.',
 };
 const patternDef = label => PATTERN_DEFS[label] || 'Transaction-pattern anomaly flagged by the typology detectors.';
-const patternChips = ps => (ps||[]).map(p=>`<span class="chip" title="${esc(patternDef(p.label))}" style="background:#ef444422;color:#fca5a5;cursor:help">⚠ ${esc(p.label)}</span>`).join('');
+const patternChips = ps => (ps||[]).slice(0,3).map(p=>`<span class="chip shrink-0" title="${esc(patternDef(p.label))}" style="background:#ef444422;color:#fca5a5;cursor:help">⚠ ${esc(p.label)}</span>`).join('');
 const tile = (label,val,color) => `<div class="card px-4 py-3"><div class="text-2xl font-extrabold" style="color:${color||'#e8edf7'}">${val}</div><div class="text-xs text-muted">${label}</div></div>`;
 
 // ---------- router ----------
@@ -218,16 +218,20 @@ async function renderDashboard(){
       <div class="text-faint text-sm w-7 text-center font-semibold">#${i+1}</div>
       ${gauge(d.score,d.band)}
       <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="font-semibold">${esc(d.name)}</span>
+        <div class="flex items-center gap-2 flex-wrap min-w-0">
+          <span class="font-semibold text-[15px]">${esc(d.name)}</span>
           <span class="chip">${esc(d.occupation)}</span><span class="chip">${esc(d.country)}</span>
-          ${(d.key_signals&&d.key_signals.length)?`<span class="badge" style="background:#6366f122;color:#c4b5fd">${esc(d.key_signals[0])}</span>`:''}
+          ${actionBadge(d.action)}${patternChips(d.patterns)}
         </div>
-        <div class="text-sm text-muted truncate mt-1">${esc(d.summary)}</div>
-        <div class="flex items-center gap-1.5 mt-2 flex-wrap">${actionBadge(d.action)}${patternChips(d.patterns)}</div>
+        <div class="text-sm text-muted line-clamp-2 mt-1.5">${esc(d.summary)}</div>
+        ${(d.key_signals&&d.key_signals.length)?`<div class="flex items-center gap-1.5 mt-2 flex-wrap">${
+          d.key_signals.slice(0,2).map(s=>`<span class="badge" style="background:#6366f118;color:#c4b5fd">${esc(s)}</span>`).join('')
+        }${d.key_signals.length>2?`<span class="chip text-faint">+${d.key_signals.length-2} more</span>`:''}</div>`:''}
       </div>
-      <div class="w-32 shrink-0 text-right">
-        <div class="text-[11px] text-faint mb-1">confidence ${d.confidence.toFixed(2)}</div>${confBar(d.confidence)}
+      <div class="w-24 shrink-0 text-right self-start">
+        <div class="text-[10px] uppercase tracking-wider text-faint mb-1">confidence</div>
+        <div class="text-sm font-bold mb-1.5" style="color:${d.confidence<0.6?'#f97316':'#22c55e'}">${d.confidence.toFixed(2)}</div>
+        ${confBar(d.confidence)}
       </div>
     </div>`).join('');
   $('content').innerHTML = hero + tiles + charts
