@@ -2,6 +2,8 @@
   "expected_band": "MED",
   "severity": "med",
   "typology": null,
+  "review": false,
+  "conflict": null,
   "missing_docs": [
     "kyc_id"
   ],

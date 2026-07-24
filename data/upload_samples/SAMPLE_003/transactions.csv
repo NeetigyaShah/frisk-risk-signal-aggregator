@@ -1,33 +1,31 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_003-T000,2026-07-21,4456.53,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_003-T001,2026-06-21,4453.87,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_003-T002,2026-05-22,4497.31,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_003-T003,2026-04-22,4570.3,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_003-T004,2026-03-23,4414.95,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_003-T005,2026-02-21,4400.49,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_003-T006,2026-07-19,959.97,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_003-T007,2026-06-19,744.64,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_003-T008,2026-05-20,1326.08,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_003-T009,2026-04-20,1054.38,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_003-T010,2026-03-21,1255.74,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_003-T011,2026-02-19,1254.0,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_003-T012,2026-03-06,3.17,GBP,out,Murray LLC,RU,card
-SAMPLE_003-T013,2026-05-13,66.59,GBP,out,Wallace-Bolton,RU,card
-SAMPLE_003-T014,2026-02-24,23.65,GBP,out,"Mason, Walsh and Lamb",RU,card
-SAMPLE_003-T015,2026-06-12,28.03,GBP,out,"Butler, Scott and King",RU,card
-SAMPLE_003-T016,2026-02-02,107.52,GBP,out,Chamberlain-Holt,RU,card
-SAMPLE_003-T017,2026-02-14,41.68,GBP,out,Ward Ltd,RU,card
-SAMPLE_003-T018,2026-07-13,18.21,GBP,out,Garner-Arnold,RU,card
-SAMPLE_003-T019,2026-02-15,14.87,GBP,out,Ball Ltd,RU,card
-SAMPLE_003-T020,2026-06-08,17.09,GBP,out,Pearson LLC,RU,card
-SAMPLE_003-T021,2026-05-01,27.05,GBP,out,"Fletcher, Mitchell and Cole",RU,card
-SAMPLE_003-T022,2026-02-14,17.57,GBP,out,Taylor-Ward,RU,card
-SAMPLE_003-T023,2026-02-20,19.25,GBP,out,Harper-Knight,RU,card
-SAMPLE_003-T024,2026-04-27,29.28,GBP,out,Winter LLC,RU,card
-SAMPLE_003-T025,2026-07-23,3313.01,GBP,in,Cash Deposit,RU,cash
-SAMPLE_003-T026,2026-05-06,3862.75,GBP,in,Cash Deposit,RU,cash
-SAMPLE_003-T027,2026-07-10,2915.47,GBP,in,Cash Deposit,RU,cash
-SAMPLE_003-T028,2026-05-15,3428.12,GBP,in,Cash Deposit,RU,cash
-SAMPLE_003-T029,2026-06-11,3880.3,GBP,in,Cash Deposit,RU,cash
-SAMPLE_003-T030,2026-04-26,3250.51,GBP,in,Cash Deposit,RU,cash
-SAMPLE_003-T031,2026-06-05,2564.67,GBP,in,Cash Deposit,RU,cash
+SAMPLE_003-T000,2026-07-21,5719.85,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_003-T001,2026-06-21,5777.28,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_003-T002,2026-05-22,5776.78,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_003-T003,2026-04-22,5592.85,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_003-T004,2026-03-23,5791.05,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_003-T005,2026-02-21,5687.33,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_003-T006,2026-07-19,781.2,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_003-T007,2026-06-19,1294.32,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_003-T008,2026-05-20,1267.13,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_003-T009,2026-04-20,1297.93,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_003-T010,2026-03-21,1308.57,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_003-T011,2026-02-19,1366.69,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_003-T012,2026-02-14,41.68,GBP,out,Murray LLC,RU,card
+SAMPLE_003-T013,2026-07-13,18.21,GBP,out,Wallace-Bolton,RU,card
+SAMPLE_003-T014,2026-02-15,14.87,GBP,out,"Mason, Walsh and Lamb",RU,card
+SAMPLE_003-T015,2026-06-08,17.09,GBP,out,"Butler, Scott and King",RU,card
+SAMPLE_003-T016,2026-05-01,27.05,GBP,out,Chamberlain-Holt,RU,card
+SAMPLE_003-T017,2026-02-14,17.57,GBP,out,Ward Ltd,RU,card
+SAMPLE_003-T018,2026-02-20,19.25,GBP,out,Garner-Arnold,RU,card
+SAMPLE_003-T019,2026-04-27,29.28,GBP,out,Ball Ltd,RU,card
+SAMPLE_003-T020,2026-03-08,5.19,GBP,out,Pearson LLC,RU,card
+SAMPLE_003-T021,2026-07-23,243.01,GBP,out,"Fletcher, Mitchell and Cole",RU,card
+SAMPLE_003-T022,2026-06-12,54.09,GBP,out,Taylor-Ward,RU,card
+SAMPLE_003-T023,2026-05-15,3428.12,GBP,in,Cash Deposit,RU,cash
+SAMPLE_003-T024,2026-06-11,3880.3,GBP,in,Cash Deposit,RU,cash
+SAMPLE_003-T025,2026-04-26,3250.51,GBP,in,Cash Deposit,RU,cash
+SAMPLE_003-T026,2026-06-05,2564.67,GBP,in,Cash Deposit,RU,cash
+SAMPLE_003-T027,2026-05-07,1923.65,GBP,in,Cash Deposit,RU,cash
+SAMPLE_003-T028,2026-07-09,3628.65,GBP,in,Cash Deposit,RU,cash
+SAMPLE_003-T029,2026-05-05,2373.24,GBP,in,Cash Deposit,RU,cash

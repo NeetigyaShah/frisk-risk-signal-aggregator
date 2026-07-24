@@ -42,5 +42,10 @@ CONFIG["scale"] = {
 CONFIG["engine_mode"] = settings.engine_mode
 CONFIG["confidence_threshold"] = settings.confidence_threshold
 CONFIG["redis_url"] = settings.redis_url
+# agentic scorer + layered memory knobs
+CONFIG["agent_max_steps"] = settings.agent_max_steps
+CONFIG["scratchpad_ttl_s"] = settings.scratchpad_ttl_s
+CONFIG["memory_topk"] = settings.memory_topk
+CONFIG["policy_version"] = _DOMAIN.get("ruleset_version", "v1.0")
 
 __all__ = ["CONFIG", "band_for", "BAND_LABEL", "LABEL_BAND", "settings"]

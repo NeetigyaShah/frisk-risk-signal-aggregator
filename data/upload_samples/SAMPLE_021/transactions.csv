@@ -1,23 +1,25 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_021-T000,2026-07-21,3793.83,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_021-T001,2026-06-21,3846.8,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_021-T002,2026-05-22,3759.85,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_021-T003,2026-04-22,3821.53,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_021-T004,2026-03-23,3804.17,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_021-T005,2026-02-21,3727.91,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_021-T006,2026-07-19,671.01,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_021-T007,2026-06-19,1038.43,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_021-T008,2026-05-20,1225.81,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_021-T009,2026-04-20,1334.43,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_021-T010,2026-03-21,1007.15,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_021-T011,2026-02-19,1324.26,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_021-T012,2026-07-04,48.68,GBP,out,Holland and Sons,VE,card
-SAMPLE_021-T013,2026-05-27,11.28,GBP,out,Taylor-Williams,VE,card
-SAMPLE_021-T014,2026-04-27,30.34,GBP,out,Hopkins Inc,VE,card
-SAMPLE_021-T015,2026-02-22,22.73,GBP,out,Nicholson Inc,VE,card
-SAMPLE_021-T016,2026-03-25,25.22,GBP,out,Hooper Ltd,VE,card
-SAMPLE_021-T017,2026-02-20,18.76,GBP,out,Roberts-Summers,VE,card
-SAMPLE_021-T018,2026-03-13,50.59,GBP,out,Coleman-Cooper,VE,card
-SAMPLE_021-T019,2026-05-14,44.4,GBP,out,Rowe Group,VE,card
-SAMPLE_021-T020,2026-07-19,51.35,GBP,out,Lewis LLC,VE,card
-SAMPLE_021-T021,2026-02-28,11.25,GBP,out,Evans Ltd,VE,card
+SAMPLE_021-T000,2026-07-21,4658.88,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_021-T001,2026-06-21,4553.57,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_021-T002,2026-05-22,4628.27,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_021-T003,2026-04-22,4607.24,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_021-T004,2026-03-23,4514.88,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_021-T005,2026-02-21,4508.76,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_021-T006,2026-07-19,1038.43,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_021-T007,2026-06-19,1225.81,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_021-T008,2026-05-20,1334.43,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_021-T009,2026-04-20,1007.15,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_021-T010,2026-03-21,1324.26,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_021-T011,2026-02-19,775.13,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_021-T012,2026-05-31,11.28,GBP,out,Jones-Evans,VE,card
+SAMPLE_021-T013,2026-03-05,64.78,GBP,out,"Bull, Gardiner and Barnes",VE,card
+SAMPLE_021-T014,2026-05-21,22.73,GBP,out,Sharp-Price,VE,card
+SAMPLE_021-T015,2026-07-01,173.33,GBP,out,Robson-Shaw,VE,card
+SAMPLE_021-T016,2026-06-20,18.76,GBP,out,Howarth-Gregory,VE,card
+SAMPLE_021-T017,2026-06-28,35.25,GBP,out,Joyce-Edwards,VE,card
+SAMPLE_021-T018,2026-02-16,44.4,GBP,out,Page-McKenzie,VE,card
+SAMPLE_021-T019,2026-07-14,68.1,GBP,out,Spencer Ltd,VE,card
+SAMPLE_021-T020,2026-03-08,11.25,GBP,out,"Thomas, Holland and Chapman",VE,card
+SAMPLE_021-T021,2026-06-09,21.59,GBP,out,Brown-Hopkins,VE,card
+SAMPLE_021-T022,2026-05-17,62.71,GBP,out,Smith Inc,VE,card
+SAMPLE_021-T023,2026-02-15,10.96,GBP,out,Rees Inc,VE,card

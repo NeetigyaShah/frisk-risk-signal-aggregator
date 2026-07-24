@@ -1,37 +1,26 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_031-T000,2026-07-21,3306.3,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_031-T001,2026-06-21,3365.85,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_031-T002,2026-05-22,3418.09,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_031-T003,2026-04-22,3310.17,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_031-T004,2026-03-23,3423.47,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_031-T005,2026-02-21,3327.07,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_031-T006,2026-07-19,1373.16,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_031-T007,2026-06-19,781.53,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_031-T008,2026-05-20,894.4,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_031-T009,2026-04-20,788.77,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_031-T010,2026-03-21,1188.43,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_031-T011,2026-02-19,730.18,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_031-T012,2026-03-15,45.06,GBP,out,Patel PLC,GB,card
-SAMPLE_031-T013,2026-07-21,8.34,GBP,out,"Bennett, Fletcher and Adams",GB,card
-SAMPLE_031-T014,2026-03-04,112.27,GBP,out,Williams-Harris,GB,card
-SAMPLE_031-T015,2026-05-29,152.79,GBP,out,Evans-Smith,GB,card
-SAMPLE_031-T016,2026-05-01,12.8,GBP,out,Glover-Parker,GB,card
-SAMPLE_031-T017,2026-02-12,29.01,GBP,out,Davies-O'Connor,GB,card
-SAMPLE_031-T018,2026-02-21,11.71,GBP,out,Taylor-Davis,GB,card
-SAMPLE_031-T019,2026-03-24,14.51,GBP,out,Noble-Glover,GB,card
-SAMPLE_031-T020,2026-06-05,11.36,GBP,out,Wright-Barnes,GB,card
-SAMPLE_031-T021,2026-05-24,46.75,GBP,out,Moore PLC,GB,card
-SAMPLE_031-T022,2026-05-01,102.48,GBP,out,"Richardson, Jenkins and Hancock",GB,card
-SAMPLE_031-T023,2026-07-04,286.32,GBP,out,Saunders PLC,GB,card
-SAMPLE_031-T024,2026-05-02,163.71,GBP,out,Wright and Sons,GB,card
-SAMPLE_031-T025,2026-05-27,19.4,GBP,out,"Smith, Scott and Jackson",GB,card
-SAMPLE_031-T026,2026-06-05,72.28,GBP,out,Baldwin-O'Neill,GB,card
-SAMPLE_031-T027,2026-06-09,10.93,GBP,out,Young and Sons,GB,card
-SAMPLE_031-T028,2026-04-01,43.57,GBP,out,"Lucas, Johnson and Lane",GB,card
-SAMPLE_031-T029,2026-03-18,9.87,GBP,out,"Taylor, Buckley and Edwards",GB,card
-SAMPLE_031-T030,2026-03-09,22.92,GBP,out,Hayes-Skinner,GB,card
-SAMPLE_031-T031,2026-03-10,37.03,GBP,out,Owen LLC,GB,card
-SAMPLE_031-T032,2026-05-03,15.21,GBP,out,Collins PLC,GB,card
-SAMPLE_031-L00,2026-06-24,192000.0,GBP,out,Shell Co A,CY,transfer
-SAMPLE_031-L01,2026-06-26,153600.0,GBP,out,Shell Co B,CY,transfer
-SAMPLE_031-L02,2026-06-28,122880.0,GBP,out,Shell Co C,CY,transfer
+SAMPLE_031-T000,2026-07-21,2874.13,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_031-T001,2026-06-21,2918.75,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_031-T002,2026-05-22,2826.59,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_031-T003,2026-04-22,2923.33,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_031-T004,2026-03-23,2841.02,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_031-T005,2026-02-21,2931.74,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_031-T006,2026-07-19,781.53,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_031-T007,2026-06-19,894.4,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_031-T008,2026-05-20,788.77,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_031-T009,2026-04-20,1188.43,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_031-T010,2026-03-21,730.18,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_031-T011,2026-02-19,1342.89,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_031-T012,2026-04-05,8.34,GBP,out,Wells-Winter,GB,card
+SAMPLE_031-T013,2026-02-06,16.59,GBP,out,Tucker Ltd,GB,card
+SAMPLE_031-T014,2026-02-05,152.79,GBP,out,"Parker, Bryant and Matthews",GB,card
+SAMPLE_031-T015,2026-05-02,35.34,GBP,out,Henderson Inc,GB,card
+SAMPLE_031-T016,2026-02-05,29.01,GBP,out,"Edwards, Smith and Williams",GB,card
+SAMPLE_031-T017,2026-04-14,20.15,GBP,out,"Miles, Smith and Martin",GB,card
+SAMPLE_031-T018,2026-04-22,14.51,GBP,out,Cooper-Griffin,GB,card
+SAMPLE_031-T019,2026-05-24,14.87,GBP,out,Stone-Davis,GB,card
+SAMPLE_031-T020,2026-03-25,46.75,GBP,out,"Jenkins, Lloyd and Jones",GB,card
+SAMPLE_031-T021,2026-04-30,5.14,GBP,out,"Walton, Patel and Jackson",GB,card
+SAMPLE_031-L00,2026-06-24,216000.0,GBP,out,Shell Co A,CY,transfer
+SAMPLE_031-L01,2026-06-26,194400.0,GBP,out,Shell Co B,CY,transfer
+SAMPLE_031-L02,2026-06-28,174960.0,GBP,out,Shell Co C,CY,transfer

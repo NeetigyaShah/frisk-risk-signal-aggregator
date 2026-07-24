@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: KP (North Korea)
-Surname: RHODES
-Given names: SHARON
+Surname: WALLIS
+Given names: KERRY
 Nationality: North Korea
-Date of birth: 2000-08-15
-Document no.: P51680122
+Date of birth: 1990-10-12
+Document no.: P26152038
 Expiry: 2031-05-01
 
 MRZ:
-P<KPRHODES<<SHARON<<<<<<<<<<<<<<<<<<<<<<<<<<
-P51680122<KP20000815<<<<<<<<<<<<<<<<<<<<<<<<
+P<KPWALLIS<<KERRY<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P26152038<KP19901012<<<<<<<<<<<<<<<<<<<<<<<<

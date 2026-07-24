@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: MM (Myanmar)
-Surname: PERRY-ANDERSON
-Given names: LYDIA
+Surname: ROBERTS-SUMMERS
+Given names: AARON
 Nationality: Myanmar
-Date of birth: 1998-12-17
-Document no.: P12507770
+Date of birth: 1981-01-20
+Document no.: P21635162
 Expiry: 2031-05-01
 
 MRZ:
-P<MMPERRY-ANDERSON<<LYDIA<<<<<<<<<<<<<<<<<<<
-P12507770<MM19981217<<<<<<<<<<<<<<<<<<<<<<<<
+P<MMROBERTS-SUMMERS<<AARON<<<<<<<<<<<<<<<<<<
+P21635162<MM19810120<<<<<<<<<<<<<<<<<<<<<<<<

@@ -1,26 +1,25 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_004-T000,2026-07-21,3389.26,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_004-T001,2026-06-21,3336.6,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_004-T002,2026-05-22,3322.12,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_004-T003,2026-04-22,3318.59,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_004-T004,2026-03-23,3321.86,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_004-T005,2026-02-21,3314.69,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_004-T006,2026-07-19,1232.72,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_004-T007,2026-06-19,1163.11,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_004-T008,2026-05-20,1076.76,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_004-T009,2026-04-20,1234.16,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_004-T010,2026-03-21,689.22,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_004-T011,2026-02-19,1270.44,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_004-T012,2026-07-16,10.31,GBP,out,Smith Ltd,GB,card
-SAMPLE_004-T013,2026-04-21,12.61,GBP,out,Jones-Hill,GB,card
-SAMPLE_004-T014,2026-06-04,15.52,GBP,out,"Read, Burke and Butler",GB,card
-SAMPLE_004-T015,2026-03-10,14.71,GBP,out,Thorpe-Brown,GB,card
-SAMPLE_004-T016,2026-06-26,72.84,GBP,out,Forster Inc,GB,card
-SAMPLE_004-T017,2026-03-28,53.78,GBP,out,"Higgins, Howard and Hodgson",GB,card
-SAMPLE_004-T018,2026-05-08,9.15,GBP,out,"Johnson, Ellis and Allen",GB,card
-SAMPLE_004-T019,2026-03-15,50.56,GBP,out,Peacock Group,GB,card
-SAMPLE_004-T020,2026-06-13,16.89,GBP,out,Pearson-Pritchard,GB,card
-SAMPLE_004-T021,2026-04-25,23.54,GBP,out,Clarke-Clarke,GB,card
-SAMPLE_004-T022,2026-03-23,12.95,GBP,out,Taylor-Garner,GB,card
-SAMPLE_004-R00,2026-07-04,109390.12,GBP,out,Offshore Nominee A,KY,wire
-SAMPLE_004-R01,2026-07-10,107202.31,GBP,in,Offshore Nominee B,KY,wire
+SAMPLE_004-T000,2026-07-21,3879.09,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_004-T001,2026-06-21,3956.88,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_004-T002,2026-05-22,3943.26,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_004-T003,2026-04-22,3926.38,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_004-T004,2026-03-23,3957.16,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_004-T005,2026-02-21,3850.59,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_004-T006,2026-07-19,1270.44,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_004-T007,2026-06-19,794.57,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_004-T008,2026-05-20,690.82,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_004-T009,2026-04-20,1018.06,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_004-T010,2026-03-21,890.46,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_004-T011,2026-02-19,1170.14,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_004-T012,2026-05-27,72.84,GBP,out,Bishop Ltd,GB,card
+SAMPLE_004-T013,2026-03-04,61.48,GBP,out,"Scott, Lewis and Nelson",GB,card
+SAMPLE_004-T014,2026-03-26,9.15,GBP,out,Smith Ltd,GB,card
+SAMPLE_004-T015,2026-02-25,29.65,GBP,out,Jones-Hill,GB,card
+SAMPLE_004-T016,2026-05-07,16.89,GBP,out,"Read, Burke and Butler",GB,card
+SAMPLE_004-T017,2026-03-16,22.06,GBP,out,Thorpe-Brown,GB,card
+SAMPLE_004-T018,2026-04-18,12.95,GBP,out,Forster Inc,GB,card
+SAMPLE_004-T019,2026-03-29,40.3,GBP,out,"Higgins, Howard and Hodgson",GB,card
+SAMPLE_004-T020,2026-02-22,36.77,GBP,out,"Johnson, Ellis and Allen",GB,card
+SAMPLE_004-T021,2026-03-10,74.56,GBP,out,Peacock Group,GB,card
+SAMPLE_004-R00,2026-07-04,68153.52,GBP,out,Offshore Nominee A,KY,wire
+SAMPLE_004-R01,2026-07-10,66790.45,GBP,in,Offshore Nominee B,KY,wire

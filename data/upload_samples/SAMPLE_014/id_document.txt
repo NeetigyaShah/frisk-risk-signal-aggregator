@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: GB (United Kingdom)
-Surname: KIRBY
-Given names: DR JOSEPH
+Surname: SPENCER-PARRY
+Given names: LEIGH
 Nationality: United Kingdom
-Date of birth: 1979-04-13
-Document no.: P14295097
+Date of birth: 1957-10-19
+Document no.: P42271648
 Expiry: 2031-05-01
 
 MRZ:
-P<GBKIRBY<<DR<JOSEPH<<<<<<<<<<<<<<<<<<<<<<<<
-P14295097<GB19790413<<<<<<<<<<<<<<<<<<<<<<<<
+P<GBSPENCER-PARRY<<LEIGH<<<<<<<<<<<<<<<<<<<<
+P42271648<GB19571019<<<<<<<<<<<<<<<<<<<<<<<<

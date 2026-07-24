@@ -3,7 +3,7 @@
   "severity": "review",
   "typology": null,
   "review": true,
-  "conflict": "adverse_unproven",
+  "conflict": "sof_unverified",
   "missing_docs": [],
   "extra_docs": []
 }

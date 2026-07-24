@@ -44,8 +44,13 @@ class Settings(BaseSettings):
 
     # --- scale / throughput ---
     workers: int = 16                      # parallel workers for I/O-bound cross-checks
-    crosscheck_policy: str = "all"         # all -> LLM on everyone; gated -> LLM only on the MED band
-    gated_confidence: float = 0.85         # confidence when rules are policy-authoritative (LLM gated out)
+    crosscheck_policy: str = "all"         # DEPRECATED (removed after cutover) — kept so batch.py imports
+    gated_confidence: float = 0.85         # DEPRECATED (removed after cutover)
+
+    # --- agentic scorer + layered memory ---
+    agent_max_steps: int = 12              # max tool-calling turns before the orchestrator must finalize / route to human
+    scratchpad_ttl_s: int = 3600           # Redis working-memory TTL backstop (evicted explicitly on every exit)
+    memory_topk: int = 3                   # per-customer history + similar-case retrieval depth
 
     # --- provider keys (read WITHOUT the FRISK_ prefix; keep out of git) ---
     openrouter_api_key: str | None = Field(default=None, validation_alias="OPENROUTER_API_KEY")

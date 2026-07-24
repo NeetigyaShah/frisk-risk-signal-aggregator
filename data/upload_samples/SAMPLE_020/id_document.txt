@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: GB (United Kingdom)
-Surname: EVANS
-Given names: DR LORRAINE
+Surname: WATSON
+Given names: LAUREN
 Nationality: United Kingdom
-Date of birth: 1997-06-24
-Document no.: P53686275
+Date of birth: 1980-12-12
+Document no.: P64669331
 Expiry: 2031-05-01
 
 MRZ:
-P<GBEVANS<<DR<LORRAINE<<<<<<<<<<<<<<<<<<<<<<
-P53686275<GB19970624<<<<<<<<<<<<<<<<<<<<<<<<
+P<GBWATSON<<LAUREN<<<<<<<<<<<<<<<<<<<<<<<<<<
+P64669331<GB19801212<<<<<<<<<<<<<<<<<<<<<<<<

@@ -1,35 +1,37 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_030-T000,2026-07-21,3135.04,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_030-T001,2026-06-21,3166.96,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_030-T002,2026-05-22,3182.8,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_030-T003,2026-04-22,3150.64,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_030-T004,2026-03-23,3113.22,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_030-T005,2026-02-21,3100.73,GBP,in,ACME Payroll Ltd,RU,salary
-SAMPLE_030-T006,2026-07-19,999.31,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_030-T007,2026-06-19,678.49,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_030-T008,2026-05-20,1283.99,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_030-T009,2026-04-20,1360.22,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_030-T010,2026-03-21,977.35,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_030-T011,2026-02-19,1120.77,GBP,out,Landlord DD,RU,direct_debit
-SAMPLE_030-T012,2026-03-09,23.83,GBP,out,"Roberts, Duncan and Andrews",RU,card
-SAMPLE_030-T013,2026-05-31,16.24,GBP,out,Smith-Hyde,RU,card
-SAMPLE_030-T014,2026-01-27,32.38,GBP,out,"Wilson, Burton and Cox",RU,card
-SAMPLE_030-T015,2026-03-18,80.39,GBP,out,"Robertson, King and Gregory",RU,card
-SAMPLE_030-T016,2026-05-15,69.53,GBP,out,Holt Inc,RU,card
-SAMPLE_030-T017,2026-07-16,25.21,GBP,out,Newman Inc,RU,card
-SAMPLE_030-T018,2026-05-02,54.22,GBP,out,"Davies, Parker and Bryant",RU,card
-SAMPLE_030-T019,2026-04-05,78.41,GBP,out,Clayton-Henderson,RU,card
-SAMPLE_030-T020,2026-02-13,36.65,GBP,out,Fuller Ltd,RU,card
-SAMPLE_030-T021,2026-02-25,62.6,GBP,out,Stone PLC,RU,card
-SAMPLE_030-T022,2026-07-08,24.02,GBP,out,Harvey-Ahmed,RU,card
-SAMPLE_030-T023,2026-05-23,52.28,GBP,out,Herbert-Murphy,RU,card
-SAMPLE_030-T024,2026-06-13,141.77,GBP,out,Stone-Davis,RU,card
-SAMPLE_030-T025,2026-04-02,2548.79,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-T026,2026-06-21,1926.35,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-T027,2026-05-13,3555.66,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-T028,2026-07-16,3182.98,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-T029,2026-04-19,2928.69,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-S00,2026-06-14,8281.33,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-S01,2026-06-16,9334.87,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-S02,2026-06-18,9519.7,GBP,in,Cash Deposit,RU,cash
-SAMPLE_030-S03,2026-06-20,8512.43,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-T000,2026-07-21,3018.2,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_030-T001,2026-06-21,2938.87,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_030-T002,2026-05-22,2999.76,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_030-T003,2026-04-22,3030.3,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_030-T004,2026-03-23,3045.46,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_030-T005,2026-02-21,3014.68,GBP,in,ACME Payroll Ltd,RU,salary
+SAMPLE_030-T006,2026-07-19,948.25,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_030-T007,2026-06-19,868.22,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_030-T008,2026-05-20,999.31,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_030-T009,2026-04-20,678.49,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_030-T010,2026-03-21,1283.99,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_030-T011,2026-02-19,1360.22,GBP,out,Landlord DD,RU,direct_debit
+SAMPLE_030-T012,2026-07-21,42.41,GBP,out,"Brennan, Wright and Morris",RU,card
+SAMPLE_030-T013,2026-03-14,23.83,GBP,out,Campbell-Jarvis,RU,card
+SAMPLE_030-T014,2026-06-30,6.28,GBP,out,Butler-Herbert,RU,card
+SAMPLE_030-T015,2026-04-18,32.38,GBP,out,Taylor-Savage,RU,card
+SAMPLE_030-T016,2026-06-25,26.82,GBP,out,"Parker, North and Young",RU,card
+SAMPLE_030-T017,2026-07-16,69.53,GBP,out,Rogers-Green,RU,card
+SAMPLE_030-T018,2026-06-09,17.7,GBP,out,Jackson Inc,RU,card
+SAMPLE_030-T019,2026-03-18,54.22,GBP,out,Roberts-Bradshaw,RU,card
+SAMPLE_030-T020,2026-03-31,22.4,GBP,out,"Brady, Clayton and Edwards",RU,card
+SAMPLE_030-T021,2026-05-13,36.65,GBP,out,Kelly PLC,RU,card
+SAMPLE_030-T022,2026-03-19,72.61,GBP,out,Wood Inc,RU,card
+SAMPLE_030-T023,2026-07-07,24.02,GBP,out,Holland-Crawford,RU,card
+SAMPLE_030-T024,2026-02-19,7.3,GBP,out,Ellis-O'Connor,RU,card
+SAMPLE_030-T025,2026-06-01,141.77,GBP,out,Marsh and Sons,RU,card
+SAMPLE_030-T026,2026-06-09,2548.79,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-T027,2026-04-02,3000.59,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-T028,2026-05-07,3555.66,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-T029,2026-07-03,3498.44,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-T030,2026-04-21,2928.69,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-T031,2026-05-04,1880.17,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-S00,2026-06-14,9334.87,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-S01,2026-06-16,9519.7,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-S02,2026-06-18,8512.43,GBP,in,Cash Deposit,RU,cash
+SAMPLE_030-S03,2026-06-20,9157.57,GBP,in,Cash Deposit,RU,cash

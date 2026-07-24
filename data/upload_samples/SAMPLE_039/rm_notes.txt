@@ -1,4 +1,4 @@
-RELATIONSHIP MANAGER NOTES — Sharon Rhodes (SAMPLE_039)
+RELATIONSHIP MANAGER NOTES — Kerry Wallis (SAMPLE_039)
 Reviewed: 2026-07-09
 
-URGENT: sanctions screening returned an EXACT match (OFAC SDN). Account frozen pending MLRO review. Do NOT process any transactions. Escalated immediately.
+HIGH RISK: client's occupation (procurement agent) and jurisdiction (North Korea) are very high risk; ownership is complex and source of funds is poorly evidenced. Recommend enhanced scrutiny and MLRO review.

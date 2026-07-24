@@ -1440,5 +1440,1726 @@
       "self_confidence": 0.3,
       "node_agreement": 0.62
     }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:317b971406e7": {
+    "finding": {
+      "customer_id": "SAMPLE_011",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domain assessments (KYC, screening, transactions) independently indicate low risk and are mutually reinforcing. No red flags, inconsistencies, or elevated risk signals were identified across any domain.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "All standard KYC checks passed: identity document verified, PEP status negative, occupation and activity consistent with profile. No red flags identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. All screening checks are clear, indicating low risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No cash deposits, structuring not applicable. Only domestic counterparty (GB). Credits exceed debits with no rapid onward transfers or round-tripping observed. No red flags present."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "The synthesis score of 10 is fully justified by the domain evidence. All three assessments (KYC, screening, transactions) independently indicate low risk with no red flags, inconsistencies, or elevated signals. The low score accurately reflects the clean, mutually reinforcing evidence."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 1.0,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:dc9453f9563b": {
+    "finding": {
+      "customer_id": "SAMPLE_016",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domains (KYC, screening, transactions) consistently indicate low risk with no red flags. The customer is a UK national mechanic with a long account history, clean sanctions/PEP/adverse media checks, and transaction patterns that are moderate, jurisdictionally contained, and free of structuring or layering indicators. The signals reinforce each other, supporting a low overall money-laundering risk view.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Standard KYC: UK national, mechanic, completed KYC, valid ID, long account history, no adverse indications. No red flags present."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. Screening results are clean, indicating low risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags identified: no cash deposits (no structuring risk), all counterparties are in a single low-risk jurisdiction (GB), transaction volume and amounts are moderate, and no indicators of layering, round-tripping, or dormant-then-spike activity are present."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "The synthesis accurately reflects the low-risk evidence from all three domains. The score of 10 is appropriate."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 0.95,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:10d2a2241edf": {
+    "finding": {
+      "customer_id": "SAMPLE_007",
+      "score": 15,
+      "band": "low",
+      "rationale": "All three domains (KYC, screening, transactions) independently assessed as low risk. The long-standing relationship, complete KYC, valid identification, non-PEP journalist profile, no sanctions or adverse media, and domestic transaction pattern with net positive flow reinforce each other, indicating no money-laundering concern. The consistency across domains provides strong evidence of a low-risk profile.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Long-standing relationship (account age ~5.8 years), complete KYC, valid French passport, non-PEP journalist with salary account. Activity consistent with profile; no specific red flags or unusual patterns identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media found. Standard screening result with no red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags present. 28 transactions with only domestic counterparties (FR), no cash deposits, and a net positive flow. No indicators of structuring, layering, round-tripping, or dormant-then-spike activity."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 15,
+        "note": "Score is justified by evidence. All three domains (KYC, screening, transactions) are independently assessed as low risk, and the synthesis accurately reflects the consistency across domains with no red flags or money-laundering concerns."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.98,
+      "self_confidence": 0.98,
+      "node_agreement": 0.98
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:3ddc53174d58": {
+    "finding": {
+      "customer_id": "SAMPLE_005",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domain assessments (KYC, screening, transactions) are uniformly low risk. The client is a UK national doctor with a long-standing account, complete KYC, no PEP, no sanctions, no adverse media, and domestic transactions with no cash or structuring. Signals reinforce each other: consistent profile, no red flags, and relationship manager confirmation. Overall risk is minimal.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Client is a UK national and doctor with a long-standing account (over 6 years), complete KYC, valid ID, no PEP status, and relationship manager notes confirm activity consistent with profile. No red flags or unusual patterns identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. All screening checks are clean, indicating no specific red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags; transactions are domestic to UK, no cash, no structuring or layering indicators."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "The synthesis score of 10 is fully justified by the evidence. All three domains (KYC, screening, transactions) are uniformly low risk, with no red flags or anomalies. The rationale accurately reflects the evidence, and the score is appropriate for a minimal risk profile."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 0.95,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:2c48e27c582e": {
+    "finding": {
+      "customer_id": "SAMPLE_006",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domains (KYC, screening, transactions) are assessed as low risk with no red flags. The customer is a long-standing Irish resident with a clean profile, no sanctions or adverse media, and domestic transactions consistent with salary income. No conflicting signals or suspicious patterns observed.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Customer is a long-standing Irish resident (architect) with complete KYC, valid ID, no PEP or adverse screening indicators. Activity consistent with salary profile. No red flags identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, confirmed PEP status, or adverse media identified. All screening checks are clean."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags identified. All transactions are domestic (IE), no cash activity, no structuring, layering, or dormant-then-spike patterns. Credit/debit volumes are typical for a personal account."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "Evidence supports low risk across all domains; score of 10 is appropriate."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 0.95,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:4044b81ebd47": {
+    "finding": {
+      "customer_id": "SAMPLE_009",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domains (KYC, screening, transactions) indicate low risk and reinforce each other. KYC shows complete, valid documentation, domestic Spanish national with consistent occupation and salary account usage. Screening returns no sanctions, PEP, or adverse media. Transactions are domestic only, no cash, moderate volumes, no structuring or layering. The consistency across domains confirms no red flags, resulting in a low overall risk profile.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "All KYC requirements are met: complete KYC, valid ID document, non-PEP, domestic Spanish national with consistent occupation (dentist) and salary account usage. No red flags or unusual patterns detected."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. Screening results are clean."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags identified. Transactions are domestic (only Spain as counterparty), no cash activity, moderate volumes and amounts, and no indicators of structuring, layering, round-tripping, or dormant account spikes. Activity appears consistent with normal financial behavior."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "The synthesis score of 10 is well-supported by the evidence: all three domains (KYC, screening, transactions) are assessed as low risk with no red flags, and the rationale correctly notes the reinforcing consistency. A very low score is appropriate for a clean, straightforward profile."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 0.98,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:f962b393a256": {
+    "finding": {
+      "customer_id": "SAMPLE_010",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domains (KYC, screening, transactions) are assessed as low risk and mutually reinforce each other. The customer is a Netherlands national pharmacist with complete KYC, no PEP/sanctions/adverse media, and a consistent transaction pattern of domestic salary/card usage with no cash, structuring, layering, or dormant-spike activity. No red flags are present, and RM notes confirm consistent activity. The evidence is clear and consistent across domains, leading to a very low overall risk.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Netherlands national, pharmacist, no PEP, complete KYC with valid ID, account age over 2 years, RM notes confirm consistent activity and no concerns."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media found. KYC and screening results are clean, indicating no specific red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags present: zero cash deposits (no structuring risk), consistent counterparty country (NL), and no indicators of layering, round-tripping, or dormant-then-spike activity. The transaction pattern appears normal with credits and debits typical of domestic salary/card usage."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "Score is justified by evidence; all domains are assessed as low risk with no red flags, and the synthesis accurately reflects the consistent low-risk profile across KYC, screening, and transactions."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 0.95,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:9b5b90533045": {
+    "finding": {
+      "customer_id": "SAMPLE_008",
+      "score": 15,
+      "band": "low",
+      "rationale": "All three domains (KYC, screening, transactions) independently assess the customer as low risk. There is no reinforcing negative signal; instead, the consistency across domains supports a low-risk profile. The customer is a German national farmer with no PEP status, complete KYC, clear screening, and domestic transaction activity with no red flags. The evidence is consistent and thin on risk, leading to a low overall score.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Customer is a German national and resident (DE/DE), occupation farmer, no PEP status. KYC is complete with a valid ID document. Account age is over 1 year with activity consistent with profile per RM notes. No red flags or unusual patterns identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. All screening indicators are clear, resulting in low risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags observed. Activity is domestic (only Germany), no cash transactions, no structuring, layering, round-tripping, or dormant account spikes. Total credits and debits are moderate with 26 transactions, consistent with normal account usage."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 15,
+        "note": "The synthesis score of 15 is consistent with the evidence, which uniformly indicates low risk across all domains. No adjustment needed."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.95,
+      "self_confidence": 0.95,
+      "node_agreement": 0.98
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:f9237b5de92d": {
+    "finding": {
+      "customer_id": "SAMPLE_012",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domain assessments (KYC, screening, transactions) report no red flags and are internally consistent. No adverse indicators across any domain, no reinforcing signals, and activity is normal for a UK plumber. The low risk is supported by complete KYC, clean screening, and domestic transactional patterns with no suspicious activity.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "All KYC indicators are normal: complete KYC, valid UK passport, non-PEP, plumber occupation with consistent activity per RM notes. No red flags present."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. No red flags present."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags identified. Transactions are all domestic (GB), no cash activity, no structuring, layering, round-tripping, or dormant-then-spike patterns. Net credit flow is positive and consistent with normal activity."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "The synthesis score of 10 is fully justified by the domain evidence. All three assessments (KYC, screening, transactions) report no red flags, are internally consistent, and align with a low-risk profile. No adverse indicators or reinforcing signals exist. The score appropriately reflects the clean evidence."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 0.95,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:b652318438aa": {
+    "finding": {
+      "customer_id": "SAMPLE_013",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domain assessments (KYC, screening, transactions) return low risk with no red flags. The customer profile is consistent with a long-standing professor's salary account, no sanctions or PEP exposure, and domestic transaction patterns typical of normal activity. The signals reinforce each other uniformly, indicating no money-laundering risk.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Long-standing relationship with complete KYC, clean screening, and activity consistent with a professor's salary account. No red flags identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, no adverse media. No red flags present."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags; cash_in=0 so structuring not applicable; all counterparties are domestic (Italy); transaction volume and value are typical for normal activity."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "Score is justified by the evidence: all three domain assessments (KYC, screening, transactions) indicate low risk with no red flags, consistent with a low-risk professor's salary account."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 0.95,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:47c83230b816": {
+    "finding": {
+      "customer_id": "SAMPLE_017",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domain assessments (KYC, screening, transactions) independently indicate low risk with no red flags. The customer is a US national, clean documentation, no PEP/sanctions/adverse media, and domestic transactions consistent with normal activity. There is no evidence of money laundering indicators, and the domains mutually reinforce a low-risk profile without any conflicting signals.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Customer is a US national with clean KYC documentation, no PEP status, consistent activity as a software developer, and long-standing relationship with no concerns noted. No red flags present."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, PEP status confirmed negative, and no adverse media. Standard screening results indicate no red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags detected. All transactions are domestic (US), no cash activity, and no indicators of structuring, layering, round-tripping, or dormant-then-spike patterns. The transaction volume and amounts are consistent with normal activity."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "The score of 10 is fully justified by the evidence, which shows low risk across all three domains with no red flags."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 1.0,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:acb301dc1c65": {
+    "finding": {
+      "customer_id": "SAMPLE_014",
+      "score": 15,
+      "band": "low",
+      "rationale": "All three domain assessments (KYC, screening, transactions) unanimously indicate low risk with no red flags. They reinforce each other: a long-standing relationship with complete KYC, a valid UK passport, no PEP or adverse signals; clear sanctions screening, no PEP confirmation, and no adverse media; domestic transactions only (GB), no cash deposits, and a net credit position consistent with normal income/expense activity. No structuring, layering, round-tripping, or dormant-then-spike patterns ",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags. Long-standing relationship, complete KYC, valid UK passport, consistent activity, no PEP or adverse signals."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media found. All screening checks are clear, indicating no red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags present. Transactions are domestic (GB only), no cash deposits, and net credit position is consistent with normal income/expense activity. No structuring, layering, round-tripping, or dormant-then-spike patterns observed."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 15,
+        "note": "Synthesis accurately reflects evidence; all domains indicate low risk with no red flags, so a score of 15 is appropriate."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.95,
+      "self_confidence": 0.95,
+      "node_agreement": 0.98
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:079065cb6106": {
+    "finding": {
+      "customer_id": "SAMPLE_015",
+      "score": 10,
+      "band": "low",
+      "rationale": "All three domain assessments (KYC, screening, transactions) are rated low with no red flags. The client is a UK national with a long-standing account, verified documentation, and activity consistent with their profile as a baker. No sanctions, PEP, or adverse media. The absence of transaction activity is not a concern given the profile and relationship manager's confirmation. Domains reinforce each other, indicating a consistent low-risk profile.",
+      "key_signals": [],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Client is a UK national and resident, occupation baker, PEP status false, with a long-standing account (over 7 years), complete KYC documentation, and a valid GB passport. Relationship manager notes confirm activity consistent with profile and no concerns. No red flags identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. No red flags present."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No transactions or activity to assess. No red flags present."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 10,
+        "note": "The synthesis score of 10 is well-justified by the evidence. All three domains are rated low with no red flags, and the rationale correctly accounts for the absence of transaction activity given the client's profile and relationship manager confirmation. No adjustment needed."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.93,
+      "self_confidence": 1.0,
+      "node_agreement": 0.93
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:f7e43b10fc7a": {
+    "finding": {
+      "customer_id": "SAMPLE_020",
+      "score": 65,
+      "band": "medium",
+      "rationale": "The KYC and screening domains both flag unresolved negative media and a regulatory inquiry into suspected fraud, reinforcing each other. However, transaction activity is clean with no red flags, creating a partial disagreement. The occupation as a money exchange operator is inherently higher risk, but the absence of transactional evidence of money laundering tempers the overall risk. The signals are not fully corroborated by financial behavior, hence the overall risk is medium, not high.",
+      "key_signals": [
+        "adverse_media: Dr Lorraine Evans named in fraud investigation",
+        "negative_media_reference"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "negative_media_reference"
+          ],
+          "note": "Negative media reference identified during periodic review; client denies involvement but monitoring is ongoing. Occupation as money exchange operator is a higher-risk sector, but the primary red flag is the unresolved negative media."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse_media: Dr Lorraine Evans named in fraud investigation"
+          ],
+          "note": "Subject is a money exchange business named in a regulatory inquiry into suspected fraud. No charges have been filed, but the adverse media constitutes a specific red flag, warranting medium risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags observed. Counterparty only in GB, no cash transactions, and transaction volumes are modest. No evidence of structuring, layering, round-tripping, or dormant-then-spike activity."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 65,
+        "note": "The synthesis correctly balances the medium-risk signals from KYC and screening with the low-risk transaction activity, resulting in a medium overall risk score. No correction needed."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.4,
+      "self_confidence": 0.4,
+      "node_agreement": 0.52
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:8e538bd62f8a": {
+    "finding": {
+      "customer_id": "SAMPLE_019",
+      "score": 45,
+      "band": "medium",
+      "rationale": "The subject is a PEP (mayor) with KYC and screening both assessed as medium, while transaction activity is low. The PEP status is a confirmed sensitivity flag that inherently elevates risk, but the absence of sanctions hits, adverse media, and any suspicious transaction patterns (domestic only, no cash, moderate volume) provides partial mitigation. The domains do not fully align (transactions low vs. other medium), and the evidence is thin\u2014only the PEP designation without additional red flags. T",
+      "key_signals": [
+        "PEP",
+        "PEP confirmed"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "PEP"
+          ],
+          "note": "PEP status with mayor occupation; EDD applied, source of wealth stated, no other red flags."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "PEP confirmed"
+          ],
+          "note": "The subject is confirmed as a Politically Exposed Person (PEP), which is a sensitivity flag requiring enhanced due diligence. However, no sanctions hits or adverse media are present, so the screening risk is elevated but not high."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags identified. Transactions are domestic (only UK counterparties), no cash deposits, moderate volume (29 transactions) with credits and debits consistent with normal activity. No evidence of structuring, layering, round-tripping, or dormant-then-spike patterns."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 45,
+        "note": "The evidence shows only the PEP status as a risk factor, with no adverse media, no sanctions, and low transaction activity (domestic, no cash, no suspicious patterns). A score of 55 is slightly elevated given the absence of additional red flags and the low transaction risk. An adjusted score of 45 better reflects a medium-low risk band, consistent with the partial mitigation from clean transactions and the lack of supporting signals."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.4,
+      "self_confidence": 0.4,
+      "node_agreement": 0.67
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:3ff24045739f": {
+    "finding": {
+      "customer_id": "SAMPLE_018",
+      "score": 50,
+      "band": "medium",
+      "rationale": "The combination of a high-risk jurisdiction (Russia) and high-risk occupation (oil trader) from KYC, coupled with an ongoing regulatory inquiry into suspected fraud from screening, elevates risk above the individual medium assessments. However, the transaction domain shows no red flags (no cash, no structuring, low volume), which partially offsets the risk. The signals reinforce across KYC and screening, but the lack of transaction evidence and the absence of formal charges keep the overall risk",
+      "key_signals": [
+        "adverse media: named in fraud investigation",
+        "high-risk jurisdiction (Russia)",
+        "high-risk occupation (oil trader)"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "high-risk jurisdiction (Russia)",
+            "high-risk occupation (oil trader)"
+          ],
+          "note": "Client is a Russian national and resident, working as an oil trader, which is a high-risk industry. Russia is a higher-risk jurisdiction. KYC documentation is complete and account is aged, but the combination of jurisdiction and occupation warrants medium risk assessment."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse media: named in fraud investigation"
+          ],
+          "note": "Gemma Perkins, an oil trader based in Russia, is subject to an ongoing regulatory inquiry into suspected fraud. No charges have been filed, but the adverse media indicates potential financial crime risk, warranting enhanced due diligence."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific transaction red flags are present. The 29 transactions show a net inflow of ~10,915 with no cash deposits (cash_in=0), indicating no structuring via cash. Although the counterparty country is Russia (a high-risk jurisdiction), this alone does not constitute a transaction-level red flag without additional evidence of layering, round-tripping, or dormant-account spikes. The activity pattern is consistent with normal non-cash transfers, and the volume is modest. No flagged behaviors from the watchlist indicators were observed."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 50,
+        "note": "The synthesis correctly identifies the combination of medium KYC and screening risks, but the score of 60 is slightly high given the strong mitigating factor of low transaction risk (no cash, no structuring, modest volume) and the absence of formal charges. The ongoing inquiry is a concern, but it has not resulted in charges, and the transaction domain shows no red flags. A score of 50 better reflects a medium risk level that warrants enhanced monitoring without approaching high risk."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.5,
+      "self_confidence": 0.6,
+      "node_agreement": 0.67
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:ae033a730be9": {
+    "finding": {
+      "customer_id": "SAMPLE_023",
+      "score": 55,
+      "band": "medium",
+      "rationale": "The customer is a UK PEP with complete KYC, verified identity, and a 5+ year account history under enhanced due diligence. The PEP status is a specific red flag across KYC and screening domains, elevating both to medium. However, no sanctions, adverse media, or suspicious transaction patterns (low volume, domestic only, no cash, structuring, or layering) are present. The low transaction activity provides strong mitigating evidence that the PEP risk is not currently materializing. The domains are",
+      "key_signals": [
+        "PEP (Politically Exposed Person)",
+        "pep_confirmed"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "PEP (Politically Exposed Person)"
+          ],
+          "note": "Client is a PEP from the UK with complete KYC documentation, verified identity, and an account age of over 5 years. Enhanced due diligence and ongoing monitoring are in place. While PEP status is a specific red flag, the comprehensive KYC and mitigating controls justify a medium risk rating rather than high."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "pep_confirmed"
+          ],
+          "note": "A confirmed PEP hit is a specific red flag in screening, elevating risk above low. However, no sanctions or adverse media hits are present, so the overall screening risk is moderate."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Normal activity: 32 domestic transactions with no cash, no structuring, no layering, no round-tripping, and no dormant-then-spike pattern. All counterparties in UK, KYC assumed complete, screening clean."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 55,
+        "note": "Synthesis aligns with evidence; score appropriately reflects medium risk with mitigating factors."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.62,
+      "self_confidence": 0.9,
+      "node_agreement": 0.62
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:549d30240330": {
+    "finding": {
+      "customer_id": "SAMPLE_021",
+      "score": 55,
+      "band": "medium",
+      "rationale": "All three domains (KYC, screening, transactions) assess medium risk individually, but the signals reinforce each other to elevate the overall risk above medium. The client is a Venezuelan national and importer\u2014a combination that inherently raises trade-based money laundering concerns. This is further corroborated by adverse media linking the client (Carol Fisher) to an unproven fraud investigation, which introduces a specific red flag. Transactional analysis shows all counterparty activity is wi",
+      "key_signals": [
+        "High-risk jurisdiction (Venezuela)",
+        "Occupation: importer (potential trade-based money laundering risk)",
+        "adverse_media: fraud investigation (unproven allegations)",
+        "counterparty country: Venezuela (high-risk jurisdiction)"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "High-risk jurisdiction (Venezuela)",
+            "Occupation: importer (potential trade-based money laundering risk)"
+          ],
+          "note": "Client is a resident and national of Venezuela, a jurisdiction commonly associated with higher financial crime risk. The occupation as importer introduces additional exposure to trade-based money laundering. However, KYC documentation is complete, identity verified, no PEP status, and the account has been open for nearly a year with no adverse findings. The risk is assessed as medium due to the jurisdiction and occupation, warranting enhanced due diligence but not an immediate high-risk classification."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse_media: fraud investigation (unproven allegations)"
+          ],
+          "note": "While no sanctions hits or PEP confirmation, the adverse media report naming Carol Fisher in a fraud investigation introduces a specific red flag. The allegation is unproven and no charges filed, but the nature of the investigation elevates risk above low. Further due diligence is warranted."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [
+            "counterparty country: Venezuela (high-risk jurisdiction)"
+          ],
+          "note": "No structuring, layering, round-tripping, or dormant-then-spike patterns observed. However, the sole counterparty jurisdiction is Venezuela, which is commonly associated with elevated financial crime risk. Without additional context, this warrants a medium risk assessment."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 55,
+        "note": "The synthesis claims that the three medium-risk domains 'reinforce each other to elevate the overall risk above medium,' yet the evidence explicitly notes the absence of concrete transaction red flags, unproven allegations, and a year of clean history. The rationale itself admits 'evidence is thin' and 'lack of concrete transaction patterns reduces confidence.' A score of 65 is not justified by the evidence; it overstates the combined risk. A more appropriate score is 55, reflecting a moderate risk consistent with the individual domain assessments and the limited aggravating factors."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.4,
+      "self_confidence": 0.4,
+      "node_agreement": 0.95
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:21554d5b8bb8": {
+    "finding": {
+      "customer_id": "SAMPLE_022",
+      "score": 60,
+      "band": "medium",
+      "rationale": "The combination of high-risk country (Myanmar) and industry (gem trader) from KYC with a specific adverse media signal (regulatory inquiry into suspected fraud, no charges) from screening elevates the overall risk. However, the absence of transactional red flags (cash_in=0, no structuring or layering) and the fact that charges have not been filed prevent the risk from reaching high. The domains reinforce each other: the adverse media adds a concrete concern to the inherent risks, but the clean t",
+      "key_signals": [
+        "adverse_media: named in fraud investigation",
+        "high-risk jurisdiction (Myanmar \u2013 FATF grey-listed or equivalent)",
+        "high-risk occupation (gem trader \u2013 precious stones sector prone to money laundering)"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "high-risk jurisdiction (Myanmar \u2013 FATF grey-listed or equivalent)",
+            "high-risk occupation (gem trader \u2013 precious stones sector prone to money laundering)"
+          ],
+          "note": "Client is a Myanmar resident and gem trader, both known risk factors. KYC documentation is complete and no PEP or adverse screening hits are present. However, the combination of a high-risk country and industry justifies a medium risk rating; no specific transactional or behavioural red flags have been identified to elevate to high."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse_media: named in fraud investigation"
+          ],
+          "note": "Adverse media indicates involvement in a regulatory inquiry into suspected fraud, though no charges have been filed. This is a specific red flag warranting elevated scrutiny but not yet high risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags identified. Cash_in=0 eliminates structuring risk; no evidence of layering, round-tripping, or dormant-then-spike. Counterparty country is Myanmar, but without additional indicators, this alone does not elevate risk above low."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 60,
+        "note": "The synthesis accurately reflects the evidence: two medium-risk domains (KYC with high-risk country/industry, screening with adverse media but no charges) and one low-risk domain (clean transactions). The score of 60 appropriately places the overall risk at the upper end of medium, consistent with the rationale that the adverse media adds concrete concern while clean transactions prevent elevation to high. No adjustment needed."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.57,
+      "self_confidence": 0.6,
+      "node_agreement": 0.57
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:4217af77edf2": {
+    "finding": {
+      "customer_id": "SAMPLE_025",
+      "score": 50,
+      "band": "medium",
+      "rationale": "The PEP status is the primary risk driver, consistently flagged across KYC and screening domains. While transactional activity is low risk (domestic counterparties, no cash, no structuring), the inherent PEP risk elevates the overall assessment to medium. The absence of adverse media or sanctions hits provides some comfort, but the PEP status alone warrants enhanced due diligence. The low transaction score does not negate the PEP risk, resulting in a balanced medium rating.",
+      "key_signals": [
+        "Politically Exposed Person (PEP) status requires enhanced due diligence; source of wealth stated as public office/family business",
+        "pep_confirmed"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "Politically Exposed Person (PEP) status requires enhanced due diligence; source of wealth stated as public office/family business"
+          ],
+          "note": "Client is a UK PEP (Janet Finch) with complete KYC and valid ID. Enhanced due diligence and ongoing monitoring are in place per RM notes. While no transactional red flags are present, PEP status inherently elevates risk above low. Account age is under 90 days but not a standalone concern."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "pep_confirmed"
+          ],
+          "note": "Subject is a confirmed Politically Exposed Person (PEP). While no other red flags (sanctions hits, adverse media) are present, PEP status alone warrants enhanced due diligence and is considered a moderate risk factor in AML screening."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags present. All counterparties are domestic (GB), no cash transactions, total credits and debits are moderate and consistent with normal activity, and no indicators of structuring, layering, round-tripping, or dormant-then-spike behavior."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 50,
+        "note": "The synthesis accurately reflects the evidence: KYC and screening both indicate medium risk due to PEP status, while transactions are low risk. The balanced medium rating (50) is justified and consistent with the domain evidence."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.67,
+      "self_confidence": 0.7,
+      "node_agreement": 0.67
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:559fbe436c1e": {
+    "finding": {
+      "customer_id": "SAMPLE_027",
+      "score": 15,
+      "band": "low",
+      "rationale": "All three domains (KYC, screening, transactions) consistently indicate low risk. The client is a long-standing UK national with complete KYC, no PEP/sanctions/adverse media, and a normal domestic salary-in/card-out transaction pattern. The occupation as casino operator is noted but deemed consistent with the profile per RM notes, and no specific red flags are present across any domain. The signals reinforce each other: clean screening, stable KYC profile, and routine transactional behavior all p",
+      "key_signals": [
+        "occupation: casino operator"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "low",
+          "signals": [
+            "occupation: casino operator"
+          ],
+          "note": "Client is a long-standing UK national with complete KYC, valid ID, and no PEP or adverse screening. Occupation as casino operator is noted but activity is consistent with profile per RM notes; no specific red flags present."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, PEP confirmation, or adverse media; screening is clean."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "All 21 transactions are domestic (GB) with no cash deposits, no structuring, no layering, no round-tripping, and no dormant-then-spike pattern. The activity is consistent with normal domestic salary-in and card-out usage, with no specific red flags identified."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 15,
+        "note": "The evidence across all domains (KYC, screening, transactions) consistently indicates low risk. The client's occupation as a casino operator is noted but deemed consistent with profile per RM notes, and no red flags are present. A score of 15 appropriately reflects the low-risk assessment, and no adjustment is needed."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.95,
+      "self_confidence": 0.95,
+      "node_agreement": 0.98
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:9d33794a2ceb": {
+    "finding": {
+      "customer_id": "SAMPLE_024",
+      "score": 55,
+      "band": "medium",
+      "rationale": "The KYC and transaction domains both rate medium and reinforce each other through the common factor of Russia exposure. The client is a Russian resident and metals dealer (high-risk inherent factors), and all 26 transactions involve counterparties in Russia \u2013 a jurisdiction with elevated sanctions and AML risk. The screening domain is low (no sanctions, PEP, or adverse media), which provides a mitigating element but does not negate the concentration risk. The account is 7.5 years old with comple",
+      "key_signals": [
+        "counterparty country in high-risk jurisdiction (Russia)",
+        "high-risk jurisdiction: Russia",
+        "high-risk occupation: metals dealer"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "high-risk jurisdiction: Russia",
+            "high-risk occupation: metals dealer"
+          ],
+          "note": "Client is Russian resident with occupation as metals dealer, both considered higher risk. However, KYC is complete, account age is 7.5 years, and document is valid. No adverse screening results mentioned. Monitoring in place."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, no adverse media. Subject appears clean with no red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [
+            "counterparty country in high-risk jurisdiction (Russia)"
+          ],
+          "note": "No structuring, layering, round-tripping, or dormant-then-spike patterns observed. Cash deposits are zero. However, all 26 transactions involve counterparties in Russia, a jurisdiction associated with elevated sanctions and AML risk. The pattern otherwise appears normal, but the geographic concentration warrants a medium risk rating."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 55,
+        "note": "The synthesis rates the overall risk as high (70), but the individual domain evidence shows only medium ratings for KYC and transactions, and a low rating for screening. The client's Russia residence and metals dealing are indeed higher-risk factors, but these are already reflected in the medium KYC rating. The geographic concentration of transactions is similarly captured by the medium transactions rating. The low screening result (no sanctions, PEP, or adverse media) provides a significant mitigating factor. There are no structuring, layering, or other typologies. The combination of medium, medium, and low does not justify a high risk score; a moderate risk score (e.g., 55) is more appropriate given the evidence."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.5,
+      "self_confidence": 0.6,
+      "node_agreement": 0.62
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:a4e425561f68": {
+    "finding": {
+      "customer_id": "SAMPLE_028",
+      "score": 55,
+      "band": "medium",
+      "rationale": "The KYC assessment identifies the customer as a resident of Afghanistan (FATF high-risk jurisdiction) and employed in money exchange (high-risk occupation), which together elevate the inherent risk above baseline. The screening assessment shows no red flags, providing a slight counterbalance. The transaction assessment indicates no specific structuring or layering patterns, but the counterparty country (AF) is also high-risk, reinforcing the jurisdiction risk from the KYC domain. The signals acr",
+      "key_signals": [
+        "Counterparty country is Afghanistan (high-risk jurisdiction)",
+        "high-risk jurisdiction (Afghanistan)",
+        "high-risk occupation (money exchange)"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "high-risk jurisdiction (Afghanistan)",
+            "high-risk occupation (money exchange)"
+          ],
+          "note": "Client is a resident of Afghanistan (higher-risk jurisdiction per FATF) and works in money exchange, which is a high-risk occupation for money laundering. KYC is complete and ID is valid, but the combination of country and occupation elevates risk above low. No PEP or other red flags present."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags detected."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [
+            "Counterparty country is Afghanistan (high-risk jurisdiction)"
+          ],
+          "note": "While no specific structuring, layering, or round-tripping patterns are observed (cash_in=0, no rapid onward transfers or dormant-then-spike indicated), the counterparty country (AF) is a high-risk jurisdiction, elevating the transaction risk above baseline. Additional context (e.g., customer profile, business purpose, transaction narrative) would be needed to determine if further escalation is warranted."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 55,
+        "note": "The synthesis score of 65 is slightly too high given the evidence. Both KYC and transaction risks are rated medium, but these are driven solely by static factors (Afghanistan residence and money exchange occupation) without any behavioral red flags (no screening hits, no transaction patterns). The low screening assessment and absence of observed suspicious activity mean the overall risk should be lower than 65. A score of 55 better reflects the moderate elevation from static factors, leaving room for human review to assess additional context as suggested."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.5,
+      "self_confidence": 0.5,
+      "node_agreement": 0.62
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:2e58cdc7003c": {
+    "finding": {
+      "customer_id": "SAMPLE_026",
+      "score": 55,
+      "band": "medium",
+      "rationale": "The primary risk driver is the Venezuela jurisdiction (KYC medium) reinforced by observed transactions with Venezuela (transactions medium). However, the KYC is complete with no PEP status, no adverse media, and a long account history; screening is clean. No structuring or layering patterns were identified. The evidence is thin\u2014only country risk without specific red flags\u2014so overall risk is moderate but requires cautious monitoring.",
+      "key_signals": [
+        "Counterparty transactions involving Venezuela, a high-risk jurisdiction",
+        "high-risk jurisdiction (Venezuela)"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "high-risk jurisdiction (Venezuela)"
+          ],
+          "note": "Client is a Venezuelan resident with complete KYC, long account history (8+ years), no PEP status, and a legitimate occupation as a shipping agent. However, Venezuela is classified as a higher-risk jurisdiction, which elevates the overall risk to medium. No specific red flags such as inconsistent documents, adverse media, or sanctions matches were identified."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media; screening results are clean with no red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [
+            "Counterparty transactions involving Venezuela, a high-risk jurisdiction"
+          ],
+          "note": "Presence of transactions with Venezuela raises risk; no clear structuring or layering patterns observed, but further due diligence recommended."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 55,
+        "note": "The synthesis accurately reflects the moderate risk derived from the Venezuela jurisdiction and transactions, balanced by clean KYC, screening, and long account history. The score of 55 is consistent with the evidence, which indicates medium risk with no specific red flags beyond country exposure."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.4,
+      "self_confidence": 0.4,
+      "node_agreement": 0.62
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:1acefcd4fe59": {
+    "finding": {
+      "customer_id": "SAMPLE_029",
+      "score": 45,
+      "band": "medium",
+      "rationale": "Adverse media alert and unproven fraud investigation (both medium) elevate risk, but transactions are clean (low). The media signals reinforce each other as the same allegation, but the lack of transactional red flags and the unsubstantiated nature of the fraud investigation create a disconnect between domains. Overall risk is moderate, but the conflicting evidence warrants human review.",
+      "key_signals": [
+        "adverse_media_fraud_investigation",
+        "client denies involvement but monitoring ongoing",
+        "negative media reference identified during periodic review"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "medium",
+          "signals": [
+            "negative media reference identified during periodic review",
+            "client denies involvement but monitoring ongoing"
+          ],
+          "note": "Negative media alert raised during periodic review. While client denies involvement and account is aged with complete KYC, the presence of adverse news warrants enhanced due diligence and monitoring."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse_media_fraud_investigation"
+          ],
+          "note": "Adverse media names the subject in an unproven fraud investigation. While no sanctions or PEP matches exist, the allegation elevates risk above low, but remains unsubstantiated (no charges filed)."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No red flags identified; normal transaction pattern with no cash deposits, no structuring, no layering, no round-tripping, and no dormant-then-spike activity. Single counterparty country (Pakistan) does not by itself constitute a risk without additional indicators. 30 transactions with a credit/debit balance consistent with typical personal or business use."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 45,
+        "note": "Score of 55 is slightly inflated. The evidence shows two medium signals (adverse media, unproven fraud investigation) but both are unsubstantiated (no charges filed, client denies), and transactions are clean (low). The combination of unsubstantiated allegations and clean transactional history suggests a risk level closer to the lower end of moderate (around 45). The rationale correctly identifies the disconnect, but the score does not fully reflect the weight of the unsubstantiated nature and clean transactions."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.3,
+      "self_confidence": 0.3,
+      "node_agreement": 0.67
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:bd005ac94eb1": {
+    "finding": {
+      "customer_id": "SAMPLE_030",
+      "score": 70,
+      "band": "high",
+      "rationale": "The KYC assessment identifies structuring behavior (cash deposits just below \u00a310,000 threshold) and evasive responses about source of funds, which are classic red flags for money laundering. The transactions assessment reinforces this by noting significant cash inflows from Russia, a jurisdiction associated with elevated money-laundering risk. Although the screening assessment shows no hits, this does not diminish the combined weight of the other two domains; the structuring pattern and geograph",
+      "key_signals": [
+        "Counterparty jurisdiction Russia (high-risk)",
+        "High proportion of cash transactions (73% of credits)",
+        "recommendation for SAR by relationship manager",
+        "structuring via multiple cash deposits just below reporting threshold",
+        "vague explanation of source of funds"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "structuring via multiple cash deposits just below reporting threshold",
+            "vague explanation of source of funds",
+            "recommendation for SAR by relationship manager"
+          ],
+          "note": "The client's pattern of cash deposits just below the \u00a310,000 reporting threshold, combined with evasive responses about source of funds, indicates potential money laundering or structuring activity. This is a significant red flag regardless of otherwise clean KYC documentation."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No screening red flags detected."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [
+            "High proportion of cash transactions (73% of credits)",
+            "Counterparty jurisdiction Russia (high-risk)"
+          ],
+          "note": "The transaction pattern shows significant cash inflows from Russia, which elevates risk despite no clear evidence of structuring or layering. Further investigation is warranted to assess the nature of the cash deposits and the customer's business profile."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 70,
+        "note": "The synthesis overstates the transactions evidence: the evidence rates it as 'medium' and explicitly states 'no clear evidence of structuring or layering', yet the synthesis treats it as reinforcing the structuring pattern. The KYC high is strong, but the combination of medium transactions and low screening does not justify a score of 85. A more appropriate score reflects the significant KYC red flag tempered by the moderate transactions risk and clean screening, resulting in a high but not extreme overall risk."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.32,
+      "self_confidence": 0.8,
+      "node_agreement": 0.32
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:f137cfb75056": {
+    "finding": {
+      "customer_id": "SAMPLE_032",
+      "score": 75,
+      "band": "high",
+      "rationale": "The KYC and transaction domains both indicate high risk due to suspected round-tripping, reinforced by the customer's high-risk nationality (Yemen) and counterparties in the Cayman Islands and Yemen. The email explicitly mentions a 'round' and 'internal settlement' to a nominee, consistent with layering. Although screening is clean (no sanctions, PEP, or adverse media), the convergent signals from the other two domains\u2014especially the specific behavioral red flags\u2014elevate the overall risk. The ab",
+      "key_signals": [
+        "High-risk jurisdiction (Yemen)",
+        "Occupation as trader may be associated with higher money laundering risk",
+        "Offshore entity involvement",
+        "Round-tripping suspected (large outbound wire followed by near-identical inbound from related offshore entity)",
+        "client email referencing internal settlement of round",
+        "high-risk counterparty jurisdictions (KY, YE)",
+        "layering potential",
+        "round-tripping"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "Round-tripping suspected (large outbound wire followed by near-identical inbound from related offshore entity)",
+            "High-risk jurisdiction (Yemen)",
+            "Occupation as trader may be associated with higher money laundering risk",
+            "Offshore entity involvement"
+          ],
+          "note": "The customer profile includes a significant red flag from Relationship Manager notes indicating suspected round-tripping, which is a strong indicator of money laundering or financial crime. Coupled with the high-risk country of nationality (Yemen) and the occupation as a trader, the overall KYC risk is elevated. While KYC documentation is complete and account age is long, the specific transaction behavior concern outweighs these factors."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. All screening checks are clean, indicating no specific red flags."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "round-tripping",
+            "high-risk counterparty jurisdictions (KY, YE)",
+            "layering potential",
+            "client email referencing internal settlement of round"
+          ],
+          "note": "The email explicitly mentions a 'round' and 'internal settlement' of funds sent to a nominee, indicating potential round-tripping or layering. Combined with counterparties in Cayman Islands and Yemen (both high-risk jurisdictions), this pattern elevates transaction risk despite no cash activity."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 75,
+        "note": "The synthesis score of 90 is too high given the evidence. While KYC and transaction domains both indicate high risk from suspected round-tripping and high-risk jurisdictions, the screening domain is clean (no sanctions, PEP, or adverse media). This clean screening provides a mitigating factor that the synthesis overlooks when claiming 'mutual reinforcement' and 'absence of contradictory evidence.' The screening is actually contradictory, lowering the overall risk. A score of 75 better reflects the convergence of two high-risk domains tempered by a clean screening result."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.32,
+      "self_confidence": 0.9,
+      "node_agreement": 0.32
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:71eaff3cb1de": {
+    "finding": {
+      "customer_id": "SAMPLE_031",
+      "score": 55,
+      "band": "medium",
+      "rationale": "The KYC and screening domains both indicate high risk (crypto dealer occupation, adverse media linking to fraud investigation and ML fine on a connected firm), but the transactions domain directly contradicts the KYC-reported layering pattern by finding no evidence of layering, structuring, or other red flags. This critical disagreement reduces overall confidence. The transaction pattern is consistent with legitimate business activity, and the email request for consulting fees appears normal. Th",
+      "key_signals": [
+        "Mr Norman Harrison named in fraud investigation",
+        "Regulator fines firm linked to Mr Norman Harrison for money laundering",
+        "counterparty jurisdiction Cyprus",
+        "high value outflows to Cyprus",
+        "occupation: crypto dealer (high-risk industry for money laundering)",
+        "rapid onward transfers to multiple offshore counterparties shortly after inbound funds (pattern consistent with layering as noted by RM)"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "occupation: crypto dealer (high-risk industry for money laundering)",
+            "rapid onward transfers to multiple offshore counterparties shortly after inbound funds (pattern consistent with layering as noted by RM)"
+          ],
+          "note": "Client is a crypto dealer (high-risk occupation) and RM notes describe a transaction pattern indicative of layering. Combined with the high-risk nature of the business, this warrants an elevated risk rating. KYC documentation is complete and valid, but the behavioral red flags outweigh the positive documentary status."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "Mr Norman Harrison named in fraud investigation",
+            "Regulator fines firm linked to Mr Norman Harrison for money laundering"
+          ],
+          "note": "Adverse media directly links the individual to a fraud investigation and a money laundering fine against a connected firm. Although no charges have been filed, the combination of unproven fraud allegations and a regulatory penalty for money laundering creates a high screening risk."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [
+            "high value outflows to Cyprus",
+            "counterparty jurisdiction Cyprus"
+          ],
+          "note": "No evidence of structuring (cash_in=0), layering, round-tripping, or dormant-then-spike. The email request for consulting fee transfers appears legitimate. While Cyprus is a higher-risk jurisdiction, the transaction pattern is consistent with normal business activity given the context and clean counterparty list (GB also present). No specific red flags warrant elevated risk."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 55,
+        "note": "The synthesis score of 55 appropriately reflects the tension between two high-risk domains (KYC and screening) and one low-risk domain (transactions). The critical disagreement between the KYC-reported layering pattern and the clean transaction evidence justifies a moderate, not extreme, score. The rationale for human review is sound, and the score is neither too high nor too low given the evidence."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.32,
+      "self_confidence": 0.35,
+      "node_agreement": 0.32
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:65467952eab4": {
+    "finding": {
+      "customer_id": "SAMPLE_033",
+      "score": 55,
+      "band": "medium",
+      "rationale": "The KYC assessment flags high risk due to a dormant account receiving high-value wires from an unknown counterparty, combined with the client's high-risk precious metals trading occupation. The screening assessment adds medium risk from adverse media linking Ben Slater to an ongoing regulatory inquiry into suspected fraud, though no charges have been filed. However, the transaction assessment finds low risk, noting no indicators of structuring, layering, or dormant-then-spike patterns based on t",
+      "key_signals": [
+        "adverse media: fraud investigation",
+        "dormant account then sudden high-value inbound wires from new counterparty",
+        "high-risk occupation (precious metals trader)",
+        "source of funds unclear"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "dormant account then sudden high-value inbound wires from new counterparty",
+            "source of funds unclear",
+            "high-risk occupation (precious metals trader)"
+          ],
+          "note": "Account was dormant for ~8 months before receiving a series of high-value wires from an unknown counterparty. The source of these funds is not documented, and the client's occupation as a precious metals trader is inherently high-risk for money laundering. Despite complete KYC documentation, the unusual transaction pattern and lack of clarity on fund origin warrant elevated risk."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse media: fraud investigation"
+          ],
+          "note": "Ben Slater, a UK-based precious metals trader, is named in an ongoing regulatory inquiry into suspected fraud. Although no charges have been filed and allegations are unproven, the adverse media report warrants further due diligence."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "Only 7 transactions with total credits of 127,731 and debits of 361, no cash activity, counterparties from AE and GB. No indicators of structuring (no cash deposits), layering, round-tripping, or dormant-then-spike patterns based on the limited facts. Activity appears consistent with normal inbound payments and minor outflows, presenting no specific red flags."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 55,
+        "note": "The synthesis accurately reflects the conflicting evidence and assigns a moderate score that appropriately weighs the high-risk KYC and screening against the low-risk transaction assessment, with the contradiction reducing confidence. Score is justified."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.3,
+      "self_confidence": 0.3,
+      "node_agreement": 0.32
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:d3770f448914": {
+    "finding": {
+      "customer_id": "SAMPLE_034",
+      "score": 75,
+      "band": "high",
+      "rationale": "KYC assessment is high due to North Korean nationality (sanctioned jurisdiction), high-risk broker occupation, and internal RM notes describing a layering pattern. Transactions assessment is high due to counterparty country North Korea (KP), combined with Cyprus and large debits, indicating sanctions evasion risk. These two domains strongly reinforce each other, pointing to potential money laundering and sanctions circumvention. Screening is low (no sanctions hits, no PEP, no adverse media), but",
+      "key_signals": [
+        "Counterparty country Cyprus (CY) - offshore financial center",
+        "Counterparty country North Korea (KP) - high risk jurisdiction",
+        "Email requesting expedited transfers for offshore consulting fees",
+        "High-risk jurisdiction: North Korea (KP) - subject to international sanctions",
+        "Large debit outflow relative to credit inflow (debits 474,464 vs credits 22,338)",
+        "Occupation: broker - inherently higher money laundering risk",
+        "RM notes indicate rapid onward transfers to offshore counterparties, suggesting layering pattern"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "High-risk jurisdiction: North Korea (KP) - subject to international sanctions",
+            "Occupation: broker - inherently higher money laundering risk",
+            "RM notes indicate rapid onward transfers to offshore counterparties, suggesting layering pattern"
+          ],
+          "note": "Customer is a North Korean national (KP) with occupation as broker. Despite complete KYC documentation and a long account history, the combination of a sanctioned high-risk jurisdiction and a high-risk occupation, reinforced by internal RM notes describing a layering pattern, elevates the KYC risk to high. Enhanced due diligence is warranted to verify source of wealth and funds."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No sanctions hits, no PEP confirmation, and no adverse media. No red flags identified from screening data."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "Counterparty country North Korea (KP) - high risk jurisdiction",
+            "Counterparty country Cyprus (CY) - offshore financial center",
+            "Large debit outflow relative to credit inflow (debits 474,464 vs credits 22,338)",
+            "Email requesting expedited transfers for offshore consulting fees"
+          ],
+          "note": "The presence of North Korea (KP) as a counterparty country is a significant red flag for sanctions risk. Combined with Cyprus and large debits, the transaction pattern warrants further investigation. No cash deposits observed, so structuring risk is not applicable."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 75,
+        "note": "Score of 95 overstates confidence given the low screening results (no sanctions hits, no PEP, no adverse media). While KYC and transactions both present strong red flags (North Korean nationality, broker, layering notes, KP counterparty), the complete absence of screening hits is a significant counter-indication that reduces certainty. The synthesis acknowledges this disagreement but still assigns a near-certain score, which is not fully justified by the evidence. A moderate-high score of 75 better reflects the elevated risk while accounting for the need for human review due to domain inconsistency."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.32,
+      "self_confidence": 0.4,
+      "node_agreement": 0.32
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:c918a3b6282c": {
+    "finding": {
+      "customer_id": "SAMPLE_036",
+      "score": 85,
+      "band": "high",
+      "rationale": "The KYC and transaction domains both assess as high risk, with the arms broker occupation and explicit round-trip transaction via a nominee entity serving as primary red flags. The screening domain is medium due to unproven adverse media allegations and no sanctions/PEP hits, but the fraud investigation and Russia involvement reinforce the overall risk picture. The combination of high-risk occupation, structured layering pattern, offshore counterparties (Cayman Islands), and exposure to a high-r",
+      "key_signals": [
+        "adverse_media involving fraud investigation",
+        "high-risk counterparty jurisdictions (KY and RU)",
+        "occupation: arms broker (high-risk for sanctions, illicit trade)",
+        "round-tripping (indicated by email referencing internal settlement and return of funds via nominee)",
+        "subject is an arms broker based in Russia",
+        "suspected round-tripping: large outbound wire followed by near-identical inbound from related offshore entity",
+        "use of nominee account (Nominee A) suggesting potential layering or concealment"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "occupation: arms broker (high-risk for sanctions, illicit trade)",
+            "suspected round-tripping: large outbound wire followed by near-identical inbound from related offshore entity"
+          ],
+          "note": "The client's occupation as an arms broker is inherently high-risk, and the RM notes indicate a specific transaction pattern (round-tripping) that raises money laundering concerns. Despite complete KYC documentation, these red flags elevate the risk level."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse_media involving fraud investigation",
+            "subject is an arms broker based in Russia"
+          ],
+          "note": "The adverse media report names the subject in a fraud investigation, and her role as an arms broker in Russia introduces elevated concern. However, no charges have been filed, the allegations are unproven, and there are no sanctions hits or PEP confirmation. The combination warrants a medium risk level."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "round-tripping (indicated by email referencing internal settlement and return of funds via nominee)",
+            "high-risk counterparty jurisdictions (KY and RU)",
+            "use of nominee account (Nominee A) suggesting potential layering or concealment"
+          ],
+          "note": "Despite no cash deposits, the email explicitly describes a round-trip transaction via a nominee entity, which combined with counterparties in Cayman Islands and Russia raises significant layering and sanctions evasion concerns. The pattern deviates from normal low-risk activity."
+        }
+      ],
+      "verdict": {
+        "consistent": true,
+        "adjusted_score": 85,
+        "note": "The synthesis accurately reflects the domain evidence with two high-risk domains (KYC and transactions) and one medium (screening). The rationale correctly identifies the primary red flags (arms broker, round-trip via nominee, offshore jurisdictions, Russia exposure) and acknowledges the unproven nature of adverse media. The score of 85 is well-justified given the strong indicators of money-laundering risk without reaching the maximum for confirmed sanctions or PEP hits."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.65,
+      "self_confidence": 0.85,
+      "node_agreement": 0.65
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:72c72d3fef4f": {
+    "finding": {
+      "customer_id": "SAMPLE_035",
+      "score": 75,
+      "band": "high",
+      "rationale": "The KYC assessment flags high risk due to alleged cash structuring and evasive responses, but the transaction data shows no clear pattern of deposits under thresholds, conflicting with the KYC conclusion. The adverse media screening adds a moderate, unproven fraud inquiry. Domains disagree (KYC high vs transactions low), reducing confidence. Overall risk is elevated but not high; requires human review.",
+      "key_signals": [
+        "adverse media: fraud investigation",
+        "occupation (art dealer) may be associated with higher money laundering risk, but primary red flag is cash structuring behavior",
+        "structuring: multiple cash deposits just below \u00a310,000 reporting threshold",
+        "vague source of funds explanation"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "structuring: multiple cash deposits just below \u00a310,000 reporting threshold",
+            "vague source of funds explanation",
+            "occupation (art dealer) may be associated with higher money laundering risk, but primary red flag is cash structuring behavior"
+          ],
+          "note": "The client's behavior of making repeated cash deposits just under the reporting threshold, combined with evasive responses about the source of funds, raises significant AML/CTF concerns. This suggests potential structuring to avoid detection, which is a clear red flag. The occupation as an art dealer, while not inherently suspicious, can be a vector for laundering high-value assets, but the primary risk driver is the cash structuring pattern. A SAR is warranted."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "medium",
+          "signals": [
+            "adverse media: fraud investigation"
+          ],
+          "note": "The subject, Mr Arthur Johnson, is named in an adverse media report regarding a regulatory inquiry into suspected fraud. While no charges have been filed and allegations remain unproven, the presence of a fraud-related investigation constitutes a specific red flag that elevates risk above a clean screening result. However, the absence of sanctions hits, PEP confirmation, or other escalating indicators keeps the risk at a moderate level."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "low",
+          "signals": [],
+          "note": "No specific red flags identified. Counterparty countries are limited to the UK (domestic), and the transaction volume is moderate. The cash_in amount of 53,393 does not by itself indicate structuring or layering without additional context such as multiple deposits just under reporting thresholds. The pattern appears consistent with normal domestic activity."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 75,
+        "note": "The synthesis underestimates the risk by giving too much weight to the apparent conflict between the KYC high and transactions low assessments. The KYC evidence explicitly states repeated cash deposits just under thresholds and evasive responses, which directly contradicts the synthesis's claim of 'no clear pattern of deposits under thresholds.' The transactions low assessment is based on a single cash amount and lacks context, while the KYC provides that context. With a high KYC red flag and a medium adverse media flag, the overall risk is elevated towards high, not moderate. A score of 55 is too low; 75 better reflects the combined evidence, requiring human review as indicated."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.32,
+      "self_confidence": 0.35,
+      "node_agreement": 0.32
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:47a7bf62702f": {
+    "finding": {
+      "customer_id": "SAMPLE_038",
+      "score": 90,
+      "band": "high",
+      "rationale": "All three domain assessments (KYC, screening, transactions) unanimously indicate high risk and strongly reinforce each other. The KYC domain reports an exact OFAC SDN match, which is a definitive red flag; the screening domain confirms a PEP status combined with a sanctions hit on the same name; the transactions domain shows all counterparties are in Syria, a high-risk jurisdiction. These signals are consistent and cumulative, leaving no ambiguity that the entity poses an extreme money launderin",
+      "key_signals": [
+        "Counterparty country is Syria (high-risk jurisdiction subject to sanctions and FATF non-compliance)",
+        "PEP status",
+        "exact OFAC SDN match",
+        "occupation: shell company director",
+        "pep_confirmed",
+        "sanctions_hit"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "occupation: shell company director",
+            "PEP status",
+            "exact OFAC SDN match"
+          ],
+          "note": "Sanctions screening returned exact OFAC SDN match; account frozen pending MLRO review."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "sanctions_hit",
+            "pep_confirmed"
+          ],
+          "note": "Sanctions hit on name 'Adrian Smith' combined with confirmed PEP status indicates elevated screening risk. Further investigation needed to verify match accuracy and assess overall exposure."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "Counterparty country is Syria (high-risk jurisdiction subject to sanctions and FATF non-compliance)"
+          ],
+          "note": "All transactions involve a counterparty in Syria, which is a high-risk jurisdiction with significant sanctions and regulatory concerns. No cash transactions or structuring indicators are present, but the country risk alone warrants a high-risk rating."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 90,
+        "note": "The synthesis claims 'no ambiguity' and a score of 100, but the screening evidence explicitly states 'Further investigation needed to verify match accuracy', introducing uncertainty. While the KYC and transactions indicators are strong, the screening caveat prevents total certainty, so a slightly lower score (90) better reflects the evidence. The synthesis otherwise correctly identifies cumulative high risk."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.5,
+      "self_confidence": 0.95,
+      "node_agreement": 0.95
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:00958ba8232c": {
+    "finding": {
+      "customer_id": "SAMPLE_037",
+      "score": 90,
+      "band": "high",
+      "rationale": "The KYC domain identifies the client as an Iranian national and arms dealer with an exact OFAC SDN match, which is a definitive red flag. The screening domain independently reports a direct sanctions hit on 'Trevor Simmons', adding a second sanctions exposure. While the name discrepancy suggests a possible alias or separate entity, both domains concur on high risk. The transactions domain, though medium, reveals dealings with Iran (a sanctioned jurisdiction), reinforcing the sanctions nexus. Tog",
+      "key_signals": [
+        "Transactions with counterparty in Iran (high-risk jurisdiction)",
+        "occupation: arms dealer",
+        "sanctions screening: exact OFAC SDN match",
+        "sanctions_hit: Trevor Simmons"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "occupation: arms dealer",
+            "sanctions screening: exact OFAC SDN match"
+          ],
+          "note": "The client is an Iranian national and arms dealer, which individually are high-risk indicators. Critically, the relationship manager notes an exact OFAC SDN match, requiring immediate freezing and escalation. This constitutes a definitive red flag for KYC risk."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "sanctions_hit: Trevor Simmons"
+          ],
+          "note": "A direct sanctions hit on 'Trevor Simmons' was identified. This constitutes a high-risk screening alert requiring immediate review and escalation to confirm identity and determine if a match is valid."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "medium",
+          "signals": [
+            "Transactions with counterparty in Iran (high-risk jurisdiction)"
+          ],
+          "note": "While no specific structuring, layering, or other typologies are evident, the presence of transactions with Iran (a sanctioned jurisdiction) elevates risk above baseline. The moderate cash_in relative to total credits and low debits does not in itself indicate suspicious activity, but the counterparty country warrants further scrutiny."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 90,
+        "note": "The synthesis claims no contradictory evidence, but the KYC domain identifies an exact OFAC SDN match for an Iranian national arms dealer, while the screening domain reports a sanctions hit on 'Trevor Simmons' \u2014 a name that does not appear to align with the KYC identity. This discrepancy introduces ambiguity about whether the hits refer to the same entity, which should lower the score from 100. The transactions domain adds Iran-related risk, but the unresolved name mismatch prevents full certainty. Adjusted score reflects very high risk (90) rather than definitive (100)."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.5,
+      "self_confidence": 0.9,
+      "node_agreement": 0.6
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:graph:567de8e1234f": {
+    "finding": {
+      "customer_id": "SAMPLE_039",
+      "score": 100,
+      "band": "high",
+      "rationale": "All three domains (KYC, Screening, Transactions) converge on extreme sanctions risk. KYC confirms the customer is a North Korean national listed on the OFAC SDN list, with the account already frozen and escalated. Screening flags a potential sanctions hit for 'Sharon Rhodes' (needs confirmation but adds weight). Transactions show counterparty involvement with North Korea (KP), an 'offshore project' reference, and a request for expedited processing\u2014classic indicators of sanctions evasion or illic",
+      "key_signals": [
+        "Account frozen pending MLRO review",
+        "Exact OFAC SDN match identified",
+        "Nationality/country: North Korea (KP) - high-risk jurisdiction",
+        "Sanctions screening hit",
+        "counterparty includes North Korea (KP) - high-risk sanctioned jurisdiction",
+        "email requesting expedited transfers to 'offshore project' associates - potential layering or sanctions evasion",
+        "large net outflow ($448,396) to high-risk jurisdictions",
+        "sanctions_hit",
+        "significant debit volume ($474,950) vs credits ($26,554) - unbalanced flow"
+      ],
+      "confidence": 0.6
+    },
+    "detail": {
+      "source_findings": [
+        {
+          "domain": "kyc",
+          "risk_level": "high",
+          "signals": [
+            "Exact OFAC SDN match identified",
+            "Sanctions screening hit",
+            "Nationality/country: North Korea (KP) - high-risk jurisdiction",
+            "Account frozen pending MLRO review"
+          ],
+          "note": "Customer is a North Korean national with an exact match on OFAC SDN list. Account has been frozen and escalated to MLRO per RM notes. Immediate action required."
+        },
+        {
+          "domain": "screening",
+          "risk_level": "high",
+          "signals": [
+            "sanctions_hit"
+          ],
+          "note": "Sanctions hit detected for name 'Sharon Rhodes'. Further investigation required to confirm if it is a true match or false positive."
+        },
+        {
+          "domain": "transactions",
+          "risk_level": "high",
+          "signals": [
+            "counterparty includes North Korea (KP) - high-risk sanctioned jurisdiction",
+            "large net outflow ($448,396) to high-risk jurisdictions",
+            "email requesting expedited transfers to 'offshore project' associates - potential layering or sanctions evasion",
+            "significant debit volume ($474,950) vs credits ($26,554) - unbalanced flow"
+          ],
+          "note": "The presence of North Korea (KP) as a counterparty country is a critical red flag, indicating potential sanctions violations. The email's reference to 'offshore project' and request for expedited processing further elevates suspicion of layering or illicit fund movement. Despite no cash structuring observed, the combination of high-risk jurisdiction and unusual transaction pattern warrants high risk."
+        }
+      ],
+      "verdict": {
+        "consistent": false,
+        "adjusted_score": 100,
+        "note": "The synthesis claims all three domains converge on extreme sanctions risk, but the screening evidence is for a different name ('Sharon Rhodes') that requires confirmation and is not directly linked to the customer. This overstates the convergence. However, the KYC evidence alone (confirmed OFAC SDN match) justifies a score of 100, and the transactions evidence further supports the extreme risk profile. The score remains appropriate, but the rationale is not fully consistent with the evidence."
+      },
+      "errors": [],
+      "steps": 5,
+      "confidence": 0.5,
+      "self_confidence": 0.95,
+      "node_agreement": 0.85
+    }
   }
 }

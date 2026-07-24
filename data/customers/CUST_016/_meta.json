@@ -2,6 +2,8 @@
   "expected_band": "HIGH",
   "severity": "high",
   "typology": "dormant_spike",
+  "review": false,
+  "conflict": null,
   "missing_docs": [],
   "extra_docs": [
     "second_passport"

@@ -11,9 +11,9 @@ SAMPLE_028-T008,2026-05-20,1056.1,GBP,out,Landlord DD,AF,direct_debit
 SAMPLE_028-T009,2026-04-20,855.24,GBP,out,Landlord DD,AF,direct_debit
 SAMPLE_028-T010,2026-03-21,923.77,GBP,out,Landlord DD,AF,direct_debit
 SAMPLE_028-T011,2026-02-19,1112.15,GBP,out,Landlord DD,AF,direct_debit
-SAMPLE_028-T012,2026-06-27,97.47,GBP,out,Whitehead-O'Brien,AF,card
-SAMPLE_028-T013,2026-06-03,21.5,GBP,out,Carter Inc,AF,card
-SAMPLE_028-T014,2026-07-20,59.22,GBP,out,"Parsons, Sims and Holmes",AF,card
-SAMPLE_028-T015,2026-05-24,24.0,GBP,out,Shah-Kennedy,AF,card
-SAMPLE_028-T016,2026-07-06,8.23,GBP,out,Smith Inc,AF,card
-SAMPLE_028-T017,2026-06-08,107.47,GBP,out,Glover-Short,AF,card
+SAMPLE_028-T012,2026-04-25,26.03,GBP,out,Jones-Ryan,AF,card
+SAMPLE_028-T013,2026-01-31,21.5,GBP,out,Sullivan-Davis,AF,card
+SAMPLE_028-T014,2026-03-11,77.43,GBP,out,Lewis Ltd,AF,card
+SAMPLE_028-T015,2026-03-22,24.0,GBP,out,"Barker, Davies and Wilson",AF,card
+SAMPLE_028-T016,2026-02-28,14.44,GBP,out,Newton Inc,AF,card
+SAMPLE_028-T017,2026-04-28,9.34,GBP,out,"Daniels, Lewis and Cook",AF,card

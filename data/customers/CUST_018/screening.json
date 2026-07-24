@@ -1,11 +1,3 @@
 {
-  "sanctions": [
-    {
-      "name": "Mr Hugh Taylor",
-      "match_score": 1.0,
-      "list": "OFAC SDN"
-    }
-  ],
-  "pep_confirmed": false,
-  "adverse_media": []
+  "pep_confirmed": false
 }

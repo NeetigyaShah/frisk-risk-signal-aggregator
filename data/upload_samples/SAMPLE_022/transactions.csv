@@ -1,26 +1,21 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_022-T000,2026-07-21,5562.07,GBP,in,ACME Payroll Ltd,MM,salary
-SAMPLE_022-T001,2026-06-21,5643.65,GBP,in,ACME Payroll Ltd,MM,salary
-SAMPLE_022-T002,2026-05-22,5544.04,GBP,in,ACME Payroll Ltd,MM,salary
-SAMPLE_022-T003,2026-04-22,5727.35,GBP,in,ACME Payroll Ltd,MM,salary
-SAMPLE_022-T004,2026-03-23,5643.55,GBP,in,ACME Payroll Ltd,MM,salary
-SAMPLE_022-T005,2026-02-21,5712.36,GBP,in,ACME Payroll Ltd,MM,salary
-SAMPLE_022-T006,2026-07-19,1008.92,GBP,out,Landlord DD,MM,direct_debit
-SAMPLE_022-T007,2026-06-19,1212.02,GBP,out,Landlord DD,MM,direct_debit
-SAMPLE_022-T008,2026-05-20,1212.71,GBP,out,Landlord DD,MM,direct_debit
-SAMPLE_022-T009,2026-04-20,934.07,GBP,out,Landlord DD,MM,direct_debit
-SAMPLE_022-T010,2026-03-21,1370.46,GBP,out,Landlord DD,MM,direct_debit
-SAMPLE_022-T011,2026-02-19,918.41,GBP,out,Landlord DD,MM,direct_debit
-SAMPLE_022-T012,2026-06-08,14.29,GBP,out,Davies Inc,MM,card
-SAMPLE_022-T013,2026-06-08,78.43,GBP,out,"Fisher, Morris and Smith",MM,card
-SAMPLE_022-T014,2026-04-13,20.97,GBP,out,Griffiths-Taylor,MM,card
-SAMPLE_022-T015,2026-04-03,115.54,GBP,out,Morris-Harvey,MM,card
-SAMPLE_022-T016,2026-07-19,23.31,GBP,out,Jones Inc,MM,card
-SAMPLE_022-T017,2026-05-24,2.59,GBP,out,Lawson and Sons,MM,card
-SAMPLE_022-T018,2026-06-04,47.91,GBP,out,"Pickering, Hamilton and Walker",MM,card
-SAMPLE_022-T019,2026-04-18,14.24,GBP,out,Francis-Smith,MM,card
-SAMPLE_022-T020,2026-05-16,39.22,GBP,out,"Read, Wilkinson and Davies",MM,card
-SAMPLE_022-T021,2026-06-23,44.05,GBP,out,Davies-Price,MM,card
-SAMPLE_022-T022,2026-07-23,20.6,GBP,out,Reid-Page,MM,card
-SAMPLE_022-T023,2026-04-20,48.21,GBP,out,"Williams, Moore and Morris",MM,card
-SAMPLE_022-T024,2026-05-02,9.41,GBP,out,Powell-McDonald,MM,card
+SAMPLE_022-T000,2026-07-21,5836.25,GBP,in,ACME Payroll Ltd,MM,salary
+SAMPLE_022-T001,2026-06-21,5907.41,GBP,in,ACME Payroll Ltd,MM,salary
+SAMPLE_022-T002,2026-05-22,5822.24,GBP,in,ACME Payroll Ltd,MM,salary
+SAMPLE_022-T003,2026-04-22,5881.34,GBP,in,ACME Payroll Ltd,MM,salary
+SAMPLE_022-T004,2026-03-23,5881.54,GBP,in,ACME Payroll Ltd,MM,salary
+SAMPLE_022-T005,2026-02-21,5800.46,GBP,in,ACME Payroll Ltd,MM,salary
+SAMPLE_022-T006,2026-07-19,1370.46,GBP,out,Landlord DD,MM,direct_debit
+SAMPLE_022-T007,2026-06-19,918.41,GBP,out,Landlord DD,MM,direct_debit
+SAMPLE_022-T008,2026-05-20,918.56,GBP,out,Landlord DD,MM,direct_debit
+SAMPLE_022-T009,2026-04-20,1180.26,GBP,out,Landlord DD,MM,direct_debit
+SAMPLE_022-T010,2026-03-21,802.49,GBP,out,Landlord DD,MM,direct_debit
+SAMPLE_022-T011,2026-02-19,1199.74,GBP,out,Landlord DD,MM,direct_debit
+SAMPLE_022-T012,2026-04-13,20.97,GBP,out,Williams PLC,MM,card
+SAMPLE_022-T013,2026-04-03,115.54,GBP,out,Rowe Group,MM,card
+SAMPLE_022-T014,2026-07-19,23.31,GBP,out,Lewis LLC,MM,card
+SAMPLE_022-T015,2026-05-24,2.59,GBP,out,Evans Ltd,MM,card
+SAMPLE_022-T016,2026-06-04,47.91,GBP,out,Knowles-Parkes,MM,card
+SAMPLE_022-T017,2026-04-18,14.24,GBP,out,Todd Ltd,MM,card
+SAMPLE_022-T018,2026-05-16,39.22,GBP,out,Thomas PLC,MM,card
+SAMPLE_022-T019,2026-06-23,44.05,GBP,out,Morris-Smith,MM,card

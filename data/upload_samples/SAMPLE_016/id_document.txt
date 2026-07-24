@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: GB (United Kingdom)
-Surname: WILLIAMS
-Given names: MS HOLLY
+Surname: HUGHES
+Given names: BERNARD
 Nationality: United Kingdom
-Date of birth: 1989-12-19
-Document no.: P95504149
+Date of birth: 1955-10-09
+Document no.: P38959693
 Expiry: 2031-05-01
 
 MRZ:
-P<GBWILLIAMS<<MS<HOLLY<<<<<<<<<<<<<<<<<<<<<<
-P95504149<GB19891219<<<<<<<<<<<<<<<<<<<<<<<<
+P<GBHUGHES<<BERNARD<<<<<<<<<<<<<<<<<<<<<<<<<
+P38959693<GB19551009<<<<<<<<<<<<<<<<<<<<<<<<

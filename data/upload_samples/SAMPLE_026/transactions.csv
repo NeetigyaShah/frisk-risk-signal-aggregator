@@ -1,36 +1,31 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_026-T000,2026-07-21,4450.05,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_026-T001,2026-06-21,4411.32,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_026-T002,2026-05-22,4355.62,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_026-T003,2026-04-22,4395.28,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_026-T004,2026-03-23,4370.95,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_026-T005,2026-02-21,4398.03,GBP,in,ACME Payroll Ltd,VE,salary
-SAMPLE_026-T006,2026-07-19,1078.04,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_026-T007,2026-06-19,971.61,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_026-T008,2026-05-20,1212.12,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_026-T009,2026-04-20,1368.35,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_026-T010,2026-03-21,838.05,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_026-T011,2026-02-19,1249.43,GBP,out,Landlord DD,VE,direct_debit
-SAMPLE_026-T012,2026-02-23,89.3,GBP,out,Brooks-Walker,VE,card
-SAMPLE_026-T013,2026-03-12,49.52,GBP,out,"Evans, Collins and Read",VE,card
-SAMPLE_026-T014,2026-04-21,17.82,GBP,out,"Jones, Mitchell and Ali",VE,card
-SAMPLE_026-T015,2026-05-05,5.28,GBP,out,Howe-Shaw,VE,card
-SAMPLE_026-T016,2026-02-16,58.75,GBP,out,Potts LLC,VE,card
-SAMPLE_026-T017,2026-02-14,23.42,GBP,out,"Potter, Phillips and Blake",VE,card
-SAMPLE_026-T018,2026-07-04,26.09,GBP,out,Doyle-Charlton,VE,card
-SAMPLE_026-T019,2026-03-21,42.55,GBP,out,Bennett-Davies,VE,card
-SAMPLE_026-T020,2026-06-07,14.55,GBP,out,Begum Inc,VE,card
-SAMPLE_026-T021,2026-07-23,6.52,GBP,out,West PLC,VE,card
-SAMPLE_026-T022,2026-06-24,28.82,GBP,out,"Thomas, Walker and Reid",VE,card
-SAMPLE_026-T023,2026-02-18,16.65,GBP,out,"Perry, Hall and Davis",VE,card
-SAMPLE_026-T024,2026-03-10,53.9,GBP,out,"Thomas, Skinner and Taylor",VE,card
-SAMPLE_026-T025,2026-06-17,10.57,GBP,out,"Patel, Sims and Davies",VE,card
-SAMPLE_026-T026,2026-04-25,136.87,GBP,out,"Jones, Jackson and Elliott",VE,card
-SAMPLE_026-T027,2026-05-10,92.77,GBP,out,Lawson Inc,VE,card
-SAMPLE_026-T028,2026-05-25,10.35,GBP,out,Hill-Brennan,VE,card
-SAMPLE_026-T029,2026-03-06,24.19,GBP,out,"Marsh, Sheppard and Jones",VE,card
-SAMPLE_026-T030,2026-05-16,14.95,GBP,out,Price Ltd,VE,card
-SAMPLE_026-T031,2026-05-18,2708.01,GBP,in,Cash Deposit,VE,cash
-SAMPLE_026-T032,2026-03-27,3911.73,GBP,in,Cash Deposit,VE,cash
-SAMPLE_026-T033,2026-04-08,1578.16,GBP,in,Cash Deposit,VE,cash
-SAMPLE_026-T034,2026-06-26,3841.51,GBP,in,Cash Deposit,VE,cash
+SAMPLE_026-T000,2026-07-21,4616.87,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_026-T001,2026-06-21,4593.7,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_026-T002,2026-05-22,4608.86,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_026-T003,2026-04-22,4568.74,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_026-T004,2026-03-23,4511.06,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_026-T005,2026-02-21,4552.13,GBP,in,ACME Payroll Ltd,VE,salary
+SAMPLE_026-T006,2026-07-19,717.55,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_026-T007,2026-06-19,839.71,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_026-T008,2026-05-20,1078.04,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_026-T009,2026-04-20,971.61,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_026-T010,2026-03-21,1212.12,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_026-T011,2026-02-19,1368.35,GBP,out,Landlord DD,VE,direct_debit
+SAMPLE_026-T012,2026-07-15,20.29,GBP,out,Garner-Dodd,VE,card
+SAMPLE_026-T013,2026-03-17,10.73,GBP,out,"Lewis, Dobson and Reynolds",VE,card
+SAMPLE_026-T014,2026-03-31,5.26,GBP,out,"Brown, Davies and Pugh",VE,card
+SAMPLE_026-T015,2026-03-18,89.3,GBP,out,Davies Inc,VE,card
+SAMPLE_026-T016,2026-06-11,13.01,GBP,out,Wright-Johnson,VE,card
+SAMPLE_026-T017,2026-04-16,17.82,GBP,out,Brown-Wilson,VE,card
+SAMPLE_026-T018,2026-06-12,27.97,GBP,out,Ashton Group,VE,card
+SAMPLE_026-T019,2026-04-30,58.75,GBP,out,Davidson and Sons,VE,card
+SAMPLE_026-T020,2026-05-28,6.88,GBP,out,Cooper-Bryant,VE,card
+SAMPLE_026-T021,2026-06-26,26.09,GBP,out,"Slater, Harrison and Jackson",VE,card
+SAMPLE_026-T022,2026-03-20,30.25,GBP,out,"Parkinson, Higgins and Chapman",VE,card
+SAMPLE_026-T023,2026-07-13,14.55,GBP,out,"Ahmed, Gough and Morris",VE,card
+SAMPLE_026-T024,2026-05-11,3670.65,GBP,in,Cash Deposit,VE,cash
+SAMPLE_026-T025,2026-04-12,3567.77,GBP,in,Cash Deposit,VE,cash
+SAMPLE_026-T026,2026-07-08,2004.96,GBP,in,Cash Deposit,VE,cash
+SAMPLE_026-T027,2026-06-15,1758.14,GBP,in,Cash Deposit,VE,cash
+SAMPLE_026-T028,2026-06-13,2534.98,GBP,in,Cash Deposit,VE,cash
+SAMPLE_026-T029,2026-07-06,3322.87,GBP,in,Cash Deposit,VE,cash

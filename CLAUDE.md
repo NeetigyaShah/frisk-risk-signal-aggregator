@@ -52,10 +52,13 @@ the earlier design (rules = source of truth, LLM = advisory) — both live in th
 | `src/frisk/query/nlquery.py` | NL → whitelisted Pydantic filter spec → pandas mask (stretch). |
 | `src/frisk/observability/telemetry.py` | LangSmith status/wiring (opt-in). |
 | `src/frisk/cli.py` | `frisk generate` / `frisk score [--offline]` / `frisk warm`. |
-| `src/frisk/ui/Home.py` | Streamlit UI (Queue / Case detail / Audit). Run: `streamlit run src/frisk/ui/Home.py`. |
+| `src/frisk/api/service.py` | **FastAPI backend** — REST over the engine + serves `frontend/`. Endpoints: stats/queue/case/samples/review/audit/**analytics**; `POST /api/ingest`, `/api/ingest/files`, **`/api/ingest/batch`** (+ `GET .../batch/{job_id}` poll). Run: `frisk serve`. |
+| `frontend/` | Custom SPA (vanilla JS + Tailwind + Chart.js CDN, no build): `index.html`, `app.js`, `styles.css`. Dashboard (ranked queue + charts) · Review Queue · Ingest (multi-select **batch parallel scoring**) · Audit · case drawer. |
+| `src/frisk/ui/Home.py` | (Legacy) Streamlit UI — superseded by the custom frontend. `streamlit run src/frisk/ui/Home.py`. |
 | `docs/SCALING.md` | How to run at 10k+/day: gating, parallelism, caching, read store, infra diagram. |
 | `docs/PROJECT_EXPLAINER.html` | Product-level visual walkthrough (Mermaid diagrams). |
 | `docs/ARCHITECTURE.html` | Engineering codebase walkthrough: structure, ingestion pipeline, read/translate, inference, prompts, UI. |
+| `docs/ARCHITECTURE_DIAGRAMS.html` | Beautiful dark-themed Mermaid diagrams: end-to-end flow, data input, **ingestion step-by-step (in/out per file)**, 5-call LLM orchestration graph, never-fails cascade, confidence gate + HITL loop. |
 | `tests/` | Golden tests (one per typology + override + fallback + driver-sum). |
 | `README.md` | One-page submission README (setup, approach, worked example). |
 | `docs/deck/SLIDES.md` · `deck.pptx` | 5-slide submission deck (+ `build_pptx.py` renderer). |

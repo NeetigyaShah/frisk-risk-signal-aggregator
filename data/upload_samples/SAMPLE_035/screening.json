@@ -1,11 +1,3 @@
 {
-  "sanctions": [],
-  "pep_confirmed": false,
-  "adverse_media": [
-    {
-      "headline": "Mr Arthur Johnson named in fraud investigation",
-      "sentiment": "negative",
-      "date": "2026-06-09"
-    }
-  ]
+  "pep_confirmed": false
 }

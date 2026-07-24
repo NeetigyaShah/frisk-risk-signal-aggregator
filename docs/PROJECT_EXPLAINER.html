@@ -183,9 +183,19 @@ flowchart LR
     <tr><td>Screening</td><td>sanctions (exact vs fuzzy <code>match_score</code>), PEP, adverse media</td><td>OFAC match, negative news</td></tr>
     <tr><td>Robustness metadata</td><td>missing / extra document flags</td><td>the "never-fails" testers</td></tr>
   </table>
-  <p>Four typologies are injected as pure functions and detected <b>temporally</b> (proximity in time, not amount alone):
-  <b>structuring</b> (≥3 cash deposits just under a £10,000 floor within 7 days), <b>layering</b> (≥3 ~80%-forwarded
-  hops), <b>round-trip</b>, <b>dormant-then-spike</b>.</p>
+  <p>Four typologies are injected as pure functions and detected <b>temporally</b> (proximity in time, not amount alone).
+  The deterministic engine flags them on <b>every</b> customer, and the LLM transactions-analyst is independently prompted to
+  hunt for the same four in the raw transactions and correspondence — so each pattern is caught both by arithmetic and semantically:</p>
+  <table>
+    <tr><th>Typology</th><th>What it means</th><th>Detector rule</th></tr>
+    <tr><td><b>Structuring</b> ("smurfing")</td><td>Many cash deposits just under the reporting floor, clustered in a short window and together exceeding it — splitting one big deposit to dodge reporting.</td><td>≥3 cash deposits in [0.8×floor, floor) within 7 days summing &gt; £10,000 floor</td></tr>
+    <tr><td><b>Layering</b></td><td>Rapid onward transfers to several distinct counterparties in a short window — moving money through hops to obscure its origin.</td><td>≥3 outbound transfers to distinct counterparties within the window</td></tr>
+    <tr><td><b>Round-trip</b></td><td>Money goes out, then a ~matching amount returns via a <i>different</i> counterparty within a window — circular flow to fabricate legitimacy.</td><td>out then in of ~equal amount (within tolerance), different counterparty, inside the window</td></tr>
+    <tr><td><b>Dormant-spike</b></td><td>A long inactive gap, then a sudden burst of large transactions — an account waking up abnormally.</td><td>gap ≥ dormant-days, then ≥ min-burst transactions above the burst-amount floor</td></tr>
+  </table>
+  <p>In <code>engine_mode=llm</code> these are shown as corroborating <b>evidence</b> in the case view (with the exact txn IDs, amounts,
+  and window) and aggregated in the dashboard "Detected patterns" chart; only a sanctions match is a hard rail. In
+  <code>engine_mode=hybrid</code> each contributes weighted points to the rules score directly.</p>
 </section>
 
 <section id="scoring">

@@ -1,11 +1,3 @@
 {
-  "sanctions": [],
-  "pep_confirmed": true,
-  "adverse_media": [
-    {
-      "headline": "Allan Burke named in fraud investigation",
-      "sentiment": "negative",
-      "date": "2026-06-09"
-    }
-  ]
+  "pep_confirmed": true
 }

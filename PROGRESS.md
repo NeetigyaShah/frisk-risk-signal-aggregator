@@ -81,3 +81,24 @@
   (single call ~2s; graph ~11-38s/customer). Verified live: CUST_000→auto-clear(0.93), CUST_018→escalate,
   CUST_014/006→low-confidence(0.30)→PENDING_REVIEW human queue. `OpenRouterProvider` added to the boundary.
   Cache warming via OpenRouter. `OPENROUTER_API_KEY` in .env (ROTATE — pasted in chat).
+- 2026-07-24: **Custom frontend + FastAPI backend service** replaces Streamlit. `frisk/api/service.py`
+  (REST over the engine) serves `frontend/` (vanilla JS + Tailwind CDN, no build). Views: Dashboard
+  (ranked queue w/ gauges, confidence bars, pattern chips) · Human Review Queue (analyst breakdown +
+  teach form) · Ingest/Upload · Audit Trail · case slide-over drawer. Run: `frisk serve`.
+- 2026-07-24: **Batch parallel scoring** (Ingest page) + **dashboard charts**. `POST /api/ingest/batch {ids}`
+  starts a background ThreadPool job (bounded to `min(workers,6)` — 40 raw-parallel = ~200 concurrent
+  OpenRouter calls = 429s), `GET /api/ingest/batch/{job_id}` polled by the UI for a live progress bar +
+  streaming result cards; low-confidence results auto-drop into the Human Review queue. New `GET /api/analytics`
+  feeds three Chart.js charts (risk-band bars · disposition doughnut · detected-pattern frequency). UI:
+  multi-select sample list + "Select all" + "Score selected (N) in parallel". Verified live (2 profiles →
+  progress→complete→2 routed to review) + functionally with mock (analytics + 3-profile batch).
+- 2026-07-24: Made the AML typologies **visible in-app + docs**. `frontend/app.js`: `PATTERN_DEFS` plain-language
+  definitions surface as a legend under the dashboard charts, an info tooltip on the Detected-patterns chart,
+  hover tooltips on pattern chips, and per-pattern meaning in the case drawer. Confirmed usage is real: `score_customer(d)`
+  runs the 4 temporal detectors on EVERY customer (engine.py:104 to 154), and the LLM transactions-analyst is independently
+  prompted to hunt the same four (orchestrator.py:87). Mirrored full definitions into `docs/PROJECT_EXPLAINER.html`
+  (typology table) and `docs/deck/SLIDES.md` (rebuilt deck.pptx).
+- 2026-07-24: New **`docs/ARCHITECTURE_DIAGRAMS.html`** — dark brand-themed Mermaid diagram deck (6 sections):
+  end-to-end flow, data input/which-analyst-reads-what, **ingestion step-by-step** (per-file parser → typed output
+  tables + the exact fact-strings each LLM sees), the 5-call LangGraph orchestration, the never-fails cascade, and the
+  confidence-gate + teach-the-model HITL loop. Every node traced to real code; verified rendering in-browser (no Mermaid errors).

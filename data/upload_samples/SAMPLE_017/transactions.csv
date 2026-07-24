@@ -1,23 +1,32 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_017-T000,2026-07-21,5755.29,GBP,in,ACME Payroll Ltd,US,salary
-SAMPLE_017-T001,2026-06-21,5714.43,GBP,in,ACME Payroll Ltd,US,salary
-SAMPLE_017-T002,2026-05-22,5828.68,GBP,in,ACME Payroll Ltd,US,salary
-SAMPLE_017-T003,2026-04-22,5828.04,GBP,in,ACME Payroll Ltd,US,salary
-SAMPLE_017-T004,2026-03-23,5693.46,GBP,in,ACME Payroll Ltd,US,salary
-SAMPLE_017-T005,2026-02-21,5818.42,GBP,in,ACME Payroll Ltd,US,salary
-SAMPLE_017-T006,2026-07-19,745.07,GBP,out,Landlord DD,US,direct_debit
-SAMPLE_017-T007,2026-06-19,1077.07,GBP,out,Landlord DD,US,direct_debit
-SAMPLE_017-T008,2026-05-20,738.7,GBP,out,Landlord DD,US,direct_debit
-SAMPLE_017-T009,2026-04-20,823.35,GBP,out,Landlord DD,US,direct_debit
-SAMPLE_017-T010,2026-03-21,746.16,GBP,out,Landlord DD,US,direct_debit
-SAMPLE_017-T011,2026-02-19,1051.99,GBP,out,Landlord DD,US,direct_debit
-SAMPLE_017-T012,2026-03-04,14.81,GBP,out,Flynn-Marsh,US,card
-SAMPLE_017-T013,2026-04-17,18.25,GBP,out,Rhodes-Wall,US,card
-SAMPLE_017-T014,2026-02-18,68.97,GBP,out,"Price, O'Neill and Jones",US,card
-SAMPLE_017-T015,2026-06-24,21.1,GBP,out,Williams-Harding,US,card
-SAMPLE_017-T016,2026-05-24,28.13,GBP,out,Briggs and Sons,US,card
-SAMPLE_017-T017,2026-02-06,13.95,GBP,out,Begum PLC,US,card
-SAMPLE_017-T018,2026-02-01,21.43,GBP,out,Watson-Begum,US,card
-SAMPLE_017-T019,2026-06-01,50.07,GBP,out,Clark PLC,US,card
-SAMPLE_017-T020,2026-01-29,40.34,GBP,out,"Barrett, Watson and Vaughan",US,card
-SAMPLE_017-T021,2026-02-26,23.21,GBP,out,Brown-Cole,US,card
+SAMPLE_017-T000,2026-07-21,3650.09,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T001,2026-06-21,3567.8,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T002,2026-05-22,3573.45,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T003,2026-04-22,3631.58,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T004,2026-03-23,3527.53,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T005,2026-02-21,3656.75,GBP,in,ACME Payroll Ltd,US,salary
+SAMPLE_017-T006,2026-07-19,1110.64,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T007,2026-06-19,1172.34,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T008,2026-05-20,1224.81,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T009,2026-04-20,1070.04,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T010,2026-03-21,1252.5,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T011,2026-02-19,1317.0,GBP,out,Landlord DD,US,direct_debit
+SAMPLE_017-T012,2026-05-16,17.71,GBP,out,Welch Inc,US,card
+SAMPLE_017-T013,2026-07-09,85.24,GBP,out,"Smith, Lord and Davies",US,card
+SAMPLE_017-T014,2026-02-13,9.36,GBP,out,"Gray, Walsh and Taylor",US,card
+SAMPLE_017-T015,2026-05-22,39.91,GBP,out,Smith-Leach,US,card
+SAMPLE_017-T016,2026-05-07,24.68,GBP,out,Wade-Pritchard,US,card
+SAMPLE_017-T017,2026-04-12,102.22,GBP,out,Bailey PLC,US,card
+SAMPLE_017-T018,2026-07-16,41.88,GBP,out,Hall-Newman,US,card
+SAMPLE_017-T019,2026-03-08,44.12,GBP,out,Yates-Chandler,US,card
+SAMPLE_017-T020,2026-06-10,18.45,GBP,out,Mills and Sons,US,card
+SAMPLE_017-T021,2026-03-17,17.71,GBP,out,"Richards, Heath and Duffy",US,card
+SAMPLE_017-T022,2026-07-20,26.18,GBP,out,"Gould, Andrews and Kelly",US,card
+SAMPLE_017-T023,2026-04-12,38.99,GBP,out,James Group,US,card
+SAMPLE_017-T024,2026-04-25,18.26,GBP,out,Griffin-Kent,US,card
+SAMPLE_017-T025,2026-02-14,95.53,GBP,out,Stewart-Campbell,US,card
+SAMPLE_017-T026,2026-06-18,78.52,GBP,out,Wilson Ltd,US,card
+SAMPLE_017-T027,2026-06-21,100.57,GBP,out,James Group,US,card
+SAMPLE_017-T028,2026-07-22,49.28,GBP,out,Page Ltd,US,card
+SAMPLE_017-T029,2026-06-04,75.55,GBP,out,Schofield-Wilson,US,card
+SAMPLE_017-T030,2026-06-28,9.62,GBP,out,Gallagher Ltd,US,card

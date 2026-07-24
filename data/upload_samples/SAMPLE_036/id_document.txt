@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: RU (Russia)
-Surname: WILSON
-Given names: DONNA
+Surname: THOMPSON
+Given names: DR JAMES
 Nationality: Russia
-Date of birth: 1971-10-14
-Document no.: P73050917
+Date of birth: 1972-06-15
+Document no.: P22930892
 Expiry: 2031-05-01
 
 MRZ:
-P<RUWILSON<<DONNA<<<<<<<<<<<<<<<<<<<<<<<<<<<
-P73050917<RU19711014<<<<<<<<<<<<<<<<<<<<<<<<
+P<RUTHOMPSON<<DR<JAMES<<<<<<<<<<<<<<<<<<<<<<
+P22930892<RU19720615<<<<<<<<<<<<<<<<<<<<<<<<

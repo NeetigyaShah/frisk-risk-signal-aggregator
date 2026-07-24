@@ -1,26 +1,34 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_025-T000,2026-07-21,4073.11,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_025-T001,2026-06-21,4068.56,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_025-T002,2026-05-22,4167.76,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_025-T003,2026-04-22,4138.03,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_025-T004,2026-03-23,4201.71,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_025-T005,2026-02-21,4140.45,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_025-T006,2026-07-19,1232.64,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_025-T007,2026-06-19,1371.26,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_025-T008,2026-05-20,1398.57,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_025-T009,2026-04-20,656.97,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_025-T010,2026-03-21,1385.03,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_025-T011,2026-02-19,1018.86,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_025-T012,2026-02-06,24.94,GBP,out,Barnes PLC,GB,card
-SAMPLE_025-T013,2026-04-10,8.43,GBP,out,Rees and Sons,GB,card
-SAMPLE_025-T014,2026-02-20,24.56,GBP,out,"Harris, Ryan and Moore",GB,card
-SAMPLE_025-T015,2026-06-13,33.54,GBP,out,"Sheppard, Williams and Wright",GB,card
-SAMPLE_025-T016,2026-04-02,18.5,GBP,out,Hope-Patterson,GB,card
-SAMPLE_025-T017,2026-04-25,24.03,GBP,out,"Wilson, Miles and Jones",GB,card
-SAMPLE_025-T018,2026-07-20,106.53,GBP,out,Garner-Dodd,GB,card
-SAMPLE_025-T019,2026-06-02,37.91,GBP,out,"Lewis, Dobson and Reynolds",GB,card
-SAMPLE_025-T020,2026-07-21,38.63,GBP,out,"Brown, Davies and Pugh",GB,card
-SAMPLE_025-T021,2026-05-19,43.94,GBP,out,Davies Inc,GB,card
-SAMPLE_025-T022,2026-07-18,92.64,GBP,out,Wright-Johnson,GB,card
-SAMPLE_025-T023,2026-02-07,17.93,GBP,out,Brown-Wilson,GB,card
-SAMPLE_025-T024,2026-01-29,18.06,GBP,out,Ashton Group,GB,card
+SAMPLE_025-T000,2026-07-21,4139.76,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_025-T001,2026-06-21,4105.39,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_025-T002,2026-05-22,4073.39,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_025-T003,2026-04-22,4043.64,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_025-T004,2026-03-23,4151.68,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_025-T005,2026-02-21,4040.48,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_025-T006,2026-07-19,1375.39,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_025-T007,2026-06-19,986.81,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_025-T008,2026-05-20,1087.69,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_025-T009,2026-04-20,1365.84,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_025-T010,2026-03-21,1326.34,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_025-T011,2026-02-19,924.49,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_025-T012,2026-04-09,29.86,GBP,out,James Inc,GB,card
+SAMPLE_025-T013,2026-01-31,12.01,GBP,out,Webb-Shaw,GB,card
+SAMPLE_025-T014,2026-07-06,19.96,GBP,out,King-Hewitt,GB,card
+SAMPLE_025-T015,2026-05-26,18.95,GBP,out,O'Donnell-Shaw,GB,card
+SAMPLE_025-T016,2026-02-12,46.22,GBP,out,"Jones, Harper and Short",GB,card
+SAMPLE_025-T017,2026-03-27,140.83,GBP,out,"Taylor, Anderson and Smith",GB,card
+SAMPLE_025-T018,2026-02-01,15.58,GBP,out,Webb-Davies,GB,card
+SAMPLE_025-T019,2026-06-06,33.49,GBP,out,"Watson, Pearson and Morris",GB,card
+SAMPLE_025-T020,2026-01-29,50.26,GBP,out,"Kirby, Moore and Roberts",GB,card
+SAMPLE_025-T021,2026-06-29,24.94,GBP,out,"Jones, Thomas and Lloyd",GB,card
+SAMPLE_025-T022,2026-02-25,19.51,GBP,out,"Hall, Smith and Barton",GB,card
+SAMPLE_025-T023,2026-03-20,24.56,GBP,out,Noble PLC,GB,card
+SAMPLE_025-T024,2026-04-04,29.46,GBP,out,Short and Sons,GB,card
+SAMPLE_025-T025,2026-07-04,18.5,GBP,out,"Williams, Johnson and Kelly",GB,card
+SAMPLE_025-T026,2026-02-14,38.86,GBP,out,Norman-Barker,GB,card
+SAMPLE_025-T027,2026-03-04,106.53,GBP,out,Ball LLC,GB,card
+SAMPLE_025-T028,2026-07-18,25.7,GBP,out,Connor-Mason,GB,card
+SAMPLE_025-T029,2026-04-27,38.63,GBP,out,Rees and Sons,GB,card
+SAMPLE_025-T030,2026-07-15,20.22,GBP,out,"Harris, Ryan and Moore",GB,card
+SAMPLE_025-T031,2026-03-18,92.64,GBP,out,"Sheppard, Williams and Wright",GB,card
+SAMPLE_025-T032,2026-04-20,110.32,GBP,out,Hope-Patterson,GB,card

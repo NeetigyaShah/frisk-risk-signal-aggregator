@@ -1,34 +1,32 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_039-T000,2026-07-21,4507.81,GBP,in,ACME Payroll Ltd,KP,salary
-SAMPLE_039-T001,2026-06-21,4382.89,GBP,in,ACME Payroll Ltd,KP,salary
-SAMPLE_039-T002,2026-05-22,4474.63,GBP,in,ACME Payroll Ltd,KP,salary
-SAMPLE_039-T003,2026-04-22,4354.54,GBP,in,ACME Payroll Ltd,KP,salary
-SAMPLE_039-T004,2026-03-23,4419.83,GBP,in,ACME Payroll Ltd,KP,salary
-SAMPLE_039-T005,2026-02-21,4414.66,GBP,in,ACME Payroll Ltd,KP,salary
-SAMPLE_039-T006,2026-07-19,639.39,GBP,out,Landlord DD,KP,direct_debit
-SAMPLE_039-T007,2026-06-19,1112.53,GBP,out,Landlord DD,KP,direct_debit
-SAMPLE_039-T008,2026-05-20,1024.87,GBP,out,Landlord DD,KP,direct_debit
-SAMPLE_039-T009,2026-04-20,937.97,GBP,out,Landlord DD,KP,direct_debit
-SAMPLE_039-T010,2026-03-21,974.9,GBP,out,Landlord DD,KP,direct_debit
-SAMPLE_039-T011,2026-02-19,1116.62,GBP,out,Landlord DD,KP,direct_debit
-SAMPLE_039-T012,2026-03-30,24.44,GBP,out,"Sullivan, Lee and Fuller",KP,card
-SAMPLE_039-T013,2026-06-21,60.41,GBP,out,Griffiths-Webster,KP,card
-SAMPLE_039-T014,2026-03-10,17.41,GBP,out,Pritchard-Thomas,KP,card
-SAMPLE_039-T015,2026-06-24,49.33,GBP,out,Lawrence-Watkins,KP,card
-SAMPLE_039-T016,2026-03-11,50.53,GBP,out,Stewart-Smith,KP,card
-SAMPLE_039-T017,2026-01-29,9.43,GBP,out,Parkin PLC,KP,card
-SAMPLE_039-T018,2026-04-26,14.29,GBP,out,Kelly-Freeman,KP,card
-SAMPLE_039-T019,2026-04-26,34.1,GBP,out,Harrison Ltd,KP,card
-SAMPLE_039-T020,2026-02-09,14.88,GBP,out,Davis Group,KP,card
-SAMPLE_039-T021,2026-07-12,79.26,GBP,out,Griffiths Inc,KP,card
-SAMPLE_039-T022,2026-04-16,55.85,GBP,out,Bailey-Akhtar,KP,card
-SAMPLE_039-T023,2026-05-28,26.29,GBP,out,"Hunt, Graham and French",KP,card
-SAMPLE_039-T024,2026-06-25,50.85,GBP,out,Glover LLC,KP,card
-SAMPLE_039-T025,2026-06-15,23.41,GBP,out,Mason-Chambers,KP,card
-SAMPLE_039-T026,2026-04-12,25.07,GBP,out,"Barton, Doyle and Thompson",KP,card
-SAMPLE_039-T027,2026-02-05,80.67,GBP,out,"Wright, Smith and Burke",KP,card
-SAMPLE_039-T028,2026-01-29,16.35,GBP,out,"Holland, Nelson and Gill",KP,card
-SAMPLE_039-T029,2026-01-26,31.51,GBP,out,"Coates, Barlow and Finch",KP,card
-SAMPLE_039-L00,2026-06-24,192000.0,GBP,out,Shell Co A,CY,transfer
-SAMPLE_039-L01,2026-06-26,153600.0,GBP,out,Shell Co B,CY,transfer
-SAMPLE_039-L02,2026-06-28,122880.0,GBP,out,Shell Co C,CY,transfer
+SAMPLE_039-T000,2026-07-21,5126.6,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_039-T001,2026-06-21,5065.43,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_039-T002,2026-05-22,4973.8,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_039-T003,2026-04-22,4979.41,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_039-T004,2026-03-23,5008.97,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_039-T005,2026-02-21,5048.25,GBP,in,ACME Payroll Ltd,KP,salary
+SAMPLE_039-T006,2026-07-19,622.29,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_039-T007,2026-06-19,1052.19,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_039-T008,2026-05-20,938.47,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_039-T009,2026-04-20,717.77,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_039-T010,2026-03-21,1334.97,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_039-T011,2026-02-19,824.29,GBP,out,Landlord DD,KP,direct_debit
+SAMPLE_039-T012,2026-07-04,116.52,GBP,out,Smith Inc,KP,card
+SAMPLE_039-T013,2026-04-24,30.89,GBP,out,Jones-Ball,KP,card
+SAMPLE_039-T014,2026-05-23,183.19,GBP,out,O'Brien-Lambert,KP,card
+SAMPLE_039-T015,2026-03-06,51.33,GBP,out,Taylor-Bates,KP,card
+SAMPLE_039-T016,2026-05-06,58.14,GBP,out,"Berry, Berry and Miller",KP,card
+SAMPLE_039-T017,2026-05-05,31.11,GBP,out,Law and Sons,KP,card
+SAMPLE_039-T018,2026-05-29,36.93,GBP,out,Roberts-Taylor,KP,card
+SAMPLE_039-T019,2026-04-19,178.53,GBP,out,"Bradley, Grant and Bowen",KP,card
+SAMPLE_039-T020,2026-06-06,10.36,GBP,out,Brown-Robinson,KP,card
+SAMPLE_039-T021,2026-03-30,25.99,GBP,out,Mason-Payne,KP,card
+SAMPLE_039-T022,2026-03-30,24.44,GBP,out,Cole-Carter,KP,card
+SAMPLE_039-T023,2026-06-21,60.41,GBP,out,Kelly-Burton,KP,card
+SAMPLE_039-T024,2026-03-10,17.41,GBP,out,Skinner LLC,KP,card
+SAMPLE_039-T025,2026-06-24,49.33,GBP,out,Bibi-Matthews,KP,card
+SAMPLE_039-T026,2026-03-11,50.53,GBP,out,Davis Group,KP,card
+SAMPLE_039-T027,2026-01-29,9.43,GBP,out,"Jones, McLean and Holmes",KP,card
+SAMPLE_039-L00,2026-06-24,216000.0,GBP,out,Shell Co A,CY,transfer
+SAMPLE_039-L01,2026-06-26,194400.0,GBP,out,Shell Co B,CY,transfer
+SAMPLE_039-L02,2026-06-28,174960.0,GBP,out,Shell Co C,CY,transfer

@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: KP (North Korea)
-Surname: WATKINS-PARKER
-Given names: KAREN
+Surname: LUCAS
+Given names: JULIA
 Nationality: North Korea
-Date of birth: 1967-06-17
-Document no.: P15618855
+Date of birth: 1998-05-05
+Document no.: P99406792
 Expiry: 2031-05-01
 
 MRZ:
-P<KPWATKINS-PARKER<<KAREN<<<<<<<<<<<<<<<<<<<
-P15618855<KP19670617<<<<<<<<<<<<<<<<<<<<<<<<
+P<KPLUCAS<<JULIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+P99406792<KP19980505<<<<<<<<<<<<<<<<<<<<<<<<

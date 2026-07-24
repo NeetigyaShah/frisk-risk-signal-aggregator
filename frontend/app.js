@@ -15,7 +15,15 @@ const gauge = (score, band) => {
 };
 const actionBadge = a => { const [i,l,c]=ACT[a]||['⚪',a,'#94a3b8']; return `<span class="badge" style="background:${c}22;color:${c}">${i} ${l}</span>`; };
 const confBar = c => `<div class="bar"><i style="width:${Math.round(c*100)}%;background:${c<0.6?'#f97316':'#22c55e'}"></i></div>`;
-const patternChips = ps => (ps||[]).map(p=>`<span class="chip" style="background:#ef444422;color:#fca5a5">⚠ ${esc(p.label)}</span>`).join('');
+// Plain-language meaning of each AML typology (shown as tooltips + in the case drawer).
+const PATTERN_DEFS = {
+  'Structuring':  'Many cash deposits just under the reporting floor, clustered in a short window and together exceeding it — splitting one big deposit to dodge reporting ("smurfing").',
+  'Layering':     'Rapid onward transfers to several distinct counterparties in a short window — moving money through hops to hide its origin.',
+  'Round-Trip':   'Money goes out, then a ~matching amount returns via a different counterparty within a window — circular flow to fake legitimacy.',
+  'Dormant-Spike':'A long inactive gap, then a sudden burst of large transactions — an account waking up abnormally.',
+};
+const patternDef = label => PATTERN_DEFS[label] || 'Transaction-pattern anomaly flagged by the typology detectors.';
+const patternChips = ps => (ps||[]).map(p=>`<span class="chip" title="${esc(patternDef(p.label))}" style="background:#ef444422;color:#fca5a5;cursor:help">⚠ ${esc(p.label)}</span>`).join('');
 const tile = (label,val,color) => `<div class="card px-4 py-3"><div class="text-2xl font-extrabold" style="color:${color||'#e8edf7'}">${val}</div><div class="text-xs text-muted">${label}</div></div>`;
 
 // ---------- router ----------
@@ -30,7 +38,7 @@ async function refreshStats(){
 const VIEWS = {dashboard:renderDashboard, review:renderReview, ingest:renderIngest, audit:renderAudit};
 const TITLES = {dashboard:['Dashboard','Prioritised, risk-scored triage queue'],
   review:['Human Review Queue','Low-confidence cases the model routed to a person'],
-  ingest:['Ingest / Upload','Score a customer on demand from documents'],
+  ingest:['Ingest / Upload','Score any subset — or every profile — in parallel, review when they land'],
   audit:['Audit Trail','Append-only record of every decision']};
 async function go(view){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
@@ -41,6 +49,31 @@ async function go(view){
 }
 document.getElementById('nav').addEventListener('click', e => { const a=e.target.closest('.nav-item'); if(a) go(a.dataset.view); });
 
+// ---------- charts ----------
+Chart.defaults.color = '#94a3b8'; Chart.defaults.font.family = 'Inter';
+Chart.defaults.borderColor = '#1e293b'; Chart.defaults.plugins.legend.display = false;
+const _CHARTS = {};
+function chart(id, cfg){ _CHARTS[id]?.destroy(); _CHARTS[id] = new Chart($(id), cfg); }
+const noAxes = {scales:{x:{grid:{display:false}},y:{display:false,grid:{display:false}}}};
+function bar(id, labels, data, colors){
+  chart(id, {type:'bar', data:{labels, datasets:[{data, backgroundColor:colors, borderRadius:5, maxBarThickness:46}]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{beginAtZero:true,ticks:{precision:0,font:{size:10}},grid:{color:'#1e293b'}}}}});
+}
+async function renderCharts(){
+  const a = await api('/api/analytics');
+  bar('chBands', ['Low','Medium','High'], [a.bands.LOW,a.bands.MED,a.bands.HIGH], ['#22c55e','#f59e0b','#ef4444']);
+  const A = a.actions;
+  chart('chActions', {type:'doughnut', cutout:'62%',
+    data:{labels:['Auto-clear','Review','Escalate','Human queue'],
+      datasets:[{data:[A.AUTO_CLEAR,A.REVIEW,A.ESCALATE,A.PENDING_REVIEW],
+        backgroundColor:['#22c55e','#f59e0b','#ef4444','#f97316'], borderColor:'#111826', borderWidth:2}]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'right',labels:{boxWidth:10,font:{size:11}}}}}});
+  const pl = Object.keys(a.patterns), pv = Object.values(a.patterns);
+  if(pl.length) bar('chPats', pl, pv, pl.map(()=>'#6366f1'));
+  else $('chPats').closest('.card').innerHTML = '<div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns</div><div class="text-sm text-faint py-8 text-center">No typology anomalies in the population.</div>';
+}
+
 // ---------- Dashboard ----------
 async function renderDashboard(){
   const q = await api('/api/queue');
@@ -50,6 +83,14 @@ async function renderDashboard(){
     ${tile('🟡 Review', STATS.review, '#f59e0b')}
     ${tile('🟢 Auto-cleared', STATS.auto_clear, '#22c55e')}
     ${tile('🟠 Human queue', STATS.pending_review, '#f97316')}
+  </div>`;
+  const charts = `<div class="grid grid-cols-3 gap-3 mb-6">
+    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Risk bands</div><div style="height:150px"><canvas id="chBands"></canvas></div></div>
+    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Disposition</div><div style="height:150px"><canvas id="chActions"></canvas></div></div>
+    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns <span title="AML transaction typologies detected on every customer by the deterministic engine, and independently hunted by the LLM transactions-analyst." style="cursor:help">ⓘ</span></div><div style="height:150px"><canvas id="chPats"></canvas></div></div>
+  </div>
+  <div class="card p-3 mb-6 text-xs text-muted grid grid-cols-2 gap-x-6 gap-y-1">
+    ${Object.entries(PATTERN_DEFS).map(([k,v])=>`<div><b class="text-ink">${k}:</b> ${esc(v)}</div>`).join('')}
   </div>`;
   const rows = q.map((d,i)=>`
     <div class="card p-4 flex items-center gap-4 cursor-pointer fade" onclick="openCase('${d.id}')">
@@ -68,7 +109,8 @@ async function renderDashboard(){
         <div class="text-[11px] text-faint mb-1">confidence ${d.confidence.toFixed(2)}</div>${confBar(d.confidence)}
       </div>
     </div>`).join('');
-  $('content').innerHTML = tiles + `<div class="text-xs text-faint mb-2 uppercase tracking-wide">Prioritised risk queue — highest risk first</div><div class="grid gap-3">${rows}</div>`;
+  $('content').innerHTML = tiles + charts + `<div class="text-xs text-faint mb-2 uppercase tracking-wide">Prioritised risk queue — highest risk first</div><div class="grid gap-3">${rows}</div>`;
+  renderCharts();
 }
 
 // ---------- Case drawer ----------
@@ -81,8 +123,9 @@ async function openCase(cid){
        <div class="text-xs text-muted mt-1">${esc(s.note)}</div></div>`).join('')}</div>` : '';
   const verd = d.llm_detail?.verdict;
   const patterns = d.patterns.length ? d.patterns.map(p=>`
-     <div class="flex items-start gap-2 mb-2"><span class="badge" style="background:#ef444422;color:#fca5a5">⚠ ${esc(p.label)}</span>
-       <span class="text-sm text-muted">${esc(p.rationale)}</span></div>`).join('')
+     <div class="mb-3"><div class="flex items-start gap-2"><span class="badge" style="background:#ef444422;color:#fca5a5">⚠ ${esc(p.label)}</span>
+       <span class="text-sm text-muted">${esc(p.rationale)}</span></div>
+       <div class="text-xs text-faint mt-1 pl-1 italic">${esc(patternDef(p.label))}</div></div>`).join('')
      : `<div class="text-sm text-faint">No transaction-pattern anomalies detected by the rules engine.</div>`;
   const tx = (d.dossier.transactions||[]);
   const txRows = tx.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,40).map(t=>`
@@ -174,17 +217,63 @@ async function submitReview(cid){
 async function renderIngest(){
   const samples = await api('/api/samples');
   $('content').innerHTML = `
-    <div class="grid grid-cols-2 gap-4">
-      <div class="card p-5"><div class="font-semibold mb-2">Pick a sample profile</div>
-        <div class="text-xs text-muted mb-3">${samples.length} sample profiles available for manual upload.</div>
-        <select id="sampleSel" class="w-full bg-panel2 border border-line rounded-lg px-3 py-2 text-sm">${samples.map(s=>`<option>${s}</option>`).join('')}</select>
-        <button class="act w-full mt-3 bg-brand text-white py-2.5 rounded-lg font-semibold" onclick="ingestSample()">▶ Score this customer</button></div>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="card p-5 col-span-2">
+        <div class="flex items-center justify-between mb-3">
+          <div><div class="font-semibold">Sample profiles</div>
+            <div class="text-xs text-muted">${samples.length} available — tick any subset, or select all and score them in parallel.</div></div>
+          <label class="text-sm text-muted flex items-center gap-2 cursor-pointer"><input type="checkbox" id="selAll" onchange="toggleAll(this.checked)"> Select all</label>
+        </div>
+        <div class="max-h-[300px] overflow-y-auto grid grid-cols-2 gap-1 mb-4 pr-1">
+          ${samples.map(s=>`<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-panel2 text-sm cursor-pointer">
+            <input type="checkbox" class="smp" value="${s}" onchange="updateSel()"> <span class="truncate">${esc(s)}</span></label>`).join('')}
+        </div>
+        <button class="act w-full bg-brand text-white py-2.5 rounded-lg font-semibold" onclick="scoreSelected()">
+          ▶ Score selected (<span id="selCount">0</span>) in parallel</button>
+        <div class="text-[11px] text-faint mt-2 text-center">Each customer runs the full 5-step LLM graph · bounded concurrency to respect rate limits · results stream in below</div>
+      </div>
       <div class="card p-5"><div class="font-semibold mb-2">Upload files</div>
         <div class="text-xs text-muted mb-3">kyc.json · account.json · transactions.csv · screening.json · *.txt</div>
         <input id="upFiles" type="file" multiple class="text-sm w-full">
         <button class="act w-full mt-3 bg-brand2 text-white py-2.5 rounded-lg font-semibold" onclick="ingestFiles()">▶ Score uploaded files</button></div>
     </div>
+    <div id="batchArea" class="mt-6"></div>
     <div id="ingestResult" class="mt-5"></div>`;
+}
+const _selected = () => [...document.querySelectorAll('.smp:checked')].map(c=>c.value);
+function updateSel(){ $('selCount').textContent = _selected().length; }
+function toggleAll(on){ document.querySelectorAll('.smp').forEach(c=>c.checked=on); updateSel(); }
+
+const batchShell = (total, workers) => `<div class="card p-5">
+  <div class="flex items-center justify-between mb-2">
+    <div class="font-semibold">Batch scoring — up to ${workers} customers at once</div>
+    <div id="bpText" class="text-sm text-muted">0 / ${total} scored</div></div>
+  <div class="bar mb-1" style="height:8px"><i id="bpBar" style="width:0%;background:#3b82f6;transition:width .3s"></i></div>
+  <div id="bpDone" class="text-xs text-faint mb-4">Scoring… fire-and-review — you can leave this running.</div>
+  <div id="bResults" class="grid grid-cols-2 gap-2"></div></div>`;
+function batchCard(r){
+  if(r.error) return `<div class="card p-3 text-sm border-high/50"><b>${esc(r.name)}</b> <span class="text-high">✕ ${esc(r.error).slice(0,60)}</span></div>`;
+  return `<div class="card p-3 flex items-center gap-3 fade cursor-pointer" onclick="openCase('${r.id}')">
+    ${gauge(r.score,r.band)}
+    <div class="flex-1 min-w-0"><div class="font-semibold text-sm truncate">${esc(r.name)} <span class="text-faint">${r.id}</span></div>
+      <div class="mt-1 flex gap-1.5 items-center flex-wrap">${actionBadge(r.action)}<span class="chip">conf ${(r.confidence||0).toFixed(2)}</span>${patternChips(r.patterns)}</div></div></div>`;
+}
+async function scoreSelected(){
+  const ids = _selected();
+  if(!ids.length){ $('batchArea').innerHTML = `<div class="text-sm text-med">Select at least one profile.</div>`; return; }
+  const j = await jpost('/api/ingest/batch', {ids});
+  $('batchArea').innerHTML = batchShell(j.total, j.workers);
+  pollBatch(j.job_id);
+}
+async function pollBatch(job_id){
+  const j = await api('/api/ingest/batch/'+job_id);
+  const pct = j.total ? Math.round(j.done/j.total*100) : 0;
+  if($('bpBar')){ $('bpBar').style.width = pct+'%'; $('bpText').textContent = `${j.done} / ${j.total} scored`;
+    $('bResults').innerHTML = (j.results||[]).map(batchCard).join(''); }
+  if(j.status !== 'complete'){ setTimeout(()=>pollBatch(job_id), 1500); return; }
+  refreshStats();
+  const rev = (j.results||[]).filter(r=>r.action==='PENDING_REVIEW').length;
+  if($('bpDone')) $('bpDone').innerHTML = `✓ Complete · ${j.total} scored${rev?` · <b class="text-review">${rev} routed to Human Review →</b>`:''} · click any card to open the case.`;
 }
 function ingestResult(d){
   const src=(d.llm_detail?.source_findings)||[]; const lv={low:'🟢',medium:'🟡',high:'🔴'};
@@ -196,10 +285,6 @@ function ingestResult(d){
     <div class="card p-3 mt-3 text-sm">${esc(d.summary)}</div>
     ${src.length?`<div class="grid grid-cols-3 gap-2 mt-3">${src.map(s=>`<div class="card p-2 text-xs"><b>${lv[s.risk_level]||'⚪'} ${esc(s.domain)}</b><div class="text-muted mt-0.5">${esc(s.note)}</div></div>`).join('')}</div>`:''}
     ${d.action==='PENDING_REVIEW'?`<div class="mt-3 text-review text-sm">🟠 Low confidence — added to the Human Review Queue.</div>`:''}</div>`;
-}
-async function ingestSample(){
-  $('ingestResult').innerHTML = '<div class="text-muted">Scoring via the LLM graph… (a live call, ~15–30s)</div>';
-  ingestResult(await jpost('/api/ingest', {sample_id: $('sampleSel').value})); refreshStats();
 }
 async function ingestFiles(){
   const fs = $('upFiles').files; if(!fs.length) return;

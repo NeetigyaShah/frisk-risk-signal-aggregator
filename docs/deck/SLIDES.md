@@ -58,8 +58,10 @@ instructor · anthropic.
 
 - **Rules as a registry of pure functions** (~stdlib, no rules-engine DSL): overrides/vetoes
   evaluated **before** the weighted sum, so a sanctions hit is never averaged away.
-- **Typology detectors are temporal**, not amount-only: structuring (≥3 sub-£10k cash in 7 days),
-  layering (≥3 ~80%-forwarded hops), round-trip, dormant-then-spike. Every finding carries evidence.
+- **Typology detectors are temporal**, not amount-only — flagged on every customer *and* independently hunted by the LLM:
+  **structuring** (sub-floor cash clustered short-window), **layering** (rapid hops to distinct counterparties),
+  **round-trip** (out then ~matching amount back via a different counterparty), **dormant-spike** (inactivity then burst).
+  Every finding carries evidence (txn IDs, amounts, window).
 - **LLM boundary = instructor + Pydantic v2:** `Field(ge=0,le=100)`, `Literal` band, `field_validator`
   asserting band↔score; `max_retries=3` feeds validation errors back for self-healing; `temperature=0`.
   The model is **not** told the rules score, so agreement is meaningful.

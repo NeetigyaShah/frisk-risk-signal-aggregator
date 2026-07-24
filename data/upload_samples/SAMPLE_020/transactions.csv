@@ -1,18 +1,33 @@
 txn_id,date,amount,currency,direction,counterparty,counterparty_country,txn_type
-SAMPLE_020-T000,2026-07-21,3688.8,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_020-T001,2026-06-21,3695.11,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_020-T002,2026-05-22,3750.82,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_020-T003,2026-04-22,3784.29,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_020-T004,2026-03-23,3822.12,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_020-T005,2026-02-21,3702.69,GBP,in,ACME Payroll Ltd,GB,salary
-SAMPLE_020-T006,2026-07-19,1287.97,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_020-T007,2026-06-19,1057.34,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_020-T008,2026-05-20,722.36,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_020-T009,2026-04-20,1073.46,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_020-T010,2026-03-21,1085.82,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_020-T011,2026-02-19,1079.07,GBP,out,Landlord DD,GB,direct_debit
-SAMPLE_020-T012,2026-07-19,53.34,GBP,out,Stevens Group,GB,card
-SAMPLE_020-T013,2026-02-05,40.37,GBP,out,"Price, Sanderson and Taylor",GB,card
-SAMPLE_020-T014,2026-02-24,15.43,GBP,out,Williams and Sons,GB,card
-SAMPLE_020-T015,2026-07-18,8.71,GBP,out,Joyce-Edwards,GB,card
-SAMPLE_020-T016,2026-01-26,14.24,GBP,out,Page-McKenzie,GB,card
+SAMPLE_020-T000,2026-07-21,3951.86,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_020-T001,2026-06-21,4067.11,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_020-T002,2026-05-22,4080.12,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_020-T003,2026-04-22,3952.37,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_020-T004,2026-03-23,3929.79,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_020-T005,2026-02-21,4074.28,GBP,in,ACME Payroll Ltd,GB,salary
+SAMPLE_020-T006,2026-07-19,818.6,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_020-T007,2026-06-19,1193.15,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_020-T008,2026-05-20,830.75,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_020-T009,2026-04-20,1080.81,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_020-T010,2026-03-21,1116.58,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_020-T011,2026-02-19,1043.79,GBP,out,Landlord DD,GB,direct_debit
+SAMPLE_020-T012,2026-07-02,36.48,GBP,out,"Johnston, Cole and Jarvis",GB,card
+SAMPLE_020-T013,2026-06-05,15.46,GBP,out,Owen-Cook,GB,card
+SAMPLE_020-T014,2026-04-23,8.56,GBP,out,Schofield-Bell,GB,card
+SAMPLE_020-T015,2026-03-27,23.31,GBP,out,Black-Gibbs,GB,card
+SAMPLE_020-T016,2026-04-28,52.99,GBP,out,King PLC,GB,card
+SAMPLE_020-T017,2026-07-19,15.08,GBP,out,Nicholson Group,GB,card
+SAMPLE_020-T018,2026-01-31,119.15,GBP,out,Pearson Ltd,GB,card
+SAMPLE_020-T019,2026-07-08,17.49,GBP,out,Griffiths Group,GB,card
+SAMPLE_020-T020,2026-03-02,25.83,GBP,out,Stewart-Taylor,GB,card
+SAMPLE_020-T021,2026-02-07,90.85,GBP,out,Smart PLC,GB,card
+SAMPLE_020-T022,2026-03-03,19.3,GBP,out,Roberts-Frost,GB,card
+SAMPLE_020-T023,2026-04-12,11.02,GBP,out,"Bailey, Cook and Bates",GB,card
+SAMPLE_020-T024,2026-04-30,78.13,GBP,out,Stephenson-James,GB,card
+SAMPLE_020-T025,2026-04-06,37.75,GBP,out,Shaw PLC,GB,card
+SAMPLE_020-T026,2026-05-19,53.34,GBP,out,"Brown, Long and Rhodes",GB,card
+SAMPLE_020-T027,2026-06-04,7.83,GBP,out,Jones-Howard,GB,card
+SAMPLE_020-T028,2026-06-12,15.43,GBP,out,Horton-Whitehead,GB,card
+SAMPLE_020-T029,2026-03-06,11.6,GBP,out,Saunders and Sons,GB,card
+SAMPLE_020-T030,2026-02-06,14.24,GBP,out,Smith Group,GB,card
+SAMPLE_020-T031,2026-07-08,6.77,GBP,out,Mason Inc,GB,card

@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: DE (Germany)
-Surname: FOX
-Given names: JENNIFER
+Surname: SMITH
+Given names: BETHANY
 Nationality: Germany
-Date of birth: 1978-10-14
-Document no.: P36395466
+Date of birth: 1973-03-28
+Document no.: P92501848
 Expiry: 2031-05-01
 
 MRZ:
-P<DEFOX<<JENNIFER<<<<<<<<<<<<<<<<<<<<<<<<<<<
-P36395466<DE19781014<<<<<<<<<<<<<<<<<<<<<<<<
+P<DESMITH<<BETHANY<<<<<<<<<<<<<<<<<<<<<<<<<<
+P92501848<DE19730328<<<<<<<<<<<<<<<<<<<<<<<<

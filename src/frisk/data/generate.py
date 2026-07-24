@@ -2,9 +2,10 @@
 
 Every profile becomes ``data/customers/CUST_xxx/`` containing STRUCTURED files (kyc.json, account.json,
 transactions.csv, screening.json) and UNSTRUCTURED files (id_document.txt OCR extract, rm_notes.txt
-relationship-manager notes, adverse_media_*.txt news snippets, correspondence.txt emails). This mirrors
-the fragmented, mixed-format inputs a real compliance analyst faces — and gives the LLM genuine
-unstructured text to synthesise, not just tidy fields.
+relationship-manager notes, correspondence.txt emails). This mirrors the fragmented, mixed-format inputs a
+real compliance analyst faces — and gives the LLM genuine unstructured text to synthesise, not just tidy fields.
+
+No sanctions, no adverse-media (scoped out — see the design spec). The only external-alert fact kept is PEP.
 
 Determinism: seeded once, fixed REF_DATE, Decimal money. Run:  python -m frisk.data.generate
 """
@@ -27,7 +28,13 @@ from frisk.core.models import Dossier, Txn
 from frisk.paths import CUSTOMERS_DIR, UPLOAD_SAMPLES
 
 SEED = CONFIG["seed"]
-FLOOR = CONFIG["reporting_floor"]
+
+# DATA-GENERATION constants (local — NOT scoring rules; no scorer reads these).
+# They only shape realistic transaction patterns for the LLM to reason about.
+GEN_FLOOR = 10_000            # £10k reporting threshold the structuring pattern hugs
+STRUCT_LOW_FRAC = 0.8         # structuring deposits sit in [0.8*floor, floor)
+LAYER_RATIO = 0.9            # each layering hop forwards ~90%
+HIGH_RISK_COUNTRIES = {"RU", "VE", "MM", "IR", "SY", "AF", "YE", "KP", "PK", "NG"}
 REF_DATE = date(2026, 7, 24)
 
 fake = Faker("en_GB")
@@ -46,23 +53,23 @@ PROFILES = [
     {"sev": "low", "country": "GB", "occ": "retail manager", "missing": "transactions"},
     {"sev": "low", "country": "FR", "occ": "chef"},
 
-    {"sev": "med", "country": "RU", "occ": "consultant", "adverse": 1},
+    {"sev": "med", "country": "RU", "occ": "consultant"},
     {"sev": "med", "country": "GB", "occ": "politician", "pep": True, "new_account": True},
-    {"sev": "med", "country": "GB", "occ": "money exchange", "adverse": 1},
-    {"sev": "med", "country": "VE", "occ": "importer", "adverse": 1, "missing": "kyc_id"},
-    {"sev": "med", "country": "GB", "occ": "landlord", "pep": True, "adverse": 1},
+    {"sev": "med", "country": "GB", "occ": "money exchange"},
+    {"sev": "med", "country": "VE", "occ": "importer", "missing": "kyc_id"},
+    {"sev": "med", "country": "GB", "occ": "landlord", "pep": True},
     {"sev": "med", "country": "RU", "occ": "precious metals trader"},
     {"sev": "med", "country": "GB", "occ": "consultant", "pep": True, "new_account": True},
 
     {"sev": "high", "country": "RU", "occ": "consultant", "typology": "structuring", "cash_heavy": True},
-    {"sev": "high", "country": "GB", "occ": "crypto dealer", "typology": "layering", "adverse": 2},
+    {"sev": "high", "country": "GB", "occ": "crypto dealer", "typology": "layering"},
     {"sev": "high", "country": "MM", "occ": "trader", "typology": "round_trip"},
     {"sev": "high", "country": "GB", "occ": "precious metals trader", "typology": "dormant_spike",
-     "adverse": 1, "extra": "second_passport"},
+     "extra": "second_passport"},
     {"sev": "high", "country": "GB", "occ": "politician", "pep": True, "typology": "structuring", "cash_heavy": True},
 
-    {"sev": "critical", "country": "IR", "occ": "arms dealer", "sanctioned": True, "typology": "structuring"},
-    {"sev": "critical", "country": "SY", "occ": "shell company director", "sanctioned": True, "pep": True},
+    {"sev": "critical", "country": "IR", "occ": "arms dealer", "typology": "structuring"},
+    {"sev": "critical", "country": "SY", "occ": "shell company director", "pep": True},
 ]
 
 EXPECTED_BAND = {"low": "LOW", "med": "MED", "high": "HIGH", "critical": "HIGH", "review": "REVIEW"}
@@ -99,7 +106,7 @@ def benign_stream(cust, rng, country, cash_heavy):
 
 
 def inject_structuring(cust, rng, country, s):
-    floor, lo = float(FLOOR), float(CONFIG["structuring"]["low_frac"]) * float(FLOOR)
+    floor, lo = float(GEN_FLOOR), STRUCT_LOW_FRAC * float(GEN_FLOOR)
     return [Txn(f"{cust}-S{i:02d}", _dstr(40 - i * 2), _amt(rng.uniform(lo, floor - 150)),
                 "GBP", "in", "Cash Deposit", country, "cash") for i in range(4)]
 
@@ -107,7 +114,7 @@ def inject_structuring(cust, rng, country, s):
 def inject_layering(cust, rng, country, s):
     txns, amt = [], 240000.0
     for i in range(3):
-        amt *= float(CONFIG["layering"]["forward_ratio"])
+        amt *= LAYER_RATIO
         txns.append(Txn(f"{cust}-L{i:02d}", _dstr(30 - i * 2), _amt(amt), "GBP", "out",
                         f"Shell Co {chr(65 + i)}", "CY", "transfer"))
     return txns
@@ -164,11 +171,11 @@ def doc_rm_notes(d, p):
                                "says these are proceeds from a private house sale and provided partial documentation. "
                                "Unclear whether legitimate or structuring — recommend a second opinion."),
             "pep_benign": (f"Client is a low-profile local {occ} (PEP). Activity is limited to salary and routine "
-                           f"household spending; no unusual transactions and no adverse media. EDD applied as a "
-                           f"precaution — the case is genuinely borderline."),
-            "adverse_unproven": ("A single negative news item surfaced during periodic review (allegations UNPROVEN, "
-                                 "no charges filed). Client gave a plausible explanation; KYC and transactions are "
-                                 "otherwise clean. Hard to weigh."),
+                           f"household spending; no unusual transactions. EDD applied as a precaution — the case is "
+                           f"genuinely borderline."),
+            "sof_unverified": ("Conflicting information about source of funds: declared income does not fully match "
+                               "observed inflows, but the client provided partial and plausible documentation. "
+                               "Genuinely borderline — recommend a second opinion."),
             "geo_explained": (f"Client runs a legitimate import/export business in {cn}. Source of funds and wealth "
                               f"are documented and independently verified; cross-border payments match declared trade. "
                               f"{cn} is a higher-risk jurisdiction — retained for periodic review."),
@@ -179,8 +186,8 @@ def doc_rm_notes(d, p):
         if cbody:
             return head + cbody + "\n"
     if sev == "critical":
-        body = ("URGENT: sanctions screening returned an EXACT match (OFAC SDN). Account frozen pending "
-                "MLRO review. Do NOT process any transactions. Escalated immediately.")
+        body = (f"HIGH RISK: client's occupation ({occ}) and jurisdiction ({cn}) are very high risk; ownership is "
+                f"complex and source of funds is poorly evidenced. Recommend enhanced scrutiny and MLRO review.")
     elif typ == "structuring":
         body = ("CONCERN: client has made multiple cash deposits just below the £10,000 reporting threshold "
                 "over recent weeks. Vague when asked about source of funds. Recommend review / possible SAR.")
@@ -196,28 +203,13 @@ def doc_rm_notes(d, p):
     elif p.get("pep"):
         body = (f"Client is a {occ}; confirmed Politically Exposed Person. Enhanced due diligence applied. "
                 f"Source of wealth stated as public office / family business. Ongoing monitoring in place.")
-    elif p["country"] in CONFIG["high_risk_countries"]:
+    elif p["country"] in HIGH_RISK_COUNTRIES:
         body = (f"Client resident in {cn} (higher-risk jurisdiction). Cross-border activity monitored. "
                 f"Source of funds: {occ} income.")
-    elif p.get("adverse"):
-        body = ("Negative media reference identified during periodic review (see attached article). Client "
-                "denies involvement; monitoring continued.")
     else:
         body = (f"Long-standing relationship. Salary account, {occ}. Activity consistent with profile; no "
                 f"concerns noted. KYC last refreshed {_dstr(120)}.")
     return head + body + "\n"
-
-
-def doc_adverse(d, p, n):
-    name, occ, cn = d.kyc["name"], d.kyc["occupation"], COUNTRY.get(p["country"], p["country"])
-    if n == 1:
-        return (f"[Financial Times — {_dstr(45)}]\n{name}, a {occ} based in {cn}, has been named in "
-                f"connection with an ongoing regulatory inquiry into suspected fraud. Authorities are said "
-                f"to be reviewing a series of transactions. No charges have been filed and the allegations "
-                f"remain unproven.\n")
-    return (f"[Reuters — {_dstr(20)}]\nRegulators have fined a company linked to {name} over alleged "
-            f"money-laundering failings. Investigators are examining cross-border transfers routed through "
-            f"shell entities. {name} did not respond to requests for comment.\n")
 
 
 def doc_correspondence(d, p):
@@ -265,13 +257,8 @@ def build_dossier(idx, p, rng, prefix="CUST_") -> Dossier:
     elif conflict == "roundtrip_explained":  # a round-trip pattern with an innocent explanation on file
         txns += inject_round_trip(cust, rng, country, len(txns))
 
-    sanctions = [{"name": name, "match_score": 1.0, "list": "OFAC SDN"}] if p.get("sanctioned") else []
-    adverse_media = []
-    if p.get("adverse", 0) >= 1:
-        adverse_media.append({"headline": f"{name} named in fraud investigation", "sentiment": "negative", "date": _dstr(45)})
-    if p.get("adverse", 0) >= 2:
-        adverse_media.append({"headline": f"Regulator fines firm linked to {name} for money laundering", "sentiment": "negative", "date": _dstr(20)})
-    screening = {"sanctions": sanctions, "pep_confirmed": pep, "adverse_media": adverse_media}
+    # The one "external-alert" fact kept is PEP. No sanctions, no adverse-media.
+    screening = {"pep_confirmed": pep}
 
     meta = {"expected_band": EXPECTED_BAND[p["sev"]], "severity": p["sev"], "typology": typ,
             "review": bool(conflict), "conflict": conflict, "missing_docs": [], "extra_docs": []}
@@ -292,8 +279,6 @@ def build_dossier(idx, p, rng, prefix="CUST_") -> Dossier:
     if p.get("extra") == "second_passport":
         docs.append(("id_document_2.txt", doc_id(d, "CY", second=True)))
     docs.append(("rm_notes.txt", doc_rm_notes(d, p)))
-    for i in range(1, p.get("adverse", 0) + 1):
-        docs.append((f"adverse_media_{i}.txt", doc_adverse(d, p, i)))
     corr = doc_correspondence(d, p)
     if corr:
         docs.append(("correspondence.txt", corr))
@@ -309,17 +294,17 @@ def generate() -> list[Dossier]:
 
 # --------------------------------------------------------------------------- 40-profile UPLOAD sample set
 # A SEPARATE dataset (different seed → different people) for MANUAL upload. NOT auto-loaded by the app.
-# The 5 "review" rows carry deliberately CONFLICTING signals so the LLM's domain analysts disagree →
+# The 5 "review" rows carry deliberately CONFLICTING signals so the specialists disagree →
 # low composite confidence → routed to the human review queue.
 
 SAMPLE_SEED = 99
 
 SAMPLE_PROFILES = [
-    # --- 5 that NEED human review (ambiguous / conflicting evidence) ---
+    # --- 5 that NEED human review (ambiguous / conflicting evidence, no sanctions/adverse) ---
     {"sev": "review", "country": "GB", "occ": "property developer", "conflict": "txn_borderline"},
     {"sev": "review", "country": "GB", "occ": "parish councillor", "pep": True, "cash_heavy": True, "conflict": "pep_benign"},
-    {"sev": "review", "country": "IE", "occ": "restaurateur", "adverse": 1, "conflict": "adverse_unproven"},
-    {"sev": "review", "country": "RU", "occ": "import/export trader", "adverse": 1, "cash_heavy": True, "conflict": "geo_explained"},
+    {"sev": "review", "country": "IE", "occ": "restaurateur", "cash_heavy": True, "conflict": "sof_unverified"},
+    {"sev": "review", "country": "RU", "occ": "import/export trader", "cash_heavy": True, "conflict": "geo_explained"},
     {"sev": "review", "country": "GB", "occ": "company director", "conflict": "roundtrip_explained"},
 
     # --- 13 low ---
@@ -338,32 +323,32 @@ SAMPLE_PROFILES = [
     {"sev": "low", "country": "US", "occ": "software developer"},
 
     # --- 12 med ---
-    {"sev": "med", "country": "RU", "occ": "oil trader", "adverse": 1},
+    {"sev": "med", "country": "RU", "occ": "oil trader"},
     {"sev": "med", "country": "GB", "occ": "mayor", "pep": True, "new_account": True},
-    {"sev": "med", "country": "GB", "occ": "money exchange", "adverse": 1},
-    {"sev": "med", "country": "VE", "occ": "importer", "adverse": 1},
-    {"sev": "med", "country": "MM", "occ": "gem trader", "adverse": 1},
+    {"sev": "med", "country": "GB", "occ": "money exchange"},
+    {"sev": "med", "country": "VE", "occ": "importer"},
+    {"sev": "med", "country": "MM", "occ": "gem trader"},
     {"sev": "med", "country": "GB", "occ": "landlord", "pep": True},
     {"sev": "med", "country": "RU", "occ": "metals dealer"},
     {"sev": "med", "country": "GB", "occ": "consultant", "pep": True, "new_account": True},
     {"sev": "med", "country": "VE", "occ": "shipping agent", "cash_heavy": True},
     {"sev": "med", "country": "GB", "occ": "casino operator"},
     {"sev": "med", "country": "AF", "occ": "money exchange"},
-    {"sev": "med", "country": "PK", "occ": "textile exporter", "adverse": 1},
+    {"sev": "med", "country": "PK", "occ": "textile exporter"},
 
     # --- 7 high (a typology + reinforcing flags) ---
     {"sev": "high", "country": "RU", "occ": "consultant", "typology": "structuring", "cash_heavy": True},
-    {"sev": "high", "country": "GB", "occ": "crypto dealer", "typology": "layering", "adverse": 2},
+    {"sev": "high", "country": "GB", "occ": "crypto dealer", "typology": "layering"},
     {"sev": "high", "country": "YE", "occ": "trader", "typology": "round_trip"},
-    {"sev": "high", "country": "GB", "occ": "precious metals trader", "typology": "dormant_spike", "adverse": 1},
+    {"sev": "high", "country": "GB", "occ": "precious metals trader", "typology": "dormant_spike"},
     {"sev": "high", "country": "KP", "occ": "broker", "typology": "layering"},
-    {"sev": "high", "country": "GB", "occ": "art dealer", "typology": "structuring", "cash_heavy": True, "adverse": 1},
-    {"sev": "high", "country": "RU", "occ": "arms broker", "typology": "round_trip", "adverse": 1},
+    {"sev": "high", "country": "GB", "occ": "art dealer", "typology": "structuring", "cash_heavy": True},
+    {"sev": "high", "country": "RU", "occ": "arms broker", "typology": "round_trip"},
 
-    # --- 3 critical (sanctions match) ---
-    {"sev": "critical", "country": "IR", "occ": "arms dealer", "sanctioned": True, "typology": "structuring"},
-    {"sev": "critical", "country": "SY", "occ": "shell company director", "sanctioned": True, "pep": True},
-    {"sev": "critical", "country": "KP", "occ": "procurement agent", "sanctioned": True, "typology": "layering"},
+    # --- 3 critical (very high-risk occupation + jurisdiction) ---
+    {"sev": "critical", "country": "IR", "occ": "arms dealer", "typology": "structuring"},
+    {"sev": "critical", "country": "SY", "occ": "shell company director", "pep": True},
+    {"sev": "critical", "country": "KP", "occ": "procurement agent", "typology": "layering"},
 ]
 
 
@@ -437,17 +422,17 @@ def _selfcheck():
     ds = generate()
     assert len(ds) == 20
     assert {d.meta["expected_band"] for d in ds} == {"LOW", "MED", "HIGH"}
-    floor = float(FLOOR)
+    floor = float(GEN_FLOOR)
     for d in ds:
-        # every profile has structured KYC + screening + unstructured RM notes
+        # every profile has structured KYC + screening (pep only) + unstructured RM notes
         assert d.kyc and "rm_notes.txt" in {x["name"] for x in d.documents}
+        assert set(d.screening) == {"pep_confirmed"}, f"{d.customer_id}: screening must be pep-only"
+        assert not any(x["name"].startswith("adverse_media") for x in d.documents), "no adverse-media docs"
         typ = d.meta.get("typology")
         if typ == "structuring":
             cash = [t for t in d.transactions if t.txn_type == "cash" and t.direction == "in" and 0.8 * floor <= float(t.amount) < floor]
             assert len(cash) >= 3, f"{d.customer_id}: weak structuring cluster"
-        if d.screening["sanctions"]:
-            assert d.meta["severity"] == "critical"
-    print("self-check OK: deterministic; 20 customers; structured + unstructured docs; bands covered")
+    print("self-check OK: deterministic; 20 customers; pep-only screening; no sanctions/adverse; bands covered")
 
 
 if __name__ == "__main__":

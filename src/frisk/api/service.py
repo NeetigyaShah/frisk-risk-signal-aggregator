@@ -5,13 +5,17 @@ endpoints. Launch with `frisk serve` (uvicorn).
 """
 from __future__ import annotations
 
+import threading
+import uuid
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import Body, FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from frisk.ai.crosscheck import _features
+from frisk.config import CONFIG
 from frisk.core.engine import assess, assess_all, log_analyst_action
 from frisk.core.models import load_dossiers
 from frisk.data import audit, store
@@ -22,6 +26,9 @@ from frisk.paths import PROJECT_ROOT, UPLOAD_SAMPLES
 
 FRONTEND = PROJECT_ROOT / "frontend"
 _TYPOLOGIES = {"STRUCTURING", "LAYERING", "ROUND_TRIP", "DORMANT_SPIKE"}
+# ponytail: batch parallelism capped at 6 — each customer = a 5-call LLM graph, so
+# firing all 40 at once would be ~200 concurrent OpenRouter calls -> instant 429s.
+_BATCH_WORKERS = min(CONFIG["scale"]["workers"], 6)
 
 app = FastAPI(title="frisk API", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -121,6 +128,63 @@ def ingest(sample_id: str = Body(..., embed=True)):
 async def ingest_files(files: list[UploadFile] = File(...)):
     fmap = {f.filename: (await f.read()).decode("utf-8", "ignore") for f in files}
     return _ingest(dossier_from_files(fmap))
+
+
+# ---- batch scoring: fire N samples through the LLM graph in parallel, poll for results ----
+_JOBS: dict = {}
+_JOBS_LOCK = threading.Lock()
+
+
+def _run_batch(job_id: str, ids: list[str]) -> None:
+    def one(sid: str):
+        try:
+            res = _ingest(load_customer(UPLOAD_SAMPLES / sid))
+        except Exception as e:  # one bad profile never sinks the batch
+            res = {"id": sid, "name": sid, "error": str(e), "action": "ERROR"}
+        with _JOBS_LOCK:
+            j = _JOBS[job_id]
+            j["results"].append(res)
+            j["done"] += 1
+        return res
+
+    with ThreadPoolExecutor(max_workers=_BATCH_WORKERS) as ex:
+        list(ex.map(one, ids))
+    with _JOBS_LOCK:
+        _JOBS[job_id]["status"] = "complete"
+
+
+@app.post("/api/ingest/batch")
+def ingest_batch(ids: list[str] = Body(..., embed=True)):
+    _bootstrap()  # warm shared state before worker threads touch it
+    job_id = uuid.uuid4().hex[:12]
+    with _JOBS_LOCK:
+        _JOBS[job_id] = {"status": "running", "done": 0, "total": len(ids),
+                         "workers": _BATCH_WORKERS, "results": []}
+    threading.Thread(target=_run_batch, args=(job_id, ids), daemon=True).start()
+    return {"job_id": job_id, "total": len(ids), "workers": _BATCH_WORKERS}
+
+
+@app.get("/api/ingest/batch/{job_id}")
+def ingest_batch_status(job_id: str):
+    with _JOBS_LOCK:
+        j = _JOBS.get(job_id)
+        return dict(j) if j else {"error": "not found"}
+
+
+@app.get("/api/analytics")
+def analytics():
+    """Aggregates for the dashboard charts."""
+    decs = list(_bootstrap()["decisions"].values())
+    bands = Counter(d.band for d in decs)
+    actions = Counter(d.action for d in decs)
+    pats = Counter(p["label"] for d in decs for p in _patterns(d))
+    return {
+        "bands": {b: bands.get(b, 0) for b in ("LOW", "MED", "HIGH")},
+        "actions": {a: actions.get(a, 0) for a in
+                    ("AUTO_CLEAR", "REVIEW", "ESCALATE", "PENDING_REVIEW")},
+        "patterns": dict(pats.most_common()),
+        "scores": sorted(d.score for d in decs),
+    }
 
 
 @app.get("/api/review")

@@ -1,12 +1,12 @@
 === TRAVEL DOCUMENT — OCR EXTRACT ===
 Type: P   Issuing country: PK (Pakistan)
-Surname: WHITEHOUSE
-Given names: DR ELLIOT
+Surname: TAYLOR
+Given names: DR JOANNA
 Nationality: Pakistan
-Date of birth: 1989-11-26
-Document no.: P82939430
+Date of birth: 1960-02-19
+Document no.: P13501063
 Expiry: 2031-05-01
 
 MRZ:
-P<PKWHITEHOUSE<<DR<ELLIOT<<<<<<<<<<<<<<<<<<<
-P82939430<PK19891126<<<<<<<<<<<<<<<<<<<<<<<<
+P<PKTAYLOR<<DR<JOANNA<<<<<<<<<<<<<<<<<<<<<<<
+P13501063<PK19600219<<<<<<<<<<<<<<<<<<<<<<<<

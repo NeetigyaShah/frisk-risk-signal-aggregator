@@ -2,6 +2,8 @@
   "expected_band": "HIGH",
   "severity": "critical",
   "typology": "structuring",
+  "review": false,
+  "conflict": null,
   "missing_docs": [],
   "extra_docs": []
 }

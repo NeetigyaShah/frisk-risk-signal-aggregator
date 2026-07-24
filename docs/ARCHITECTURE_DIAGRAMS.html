@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frisk — Architecture &amp; LLM Orchestration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0e1a; --panel:#111826; --panel2:#0d1320; --line:#1e293b; --line2:#273449;
+    --ink:#e8edf7; --muted:#94a3b8; --faint:#64748b;
+    --brand:#3b82f6; --brand2:#6366f1;
+    --data:#0ea5e9; --rules:#22c55e; --llm:#8b5cf6; --human:#f97316; --store:#64748b; --danger:#ef4444;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:radial-gradient(1200px 600px at 80% -10%, #16204010, transparent), var(--bg);
+    color:var(--ink); font-family:'Inter',system-ui,sans-serif; line-height:1.5; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:48px 28px 80px; }
+  header{ margin-bottom:36px; }
+  .badge{ display:inline-flex; gap:.4rem; align-items:center; font-size:.72rem; font-weight:700; letter-spacing:.4px;
+    text-transform:uppercase; color:var(--brand); background:#3b82f61a; border:1px solid #3b82f633;
+    padding:.3rem .7rem; border-radius:.5rem; }
+  h1{ font-size:2.15rem; font-weight:800; letter-spacing:-.5px; margin:.7rem 0 .3rem; }
+  h1 .g{ background:linear-gradient(90deg,var(--brand),var(--brand2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub{ color:var(--muted); font-size:1.02rem; max-width:760px; }
+  .legend{ display:flex; flex-wrap:wrap; gap:.5rem .9rem; margin-top:20px; font-size:.8rem; color:var(--muted); }
+  .legend b{ display:inline-flex; align-items:center; gap:.4rem; font-weight:500; }
+  .dot{ width:11px; height:11px; border-radius:3px; display:inline-block; }
+
+  section.card{ background:linear-gradient(180deg,#111826,#0f1622); border:1px solid var(--line);
+    border-radius:16px; padding:26px 26px 12px; margin:22px 0; box-shadow:0 8px 30px #00000030; }
+  .kicker{ font-size:.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--brand); }
+  h2{ font-size:1.3rem; font-weight:700; margin:.35rem 0 .3rem; }
+  .desc{ color:var(--muted); font-size:.94rem; margin:0 0 8px; max-width:840px; }
+  .mermaid{ margin:6px 0 14px; text-align:center; }
+  .note{ font-size:.83rem; color:var(--faint); border-top:1px dashed var(--line2); padding:12px 0 14px; margin-top:6px; }
+  table.io{ width:100%; border-collapse:collapse; font-size:.85rem; margin:8px 0 16px; }
+  table.io th{ text-align:left; color:var(--brand); font-weight:700; font-size:.68rem; text-transform:uppercase;
+    letter-spacing:.6px; border-bottom:1px solid var(--line2); padding:9px 12px; }
+  table.io td{ border-bottom:1px solid var(--line); padding:11px 12px; vertical-align:top; }
+  table.io tr:hover td{ background:#0d132066; }
+  table.io td.o{ color:var(--muted); }
+  table.io b.tag{ font-weight:700; }
+  table.io code{ font-family:'JetBrains Mono',monospace; font-size:.82em; background:#0b1120; border:1px solid var(--line);
+    padding:.05rem .35rem; border-radius:.35rem; color:#cbd5e1; white-space:nowrap; }
+  .note code, .desc code{ font-family:'JetBrains Mono',monospace; font-size:.82em; background:#0b1120; border:1px solid var(--line);
+    padding:.05rem .35rem; border-radius:.35rem; color:#cbd5e1; }
+  .foot{ color:var(--faint); font-size:.8rem; text-align:center; margin-top:30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">🛡 Frisk · Financial Risk Signal Aggregator</span>
+    <h1>Architecture &amp; <span class="g">LLM Orchestration</span></h1>
+    <p class="sub">How fragmented per-customer data flows in, how five sequenced LLM calls score each case,
+      and how low confidence routes to a human who teaches the model back. Every box below maps to real code.</p>
+    <div class="legend">
+      <b><span class="dot" style="background:var(--data)"></span>Data / ingest</b>
+      <b><span class="dot" style="background:var(--rules)"></span>Deterministic rules</b>
+      <b><span class="dot" style="background:var(--llm)"></span>LLM call</b>
+      <b><span class="dot" style="background:var(--human)"></span>Human-in-the-loop</b>
+      <b><span class="dot" style="background:var(--store)"></span>Store / serve</b>
+      <b><span class="dot" style="background:var(--danger)"></span>Hard rail / escalate</b>
+    </div>
+  </header>
+
+  <!-- 1. END TO END -->
+  <section class="card">
+    <div class="kicker">01 · System</div>
+    <h2>End-to-end flow</h2>
+    <p class="desc">A customer folder is ingested into one <code>Dossier</code>. The engine scores it with the
+      deterministic rules <em>and</em> the LLM graph in parallel, reconciles them into a confidence, then routes:
+      confident cases are stored and served; unsure cases (or a sanctions hit) go to the human queue.</p>
+    <pre class="mermaid">
+flowchart LR
+  IN["📁 CUST_xxx/ folder<br/>structured + unstructured"]:::data --> LD["loaders.py<br/>→ Dossier"]:::data
+  LD --> EN{{"engine.assess()"}}:::rules
+  EN --> RU["rules.score_customer()<br/>factors · 4 typologies · sanctions rail"]:::rules
+  EN --> CC["crosscheck()<br/>multi-step LLM graph"]:::llm
+  RU --> RE["reconcile + route_llm()<br/>composite confidence"]:::rules
+  CC --> RE
+  RE -->|"confident"| DB[("SQLite decisions<br/>+ append-only audit")]:::store
+  RE -->|"low conf · or sanctions"| RQ[["Redis review queue"]]:::human
+  DB --> API["FastAPI service"]:::store
+  RQ --> API
+  API --> FE["Frontend dashboard<br/>queue · case · charts · audit"]:::store
+  RQ --> HU(("👤 Human reviewer")):::human
+  HU --> FBK["correction → few-shot"]:::human
+  FBK -. "teaches" .-> CC
+  classDef data fill:#0ea5e91a,stroke:#0ea5e9,color:#e0f2fe;
+  classDef rules fill:#22c55e1a,stroke:#22c55e,color:#dcfce7;
+  classDef llm fill:#8b5cf61a,stroke:#8b5cf6,color:#ede9fe;
+  classDef human fill:#f973161a,stroke:#f97316,color:#ffedd5;
+  classDef store fill:#64748b1a,stroke:#64748b,color:#e2e8f0;
+    </pre>
+    <p class="note">Code: <code>data/loaders.py</code> → <code>core/engine.py</code> → <code>ai/crosscheck.py</code>
+      → <code>data/store.py</code> · <code>hitl/queue.py</code> → <code>api/service.py</code> → <code>frontend/</code>.</p>
+  </section>
+
+  <!-- 2. DATA INPUT -->
+  <section class="card">
+    <div class="kicker">02 · Input</div>
+    <h2>What data goes in — and which analyst reads what</h2>
+    <p class="desc">Each customer is a folder mixing <strong>structured</strong> records and <strong>unstructured</strong>
+      free text — exactly the fragmentation a real analyst faces. The three domain analysts each read a specific slice,
+      so no single LLM call has to hold everything.</p>
+    <pre class="mermaid">
+flowchart TD
+  subgraph FOLDER["📁 CUST_xxx/  (one dossier)"]
+    direction LR
+    subgraph ST["structured"]
+      direction TB
+      k["kyc.json<br/>name · DOB · nationality · occupation"]:::data
+      a["account.json<br/>type · tenure · balance"]:::data
+      t["transactions.csv<br/>date · amount · type · counterparty"]:::data
+      s["screening.json<br/>sanctions · PEP · adverse-media hits"]:::data
+    end
+    subgraph UN["unstructured (free text)"]
+      direction TB
+      id["id_document.txt<br/>OCR of the ID"]:::un
+      rm["rm_notes.txt<br/>relationship-manager notes"]:::un
+      am["adverse_media_*.txt<br/>full news articles"]:::un
+      co["correspondence.txt<br/>customer emails"]:::un
+    end
+  end
+  k --> KA["🧑‍💼 KYC analyst"]:::llm
+  id --> KA
+  rm --> KA
+  t --> TA["💸 Transactions analyst"]:::llm
+  a --> TA
+  co --> TA
+  s --> SA["🔎 Screening analyst"]:::llm
+  am --> SA
+  classDef data fill:#0ea5e91a,stroke:#0ea5e9,color:#e0f2fe;
+  classDef un fill:#0ea5e912,stroke:#38bdf8,color:#bae6fd,stroke-dasharray:4 3;
+  classDef llm fill:#8b5cf61a,stroke:#8b5cf6,color:#ede9fe;
+    </pre>
+    <p class="note">Generated by <code>data/generate.py</code>, read by <code>data/loaders.py</code>; the per-analyst
+      text builders are <code>_kyc_text</code> / <code>_txn_text</code> / <code>_screening_text</code> in <code>ai/orchestrator.py</code>.</p>
+  </section>
+
+  <!-- 3. INGESTION PIPELINE -->
+  <section class="card">
+    <div class="kicker">03 · Ingestion</div>
+    <h2>Ingestion, step by step — what goes in, what comes out of each</h2>
+    <p class="desc">Ingestion has one job: turn a pile of mixed files (from a folder, an upload, or pasted text) into
+      <strong>one typed <code>Dossier</code></strong>, then distil that Dossier into the compact fact-strings each LLM
+      analyst actually reads. Three entry points, five parsers, one object, three prompts.</p>
+    <pre class="mermaid">
+flowchart LR
+  subgraph SRC["3 entry points"]
+    direction TB
+    e1["📁 folder<br/>load_customer()"]:::data
+    e2["⬆️ uploaded files<br/>dossier_from_files()"]:::data
+    e3["📋 pasted JSON/text<br/>parse_pasted()"]:::data
+  end
+  SRC --> PR["🔧 parse &amp; type<br/>json.loads · csv→Txn · glob *.txt"]:::rules
+  PR --> DO[["🧾 Dossier — one typed object<br/>customer_id · kyc · profile · transactions · screening · meta · documents"]]:::store
+  DO --> B1["_kyc_text()"]:::llm
+  DO --> B2["_txn_text()"]:::llm
+  DO --> B3["_screening_text()"]:::llm
+  B1 --> KA["🧑‍💼 KYC analyst"]:::llm
+  B2 --> TA["💸 Transactions analyst"]:::llm
+  B3 --> SA["🔎 Screening analyst"]:::llm
+  classDef data fill:#0ea5e91a,stroke:#0ea5e9,color:#e0f2fe;
+  classDef rules fill:#22c55e1a,stroke:#22c55e,color:#dcfce7;
+  classDef store fill:#64748b1a,stroke:#64748b,color:#e2e8f0;
+  classDef llm fill:#8b5cf61a,stroke:#8b5cf6,color:#ede9fe;
+    </pre>
+
+    <div class="kicker" style="margin-top:6px">Stage 1 · raw file → typed field</div>
+    <p class="desc">Each input stream has its own parser and its own output type. Missing files don't crash ingestion —
+      they fall back to a safe empty default, which is what makes a half-complete customer still scorable.</p>
+    <table class="io">
+      <thead><tr><th>Input</th><th>Parser</th><th>Comes out as</th><th>What it is</th></tr></thead>
+      <tbody>
+        <tr><td><code>kyc.json</code></td><td class="o"><code>json.loads</code></td><td><code>kyc: dict</code></td>
+          <td class="o">Identity: name, DOB, nationality, occupation, <code>kyc_complete</code>, whether an ID doc exists.</td></tr>
+        <tr><td><code>account.json</code></td><td class="o"><code>json.loads</code></td><td><code>profile: dict</code> (+ <code>customer_id</code>)</td>
+          <td class="o">Account facts: type, tenure (days), balance, PEP flag, country. <code>customer_id</code> is split off as the dossier key.</td></tr>
+        <tr><td><code>transactions.csv</code></td><td class="o"><code>csv.DictReader</code> → <code>Txn</code></td><td><code>transactions: list[Txn]</code></td>
+          <td class="o">One row → one typed <code>Txn</code>; amounts parsed as <code>Decimal</code> (never float) so money math is exact.</td></tr>
+        <tr><td><code>screening.json</code></td><td class="o"><code>json.loads</code></td><td><code>screening: dict</code></td>
+          <td class="o">Sanctions hits, <code>pep_confirmed</code>, adverse-media list. Empty-safe default if absent.</td></tr>
+        <tr><td><code>*.txt</code> (all)</td><td class="o"><code>glob</code> + read</td><td><code>documents: list{name, kind, text}</code></td>
+          <td class="o">Every unstructured file — ID OCR, RM notes, news articles, emails — kept verbatim for the LLM to read.</td></tr>
+        <tr><td><code>_meta.json</code></td><td class="o"><code>json.loads</code></td><td><code>meta: dict</code></td>
+          <td class="o">Generator bookkeeping (expected band, injected typology) — used by self-checks, not by scoring.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="kicker" style="margin-top:6px">Stage 2 · Dossier → the exact text each LLM sees</div>
+    <p class="desc">The analysts don't get the whole Dossier — each builder emits a short, calibrated fact-string and appends
+      only the unstructured documents relevant to its domain. This is precisely "what data goes inside" each LLM call.</p>
+    <table class="io">
+      <thead><tr><th>Builder</th><th>Structured facts it emits</th><th>Unstructured docs appended</th></tr></thead>
+      <tbody>
+        <tr><td><code>_kyc_text()</code> → <b class="tag" style="color:#c4b5fd">KYC analyst</b></td>
+          <td class="o">nationality/country, occupation, PEP, account age, <code>kyc_complete</code>, id-doc present?</td>
+          <td class="o"><code>id_document.txt</code> (ID OCR) + <code>rm_notes.txt</code></td></tr>
+        <tr><td><code>_txn_text()</code> → <b class="tag" style="color:#c4b5fd">Transactions analyst</b></td>
+          <td class="o">count, total credits/debits, cash-in, distinct counterparty-countries, + a typology watch-list prompt</td>
+          <td class="o"><code>correspondence.txt</code> (emails that explain or expose transfers)</td></tr>
+        <tr><td><code>_screening_text()</code> → <b class="tag" style="color:#c4b5fd">Screening analyst</b></td>
+          <td class="o">sanctions hit names, <code>pep_confirmed</code>, adverse-media headlines</td>
+          <td class="o"><code>adverse_media_*.txt</code> (the full article text, not just the headline)</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Missing files degrade to safe defaults (empty dict / list) — ingestion never throws, so a customer
+      with only a KYC file and no transactions still produces a valid Dossier. Code: <code>data/loaders.py</code>
+      (<code>load_customer</code>, <code>_txns_from_csv</code>, <code>dossier_from_files</code>, <code>parse_pasted</code>);
+      builders in <code>ai/orchestrator.py</code>.</p>
+  </section>
+
+  <!-- 4. LLM ORCHESTRATION -->
+  <section class="card">
+    <div class="kicker">04 · Orchestration</div>
+    <h2>Five LLM calls, sequenced as a LangGraph</h2>
+    <p class="desc">Not one prompt — a graph. Three analysts run <strong>in parallel</strong> (fan-out), a senior
+      synthesizer correlates them, an adversarial QA reviewer re-checks the score, and a deterministic step packages
+      the result. Recent human corrections are injected into the synthesizer as few-shot examples.</p>
+    <pre class="mermaid">
+flowchart TD
+  S((START)):::se --> KA["① KYC analyst<br/><i>LLM</i> · risk_level + signals"]:::llm
+  S --> TA["② Transactions analyst<br/><i>LLM</i> · hunts structuring/layering/<br/>round-trip/dormant-spike"]:::llm
+  S --> SA["③ Screening analyst<br/><i>LLM</i> · sanctions · PEP · adverse media"]:::llm
+  FB["👤 human few-shot examples"]:::human -. "injected" .-> SY
+  KA --> SY["④ synthesize<br/><i>LLM</i> · correlate 3 domains,<br/>weigh reinforcement, self-confidence 0–1"]:::llm
+  TA --> SY
+  SA --> SY
+  SY --> VF["⑤ verify — QA reviewer<br/><i>LLM</i> · adversarially check &amp; correct the score"]:::llm
+  VF --> FN["finalize<br/><b>deterministic — no LLM</b><br/>QA score wins; schema-validated"]:::rules
+  FN --> CF{{"composite confidence =<br/>min(self, node-agreement, verifier, err-penalty)"}}:::gate
+  classDef se fill:#1e293b,stroke:#3b82f6,color:#e8edf7;
+  classDef llm fill:#8b5cf61a,stroke:#8b5cf6,color:#ede9fe;
+  classDef rules fill:#22c55e1a,stroke:#22c55e,color:#dcfce7;
+  classDef human fill:#f973161a,stroke:#f97316,color:#ffedd5;
+  classDef gate fill:#3b82f61a,stroke:#3b82f6,color:#dbeafe;
+    </pre>
+    <p class="note">Every analyst returns <strong>Pydantic-structured</strong> output (never free-text garbage);
+      any node that throws degrades independently and the graph still finishes. Code: <code>ai/orchestrator.py</code>
+      (<code>_get_graph()</code>, <code>synthesize</code>, <code>verify</code>, <code>finalize</code>, <code>_composite_confidence</code>).</p>
+  </section>
+
+  <!-- 4. NEVER-FAILS CASCADE -->
+  <section class="card">
+    <div class="kicker">05 · Reliability</div>
+    <h2>The never-fails cascade</h2>
+    <p class="desc">The LLM boundary can never blank out or raise to the caller. It tries the best path available and
+      falls through to cheaper, always-available ones — degrading gracefully instead of failing.</p>
+    <pre class="mermaid">
+flowchart LR
+  A["crosscheck(d, rules)"]:::llm --> C{"cache hit?"}:::gate
+  C -->|yes| HIT["return cached<br/>(instant)"]:::store
+  C -->|no| M{"multi-step<br/>enabled?"}:::gate
+  M -->|yes| G["5-node graph"]:::llm
+  G -->|ok| P1["path = rules+graph"]:::llm
+  G -->|node/graph fails| SG["single provider.complete()<br/>instructor · retry + backoff"]:::llm
+  M -->|no| SG
+  SG -->|ok| P2["path = rules+llm"]:::llm
+  SG -->|no API key| RO["rules-only finding"]:::rules
+  SG -->|hard error| SIM["simulated finding"]:::rules
+  P1 --> OUT["(finding, meta.path)"]:::store
+  P2 --> OUT
+  RO --> OUT
+  SIM --> OUT
+  classDef llm fill:#8b5cf61a,stroke:#8b5cf6,color:#ede9fe;
+  classDef rules fill:#22c55e1a,stroke:#22c55e,color:#dcfce7;
+  classDef gate fill:#3b82f61a,stroke:#3b82f6,color:#dbeafe;
+  classDef store fill:#64748b1a,stroke:#64748b,color:#e2e8f0;
+    </pre>
+    <p class="note">Rules-only / simulated paths <strong>cap confidence and force ≥ review</strong> — a degraded call
+      never silently auto-clears. Provider is config-swappable (OpenRouter default → NVIDIA / Gemini / Claude / mock).
+      Code: <code>ai/crosscheck.py</code>, <code>ai/providers/</code>.</p>
+  </section>
+
+  <!-- 5. CONFIDENCE GATE + HITL LOOP -->
+  <section class="card">
+    <div class="kicker">06 · Human-in-the-loop</div>
+    <h2>Confidence gate &amp; the teach-the-model loop</h2>
+    <p class="desc">The composite confidence and the one hard rail decide the exit. Confident cases auto-dispose;
+      unsure ones become a real message on a Redis queue. The reviewer's correct score is stored and fed back as a
+      few-shot example — so the human improves exactly the cases the model was least sure about.</p>
+    <pre class="mermaid">
+flowchart LR
+  IN["finalized score<br/>+ composite confidence"]:::llm --> KILL{"sanctions<br/>match?"}:::danger
+  KILL -->|yes| ESC["🚨 ESCALATE<br/>mandatory sign-off"]:::danger
+  KILL -->|no| GATE{"confidence ≥ 0.60<br/>and not rules-only?"}:::gate
+  GATE -->|yes| BAND["auto-dispose by band<br/>auto-clear · review · escalate"]:::rules
+  GATE -->|no| PR["PENDING_REVIEW"]:::human
+  PR --> RQ[["Redis review queue"]]:::human
+  RQ --> HU(("👤 reviewer<br/>sets correct score")):::human
+  HU --> FB["feedback.jsonl<br/>→ fewshot_block()"]:::human
+  FB -. "injected into synthesize" .-> LLMSY["LLM synthesizer<br/>(next runs)"]:::llm
+  classDef llm fill:#8b5cf61a,stroke:#8b5cf6,color:#ede9fe;
+  classDef rules fill:#22c55e1a,stroke:#22c55e,color:#dcfce7;
+  classDef human fill:#f973161a,stroke:#f97316,color:#ffedd5;
+  classDef gate fill:#3b82f61a,stroke:#3b82f6,color:#dbeafe;
+  classDef danger fill:#ef44441a,stroke:#ef4444,color:#fee2e2;
+    </pre>
+    <p class="note">Threshold is <code>CONFIG["confidence_threshold"]</code> (0.60). Code: <code>core/engine.py</code>
+      (<code>route_llm</code>), <code>hitl/queue.py</code> (Redis + in-memory fallback), <code>hitl/feedback.py</code>.</p>
+  </section>
+
+  <div class="foot">Frisk — every node maps to code in <code>src/frisk/</code>. Regenerate the underlying data with <code>frisk generate</code> · run the app with <code>frisk serve</code>.</div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad:true,
+    theme:'base',
+    securityLevel:'loose',
+    fontFamily:"'Inter', sans-serif",
+    themeVariables:{
+      background:'#0f1622',
+      primaryColor:'#111826', primaryTextColor:'#e8edf7', primaryBorderColor:'#273449',
+      lineColor:'#64748b', tertiaryColor:'#0d1320',
+      clusterBkg:'#0d132080', clusterBorder:'#273449',
+      fontSize:'14px'
+    },
+    flowchart:{ curve:'basis', nodeSpacing:42, rankSpacing:56, padding:10, htmlLabels:true, useMaxWidth:true }
+  });
+</script>
+</body>
+</html>
