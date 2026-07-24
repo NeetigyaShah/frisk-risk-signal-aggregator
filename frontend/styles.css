@@ -13,7 +13,7 @@
   --sidebar:248px; --radius:14px;
 }
 *{ box-sizing:border-box; margin:0; padding:0; }
-html,body{ max-width:100%; overflow-x:hidden; }
+html,body{ max-width:100%; }  /* no overflow-x band-aid: real overflow must be visible/fixable */
 body{
   background:var(--bg);
   color:var(--ink); font:400 14px/1.5 'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
@@ -107,6 +107,13 @@ body.rail .nav-item, body.rail .search-btn{ justify-content:center; padding-left
 
 /* ───────── responsive grids (auto-fit = never clipped) ───────── */
 .grid{ display:grid; gap:14px; }
+/* CRITICAL: grid/flex children default to min-width:auto and refuse to shrink below their
+   content — a Chart.js canvas then forces the whole column wider than the viewport. */
+.grid > *{ min-width:0; }
+.card, .kpi, .card-accent{ min-width:0; overflow:hidden; }
+/* Chart.js only shrinks inside a relatively-positioned box it can absolutely fill. */
+.chart-box{ position:relative; width:100%; min-width:0; }
+.chart-box > canvas{ position:absolute; inset:0; width:100% !important; height:100% !important; }
 .grid-hero{ grid-template-columns:minmax(0,2fr) minmax(300px,1fr); }
 .grid-kpi{ grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); }
 .grid-charts{ grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }

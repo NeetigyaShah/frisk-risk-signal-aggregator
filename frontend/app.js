@@ -140,7 +140,7 @@ async function renderDashboard(){
           <div><p class="section-label" style="margin:0 0 4px">Population risk profile</p>
             <h3 style="font-size:17px;font-weight:800;letter-spacing:-.02em">Score distribution across ${STATS.total} customers</h3></div>
           <span class="chip">${high} high-risk</span></div>
-        <div style="height:190px;margin-top:12px"><canvas id="chDist"></canvas></div>
+        <div class="chart-box" style="height:190px;margin-top:12px"><canvas id="chDist"></canvas></div>
       </div>
       <div class="card-accent card-pad reveal" data-delay="90">
         <p class="section-label" style="margin:0 0 4px">Analyst load saved</p>
@@ -164,11 +164,11 @@ async function renderDashboard(){
 
     <div class="grid grid-charts" style="margin-top:14px">
       <div class="card card-pad reveal"><p class="section-label" style="margin:0 0 10px">Risk bands</p>
-        <div style="height:160px"><canvas id="chBands"></canvas></div></div>
+        <div class="chart-box" style="height:160px"><canvas id="chBands"></canvas></div></div>
       <div class="card card-pad reveal" data-delay="70"><p class="section-label" style="margin:0 0 10px">Disposition</p>
-        <div style="height:160px"><canvas id="chActions"></canvas></div></div>
+        <div class="chart-box" style="height:160px"><canvas id="chActions"></canvas></div></div>
       <div class="card card-pad reveal" data-delay="140"><p class="section-label" style="margin:0 0 10px">Detected patterns</p>
-        <div style="height:160px"><canvas id="chPats"></canvas></div></div>
+        <div class="chart-box" style="height:160px"><canvas id="chPats"></canvas></div></div>
     </div>
 
     <div class="card card-pad reveal" style="margin-top:14px">
