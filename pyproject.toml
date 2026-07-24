@@ -28,6 +28,7 @@ llm = [
     "langchain-core>=0.3",
 ]
 ui = ["streamlit>=1.36"]
+api = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "python-multipart>=0.0.9", "redis>=5.0"]
 observability = ["langsmith>=0.10"]
 dev = ["pytest>=8.0"]
 

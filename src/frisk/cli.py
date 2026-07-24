@@ -15,6 +15,8 @@ def main(argv=None) -> None:
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("generate", help="regenerate the synthetic dossiers (the app's data/customers/)")
     sub.add_parser("samples", help="write the 40-profile MANUAL-upload sample set (separate folder)")
+    srv = sub.add_parser("serve", help="run the backend API + frontend (uvicorn)")
+    srv.add_argument("--port", type=int, default=8000)
     sc = sub.add_parser("score", help="score all customers and print the ranked queue")
     sc.add_argument("--offline", action="store_true", help="rules-only, no LLM")
     sub.add_parser("warm", help="warm the LLM cache over all customers")
@@ -31,6 +33,12 @@ def main(argv=None) -> None:
         n, files, review_ids = write_samples()
         print(f"wrote {n} sample profiles ({files} files) to:\n  {UPLOAD_SAMPLES}")
         print(f"  {len(review_ids)} designed to NEED human review: {review_ids}")
+        return
+
+    if args.cmd == "serve":
+        import uvicorn
+        print(f"frisk backend + frontend -> http://127.0.0.1:{args.port}")
+        uvicorn.run("frisk.api.service:app", host="127.0.0.1", port=args.port, reload=False)
         return
 
     if args.offline if args.cmd == "score" else False:
