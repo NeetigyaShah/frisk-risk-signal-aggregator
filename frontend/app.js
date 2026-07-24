@@ -87,7 +87,7 @@ async function renderDashboard(){
   const charts = `<div class="grid grid-cols-3 gap-3 mb-6">
     <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Risk bands</div><div style="height:150px"><canvas id="chBands"></canvas></div></div>
     <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Disposition</div><div style="height:150px"><canvas id="chActions"></canvas></div></div>
-    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns <span title="AML transaction typologies detected on every customer by the deterministic engine, and independently hunted by the LLM transactions-analyst." style="cursor:help">ⓘ</span></div><div style="height:150px"><canvas id="chPats"></canvas></div></div>
+    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns <span title="AML transaction-pattern candidates the agent surfaces via its advisory scan — the LLM decides if each is real." style="cursor:help">ⓘ</span></div><div style="height:150px"><canvas id="chPats"></canvas></div></div>
   </div>
   <div class="card p-3 mb-6 text-xs text-muted grid grid-cols-2 gap-x-6 gap-y-1">
     ${Object.entries(PATTERN_DEFS).map(([k,v])=>`<div><b class="text-ink">${k}:</b> ${esc(v)}</div>`).join('')}
@@ -100,7 +100,7 @@ async function renderDashboard(){
         <div class="flex items-center gap-2 flex-wrap">
           <span class="font-semibold">${esc(d.name)}</span>
           <span class="chip">${esc(d.occupation)}</span><span class="chip">${esc(d.country)}</span>
-          ${d.flags.length?`<span class="badge" style="background:#ef444422;color:#fca5a5">🚨 ${esc(d.flags.join(', '))}</span>`:''}
+          ${(d.key_signals&&d.key_signals.length)?`<span class="badge" style="background:#6366f122;color:#c4b5fd">${esc(d.key_signals[0])}</span>`:''}
         </div>
         <div class="text-sm text-muted truncate mt-1">${esc(d.summary)}</div>
         <div class="flex items-center gap-1.5 mt-2 flex-wrap">${actionBadge(d.action)}${patternChips(d.patterns)}</div>
@@ -115,18 +115,33 @@ async function renderDashboard(){
 
 // ---------- Case drawer ----------
 async function openCase(cid){
-  const d = await api('/api/case/'+cid);
-  const src = (d.llm_detail?.source_findings)||[];
+  const [d, hist] = await Promise.all([api('/api/case/'+cid), api('/api/case/'+cid+'/history').catch(()=>[])]);
   const lv = {low:'🟢',medium:'🟡',high:'🔴'};
-  const analysts = src.length ? `<div class="grid grid-cols-3 gap-2">${src.map(s=>`
-     <div class="card p-3"><div class="font-semibold text-sm">${lv[s.risk_level]||'⚪'} ${esc(s.domain[0].toUpperCase()+s.domain.slice(1))}</div>
-       <div class="text-xs text-muted mt-1">${esc(s.note)}</div></div>`).join('')}</div>` : '';
-  const verd = d.llm_detail?.verdict;
+  const cap = s => (s||'').replace(/^\w/, c=>c.toUpperCase());
+  const ops = d.opinions||[];
+  const opinions = ops.length ? `<div class="grid grid-cols-3 gap-2">${ops.map(s=>`
+     <div class="card p-3"><div class="font-semibold text-sm">${lv[s.risk_level]||'⚪'} ${esc(cap(s.domain))} <span class="text-faint text-xs">${s.tentative_score??''}</span></div>
+       <div class="text-xs text-muted mt-1">${esc(s.note||'')}</div>
+       ${(s.signals&&s.signals.length)?`<div class="mt-1 flex flex-wrap gap-1">${s.signals.slice(0,4).map(x=>`<span class="chip text-[10px]">${esc(x)}</span>`).join('')}</div>`:''}</div>`).join('')}</div>` : '<span class="text-sm text-faint">No specialist opinions.</span>';
+  const trace = d.trace||[];
+  const traceHtml = trace.length ? `<ol class="space-y-1 text-sm">${trace.map(t=>`
+     <li class="flex gap-2 items-start"><span class="text-faint w-6 text-right shrink-0">${(t.step??0)+1}.</span>
+       <span class="chip shrink-0">${esc(t.tool)}</span>
+       <span class="text-muted text-xs truncate">${esc(JSON.stringify(t.args||{}))}</span></li>`).join('')}</ol>` : '<div class="text-sm text-faint">No trace recorded.</div>';
+  const im = d.injected_memory||{};
+  const memHtml = `<div class="flex gap-2 flex-wrap"><span class="chip">history: ${im.history_n??0}</span>
+     <span class="chip">similar cases: ${im.similar_n??0}</span><span class="chip">lessons: ${im.lessons_n??0}</span></div>
+     ${im.history_summary?`<div class="text-xs text-faint mt-2">${esc(im.history_summary)}</div>`:''}`;
+  const histHtml = (hist&&hist.length>1) ? `<div class="text-xs text-muted space-y-1">${hist.map(h=>`
+     <div class="flex gap-2"><span class="text-faint">${(h.ts||'').slice(0,10)}</span>
+       <span>${esc((h.band||'').toUpperCase())} (${h.score})</span>
+       <span class="text-faint">${esc(h.disposition||'')}</span>${h.human_verified?'<span class="text-low">✓ reviewer</span>':''}</div>`).join('')}</div>`
+     : '<div class="text-xs text-faint">First assessment on file — history builds as this customer is re-scored.</div>';
   const patterns = d.patterns.length ? d.patterns.map(p=>`
-     <div class="mb-3"><div class="flex items-start gap-2"><span class="badge" style="background:#ef444422;color:#fca5a5">⚠ ${esc(p.label)}</span>
+     <div class="mb-3"><div class="flex items-start gap-2"><span class="badge" style="background:#ef444422;color:#fca5a5">⚠ ${esc(p.label)} ${p.strength!=null?`<span class="text-faint">str ${p.strength}</span>`:''}</span>
        <span class="text-sm text-muted">${esc(p.rationale)}</span></div>
        <div class="text-xs text-faint mt-1 pl-1 italic">${esc(patternDef(p.label))}</div></div>`).join('')
-     : `<div class="text-sm text-faint">No transaction-pattern anomalies detected by the rules engine.</div>`;
+     : `<div class="text-sm text-faint">No transaction-pattern candidates surfaced by the advisory scan.</div>`;
   const tx = (d.dossier.transactions||[]);
   const txRows = tx.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,40).map(t=>`
      <tr class="${t.anomalous?'bg-high/10':''}">
@@ -150,13 +165,18 @@ async function openCase(cid){
       <button onclick="closeDrawer()" class="text-faint hover:text-ink text-xl">✕</button>
     </div>
     <div class="p-5 space-y-5">
-      ${d.flags.length?`<div class="card p-3" style="border-color:#ef4444"><b class="text-high">🚨 Kill-switch:</b> ${esc(d.flags.join(', '))} — mandatory escalation.</div>`:''}
       <div><div class="text-xs uppercase tracking-wide text-faint mb-1">AI risk summary</div>
-        <div class="card p-4 text-sm leading-relaxed">${esc(d.summary)}</div></div>
-      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Detected patterns &amp; anomalies</div>
+        <div class="card p-4 text-sm leading-relaxed">${esc(d.summary)}</div>
+        ${(d.key_signals&&d.key_signals.length)?`<div class="mt-2 flex flex-wrap gap-1">${d.key_signals.map(s=>`<span class="chip" style="background:#6366f122;color:#c4b5fd">${esc(s)}</span>`).join('')}</div>`:''}</div>
+      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Parallel specialists — KYC · transactions · documents</div>
+        <div class="card p-4">${opinions}</div></div>
+      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Agent investigation — serial tool-call trace</div>
+        <div class="card p-4">${traceHtml}${(d.evidence_refs&&d.evidence_refs.length)?`<div class="text-xs text-faint mt-2">cited evidence: ${d.evidence_refs.map(esc).join(', ')}</div>`:''}</div></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Memory injected</div><div class="card p-4">${memHtml}</div></div>
+        <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Per-customer history</div><div class="card p-4">${histHtml}</div></div></div>
+      <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Detected patterns &amp; anomalies (advisory)</div>
         <div class="card p-4">${patterns}</div></div>
-      ${analysts?`<div><div class="text-xs uppercase tracking-wide text-faint mb-2">Multi-step AI reasoning — parallel analysts → synthesis → verification</div>
-        ${analysts}${verd?`<div class="text-xs text-muted mt-2">QA verifier: ${verd.consistent?'✅ consistent':'✏️ adjusted'} — ${esc(verd.note||'')}</div>`:''}</div>`:''}
       <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Transactions ${tx.length?`(${tx.length}, anomalies highlighted)`:'(none on file)'}</div>
         <div class="card p-3 overflow-x-auto"><table class="w-full text-sm">${txRows}</table></div></div>
       <div><div class="text-xs uppercase tracking-wide text-faint mb-2">Dossier</div>
@@ -173,7 +193,7 @@ async function renderReview(){
   const pend = await api('/api/review');
   window._PEND = pend;
   if(!pend.length){ $('content').innerHTML = `<div class="card p-8 text-center text-muted">Queue empty — the model was confident on every case.</div>`; return; }
-  const why = c => (c.source_findings||[]).map(s=>`${s.domain.slice(0,4)}=${s.risk_level}`).join(', ') || 'low confidence';
+  const why = c => (c.opinions||[]).map(s=>`${(s.domain||'').slice(0,4)}=${s.risk_level}`).join(', ') || 'low confidence';
   const cards = pend.map((c,i)=>`
     <div class="card p-4 fade">
       <div class="flex items-center gap-3">
@@ -183,7 +203,7 @@ async function renderReview(){
           <div class="text-sm text-muted mt-1">${esc(c.reason||'')}</div></div>
         <button class="act bg-brand text-white px-3 py-2 rounded-lg text-sm font-medium" onclick="openReview(${i})">Review →</button>
       </div>
-      <div class="grid grid-cols-3 gap-2 mt-3">${(c.source_findings||[]).map(s=>{const lv={low:'🟢',medium:'🟡',high:'🔴'};
+      <div class="grid grid-cols-3 gap-2 mt-3">${(c.opinions||[]).map(s=>{const lv={low:'🟢',medium:'🟡',high:'🔴'};
         return `<div class="card p-2 text-xs"><b>${lv[s.risk_level]||'⚪'} ${esc(s.domain)}</b><div class="text-muted mt-0.5">${esc(s.note)}</div></div>`}).join('')}</div>
     </div>`).join('');
   $('content').innerHTML = `<div class="text-sm text-muted mb-3">${pend.length} case(s) awaiting a human decision. Set the correct score — it teaches the model.</div><div class="grid gap-3">${cards}</div>`;
@@ -194,7 +214,7 @@ function openReview(i){
     <div class="flex items-center justify-between"><div class="text-lg font-bold">${esc(c.name)} <span class="text-faint text-sm">${c.customer_id}</span></div>
       <button onclick="closeDrawer()" class="text-faint hover:text-ink text-xl">✕</button></div>
     <div class="card p-3 text-sm">LLM proposed <b>${c.llm_score}</b> at confidence <b class="text-review">${(c.confidence||0).toFixed(2)}</b>. ${esc(c.reason||'')}</div>
-    <div class="grid grid-cols-3 gap-2">${(c.source_findings||[]).map(s=>{const lv={low:'🟢',medium:'🟡',high:'🔴'};
+    <div class="grid grid-cols-3 gap-2">${(c.opinions||[]).map(s=>{const lv={low:'🟢',medium:'🟡',high:'🔴'};
       return `<div class="card p-2 text-xs"><b>${lv[s.risk_level]||'⚪'} ${esc(s.domain)}</b><div class="text-muted mt-0.5">${esc(s.note)}</div></div>`}).join('')}</div>
     <div class="pt-2 border-t border-line"><div class="text-xs uppercase tracking-wide text-faint mb-2">Your decision — teaches the model</div>
       <label class="text-sm text-muted">Correct score: <b id="rvS">${c.llm_score||50}</b></label>
@@ -230,7 +250,7 @@ async function renderIngest(){
         </div>
         <button class="act w-full bg-brand text-white py-2.5 rounded-lg font-semibold" onclick="scoreSelected()">
           ▶ Score selected (<span id="selCount">0</span>) in parallel</button>
-        <div class="text-[11px] text-faint mt-2 text-center">Each customer runs the full 5-step LLM graph · bounded concurrency to respect rate limits · results stream in below</div>
+        <div class="text-[11px] text-faint mt-2 text-center">Each customer runs parallel specialists + an agentic orchestrator · bounded concurrency · results stream in below</div>
       </div>
       <div class="card p-5"><div class="font-semibold mb-2">Upload files</div>
         <div class="text-xs text-muted mb-3">kyc.json · account.json · transactions.csv · screening.json · *.txt</div>
@@ -276,7 +296,7 @@ async function pollBatch(job_id){
   if($('bpDone')) $('bpDone').innerHTML = `✓ Complete · ${j.total} scored${rev?` · <b class="text-review">${rev} routed to Human Review →</b>`:''} · click any card to open the case.`;
 }
 function ingestResult(d){
-  const src=(d.llm_detail?.source_findings)||[]; const lv={low:'🟢',medium:'🟡',high:'🔴'};
+  const src=(d.opinions)||[]; const lv={low:'🟢',medium:'🟡',high:'🔴'};
   $('ingestResult').innerHTML = `<div class="card p-5 fade">
     <div class="flex items-center gap-4">${gauge(d.score,d.band)}
       <div class="flex-1"><div class="font-bold">${esc(d.name)} <span class="text-faint text-sm">${d.id}</span></div>
