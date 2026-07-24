@@ -67,6 +67,58 @@ async function go(view){
 }
 document.getElementById('nav').addEventListener('click', e => { const a=e.target.closest('.nav-item'); if(a) go(a.dataset.view); });
 
+// ---------- sidebar rail (ported from 21st.dev "Dashboard Sidebar") ----------
+function toggleSidebar(){
+  document.body.classList.toggle('rail');
+  localStorage.setItem('frisk_rail', document.body.classList.contains('rail') ? '1' : '');
+}
+if(localStorage.getItem('frisk_rail')) document.body.classList.add('rail');
+
+// ---------- ⌘K command palette ----------
+let _PAL = [];
+async function openPalette(){
+  $('palette').classList.remove('hidden'); $('pq').value=''; $('pq').focus();
+  try { _PAL = await api('/api/queue'); } catch { _PAL = []; }
+  paletteFilter();
+}
+const closePalette = () => $('palette').classList.add('hidden');
+function paletteFilter(){
+  const q = ($('pq').value||'').toLowerCase();
+  const hits = _PAL.filter(d => !q || [d.id,d.name,d.occupation,d.country].join(' ').toLowerCase().includes(q)).slice(0,8);
+  $('presults').innerHTML = hits.length ? hits.map(d=>`
+    <div class="prow" onclick="closePalette();openCase('${d.id}')">
+      <span class="badge" style="background:${riskColor(d.band)}22;color:${riskColor(d.band)}">${d.score}</span>
+      <span class="font-medium">${esc(d.name)}</span>
+      <span class="text-faint text-xs">${d.id} · ${esc(d.occupation)}</span>
+      <span class="ml-auto">${actionBadge(d.action)}</span></div>`).join('')
+    : `<div class="text-sm text-faint text-center py-6">No matching customers.</div>`;
+}
+document.addEventListener('keydown', e => {
+  if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); openPalette(); }
+  if(e.key==='Escape'){ closePalette(); closeDrawer(); }
+});
+
+// ---------- scroll-reveal (ported from "Advanced Stats" TimelineAnimation) ----------
+function revealAll(){
+  const els = document.querySelectorAll('.reveal:not(.in)');
+  const io = new IntersectionObserver((entries,obs)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){
+      const d = +(en.target.dataset.delay||0);
+      setTimeout(()=>en.target.classList.add('in'), d);
+      obs.unobserve(en.target);
+    }});
+  }, {threshold:.12});
+  els.forEach(el=>io.observe(el));
+}
+// count-up for KPI numbers
+function countUp(el, to, ms=700){
+  const t0 = performance.now();
+  const step = now => { const p = Math.min(1,(now-t0)/ms);
+    el.textContent = Math.round(to * (1-Math.pow(1-p,3)));
+    if(p<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+
 // ---------- charts ----------
 Chart.defaults.color = '#94a3b8'; Chart.defaults.font.family = 'Inter';
 Chart.defaults.borderColor = '#1e293b'; Chart.defaults.plugins.legend.display = false;
@@ -78,8 +130,25 @@ function bar(id, labels, data, colors){
     options:{responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true}},
       scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{beginAtZero:true,ticks:{precision:0,font:{size:10}},grid:{color:'#1e293b'}}}}});
 }
-async function renderCharts(){
+async function renderCharts(queue){
   const a = await api('/api/analytics');
+  // hero: score distribution as a gradient area chart (Advanced Stats ClippedAreaChart)
+  if($('chDist') && queue){
+    const sorted = queue.slice().sort((x,y)=>x.score-y.score);
+    const cv = $('chDist').getContext('2d');
+    const g = cv.createLinearGradient(0,0,0,186);
+    g.addColorStop(0,'rgba(59,130,246,.45)'); g.addColorStop(1,'rgba(59,130,246,0)');
+    chart('chDist', {type:'line',
+      data:{labels:sorted.map(d=>d.id.replace(/^\w+_/,'#')),
+        datasets:[{data:sorted.map(d=>d.score), fill:true, backgroundColor:g, borderColor:'#6366f1',
+          borderWidth:2, tension:.4, pointRadius:3,
+          pointBackgroundColor:sorted.map(d=>riskColor(d.band)), pointBorderColor:'#111826', pointBorderWidth:2}]},
+      options:{responsive:true, maintainAspectRatio:false, animation:{duration:900},
+        plugins:{tooltip:{callbacks:{title:i=>sorted[i[0].dataIndex].name,
+          label:i=>`score ${i.raw} · ${sorted[i.dataIndex].action}`}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#475569'}},
+          y:{min:0,max:100,grid:{color:'#1e293b'},ticks:{stepSize:25,font:{size:10}}}}}});
+  }
   bar('chBands', ['Low','Medium','High'], [a.bands.LOW,a.bands.MED,a.bands.HIGH], ['#22c55e','#f59e0b','#ef4444']);
   const A = a.actions;
   chart('chActions', {type:'doughnut', cutout:'62%',
@@ -95,19 +164,53 @@ async function renderCharts(){
 // ---------- Dashboard ----------
 async function renderDashboard(){
   const q = await api('/api/queue');
-  const tiles = `<div class="grid grid-cols-5 gap-3 mb-6">
-    ${tile('Total customers', STATS.total)}
-    ${tile('🔴 Escalate', STATS.escalate, '#ef4444')}
-    ${tile('🟡 Review', STATS.review, '#f59e0b')}
-    ${tile('🟢 Auto-cleared', STATS.auto_clear, '#22c55e')}
-    ${tile('🟠 Human queue', STATS.pending_review, '#f97316')}
+  // hero row: big score-distribution chart + accent "coverage" card  (Advanced Stats layout)
+  const hi = q.filter(d=>d.band==='HIGH').length, esc_ = STATS.escalate;
+  const autoPct = STATS.total ? Math.round(STATS.auto_clear/STATS.total*100) : 0;
+  const hero = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+    <div class="card-accent p-6 lg:col-span-2 reveal" data-delay="0">
+      <div class="flex items-start justify-between mb-1">
+        <div><div class="text-[10px] font-bold uppercase tracking-[.18em] text-faint mb-1">Population risk profile</div>
+          <h3 class="text-lg font-bold tracking-tight">Score distribution across ${STATS.total} customers</h3></div>
+        <span class="chip">${hi} high-risk</span>
+      </div>
+      <div style="height:186px" class="mt-3"><canvas id="chDist"></canvas></div>
+    </div>
+    <div class="card-accent p-6 flex flex-col justify-between reveal" data-delay="90">
+      <div><div class="text-[10px] font-bold uppercase tracking-[.18em] text-faint mb-2">Analyst load saved</div>
+        <h4 class="text-xl font-bold tracking-tight">Auto-cleared without review</h4></div>
+      <div class="mt-6">
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-4xl font-black tracking-tighter text-low"><span id="apct">0</span>%</span>
+          <span class="text-xs text-faint mb-1">${STATS.auto_clear} of ${STATS.total} cases</span></div>
+        <div class="bar" style="height:7px"><i id="apbar" style="width:0%;background:linear-gradient(90deg,#22c55e,#16a34a);transition:width .9s cubic-bezier(.22,1,.36,1)"></i></div>
+        <div class="text-[11px] text-faint mt-3">${esc_} escalated to a senior reviewer · ${STATS.pending_review} sent to the human queue.</div>
+      </div>
+    </div></div>`;
+
+  // KPI row with count-up + hover accent (Advanced Stats KPI cards)
+  const K = [
+    {label:'Total customers', val:STATS.total,        color:'#e8edf7', tone:''},
+    {label:'Escalate',        val:STATS.escalate,     color:'#ef4444', tone:'high'},
+    {label:'Review',          val:STATS.review,       color:'#f59e0b', tone:'med'},
+    {label:'Auto-cleared',    val:STATS.auto_clear,   color:'#22c55e', tone:'low'},
+    {label:'Human queue',     val:STATS.pending_review,color:'#f97316',tone:'review'},
+  ];
+  const tiles = `<div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+    ${K.map((k,i)=>`<div class="kpi reveal" data-delay="${120+i*70}" style="--c:${k.color}">
+      <div class="k-label">${k.label}</div>
+      <div class="flex items-baseline justify-between">
+        <div class="k-value" style="color:${k.color}"><span class="cu" data-to="${k.val}">0</span></div>
+        ${k.tone?`<span class="k-delta" style="background:${k.color}18;color:${k.color}">${STATS.total?Math.round(k.val/STATS.total*100):0}%</span>`:''}
+      </div></div>`).join('')}
   </div>`;
-  const charts = `<div class="grid grid-cols-3 gap-3 mb-6">
-    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Risk bands</div><div style="height:150px"><canvas id="chBands"></canvas></div></div>
-    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Disposition</div><div style="height:150px"><canvas id="chActions"></canvas></div></div>
-    <div class="card p-4"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns <span title="AML transaction-pattern candidates the agent surfaces via its advisory scan — the LLM decides if each is real." style="cursor:help">ⓘ</span></div><div style="height:150px"><canvas id="chPats"></canvas></div></div>
+
+  const charts = `<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+    <div class="card p-4 reveal" data-delay="0"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Risk bands</div><div style="height:150px"><canvas id="chBands"></canvas></div></div>
+    <div class="card p-4 reveal" data-delay="80"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Disposition</div><div style="height:150px"><canvas id="chActions"></canvas></div></div>
+    <div class="card p-4 reveal" data-delay="160"><div class="text-xs text-faint mb-2 uppercase tracking-wide">Detected patterns <span title="AML transaction-pattern candidates the agent surfaces via its advisory scan — the LLM decides if each is real." style="cursor:help">ⓘ</span></div><div style="height:150px"><canvas id="chPats"></canvas></div></div>
   </div>
-  <div class="card p-3 mb-6 text-xs text-muted grid grid-cols-2 gap-x-6 gap-y-1">
+  <div class="card p-3 mb-6 text-xs text-muted grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 reveal">
     ${Object.entries(PATTERN_DEFS).map(([k,v])=>`<div><b class="text-ink">${k}:</b> ${esc(v)}</div>`).join('')}
   </div>`;
   const rows = q.map((d,i)=>`
@@ -127,8 +230,13 @@ async function renderDashboard(){
         <div class="text-[11px] text-faint mb-1">confidence ${d.confidence.toFixed(2)}</div>${confBar(d.confidence)}
       </div>
     </div>`).join('');
-  $('content').innerHTML = tiles + charts + `<div class="text-xs text-faint mb-2 uppercase tracking-wide">Prioritised risk queue — highest risk first</div><div class="grid gap-3">${rows}</div>`;
-  renderCharts();
+  $('content').innerHTML = hero + tiles + charts
+    + `<div class="text-xs text-faint mb-2 uppercase tracking-wide">Prioritised risk queue — highest risk first</div><div class="grid gap-3">${rows}</div>`;
+  renderCharts(q);
+  revealAll();
+  document.querySelectorAll('.cu').forEach(el=>countUp(el, +el.dataset.to));
+  setTimeout(()=>{ const b=$('apbar'); if(b) b.style.width = autoPct+'%';
+                   const p=$('apct');  if(p) countUp(p, autoPct, 900); }, 220);
 }
 
 // ---------- Case drawer ----------

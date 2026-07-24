@@ -3,13 +3,25 @@
 ::-webkit-scrollbar{ width:8px; height:8px; }
 ::-webkit-scrollbar-thumb{ background:#273449; border-radius:8px; }
 
-.nav-item{ display:flex; align-items:center; gap:.6rem; padding:.55rem .7rem; border-radius:.5rem;
-  color:#94a3b8; cursor:pointer; transition:.12s; }
+/* ---- sidebar nav (grouped, collapsible) ---- */
+.sb-head{ padding:0 .65rem; margin-bottom:.15rem; font-size:10px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:#64748b80; }
+.nav-item{ display:flex; align-items:center; gap:.65rem; padding:.5rem .65rem; border-radius:.5rem;
+  color:#94a3b8; cursor:pointer; transition:.15s; font-size:13px; white-space:nowrap; }
+.nav-item .ico{ width:18px; text-align:center; flex-shrink:0; }
 .nav-item:hover{ background:#111826; color:#e8edf7; }
-.nav-item.active{ background:#1e293b; color:#e8edf7; }
+.nav-item.active{ background:#1e293b; color:#e8edf7; font-weight:600; box-shadow:inset 2px 0 0 #3b82f6; }
 
-.card{ background:#111826; border:1px solid #1e293b; border-radius:.85rem; }
+/* collapsed rail */
+body.rail #sidebar{ width:64px; }
+body.rail #main{ margin-left:64px; }
+body.rail .sb-label, body.rail .sb-head{ display:none; }
+body.rail .nav-item{ justify-content:center; padding-left:0; padding-right:0; }
+
+/* ---- surfaces ---- */
+.card{ background:#111826; border:1px solid #1e293b; border-radius:.85rem; transition:.18s; }
 .card:hover{ border-color:#273449; }
+.card-accent{ background:linear-gradient(160deg,#141c2e,#0f1725); border:1px solid #273449; border-radius:1rem; }
 
 .badge{ display:inline-flex; align-items:center; gap:.3rem; padding:.15rem .55rem; border-radius:.4rem;
   font-size:.72rem; font-weight:600; }
@@ -22,6 +34,26 @@
 .bar{ height:6px; border-radius:6px; background:#1e293b; overflow:hidden; }
 .bar > i{ display:block; height:100%; border-radius:6px; }
 
+/* ---- KPI tiles (ported from 21st.dev "Advanced Stats") ---- */
+.kpi{ padding:1.1rem; border-radius:1rem; background:#111826; border:1px solid #1e293b;
+  transition:.2s; position:relative; overflow:hidden; }
+.kpi:hover{ transform:translateY(-2px); }
+.kpi .k-label{ font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:#64748b; margin-bottom:.45rem; }
+.kpi .k-value{ font-size:1.9rem; font-weight:900; letter-spacing:-.03em; line-height:1; }
+.kpi .k-delta{ font-size:.68rem; font-weight:700; padding:.1rem .4rem; border-radius:.35rem; }
+
+/* ---- scroll-reveal timeline animation (ported from "Advanced Stats") ---- */
+.reveal{ opacity:0; transform:translateY(16px);
+  transition:opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+.reveal.in{ opacity:1; transform:none; }
+
 .fade{ animation:fade .18s ease; } @keyframes fade{ from{opacity:0; transform:translateY(4px)} to{opacity:1} }
 .slide{ animation:slide .2s ease; } @keyframes slide{ from{transform:translateX(20px); opacity:0} to{transform:translateX(0); opacity:1} }
+.zoom{ animation:zoom .16s cubic-bezier(.22,1,.36,1); } @keyframes zoom{ from{opacity:0; transform:scale(.97) translateY(-6px)} to{opacity:1} }
 button.act{ transition:.12s; } button.act:hover{ filter:brightness(1.12); }
+
+/* command palette rows */
+.prow{ display:flex; align-items:center; gap:.7rem; padding:.55rem .7rem; border-radius:.5rem;
+  cursor:pointer; font-size:13px; }
+.prow:hover, .prow.sel{ background:#1e293b; }

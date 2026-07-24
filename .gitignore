@@ -20,3 +20,4 @@ src/*.egg-info/
 
 # runtime HITL feedback log
 data/feedback.jsonl
+.design-reference/
