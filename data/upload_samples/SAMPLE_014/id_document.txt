@@ -3,10 +3,10 @@ Type: P   Issuing country: GB (United Kingdom)
 Surname: SPENCER-PARRY
 Given names: LEIGH
 Nationality: United Kingdom
-Date of birth: 1957-10-19
+Date of birth: 1957-10-20
 Document no.: P42271648
 Expiry: 2031-05-01
 
 MRZ:
 P<GBSPENCER-PARRY<<LEIGH<<<<<<<<<<<<<<<<<<<<
-P42271648<GB19571019<<<<<<<<<<<<<<<<<<<<<<<<
+P42271648<GB19571020<<<<<<<<<<<<<<<<<<<<<<<<

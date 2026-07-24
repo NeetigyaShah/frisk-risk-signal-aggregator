@@ -270,13 +270,27 @@ async function renderIngest(){
           ▶ Score selected (<span id="selCount">0</span>) in parallel</button>
         <div class="text-[11px] text-faint mt-2 text-center">Each customer runs parallel specialists + an agentic orchestrator · bounded concurrency · results stream in below</div>
       </div>
-      <div class="card p-5"><div class="font-semibold mb-2">Upload files</div>
-        <div class="text-xs text-muted mb-3">kyc.json · account.json · transactions.csv · screening.json · *.txt</div>
+      <div class="card p-5"><div class="font-semibold mb-2">📤 Upload files</div>
+        <div class="text-xs text-muted mb-1">Drop one customer's documents:</div>
+        <div class="text-[11px] text-faint mb-3 leading-relaxed"><code class="chip">kyc.json</code> <code class="chip">account.json</code> <code class="chip">transactions.csv</code> <code class="chip">screening.json</code> <code class="chip">*.txt</code></div>
         <input id="upFiles" type="file" multiple class="text-sm w-full">
-        <button class="act w-full mt-3 bg-brand2 text-white py-2.5 rounded-lg font-semibold" onclick="ingestFiles()">▶ Score uploaded files</button></div>
+        <button class="act w-full mt-3 bg-brand2 text-white py-2.5 rounded-lg font-semibold" onclick="ingestFiles()">▶ Score uploaded files</button>
+        <div class="text-[11px] text-faint mt-2 text-center">Missing files are fine — the agent works with what's there.</div></div>
     </div>
     <div id="batchArea" class="mt-6"></div>
     <div id="ingestResult" class="mt-5"></div>`;
+  restoreBatch();          // a run started earlier keeps rendering after you navigate away and back
+}
+
+// ---- persistent batch state (survives view switches) ----
+const JOB = {              // lives on window for the session
+  get id(){ return sessionStorage.getItem('frisk_job') || ''; },
+  set id(v){ v ? sessionStorage.setItem('frisk_job', v) : sessionStorage.removeItem('frisk_job'); },
+};
+function restoreBatch(){
+  if(!JOB.id) return;
+  $('batchArea').innerHTML = batchShell(window._bTotal||0, window._bWorkers||6);
+  pollBatch(JOB.id);
 }
 const _selected = () => [...document.querySelectorAll('.smp:checked')].map(c=>c.value);
 function updateSel(){ $('selCount').textContent = _selected().length; }
@@ -284,10 +298,11 @@ function toggleAll(on){ document.querySelectorAll('.smp').forEach(c=>c.checked=o
 
 const batchShell = (total, workers) => `<div class="card p-5">
   <div class="flex items-center justify-between mb-2">
-    <div class="font-semibold">Batch scoring — up to ${workers} customers at once</div>
+    <div><div class="font-semibold">⚙ Batch scoring <span class="text-faint text-sm font-normal">— up to ${workers} customers at once</span></div>
+      <div class="text-[11px] text-faint">Keeps running if you switch pages — come back any time.</div></div>
     <div id="bpText" class="text-sm text-muted">0 / ${total} scored</div></div>
-  <div class="bar mb-1" style="height:8px"><i id="bpBar" style="width:0%;background:#3b82f6;transition:width .3s"></i></div>
-  <div id="bpDone" class="text-xs text-faint mb-4">Scoring… fire-and-review — you can leave this running.</div>
+  <div class="bar mb-1" style="height:9px"><i id="bpBar" style="width:0%;background:linear-gradient(90deg,#3b82f6,#6366f1);transition:width .4s"></i></div>
+  <div id="bpDone" class="text-xs text-faint mb-4">Scoring… fire-and-review.</div>
   <div id="bResults" class="grid grid-cols-2 gap-2"></div></div>`;
 function batchCard(r){
   if(r.error) return `<div class="card p-3 text-sm border-high/50"><b>${esc(r.name)}</b> <span class="text-high">✕ ${esc(r.error).slice(0,60)}</span></div>`;
@@ -300,18 +315,26 @@ async function scoreSelected(){
   const ids = _selected();
   if(!ids.length){ $('batchArea').innerHTML = `<div class="text-sm text-med">Select at least one profile.</div>`; return; }
   const j = await jpost('/api/ingest/batch', {ids});
+  JOB.id = j.job_id; window._bTotal = j.total; window._bWorkers = j.workers;
   $('batchArea').innerHTML = batchShell(j.total, j.workers);
   pollBatch(j.job_id);
 }
 async function pollBatch(job_id){
   const j = await api('/api/ingest/batch/'+job_id);
+  if(j.error){ JOB.id = ''; return; }
+  window._bTotal = j.total; window._bWorkers = j.workers;
   const pct = j.total ? Math.round(j.done/j.total*100) : 0;
-  if($('bpBar')){ $('bpBar').style.width = pct+'%'; $('bpText').textContent = `${j.done} / ${j.total} scored`;
+  const onPage = !!$('bpBar');
+  if(onPage){ $('bpBar').style.width = pct+'%'; $('bpText').textContent = `${j.done} / ${j.total} scored`;
     $('bResults').innerHTML = (j.results||[]).map(batchCard).join(''); }
-  if(j.status !== 'complete'){ setTimeout(()=>pollBatch(job_id), 1500); return; }
+  if(j.status !== 'complete'){
+    clearTimeout(window._bT);
+    window._bT = setTimeout(()=>pollBatch(job_id), 1500);   // keeps polling even off-page
+    return;
+  }
   refreshStats();
   const rev = (j.results||[]).filter(r=>r.action==='PENDING_REVIEW').length;
-  if($('bpDone')) $('bpDone').innerHTML = `✓ Complete · ${j.total} scored${rev?` · <b class="text-review">${rev} routed to Human Review →</b>`:''} · click any card to open the case.`;
+  if(onPage) $('bpDone').innerHTML = `✓ Complete · ${j.total} scored${rev?` · <b class="text-review">${rev} routed to Human Review →</b>`:''} · click any card to open the case.`;
 }
 function ingestResult(d){
   const src=(d.opinions)||[]; const lv={low:'🟢',medium:'🟡',high:'🔴'};

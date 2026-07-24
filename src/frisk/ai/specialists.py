@@ -35,7 +35,8 @@ def _prompt(d, domain: str, mem: dict) -> str:
         f"You are an AML {domain} analyst. Assess ONLY the {domain} risk from the facts below and respond "
         f"in JSON with keys domain,risk_level(low|medium|high),signals(list),note,tentative_score(0-100). "
         f"Set domain='{domain}'. Be calibrated: rate LOW when no specific red flag is present; do NOT invent "
-        f"risk from ordinary activity.\n\n"
+        f"risk from ordinary activity. This system has NO sanctions or adverse-media screening — never claim a "
+        f"customer is sanctioned, watchlisted, or in the news; judge only the facts below.\n\n"
         f"REFERENCE (context, not rules):\n{cheat}\n\n{fewshot}\n\n{hist}\n\nFACTS:\n{_facts(d, domain)}"
     )
 

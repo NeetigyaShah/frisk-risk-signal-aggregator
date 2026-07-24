@@ -3,10 +3,10 @@ Type: P   Issuing country: GB (United Kingdom)
 Surname: MOORE-CLARK
 Given names: ALLAN
 Nationality: United Kingdom
-Date of birth: 1965-09-13
+Date of birth: 1965-09-14
 Document no.: P23155591
 Expiry: 2031-05-01
 
 MRZ:
 P<GBMOORE-CLARK<<ALLAN<<<<<<<<<<<<<<<<<<<<<<
-P23155591<GB19650913<<<<<<<<<<<<<<<<<<<<<<<<
+P23155591<GB19650914<<<<<<<<<<<<<<<<<<<<<<<<

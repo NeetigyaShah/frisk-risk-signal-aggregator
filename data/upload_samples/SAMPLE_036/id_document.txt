@@ -3,10 +3,10 @@ Type: P   Issuing country: RU (Russia)
 Surname: THOMPSON
 Given names: DR JAMES
 Nationality: Russia
-Date of birth: 1972-06-15
+Date of birth: 1972-06-16
 Document no.: P22930892
 Expiry: 2031-05-01
 
 MRZ:
 P<RUTHOMPSON<<DR<JAMES<<<<<<<<<<<<<<<<<<<<<<
-P22930892<RU19720615<<<<<<<<<<<<<<<<<<<<<<<<
+P22930892<RU19720616<<<<<<<<<<<<<<<<<<<<<<<<

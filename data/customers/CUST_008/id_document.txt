@@ -3,10 +3,10 @@ Type: P   Issuing country: GB (United Kingdom)
 Surname: CLARK
 Given names: DR STEPHEN
 Nationality: United Kingdom
-Date of birth: 1973-05-02
+Date of birth: 1973-05-03
 Document no.: P56280058
 Expiry: 2031-05-01
 
 MRZ:
 P<GBCLARK<<DR<STEPHEN<<<<<<<<<<<<<<<<<<<<<<<
-P56280058<GB19730502<<<<<<<<<<<<<<<<<<<<<<<<
+P56280058<GB19730503<<<<<<<<<<<<<<<<<<<<<<<<

@@ -3,10 +3,10 @@ Type: P   Issuing country: IT (Italy)
 Surname: BURNS
 Given names: MR TREVOR
 Nationality: Italy
-Date of birth: 1963-05-09
+Date of birth: 1963-05-10
 Document no.: P99177789
 Expiry: 2031-05-01
 
 MRZ:
 P<ITBURNS<<MR<TREVOR<<<<<<<<<<<<<<<<<<<<<<<<
-P99177789<IT19630509<<<<<<<<<<<<<<<<<<<<<<<<
+P99177789<IT19630510<<<<<<<<<<<<<<<<<<<<<<<<

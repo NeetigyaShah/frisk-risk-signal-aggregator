@@ -31,7 +31,7 @@ def load_customer(cdir: Path) -> Dossier:
 
     kyc = j("kyc.json", {})
     account = j("account.json", {})
-    screening = j("screening.json", {"sanctions": [], "pep_confirmed": False, "adverse_media": []})
+    screening = j("screening.json", {"pep_confirmed": False})
     meta = j("_meta.json", {})
     tx_path = cdir / "transactions.csv"
     txns = _txns_from_csv(tx_path.read_text(encoding="utf-8")) if tx_path.exists() else []
@@ -59,7 +59,7 @@ def dossier_from_files(files: dict[str, str], customer_id: str = "UPLOAD_001") -
 
     kyc = j("kyc.json", {})
     account = j("account.json", {})
-    screening = j("screening.json", {"sanctions": [], "pep_confirmed": False, "adverse_media": []})
+    screening = j("screening.json", {"pep_confirmed": False})
     meta = j("_meta.json", {})
     txns = _txns_from_csv(files["transactions.csv"]) if "transactions.csv" in files else []
     documents = [{"name": n, "kind": "unstructured", "text": t} for n, t in files.items() if n.endswith(".txt")]
@@ -77,5 +77,5 @@ def parse_pasted(text: str, customer_id: str = "PASTED_001") -> Dossier:
         return dossier_from_dict(obj)
     except Exception:
         # treat as free-text: one unstructured document, minimal structured shell
-        return Dossier(customer_id, {}, {}, [], {"sanctions": [], "pep_confirmed": False, "adverse_media": []},
+        return Dossier(customer_id, {}, {}, [], {"pep_confirmed": False},
                        {}, [{"name": "pasted.txt", "kind": "unstructured", "text": text}])

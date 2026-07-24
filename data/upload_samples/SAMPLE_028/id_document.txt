@@ -3,10 +3,10 @@ Type: P   Issuing country: AF (Afghanistan)
 Surname: HART-BROWN
 Given names: JOSEPH
 Nationality: Afghanistan
-Date of birth: 1974-07-23
+Date of birth: 1974-07-24
 Document no.: P23249385
 Expiry: 2031-05-01
 
 MRZ:
 P<AFHART-BROWN<<JOSEPH<<<<<<<<<<<<<<<<<<<<<<
-P23249385<AF19740723<<<<<<<<<<<<<<<<<<<<<<<<
+P23249385<AF19740724<<<<<<<<<<<<<<<<<<<<<<<<

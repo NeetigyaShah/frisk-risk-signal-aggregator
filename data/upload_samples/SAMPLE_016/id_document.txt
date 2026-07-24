@@ -3,10 +3,10 @@ Type: P   Issuing country: GB (United Kingdom)
 Surname: HUGHES
 Given names: BERNARD
 Nationality: United Kingdom
-Date of birth: 1955-10-09
+Date of birth: 1955-10-10
 Document no.: P38959693
 Expiry: 2031-05-01
 
 MRZ:
 P<GBHUGHES<<BERNARD<<<<<<<<<<<<<<<<<<<<<<<<<
-P38959693<GB19551009<<<<<<<<<<<<<<<<<<<<<<<<
+P38959693<GB19551010<<<<<<<<<<<<<<<<<<<<<<<<

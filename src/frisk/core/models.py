@@ -41,7 +41,7 @@ class Dossier:
     kyc: dict          # name, dob, nationality(ISO2), occupation, id_doc, onboarded, kyc_complete
     profile: dict      # entity_type, country(ISO2), product, pep(bool), tenure_days(int)
     transactions: list  # list[Txn]
-    screening: dict    # sanctions[list{name,match_score,list}], pep_confirmed(bool), adverse_media[list{headline,sentiment,date}]
+    screening: dict    # external-alert facts — pep_confirmed(bool). (sanctions/adverse-media scoped out)
     meta: dict = field(default_factory=dict)  # missing_docs[list], extra_docs[list], expected_band(str) for eval
     documents: list = field(default_factory=list)  # unstructured docs: [{name, kind, text}] (id doc, RM notes, news, email)
 

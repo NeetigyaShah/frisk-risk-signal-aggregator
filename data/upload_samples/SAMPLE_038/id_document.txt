@@ -3,10 +3,10 @@ Type: P   Issuing country: SY (Syria)
 Surname: SMITH
 Given names: EILEEN
 Nationality: Syria
-Date of birth: 1973-05-31
+Date of birth: 1973-06-01
 Document no.: P55609178
 Expiry: 2031-05-01
 
 MRZ:
 P<SYSMITH<<EILEEN<<<<<<<<<<<<<<<<<<<<<<<<<<<
-P55609178<SY19730531<<<<<<<<<<<<<<<<<<<<<<<<
+P55609178<SY19730601<<<<<<<<<<<<<<<<<<<<<<<<
