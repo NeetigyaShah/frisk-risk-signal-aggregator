@@ -7,8 +7,10 @@ from frisk.ai.providers.base import Provider
 from frisk.ai.providers.gemini import GeminiProvider
 from frisk.ai.providers.mock import MockProvider
 from frisk.ai.providers.nvidia import NvidiaProvider
+from frisk.ai.providers.openrouter import OpenRouterProvider
 
 _REGISTRY = {
+    "openrouter": OpenRouterProvider,
     "nvidia": NvidiaProvider,
     "gemini": GeminiProvider,
     "anthropic": AnthropicProvider,

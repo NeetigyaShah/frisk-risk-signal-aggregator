@@ -21,7 +21,8 @@ from frisk.paths import LLM_CACHE as _CACHE_PATH
 from frisk.ai.providers import get_provider
 
 _LLM = CONFIG["llm"]
-_MODEL_KEY = {"nvidia": "nvidia_model", "gemini": "gemini_model", "anthropic": "model", "mock": "mock"}
+_MODEL_KEY = {"openrouter": "openrouter_model", "nvidia": "nvidia_model", "gemini": "gemini_model",
+              "anthropic": "model", "mock": "mock"}
 
 # Opt-in LangSmith observability: real @traceable if installed + LANGSMITH_TRACING=true, else a no-op.
 try:
@@ -140,7 +141,7 @@ def crosscheck(d: Dossier, rr: RiskResult) -> tuple[RiskFinding, dict]:
     provider = get_provider(provider_name)
     model_name = _LLM.get(_MODEL_KEY.get(provider_name, ""), provider_name)
     ph = meta["prompt_hash"]
-    multistep = bool(_LLM.get("multi_step")) and provider_name == "nvidia"
+    multistep = bool(_LLM.get("multi_step")) and provider_name in ("openrouter", "nvidia")
     cache = _load_cache()
     graph_key = f"{provider_name}:{model_name}:graph:{ph}"
     single_key = f"{provider_name}:{model_name}:{ph}"

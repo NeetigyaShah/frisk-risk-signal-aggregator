@@ -19,8 +19,13 @@ class Settings(BaseSettings):
 
     # --- LLM behaviour ---
     llm_mode: str = "auto"                 # auto -> real if a key is set else simulated; off -> rules-only
-    provider: str = "nvidia"               # nvidia | gemini | anthropic | mock
+    provider: str = "openrouter"           # openrouter | nvidia | gemini | anthropic | mock
     multi_step: bool = True                # LangGraph 5-step orchestration vs single call
+    # OpenRouter (OpenAI-compatible) — deepseek-v4-flash, preferring Baidu Qianfan (fastest) with fast fallbacks
+    openrouter_model: str = "deepseek/deepseek-v4-flash"
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    openrouter_extra_body: dict = Field(default_factory=lambda: {
+        "provider": {"order": ["baidu", "alibaba", "deepinfra", "fireworks"], "allow_fallbacks": True}})
     nvidia_model: str = "deepseek-ai/deepseek-v4-flash"
     nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"
     nvidia_extra_body: dict = Field(
@@ -43,6 +48,7 @@ class Settings(BaseSettings):
     gated_confidence: float = 0.85         # confidence when rules are policy-authoritative (LLM gated out)
 
     # --- provider keys (read WITHOUT the FRISK_ prefix; keep out of git) ---
+    openrouter_api_key: str | None = Field(default=None, validation_alias="OPENROUTER_API_KEY")
     nvidia_api_key: str | None = Field(default=None, validation_alias="NVIDIA_API_KEY")
     gemini_api_key: str | None = Field(default=None, validation_alias="GEMINI_API_KEY")
     google_api_key: str | None = Field(default=None, validation_alias="GOOGLE_API_KEY")

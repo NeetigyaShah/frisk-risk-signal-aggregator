@@ -9,8 +9,9 @@ An AI prototype that ingests fragmented financial data (KYC, transactions, sanct
 for ~20 synthetic customers and produces a **prioritised, risk-scored analyst triage queue** with
 per-finding rationale. Domain: AML / financial-crime compliance. Deliverables: working Streamlit demo
 (≤3-min recording) + 5-slide deck + README. Deadline: 2026-07-25. Pro-code: Python, pandas, pydantic v2,
-Streamlit, instructor. LLM cross-check is provider-configurable in `config.py` — default
-**NVIDIA Nemotron-3-Ultra-550B** (OpenAI-compatible endpoint), with Gemini and Claude as alternates.
+Streamlit, instructor, LangGraph. LLM is provider-configurable in `config/settings.py` — default
+**OpenRouter → `deepseek/deepseek-v4-flash`** (prefers **Baidu Qianfan** via provider routing for throughput),
+with NVIDIA / Gemini / Claude / mock as alternates. Keys in `.env` (gitignored): `OPENROUTER_API_KEY` etc.
 
 **North star (current — `engine_mode=llm`):** the **LLM scores** each customer via a 5-step LangGraph graph
 that reads BOTH structured + unstructured docs. A **composite confidence** = min(self-report, node-agreement,

@@ -75,6 +75,9 @@
   * REAL Redis broker (`docker run -d --name frisk-redis -p 6379:6379 redis:7-alpine`) via `frisk/hitl/queue.py`
     (in-memory fallback). `frisk/hitl/feedback.py` = human corrections → few-shot examples in the synthesis prompt.
   * Streamlit **Human Review Queue** page: reviewer sets correct score/band/action + note → resolve + teach.
-  * Sanctions kill-switch kept as the one hard rail. 16 tests pass. **Model still needs a reliable warm**
-    (deepseek endpoint was 503-ing); offline (LLM_MODE=off) sends all non-sanctioned to the queue — a full HITL demo.
-    Redis must be running for the queue (container `frisk-redis`).
+  * Sanctions kill-switch kept as the one hard rail. 16 tests pass.
+- 2026-07-24: LLM provider → **OpenRouter** (`deepseek/deepseek-v4-flash`), provider routing prefers **Baidu Qianfan**
+  (`openrouter_extra_body.provider.order=[baidu,alibaba,deepinfra,fireworks]`, fallbacks on). Fast + reliable
+  (single call ~2s; graph ~11-38s/customer). Verified live: CUST_000→auto-clear(0.93), CUST_018→escalate,
+  CUST_014/006→low-confidence(0.30)→PENDING_REVIEW human queue. `OpenRouterProvider` added to the boundary.
+  Cache warming via OpenRouter. `OPENROUTER_API_KEY` in .env (ROTATE — pasted in chat).

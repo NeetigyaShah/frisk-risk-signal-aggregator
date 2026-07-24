@@ -32,7 +32,7 @@ def _get_runnables():
     if _runnables:
         return _runnables
     from frisk.ai.providers import get_provider
-    prov = get_provider("nvidia")
+    prov = get_provider()               # the configured provider (default: openrouter)
     if not prov.available():
         return None
     try:
