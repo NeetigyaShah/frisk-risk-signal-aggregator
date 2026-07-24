@@ -85,6 +85,7 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
 
     seen: set = set()
     trace: list[AgentStep] = []
+    recent: list[str] = []
     final: dict | None = None
     max_steps = CONFIG["agent_max_steps"]
 
@@ -125,6 +126,14 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
         scratchpad.note(cid, name, _brief(result))
         trace.append(AgentStep(step, name, args, _digest(result)))
         msgs.append(ToolMessage(content=json.dumps(result, default=str)[:3000], tool_call_id=call_id))
+        # nudge toward finalize as the budget runs low, or if the model is spinning on one tool
+        recent.append(name + json.dumps(args, sort_keys=True, default=str))
+        remaining = max_steps - step - 1
+        if remaining <= 3:
+            msgs.append(HumanMessage(content=f"You have {remaining} tool call(s) left. Call finalize NOW "
+                        "with your best current assessment — do not call any other tool."))
+        elif len(recent) >= 3 and len(set(recent[-3:])) == 1:
+            msgs.append(HumanMessage(content="You already gathered this. Stop and call finalize now."))
 
     injected = mem.get("injected", {})
     if final is None:  # bounded fallback: never blank, always resolves to a person

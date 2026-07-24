@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     workers: int = 16                      # parallel workers (across customers) for batch scoring
 
     # --- agentic scorer + layered memory ---
-    agent_max_steps: int = 12              # max tool-calling turns before the orchestrator must finalize / route to human
+    agent_max_steps: int = 16              # max tool-calling turns before the orchestrator must finalize / route to human
     scratchpad_ttl_s: int = 3600           # Redis working-memory TTL backstop (evicted explicitly on every exit)
     memory_topk: int = 3                   # per-customer history + similar-case retrieval depth
 
