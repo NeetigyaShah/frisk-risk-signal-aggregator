@@ -77,16 +77,54 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
     base = get_provider().chat_model()
     if base is None:
         raise RuntimeError("provider has no chat_model() — cannot run the agent")
-    llm = base.bind_tools(tool_objs, parallel_tool_calls=False)
+    # Tools whose output we hand over up front (see the briefing below). Removing them from the bound
+    # toolset is the only thing that actually works: telling the model "do not re-request these" in the
+    # prompt was measured to be ignored — it still spent 15 steps re-fetching pre-loaded facts. If the
+    # tool isn't offered, it can't be called, so the agent must reason from the briefing instead.
+    _PRELOADED = {"read_kyc", "list_documents", "aggregate_transactions", "find_txn_patterns"}
+    llm = base.bind_tools([t for t in tool_objs if getattr(t, "name", "") not in _PRELOADED],
+                          parallel_tool_calls=False)
     finalize_only = [t for t in tool_objs if getattr(t, "name", "") == "finalize"]
     llm_final = base.bind_tools(finalize_only, parallel_tool_calls=False) if finalize_only else llm
 
     lessons = "\n".join("- " + x["text"] for x in mem.get("lessons", []))
     sysmsg = SYSTEM + (f"\n\nLESSONS LEARNED (apply these):\n{lessons}" if lessons else "")
     opins = "\n".join(f"[{o.domain}={o.risk_level}] {o.note} (tentative {o.tentative_score})" for o in opinions)
+
+    # Pre-load the facts the agent almost always asks for anyway. Audit-log analysis showed it spent
+    # ~15 of its 16 steps on lookups it could have had up front: query_transactions 4.5x/customer,
+    # find_txn_patterns 3x/customer, plus read_kyc + list_documents nearly every run. At ~3.2s per
+    # round-trip that is most of the runtime. Handing these over in the opening message lets the agent
+    # spend its steps on genuine follow-up (reading a specific document, drilling into a subset)
+    # instead of re-fetching context. The tools remain available for exactly that.
+    briefing = ""
+    try:
+        kyc = dispatch["read_kyc"]()
+        docs = dispatch["list_documents"]()["documents"]
+        agg = dispatch["aggregate_transactions"]("txn_type", "sum")
+        pats = dispatch["find_txn_patterns"]("free")["candidates"]
+        txns = dispatch["query_transactions"](limit=60)
+        # register everything we just handed over as legitimately "seen" evidence
+        _collect_seen(txns, seen)                      # txn ids from rows
+        _collect_seen({"documents": docs}, seen)       # document names
+        _collect_seen({"candidates": pats}, seen)      # txn ids cited by pattern candidates
+        briefing = (
+            f"\n\nPRE-LOADED FACTS (already fetched for you — do not re-request these):\n"
+            f"KYC/profile: {json.dumps(kyc, default=str)}\n"
+            f"Documents on file: {json.dumps([x['name'] for x in docs])}\n"
+            f"Transaction totals by type: {json.dumps(agg.get('buckets', {}), default=str)}\n"
+            f"Advisory pattern candidates: {json.dumps(pats, default=str)[:1500]}\n"
+            f"Transactions ({txns.get('count')} total, first {len(txns.get('rows', []))} shown): "
+            f"{json.dumps(txns.get('rows', []), default=str)[:6000]}\n"
+            f"The remaining tools are read_document (open a specific file), query_transactions "
+            f"(filter/drill into a subset), note/read_notes, and finalize. Everything above is already "
+            f"known — go straight to the follow-up you actually need, then call finalize.")
+    except Exception:
+        briefing = ""   # any failure just means the agent fetches these itself, as before
+
     header = (f"Customer {cid}: {d.kyc.get('name')} — {d.kyc.get('occupation')} in "
               f"{d.profile.get('country')}; pep={bool(d.profile.get('pep'))}.\n"
-              f"SPECIALIST OPINIONS:\n{opins}\n\nInvestigate with tools, then call finalize.")
+              f"SPECIALIST OPINIONS:\n{opins}{briefing}")
     msgs = [SystemMessage(content=sysmsg), HumanMessage(content=header)]
 
     seen: set = set()
@@ -97,13 +135,24 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
 
     for step in range(max_steps):
         # in the final turns, offer ONLY the finalize tool so the model must decide
+        forced = (max_steps - step) <= 2
         with llm_slot():
-            resp = (llm_final if (max_steps - step) <= 2 else llm).invoke(msgs)
+            resp = (llm_final if forced else llm).invoke(msgs)
         tcs = getattr(resp, "tool_calls", None) or []
         if not tcs:
+            # A turn that produced no tool call still burns a step. When we are already forcing
+            # finalize, retry immediately with an explicit demand instead of letting the budget
+            # drain silently into a false PENDING_REVIEW at confidence 0.
             msgs.append(resp)
-            msgs.append(HumanMessage(content="You must use a tool or call finalize."))
-            continue
+            msgs.append(HumanMessage(
+                content="Call the finalize tool NOW with your best assessment." if forced
+                else "You must use a tool or call finalize."))
+            if forced:
+                with llm_slot():
+                    resp = llm_final.invoke(msgs)
+                tcs = getattr(resp, "tool_calls", None) or []
+            if not tcs:
+                continue
         call = tcs[0]  # serial — execute only the first tool call even if the model batched
         name, args, call_id = call["name"], call.get("args", {}) or {}, call.get("id", "")
         msgs.append(AIMessage(content="", tool_calls=[call]))
@@ -137,7 +186,7 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
         # nudge toward finalize as the budget runs low, or if the model is spinning on one tool
         recent.append(name + json.dumps(args, sort_keys=True, default=str))
         remaining = max_steps - step - 1
-        if remaining <= 3:
+        if remaining <= 2:
             msgs.append(HumanMessage(content=f"You have {remaining} tool call(s) left. Call finalize NOW "
                         "with your best current assessment — do not call any other tool."))
         elif len(recent) >= 3 and len(set(recent[-3:])) == 1:
