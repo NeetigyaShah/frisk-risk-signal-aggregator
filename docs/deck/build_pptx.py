@@ -288,23 +288,25 @@ def slide2(prs):
 
     label(s, Inches(6.85), ty, Inches(5.88), "five kinds of memory it can draw on")
     tiers = [
-        ("Scratchpad",   "notes it takes while working",  "wiped when done",     REVIEW),
-        ("This person",  "how we judged them before",     "kept forever",        FAINT),
-        ("Past cases",   "people who looked like this",   "kept forever",        TEAL),
-        ("The rulebook", "what each crime pattern means", "fixed reference",     CYAN),
-        ("Lessons",      "where we got it wrong before",  "grows as people fix", VIOLET),
+        ("Scratchpad",   "working memory",      "notes it takes as it goes", "wiped when done",  REVIEW),
+        ("This person",  "per-customer history", "how we judged them before", "kept",            FAINT),
+        ("Past cases",   "episodic recall",     "people who looked like this", "kept",           TEAL),
+        ("The rulebook", "semantic memory",     "what each pattern means",   "fixed",            CYAN),
+        ("Lessons",      "procedural memory",   "where we got it wrong",     "grows",            VIOLET),
     ]
-    for i, (name, what, life, col) in enumerate(tiers):
+    for i, (name, tech, what, life, col) in enumerate(tiers):
         ry = ty + Inches(0.28) + Inches(0.37 * i)
         rect(s, Inches(6.85), ry, Inches(5.88), Inches(0.33),
              fill=PANEL if i % 2 == 0 else BG, outline=None)
         rect(s, Inches(6.97), ry + Inches(0.11), Inches(0.1), Inches(0.1), fill=col, outline=None)
-        text(s, Inches(7.18), ry + Inches(0.05), Inches(1.5), Inches(0.24),
+        text(s, Inches(7.18), ry + Inches(0.05), Inches(1.28), Inches(0.24),
              name, size=9, color=INK, bold=True)
-        text(s, Inches(8.85), ry + Inches(0.05), Inches(2.6), Inches(0.24),
+        text(s, Inches(8.5), ry + Inches(0.06), Inches(1.62), Inches(0.24),
+             tech, size=7.5, color=col, font=MONO)
+        text(s, Inches(10.18), ry + Inches(0.05), Inches(1.68), Inches(0.24),
              what, size=8.5, color=MUTED)
-        text(s, Inches(11.5), ry + Inches(0.05), Inches(1.2), Inches(0.24),
-             life, size=8, color=FAINT)
+        text(s, Inches(11.92), ry + Inches(0.06), Inches(0.8), Inches(0.24),
+             life, size=7.5, color=FAINT)
 
     ky = Inches(5.44)
     rect(s, Inches(0.6), ky, Inches(6.0), Inches(1.06), fill=PANEL2, outline=VIOLET)
@@ -426,7 +428,7 @@ def slide3(prs):
 
 # ── slide 4 · human-in-the-loop ─────────────────────────────────────────────
 def slide4(prs):
-    s = slide_base(prs, "04 · Where People Come In",
+    s = slide_base(prs, "04 · Human-in-the-Loop · Where People Come In",
                    "When it is unsure, it asks. And it remembers your answer.",
                    "The AI says how sure it is. If it is not sure enough, a person decides instead — and that correction makes the whole system better, three different ways.")
 
@@ -478,13 +480,23 @@ def slide4(prs):
 
     label(s, Inches(6.85), Inches(3.16), Inches(5.88), "one correction teaches it three ways")
     paths = [
-        ("1 · a worked example", "the next customer who looks like this gets shown your answer", TEAL),
-        ("2 · a written lesson", "turned into a rule of thumb it reads before every future case", VIOLET),
-        ("3 · a note on that person's file", "next time this customer comes round, it sees what changed", CYAN),
+        ("1 · a worked example", "episodic memory",
+         "the next customer who looks like this gets shown your answer", TEAL),
+        ("2 · a written lesson", "procedural memory",
+         "turned into a rule of thumb it reads before every future case", VIOLET),
+        ("3 · a note on that person's file", "per-customer history",
+         "next time this customer comes round, it sees what changed", CYAN),
     ]
-    for i, (h, b, c) in enumerate(paths):
-        card(s, Inches(6.85), Inches(3.44) + Inches(0.6 * i), Inches(5.88), Inches(0.54),
-             h, b, accent=c, bar=True, hsize=9.5, bsize=8.5)
+    for i, (h, tech, b, c) in enumerate(paths):
+        py2 = Inches(3.44) + Inches(0.6 * i)
+        rect(s, Inches(6.85), py2, Inches(5.88), Inches(0.54), fill=PANEL)
+        rect(s, Inches(6.85), py2, Pt(3), Inches(0.54), fill=c, outline=None, radius=False)
+        text(s, Inches(7.05), py2 + Inches(0.07), Inches(2.6), Inches(0.24),
+             h, size=9.5, color=INK, bold=True)
+        text(s, Inches(9.72), py2 + Inches(0.08), Inches(1.55), Inches(0.24),
+             tech, size=7.5, color=c, font=MONO)
+        text(s, Inches(7.05), py2 + Inches(0.29), Inches(5.6), Inches(0.22),
+             b, size=8.5, color=MUTED)
     text(s, Inches(6.85), Inches(5.24), Inches(5.88), Inches(0.24),
          [[("Most systems manage one of these. Three means your single correction improves ",
             {"size": 8.5, "color": FAINT}),
