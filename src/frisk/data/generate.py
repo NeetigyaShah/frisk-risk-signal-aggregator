@@ -352,6 +352,30 @@ SAMPLE_PROFILES = [
 ]
 
 
+# --------------------------------------------------------------------------- 5-profile DEMO set
+# For the recorded walkthrough: five customers the app has NEVER scored, so the demo can run a live
+# assessment on camera. Ordered so each one shows a different capability, in the order the script
+# walks through them. Different seed again → different people from both sets above.
+
+DEMO_SEED = 7
+
+DEMO_PROFILES = [
+    # 1 — the headline. Clear-cut structuring: the agent should find it and cite the exact rows.
+    {"sev": "critical", "country": "IR", "occ": "arms dealer", "typology": "structuring",
+     "cash_heavy": True},
+    # 2 — the contrast. Obviously fine, so the same agent auto-clears in one breath.
+    {"sev": "low", "country": "GB", "occ": "primary school teacher"},
+    # 3 — the human-in-the-loop moment. Conflicting signals → specialists disagree → low
+    #     confidence → review queue → correction form on camera.
+    {"sev": "review", "country": "GB", "occ": "parish councillor", "pep": True,
+     "cash_heavy": True, "conflict": "pep_benign"},
+    # 4 — a different typology, so the trace does not look like a one-trick demo.
+    {"sev": "high", "country": "GB", "occ": "crypto dealer", "typology": "layering"},
+    # 5 — robustness: transactions.csv is missing entirely. It must still return a real decision.
+    {"sev": "med", "country": "VE", "occ": "importer", "missing": "transactions"},
+]
+
+
 def write_samples(out_dir=UPLOAD_SAMPLES, seed=SAMPLE_SEED, profiles=None, prefix="SAMPLE_"):
     """Write the manual-upload sample set to a SEPARATE folder (not the app's data/customers/)."""
     profiles = profiles or SAMPLE_PROFILES

@@ -2,6 +2,7 @@
 
     frisk generate            # regenerate the deterministic synthetic dossiers
     frisk samples             # write the 40-profile manual-upload sample set
+    frisk demo                # write the 5-profile demo set (unscored — for the recording)
     frisk migrate             # create/upgrade the relational DB (customers/assessments/lessons/cases)
     frisk serve [--port]      # run the backend API + frontend (uvicorn)
     frisk score [--offline]   # score all customers and print the ranked queue (--offline = mock provider)
@@ -19,6 +20,7 @@ def main(argv=None) -> None:
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("generate", help="regenerate the synthetic dossiers (the app's data/customers/)")
     sub.add_parser("samples", help="write the 40-profile MANUAL-upload sample set (separate folder)")
+    sub.add_parser("demo", help="write the 5-profile DEMO set (never scored — for the recording)")
     sub.add_parser("migrate", help="create/upgrade the relational DB tables")
     sub.add_parser("reflect", help="distill lessons-learned from human corrections")
     srv = sub.add_parser("serve", help="run the backend API + frontend (uvicorn)")
@@ -39,6 +41,16 @@ def main(argv=None) -> None:
         n, files, review_ids = write_samples()
         print(f"wrote {n} sample profiles ({files} files) to:\n  {UPLOAD_SAMPLES}")
         print(f"  {len(review_ids)} designed to NEED human review: {review_ids}")
+        return
+
+    if args.cmd == "demo":
+        from frisk.data.generate import DEMO_PROFILES, DEMO_SEED, write_samples
+        from frisk.paths import DEMO_SAMPLES
+        n, files, review_ids = write_samples(
+            out_dir=DEMO_SAMPLES, seed=DEMO_SEED, profiles=DEMO_PROFILES, prefix="DEMO_")
+        print(f"wrote {n} demo profiles ({files} files) to:\n  {DEMO_SAMPLES}")
+        print(f"  {len(review_ids)} designed to NEED human review: {review_ids}")
+        print("  these are NOT auto-loaded — upload them on camera to score live")
         return
 
     if args.cmd == "migrate":

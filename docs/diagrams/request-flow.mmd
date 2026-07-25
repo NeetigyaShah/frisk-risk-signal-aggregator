@@ -1,0 +1,49 @@
+%%{init: {"theme":"base","themeVariables":{
+  "primaryColor":"#1e293b","primaryTextColor":"#f8fafc","primaryBorderColor":"#64748b",
+  "actorBkg":"#1e293b","actorTextColor":"#f8fafc","actorBorder":"#94a3b8",
+  "signalColor":"#cbd5e1","signalTextColor":"#e2e8f0",
+  "labelBoxBkgColor":"#334155","labelTextColor":"#f8fafc",
+  "loopTextColor":"#e2e8f0","noteBkgColor":"#334155","noteTextColor":"#f8fafc",
+  "sequenceNumberColor":"#0f172a","activationBkgColor":"#475569","fontSize":"14px"}}}%%
+sequenceDiagram
+    autonumber
+    participant U as Browser
+    participant API as service.py
+    participant E as engine.py
+    participant M as memory.py
+    participant SP as specialists.py
+    participant A as agent.py
+    participant T as tools.py
+    participant DB as store + audit
+
+    U->>API: POST /api/score/{id}
+    API->>E: assess(customer)
+    E->>M: what do we already know?
+    M-->>E: history · similar cases · lessons · rulebook
+    E->>E: open scratchpad (working memory)
+
+    par all three at once
+        E->>SP: background specialist
+    and
+        E->>SP: money specialist
+    and
+        E->>SP: papers specialist
+    end
+    SP-->>E: three opinions
+
+    E->>A: opinions + full case folder
+    loop up to 12 steps, one at a time
+        A->>T: read a document / slice the payments / scan for patterns
+        T-->>A: facts only — never a verdict
+        A->>A: jot a note to the scratchpad
+    end
+    A-->>E: decision + how sure + the evidence it points at
+
+    alt 60% sure or more
+        E->>DB: save decision, write audit record
+    else under 60%
+        E->>DB: save + put in the review queue for a person
+    end
+    E->>E: wipe the scratchpad (in a finally — happens even on a crash)
+    E-->>API: decision
+    API-->>U: score, reasoning, and every step it took

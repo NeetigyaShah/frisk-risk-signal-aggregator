@@ -115,6 +115,7 @@ frisk serve              # start the app          → http://127.0.0.1:8000
 frisk score --offline    # ranked list in the terminal (stand-in model, costs nothing)
 frisk generate           # rebuild the 20 sample customers
 frisk samples            # rebuild the 40 upload samples
+frisk demo               # write 5 never-scored customers (for a live walkthrough)
 frisk migrate            # create/upgrade the database
 frisk reflect            # turn accumulated human corrections into lessons
 ```

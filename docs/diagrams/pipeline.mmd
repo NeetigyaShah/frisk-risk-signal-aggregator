@@ -1,0 +1,42 @@
+%%{init: {"theme":"base","themeVariables":{
+  "clusterBkg":"transparent","clusterBorder":"#52525b","titleColor":"#a1a1aa",
+  "lineColor":"#8b8b94","edgeLabelBackground":"transparent","fontSize":"14px"}}}%%
+flowchart TD
+    FORM["<b>form-like</b><br>kyc.txt · account.txt · transactions.txt"]
+    PROSE["<b>plain English</b> — what conventional software cannot read<br>id_document.txt · rm_notes.txt · correspondence.txt"]
+    CASE(["<b>1 · GATHER THE FILE</b><br>one case folder, nothing left unread"])
+    FORM --> CASE
+    PROSE --> CASE
+
+    CASE --> MEMORY["<b>2 · REMEMBER</b> — what do we already know?<br>this customer before · similar past cases · lessons learned · the rulebook"]
+
+    MEMORY --> SP1 & SP2 & SP3
+
+    SP1["background"]
+    SP2["the money"]
+    SP3["the papers"]
+    SP1 & SP2 & SP3 --> LEAD
+
+    LEAD["<b>3 · THE LEAD INVESTIGATOR</b> — one step at a time<br>reads documents · slices the payments · scans for patterns · writes notes · then decides"]
+
+    LEAD --> GATE{"<b>4</b> · how sure<br>is it?"}
+    GATE -->|"60% or more"| AUTO["<b>it decides</b><br>clear · review · send up"]
+    GATE -->|"under 60%"| HUMAN["<b>a person decides</b><br>and sees everything the AI saw"]
+    HUMAN --> LEARN(["their answer is remembered"])
+    LEARN -.->|"teaches it, three ways"| MEMORY
+
+    classDef ingest fill:#0c4a6e,stroke:#38bdf8,stroke-width:1.5px,color:#f0f9ff
+    classDef mem fill:#115e59,stroke:#2dd4bf,stroke-width:1.5px,color:#f0fdfa
+    classDef spec fill:#4c1d95,stroke:#a78bfa,stroke-width:1.5px,color:#f5f3ff
+    classDef lead fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#eef2ff
+    classDef good fill:#14532d,stroke:#4ade80,stroke-width:1.5px,color:#f0fdf4
+    classDef warn fill:#7c2d12,stroke:#fb923c,stroke-width:1.5px,color:#fff7ed
+    classDef ask fill:#3f3f46,stroke:#e4e4e7,stroke-width:2px,color:#fafafa
+
+    class FORM,PROSE,CASE ingest
+    class MEMORY,LEARN mem
+    class SP1,SP2,SP3 spec
+    class LEAD lead
+    class AUTO good
+    class HUMAN warn
+    class GATE ask

@@ -18,9 +18,10 @@ data/audit_log.jsonl
 data/feedback.jsonl
 data/llm_cache.json
 
-# ---- generated datasets (recreate with `frisk generate` / `frisk samples`) ----
+# ---- generated datasets (recreate with `frisk generate` / `frisk samples` / `frisk demo`) ----
 data/customers/
 data/upload_samples/
+data/demo_samples/
 
 # ---- local tooling / scratch ----
 .playwright-mcp/
