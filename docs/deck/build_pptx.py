@@ -525,18 +525,12 @@ def slide5(prs):
         text(s, nx + Inches(0.14), ny + Inches(0.55), Inches(2.64), Inches(0.4),
              b, size=8, color=MUTED, line=1.15)
 
-    ey = Inches(6.24)
-    rect(s, Inches(0.6), ey, Inches(12.13), Inches(0.82), fill=PANEL2, outline=ACCENT)
-    text(s, Inches(0.82), ey + Inches(0.1), Inches(11.7), Inches(0.24),
-         "ENGINEERING DECISIONS WORTH DEFENDING", size=9, color=FAINT, bold=True)
-    text(s, Inches(0.82), ey + Inches(0.34), Inches(11.7), Inches(0.4),
-         [[("No deterministic scoring · sanctions deliberately scoped out (the brief said “external "
-            "alerts”) · Decimal money · seeded byte-identical data generation · append-only audit of "
-            "clears as well as escalations · working-memory scratchpad evicted on every exit path",
-            {"size": 9.5, "color": MUTED})]], line=1.2)
-
     note(s, "Close on the trade-offs, not the wins — showing you know where it is weak is more convincing "
-            "than claiming it is finished. Each next step maps to a limit named above.")
+            "than claiming it is finished. Each next step maps to a limit named above.\n\n"
+            "If asked about engineering decisions: no deterministic scoring · sanctions deliberately "
+            "scoped out (the brief said “external alerts”) · Decimal money · seeded byte-identical data "
+            "generation · append-only audit of clears as well as escalations · working-memory scratchpad "
+            "evicted on every exit path.")
     return s
 
 
