@@ -23,7 +23,15 @@ class Settings(BaseSettings):
     openrouter_model: str = "deepseek/deepseek-v4-flash"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_extra_body: dict = Field(default_factory=lambda: {
-        "provider": {"order": ["baidu", "alibaba", "deepinfra", "fireworks"], "allow_fallbacks": True}})
+        # Pinned to Alibaba, no fallbacks. Baidu was the default and is the reason for every latency
+        # horror story in this repo's history: identical trivial prompts returned in 0.7s and then
+        # 62.3s from the SAME provider under load, and runs hit 394s and 722s. Alibaba publishes 72
+        # tps against Baidu's queueing, and a serial agent makes ~5 calls per run, so throughput is
+        # the number that sets the wall clock.
+        # allow_fallbacks is False deliberately: silently drifting to a slow provider is what made
+        # the old behaviour so hard to diagnose. If Alibaba is down we now fail fast and say so
+        # (see _provider_fault in api/service.py) rather than hanging for minutes.
+        "provider": {"order": ["alibaba"], "allow_fallbacks": False}})
     nvidia_model: str = "deepseek-ai/deepseek-v4-flash"
     nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"
     nvidia_extra_body: dict = Field(
@@ -39,8 +47,14 @@ class Settings(BaseSettings):
                                             # call and the run dies with "missing argument
                                             # evidence_refs". The cure is shorter tool OUTPUT (see the
                                             # note tool's description), not a hard ceiling on it.
-    max_retries: int = 3
-    timeout_s: int = 60
+    max_retries: int = 2
+    timeout_s: int = 25                    # A hung upstream, not slow reasoning, is what produces the
+                                            # scary outliers: 60s x (1 + 3 retries) let a SINGLE call
+                                            # burn 240s, and a 4-step run measured 722s. A real agent
+                                            # turn is ~3-8s, so 60s was ~7x p95 — long enough to be a
+                                            # wait, too short to be a useful ceiling. Abandoning a
+                                            # stalled socket at 25s and retrying is strictly faster
+                                            # than waiting it out, and caps a call at 75s not 240s.
 
     # --- human-in-the-loop ---
     confidence_threshold: float = 0.60     # below this the agent is "unsure" -> route to the human review queue
