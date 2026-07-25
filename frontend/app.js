@@ -74,17 +74,27 @@ const TITLES = {
   ingest:['Ingest / Upload','Score any subset — or every profile — in parallel'],
   audit:['Audit Trail','Append-only record of every decision'],
 };
+// Race guard: switching views fast (dashboard -> compare before dashboard's fetches land)
+// used to let whichever render finished LAST win, overwriting the page you actually asked
+// for. Every navigation bumps _navGen; each render checks it's still current before
+// touching #content, and abandons silently otherwise.
+let _navGen = 0;
+const staleNav = gen => gen !== _navGen;
+
 async function go(view){
+  const gen = ++_navGen;
   document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
   $('title').textContent = TITLES[view][0];
   $('subtitle').textContent = TITLES[view][1];
   await refreshStats();
-  if (STATS.warming) return showWarming(view);
-  await VIEWS[view]();
+  if (staleNav(gen)) return;
+  if (STATS.warming) return showWarming(view, gen);
+  await VIEWS[view](gen);
 }
 $('nav').addEventListener('click', e => { const a = e.target.closest('.nav-item'); if (a) go(a.dataset.view); });
 
-function showWarming(view){
+function showWarming(view, gen = _navGen){
+  if (staleNav(gen)) return;
   const pct = STATS.total ? Math.round((STATS.done / STATS.total) * 100) : 0;
   $('content').innerHTML = `<div class="card card-pad fade" style="max-width:520px;margin:8vh auto;text-align:center">
     <div style="font-size:34px;margin-bottom:10px">⚙️</div>
@@ -127,8 +137,9 @@ function countUp(node, to, ms = 700){
 }
 
 /* ───────────── Dashboard ───────────── */
-async function renderDashboard(){
+async function renderDashboard(gen = _navGen){
   const [q, a] = await Promise.all([api('/api/queue'), api('/api/analytics')]);
+  if (staleNav(gen)) return;   // user navigated away while these fetches were in flight
   const autoPct = STATS.total ? Math.round(STATS.auto_clear / STATS.total * 100) : 0;
   const high = q.filter(d => bandUp(d.band) === 'HIGH').length;
 
@@ -345,8 +356,9 @@ async function openCase(cid){
 const closeDrawer = () => $('drawer').classList.add('hidden');
 
 /* ───────────── Review Queue ───────────── */
-async function renderReview(){
+async function renderReview(gen = _navGen){
   const pend = await api('/api/review');
+  if (staleNav(gen)) return;
   window._PEND = pend;
   if (!pend.length){
     $('content').innerHTML = emptyState('✅','Queue is empty',
@@ -424,8 +436,9 @@ async function submitReview(cid){
 }
 
 /* ───────────── Ingest ───────────── */
-async function renderIngest(){
+async function renderIngest(gen = _navGen){
   const samples = await api('/api/samples');
+  if (staleNav(gen)) return;
   $('content').innerHTML = `
     <div class="grid grid-2" style="align-items:start">
       <div class="card card-pad">
@@ -523,8 +536,9 @@ async function ingestFiles(){
 }
 
 /* ───────────── Audit ───────────── */
-async function renderAudit(){
+async function renderAudit(gen = _navGen){
   const rows = await api('/api/audit');
+  if (staleNav(gen)) return;
   if (!rows.length){ $('content').innerHTML = emptyState('📜','No audit records yet','Every decision — cleared or escalated — is appended here with its tool-call trace.'); return; }
   $('content').innerHTML = `<div class="card" style="overflow-x:auto">
     <table class="tx" style="min-width:720px">
@@ -544,8 +558,11 @@ async function renderAudit(){
 
 /* ───────────── Case Comparison ───────────── */
 let _CMP = [];
-async function renderCompare(){
+let _cmpGen = 0;   // runCompare() is user-triggered (dropdown), guarded separately from nav
+async function renderCompare(gen = _navGen){
   _CMP = await api('/api/queue');
+  if (staleNav(gen)) return;
+  _cmpGen = gen;
   if (_CMP.length < 2){ $('content').innerHTML = emptyState('⚖️','Need at least two scored cases','Score a few customers first, then come back to compare them side by side.'); return; }
   const opts = sel => _CMP.map(d => `<option value="${d.id}" ${d.id===sel?'selected':''}>${esc(d.name)} — ${d.id} (${d.score})</option>`).join('');
   const hi = _CMP[0].id, lo = _CMP[_CMP.length-1].id;
@@ -596,10 +613,12 @@ const cmpCol = (d, other) => {
   </div>`;
 };
 async function runCompare(){
+  const myGen = _cmpGen, navAtStart = _navGen;
   const a = $('cmpA').value, b = $('cmpB').value;
   if (a === b){ $('cmpOut').innerHTML = `<p style="color:#f59e0b;font-size:13px">Pick two different customers.</p>`; return; }
   $('cmpOut').innerHTML = `<p style="color:var(--muted);font-size:13px">Comparing…</p>`;
   const r = await api(`/api/compare?a=${a}&b=${b}`);
+  if (staleNav(navAtStart) || myGen !== _cmpGen) return;   // left the page (or picked new options) mid-fetch
   if (r.error){ $('cmpOut').innerHTML = `<p style="color:#ef4444;font-size:13px">${esc(r.error)}</p>`; return; }
   const gap = Math.abs(r.score_delta);
   $('cmpOut').innerHTML = `
@@ -623,8 +642,9 @@ async function runCompare(){
 }
 
 /* ───────────── SAR drafts ───────────── */
-async function renderSar(){
+async function renderSar(gen = _navGen){
   const q = await api('/api/queue');
+  if (staleNav(gen)) return;
   const flagged = q.filter(d => ['ESCALATE','REVIEW','PENDING_REVIEW'].includes(d.action));
   if (!flagged.length){ $('content').innerHTML = emptyState('📋','Nothing to report','No case currently warrants a Suspicious Activity Report — every customer auto-cleared.'); return; }
   $('content').innerHTML = `
