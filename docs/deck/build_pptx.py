@@ -157,16 +157,16 @@ def card(slide, x, y, w, h, head, body, *, accent=None, hsize=10.5, bsize=8.5,
 
 # ── slide 1 · problem understanding ─────────────────────────────────────────
 def slide1(prs):
-    s = slide_base(prs, "01 · Problem Understanding",
-                   "Compliance drowns in signals it generated itself",
-                   "The bottleneck is not detecting suspicious activity — it is triaging the noise, and explaining the call afterwards.")
+    s = slide_base(prs, "01 · The Problem",
+                   "Too many alarms. Almost none of them real.",
+                   "The hard part is not spotting alarms — it is sorting the real ones from the noise, and proving afterwards why you decided what you did.")
 
-    label(s, Inches(0.6), Inches(1.72), Inches(6.0), "the domain, in numbers")
+    label(s, Inches(0.6), Inches(1.72), Inches(6.0), "what the industry looks like today")
     facts = [
-        ("~90–95%", "of AML alerts are false positives", "the bottleneck is triage, not detection", HIGH),
-        ("2–4%", "of alerts are actionable", "96%+ of analyst effort produces nothing", MED),
-        ("70–80%", "of analyst time goes to false positives", "the scarce resource is attention", REVIEW),
-        ("2–5%", "of global GDP laundered annually (UNODC)", "the false negatives are the costly ones", MUTED),
+        ("9 in 10", "alarms turn out to be nothing", "so the real work is sorting, not spotting", HIGH),
+        ("2–4%", "of alarms are worth acting on", "almost all the effort leads nowhere", MED),
+        ("70–80%", "of a reviewer's day is spent on dead ends", "the scarce thing is attention, not data", REVIEW),
+        ("2–5%", "of the world's money is dirty (UN estimate)", "and missing one is the expensive mistake", MUTED),
     ]
     for i, (n, what, why, c) in enumerate(facts):
         ry = Inches(2.0) + Inches(0.55 * i)
@@ -178,16 +178,16 @@ def slide1(prs):
         text(s, Inches(1.88), ry + Inches(0.24), Inches(4.6), Inches(0.2),
              why, size=8, color=FAINT)
     text(s, Inches(0.6), Inches(4.24), Inches(6.0), Inches(0.36),
-         "Directional industry estimates, not audited statistics — but the shape is consistent.",
+         "Rough industry figures, not audited numbers — but every source tells the same story.",
          size=8.5, color=FAINT)
 
-    label(s, Inches(6.9), Inches(1.72), Inches(5.83), "one customer = five disconnected artefacts")
+    label(s, Inches(6.9), Inches(1.72), Inches(5.83), "one customer arrives as five separate files")
     rows = [
-        ("kyc.json",         "structured", "identity, occupation, PEP"),
-        ("account.json",     "structured", "tenure, product, jurisdiction"),
-        ("transactions.csv", "structured", "the behaviour — 100s of rows"),
-        ("rm_notes.txt",     "free text",  "the RM's unease, in prose"),
-        ("id_document.txt",  "free text",  "document anomalies, admissions"),
+        ("kyc.txt",          "form-like", "who they say they are, and what they do"),
+        ("account.txt",      "form-like", "how long they have banked here, and where"),
+        ("transactions.txt", "table",     "what they actually did — hundreds of rows"),
+        ("rm_notes.txt",     "prose",     "their banker's gut feeling, written out"),
+        ("id_document.txt",  "prose",     "what the ID scan actually said"),
     ]
     for i, (f, kind, hides) in enumerate(rows):
         ry = Inches(2.0) + Inches(0.44 * i)
@@ -195,18 +195,22 @@ def slide1(prs):
         text(s, Inches(7.04), ry + Inches(0.07), Inches(1.7), Inches(0.24),
              f, size=9.5, color=INK, bold=True, font=MONO)
         text(s, Inches(8.76), ry + Inches(0.08), Inches(0.92), Inches(0.22),
-             kind, size=8, color=REVIEW if kind == "free text" else FAINT, bold=True)
+             kind, size=8, color=REVIEW if kind == "prose" else FAINT, bold=True)
         text(s, Inches(9.72), ry + Inches(0.08), Inches(2.9), Inches(0.22),
              hides, size=8.5, color=MUTED)
     text(s, Inches(6.9), Inches(4.24), Inches(5.83), Inches(0.36),
-         [[("The two most incriminating sources are unstructured. ", {"size": 9, "color": MUTED}),
-           ("No rules engine reads them.", {"size": 9, "color": REVIEW, "bold": True})]])
+         [[("The two files that give the game away are plain English. ",
+            {"size": 9, "color": MUTED}),
+           ("Traditional software cannot read them.", {"size": 9, "color": REVIEW, "bold": True})]])
 
-    label(s, Inches(0.6), Inches(4.76), Inches(12.13), "three failures this creates")
+    label(s, Inches(0.6), Inches(4.76), Inches(12.13), "so three things go wrong")
     fails = [
-        ("Slow", HIGH, "Minutes per customer — and the queue is unordered, so the riskiest case may be read last."),
-        ("Inconsistent", MED, "Two analysts score the same file differently. There is no shared calibration."),
-        ("Unauditable", REVIEW, "A regulator asking “why was this cleared?” six months later gets a shrug."),
+        ("It is slow", HIGH,
+         "Minutes per customer, and nobody knows who to open first — so the worst case might be read last."),
+        ("It is inconsistent", MED,
+         "Give the same file to two reviewers and you get two different answers. Nobody agrees on the yardstick."),
+        ("Nobody can explain it", REVIEW,
+         "The thinking stays in someone's head. Ask six months later why a customer was let through, and you get a shrug."),
     ]
     for i, (h, c, b) in enumerate(fails):
         card(s, Inches(0.6) + Inches(4.09) * i, Inches(5.02), Inches(3.93), Inches(0.78),
@@ -215,62 +219,63 @@ def slide1(prs):
     cy = Inches(5.98)
     rect(s, Inches(0.6), cy, Inches(12.13), Inches(1.06), fill=PANEL2, outline=ACCENT)
     text(s, Inches(0.84), cy + Inches(0.11), Inches(11.6), Inches(0.22),
-         "OBJECTIVE, AND THE CONSTRAINT THAT SHAPED EVERYTHING", size=9, color=FAINT, bold=True)
+         "WHAT WE SET OUT TO BUILD", size=9, color=FAINT, bold=True)
     text(s, Inches(0.84), cy + Inches(0.34), Inches(11.65), Inches(0.66),
-         [[("Do the first pass: ", {"bold": True, "color": INK, "size": 11}),
-           ("read every source, investigate like an analyst, rank the whole book by risk, and show "
-            "the work — so the human starts from evidence, not a blank page.",
+         [[("Do the first pass. ", {"bold": True, "color": INK, "size": 11}),
+           ("Read every file, dig like a good reviewer would, put the whole customer list in order of "
+            "risk, and show the working — so a person starts with evidence instead of a blank page.",
             {"color": MUTED, "size": 11})],
-          [("A false negative is catastrophic; a false positive is merely expensive — so the system "
-            "must ", {"color": MUTED, "size": 11}),
-           ("know when it is unsure and escalate", {"bold": True, "color": REVIEW, "size": 11}),
-           (". That is why confidence, not score, decides who sees a case.",
+          [("Missing a real bad actor is a disaster; a false alarm is just costly. So the system has "
+            "to ", {"color": MUTED, "size": 11}),
+           ("admit when it is unsure and hand over", {"bold": True, "color": REVIEW, "size": 11}),
+           (", instead of bluffing. That one rule shaped the whole design.",
             {"color": MUTED, "size": 11})]], space_after=4, line=1.25)
 
-    note(s, "Lead with the analyst's desk, not the tech. The numbers establish this is a triage and "
-            "explainability problem, not a detection problem. Everything in the next four slides "
-            "answers one of the three failures.")
+    note(s, "Lead with the reviewer's desk, not the tech. The numbers establish this is a sorting and "
+            "explaining problem, not a spotting problem. Everything in the next four slides answers "
+            "one of the three things that go wrong.")
     return s
 
 
 # ── slide 2 · solution approach ─────────────────────────────────────────────
 def slide2(prs):
-    s = slide_base(prs, "02 · Solution Approach",
-                   "Parallel where independent, serial where dependent",
-                   "Four stages per customer. No deterministic rules engine — the LLM produces the score; code supplies tools, memory and guardrails.")
+    s = slide_base(prs, "02 · How We Built It",
+                   "A team of AI specialists, then one lead investigator",
+                   "Four steps per customer. No scoring formula anywhere in the code — the AI decides the number; the code hands it the tools, the memory, and rules it cannot break.")
 
     py = Inches(1.76)
     bw, bh = Inches(2.72), Inches(1.42)
     gap = Inches(0.36)
     xs = [Inches(0.6) + (bw + gap) * i for i in range(4)]
-    flow_box(s, xs[0], py, bw, bh, "1 · INGEST",
-             ["kyc · account · transactions", "id_document · rm_notes",
-              "correspondence", "", "→ one typed Dossier"],
+    flow_box(s, xs[0], py, bw, bh, "1 · GATHER THE FILE",
+             ["five separate files in,", "one tidy case folder out", "",
+              "→ nothing is left unread"],
              accent=CYAN, tcolor=RGBColor(0x7D, 0xD3, 0xFC))
-    flow_box(s, xs[1], py, bw, bh, "2 · RETRIEVE MEMORY",
-             ["per-customer history", "similar past cases", "lessons learned",
-              "", "reference cheat-sheets"], accent=TEAL, tcolor=RGBColor(0x5E, 0xEA, 0xD4))
+    flow_box(s, xs[1], py, bw, bh, "2 · REMEMBER",
+             ["what we knew about them before", "how we handled similar people",
+              "lessons from past corrections", "", "the AML rulebook"],
+             accent=TEAL, tcolor=RGBColor(0x5E, 0xEA, 0xD4))
     flow_box(s, xs[2], py, bw, bh, "3 · INVESTIGATE",
-             ["3 specialists — PARALLEL", "   KYC · transactions · docs", "",
-              "orchestrator — SERIAL", "   tools → finalize()"],
+             ["3 specialists work AT ONCE", "   background · money · papers", "",
+              "1 lead works STEP BY STEP", "   asks, reads, then decides"],
              accent=VIOLET, tcolor=RGBColor(0xC4, 0xB5, 0xFD))
     flow_box(s, xs[3], py, bw, bh, "4 · DECIDE + LEARN",
-             ["conf ≥ 0.60 → auto-dispose", "conf < 0.60 → human queue", "",
-              "correction → memory"], accent=REVIEW, tcolor=RGBColor(0xFD, 0xBA, 0x74))
+             ["sure enough → decide it", "not sure → ask a person", "",
+              "their answer → remembered"], accent=REVIEW, tcolor=RGBColor(0xFD, 0xBA, 0x74))
     for i in range(3):
         arrow(s, xs[i] + bw + Inches(0.04), py + Inches(0.63))
 
     ty = Inches(3.44)
-    label(s, Inches(0.6), ty, Inches(6.0), "why two different topologies")
+    label(s, Inches(0.6), ty, Inches(6.0), "why a team, and then a lead")
     text(s, Inches(1.9), ty + Inches(0.26), Inches(2.1), Inches(0.22),
-         "3 Specialists", size=9.5, color=ACCENT, bold=True)
+         "The 3 specialists", size=9.5, color=ACCENT, bold=True)
     text(s, Inches(4.05), ty + Inches(0.26), Inches(2.4), Inches(0.22),
-         "1 Orchestrator", size=9.5, color=ACCENT, bold=True)
+         "The lead investigator", size=9.5, color=ACCENT, bold=True)
     trows = [
-        ("Execution", "3 calls in parallel", "serial loop, one call at a time"),
-        ("Sees", "only its own slice", "all 3 opinions + dossier + tools"),
-        ("Returns", "SpecialistOpinion", "RiskFinding via finalize()"),
-        ("Why", "speed, no cross-talk", "each result informs the next question"),
+        ("How they work", "all three at once", "one step at a time"),
+        ("What they see", "only their own topic", "all 3 views + the whole file"),
+        ("What they give", "an opinion, not a verdict", "the final call, with reasons"),
+        ("Why this way", "fast, and no groupthink", "each answer shapes the next question"),
     ]
     for i, (a, b, c) in enumerate(trows):
         ry = ty + Inches(0.52) + Inches(0.31 * i)
@@ -281,67 +286,69 @@ def slide2(prs):
         text(s, Inches(1.9), ry, Inches(2.1), Inches(0.24), b, size=8.5, color=MUTED)
         text(s, Inches(4.05), ry, Inches(2.35), Inches(0.24), c, size=8.5, color=MUTED)
 
-    label(s, Inches(6.85), ty, Inches(5.88), "layered memory — 5 tiers, 3 stores")
+    label(s, Inches(6.85), ty, Inches(5.88), "five kinds of memory it can draw on")
     tiers = [
-        ("Working",      "notes during this run",       "Redis scratchpad",   REVIEW, "evicted on exit"),
-        ("Per-customer", "this customer's history",     "SQLite assessments", FAINT,  "permanent"),
-        ("Episodic",     "similar cases + corrections", "case bank",          TEAL,   "permanent"),
-        ("Semantic",     "typology defs, risk lists",   "static files",       CYAN,   "static"),
-        ("Procedural",   "lessons from corrections",    "lessons table",      VIOLET, "grows with use"),
+        ("Scratchpad",   "notes it takes while working",  "wiped when done",     REVIEW),
+        ("This person",  "how we judged them before",     "kept forever",        FAINT),
+        ("Past cases",   "people who looked like this",   "kept forever",        TEAL),
+        ("The rulebook", "what each crime pattern means", "fixed reference",     CYAN),
+        ("Lessons",      "where we got it wrong before",  "grows as people fix", VIOLET),
     ]
-    for i, (name, what, store, col, life) in enumerate(tiers):
+    for i, (name, what, life, col) in enumerate(tiers):
         ry = ty + Inches(0.28) + Inches(0.37 * i)
         rect(s, Inches(6.85), ry, Inches(5.88), Inches(0.33),
              fill=PANEL if i % 2 == 0 else BG, outline=None)
         rect(s, Inches(6.97), ry + Inches(0.11), Inches(0.1), Inches(0.1), fill=col, outline=None)
-        text(s, Inches(7.18), ry + Inches(0.05), Inches(1.3), Inches(0.24), name, size=9, color=INK, bold=True)
-        text(s, Inches(8.45), ry + Inches(0.05), Inches(1.95), Inches(0.24), what, size=8.5, color=MUTED)
-        text(s, Inches(10.42), ry + Inches(0.05), Inches(1.4), Inches(0.24), store, size=8, color=MUTED, font=MONO)
-        text(s, Inches(11.86), ry + Inches(0.05), Inches(0.85), Inches(0.24), life, size=7.5, color=FAINT)
+        text(s, Inches(7.18), ry + Inches(0.05), Inches(1.5), Inches(0.24),
+             name, size=9, color=INK, bold=True)
+        text(s, Inches(8.85), ry + Inches(0.05), Inches(2.6), Inches(0.24),
+             what, size=8.5, color=MUTED)
+        text(s, Inches(11.5), ry + Inches(0.05), Inches(1.2), Inches(0.24),
+             life, size=8, color=FAINT)
 
     ky = Inches(5.44)
     rect(s, Inches(0.6), ky, Inches(6.0), Inches(1.06), fill=PANEL2, outline=VIOLET)
     text(s, Inches(0.82), ky + Inches(0.11), Inches(5.6), Inches(0.22),
-         "THE KEY DESIGN DECISION", size=9, color=FAINT, bold=True)
+         "THE DECISION WE ARGUED ABOUT MOST", size=9, color=FAINT, bold=True)
     text(s, Inches(0.82), ky + Inches(0.34), Inches(5.62), Inches(0.66),
-         [[("The orchestrator is ", {"size": 9.5, "color": MUTED}),
-           ("serial", {"size": 9.5, "color": INK, "bold": True}),
-           (" because investigation is inherently sequential — you cannot know which document to "
-            "open until you have seen the transactions. The specialists are ",
+         [[("The lead works ", {"size": 9.5, "color": MUTED}),
+           ("one step at a time", {"size": 9.5, "color": INK, "bold": True}),
+           (" because real investigation is like that — you cannot know which document to open "
+            "until you have seen the money. The three specialists work ",
             {"size": 9.5, "color": MUTED}),
-           ("parallel", {"size": 9.5, "color": INK, "bold": True}),
-           (" because their domains are independent.", {"size": 9.5, "color": MUTED})]], line=1.2)
+           ("all at once", {"size": 9.5, "color": INK, "bold": True}),
+           (" because their topics never overlap.", {"size": 9.5, "color": MUTED})]], line=1.2)
 
     rect(s, Inches(6.85), ky, Inches(5.88), Inches(1.06), fill=PANEL2, outline=TEAL)
     text(s, Inches(7.07), ky + Inches(0.11), Inches(5.5), Inches(0.22),
-         "WHY MEMORY IS RETRIEVED FIRST", size=9, color=FAINT, bold=True)
+         "WHY IT REMEMBERS BEFORE IT THINKS", size=9, color=FAINT, bold=True)
     text(s, Inches(7.07), ky + Inches(0.34), Inches(5.5), Inches(0.66),
          [[("Memory is loaded ", {"size": 9.5, "color": MUTED}),
            ("before", {"size": 9.5, "color": INK, "bold": True}),
-           (" the specialists run, so every LLM call in the pipeline sees the same context — past "
-            "assessments, verified precedents, and lessons from corrections. That is what makes "
-            "this a system rather than a prompt.", {"size": 9.5, "color": MUTED})]], line=1.2)
+           (" anyone starts thinking, so every part of the pipeline works from the same background — "
+            "past judgements, similar people, and lessons a human taught it. That is the difference "
+            "between a system and a clever prompt.", {"size": 9.5, "color": MUTED})]], line=1.2)
 
-    note(s, "The two-topology split is the core architectural claim — parallel where independent, "
-            "serial where dependent. The memory table is the second claim: state outlives the request.")
+    note(s, "The split — a team working at once, then one lead working step by step — is the core "
+            "architectural claim. The memory table is the second: what it learns outlives the request.")
     return s
 
 
 # ── slide 3 · key highlights ────────────────────────────────────────────────
 def slide3(prs):
-    s = slide_base(prs, "03 · Key Highlights",
-                   "It investigates, cites its evidence, and shows the work",
-                   "A real trace from CUST_018 — an Iranian arms dealer. Every step is recorded; the trace is the audit record.")
+    s = slide_base(prs, "03 · What It Actually Does",
+                   "It digs, it points at the evidence, it shows the working",
+                   "A real investigation of CUST_018 — a customer whose money did not match his story. Every step below was recorded automatically. That record is the receipt.")
 
-    label(s, Inches(0.6), Inches(1.72), Inches(6.2), "the loop — actual trace, 12 steps")
+    label(s, Inches(0.6), Inches(1.72), Inches(6.2), "what it did, in its own order — 12 steps")
     steps = [
-        ("1",   "read_document",      "id_document.txt — Iranian passport, valid"),
-        ("2",   "read_document",      "rm_notes.txt — RM flags poor source of funds"),
-        ("3",   "query_transactions", "31 transactions, £62,174 in credits"),
-        ("4-9", "query_transactions", "filtered 6 ways: cash, counterparty, window"),
-        ("10",  "find_txn_patterns",  "STRUCTURING candidate, strength 1.0, S00–S03"),
-        ("11",  "note",               "“4 sub-threshold deposits in 6 days”"),
-        ("12",  "finalize",           "score 83 · HIGH · ESCALATE · conf 0.85"),
+        ("1",   "read_document",      "opened the ID scan — passport checks out"),
+        ("2",   "read_document",      "read the banker's notes — “can't explain his income”"),
+        ("3",   "query_transactions", "pulled all 31 payments, £62,174 coming in"),
+        ("4-9", "query_transactions", "sliced them six ways — cash, who, when"),
+        ("10",  "find_txn_patterns",  "spotted a possible pattern in rows S00–S03"),
+        ("11",  "note",               "wrote itself: “4 deposits just under the limit, 6 days”"),
+        ("12",  "finalize",           "decided: 83 · HIGH RISK · send to a senior · 85% sure"),
     ]
     for i, (n, tool, what) in enumerate(steps):
         ry = Inches(2.0) + Inches(0.38 * i)
@@ -356,38 +363,40 @@ def slide3(prs):
         text(s, Inches(2.96), ry + Inches(0.05), Inches(3.76), Inches(0.22),
              what, size=8.5, color=INK if last else MUTED)
 
-    label(s, Inches(7.15), Inches(1.72), Inches(5.58), "output — a decision that carries its evidence")
+    label(s, Inches(7.15), Inches(1.72), Inches(5.58), "the answer comes with its receipts attached")
     oy = Inches(2.0)
     rect(s, Inches(7.15), oy, Inches(5.58), Inches(1.4), fill=PANEL2, outline=HIGH)
     text(s, Inches(7.35), oy + Inches(0.08), Inches(5.2), Inches(0.4),
          [[("83", {"size": 26, "bold": True, "color": HIGH}),
            (" / 100", {"size": 11, "color": FAINT}),
-           ("    HIGH · ESCALATE", {"size": 12, "bold": True, "color": HIGH}),
-           ("   conf 0.85", {"size": 10, "color": MUTED})]])
+           ("    HIGH RISK · SEND TO A SENIOR", {"size": 12, "bold": True, "color": HIGH}),
+           ("   85% sure", {"size": 10, "color": MUTED})]])
     text(s, Inches(7.35), oy + Inches(0.52), Inches(5.22), Inches(0.82),
-         [[("evidence_refs: ", {"size": 8, "color": FAINT, "font": MONO}),
-           ("CUST_018-S00, S01, S02, S03, rm_notes.txt", {"size": 8, "color": LOW, "font": MONO})],
-          [("key_signals: ", {"size": 8, "color": FAINT, "font": MONO}),
-           ("Iran high-risk jurisdiction · arms dealer occupation · confirmed structuring "
-            "($37k across 4 deposits in 6 days)", {"size": 8, "color": MUTED, "font": MONO})]],
+         [[("Proof it points at:  ", {"size": 8.5, "color": FAINT}),
+           ("payments S00, S01, S02, S03  ·  the banker's notes",
+            {"size": 8.5, "color": LOW, "font": MONO})],
+          [("Why:  ", {"size": 8.5, "color": FAINT}),
+           ("home country carries elevated risk · line of work is high-risk · four cash deposits "
+            "totalling $37k, each kept just under the reporting limit, all inside six days",
+            {"size": 8.5, "color": MUTED})]],
          space_after=3, line=1.25)
 
-    label(s, Inches(7.15), Inches(3.58), Inches(5.58), "four guardrails that make it trustworthy")
+    label(s, Inches(7.15), Inches(3.58), Inches(5.58), "four rules it is not allowed to break")
     guards = [
-        ("Citation check", "evidence_refs validated against what the tools actually returned — fabrications rejected"),
-        ("Bounded loop", "12 steps max; exceeding it routes to a human, never loops forever"),
-        ("Never blank", "any exception still produces a valid decision, routed to review"),
-        ("Facts, not verdicts", "find_txn_patterns returns candidates the agent must judge and cite"),
+        ("It cannot make up proof", "every reference is checked against what the tools really returned — invented ones are thrown out"),
+        ("It cannot ramble forever", "12 steps maximum; run past that and a person picks it up"),
+        ("It cannot come back empty", "even if something crashes, you still get a real decision, routed to a person"),
+        ("Tools suggest, AI decides", "the pattern scanner only says “this looks odd” — the AI has to agree and point at the rows"),
     ]
     for i, (h, b) in enumerate(guards):
         card(s, Inches(7.15), Inches(3.86) + Inches(0.55 * i), Inches(5.58), Inches(0.5),
              h, b, hsize=9.5, bsize=8, hcolor=LOW)
 
     ry = Inches(4.86)
-    label(s, Inches(0.6), ry, Inches(6.2), "it works end-to-end")
+    label(s, Inches(0.6), ry, Inches(6.2), "and it ran the whole book, start to finish")
     cw = Inches(1.19)
-    kpis = [("scored", "22", INK), ("auto-cleared", "27%", LOW), ("escalated", "3", HIGH),
-            ("to a human", "1", REVIEW), ("tests", "14 ✓", LOW)]
+    kpis = [("customers", "22", INK), ("cleared on its own", "27%", LOW), ("sent up", "3", HIGH),
+            ("asked a human", "1", REVIEW), ("tests pass", "14 ✓", LOW)]
     for i, (l, v, c) in enumerate(kpis):
         x = Inches(0.6) + (cw + Inches(0.06)) * i
         rect(s, x, ry + Inches(0.26), cw, Inches(0.62), fill=PANEL)
@@ -396,134 +405,134 @@ def slide3(prs):
         text(s, x + Inches(0.1), ry + Inches(0.5), cw - Inches(0.2), Inches(0.3),
              v, size=15, color=c, bold=True)
 
-    label(s, Inches(0.6), Inches(6.0), Inches(6.2), "same agent, opposite ends of the queue")
+    label(s, Inches(0.6), Inches(6.0), Inches(6.2), "same AI, two very different customers")
     rect(s, Inches(0.6), Inches(6.26), Inches(6.2), Inches(0.42), fill=PANEL, outline=HIGH)
     text(s, Inches(0.76), Inches(6.34), Inches(5.9), Inches(0.26),
          [[("CUST_018", {"size": 9.5, "bold": True, "color": INK, "font": MONO}),
-           ("  arms dealer, Iran → ", {"size": 8.5, "color": MUTED}),
-           ("83 HIGH / ESCALATE", {"size": 9.5, "bold": True, "color": HIGH}),
-           (" @ 0.85", {"size": 8.5, "color": MUTED})]])
+           ("  odd cash, odd story → ", {"size": 8.5, "color": MUTED}),
+           ("83 · SEND TO A SENIOR", {"size": 9.5, "bold": True, "color": HIGH}),
+           (" · 85% sure", {"size": 8.5, "color": MUTED})]])
     rect(s, Inches(0.6), Inches(6.76), Inches(6.2), Inches(0.42), fill=PANEL, outline=LOW)
     text(s, Inches(0.76), Inches(6.84), Inches(5.9), Inches(0.26),
          [[("CUST_000", {"size": 9.5, "bold": True, "color": INK, "font": MONO}),
-           ("  UK teacher, salary → ", {"size": 8.5, "color": MUTED}),
-           ("5 LOW / AUTO_CLEAR", {"size": 9.5, "bold": True, "color": LOW}),
-           (" @ 0.95", {"size": 8.5, "color": MUTED})]])
+           ("  teacher, salary in, rent out → ", {"size": 8.5, "color": MUTED}),
+           ("5 · CLEARED", {"size": 9.5, "bold": True, "color": LOW}),
+           (" · 95% sure", {"size": 8.5, "color": MUTED})]])
 
-    note(s, "Walk the trace. This is 'show your work' made concrete. Point at step 10 — the tool "
-            "only suggests structuring; the agent had to accept it and cite the exact rows to claim it.")
+    note(s, "Walk the steps out loud. This is 'show your working' made real. Point at step 10 — the "
+            "tool only says something looks odd; the AI had to agree and name the exact payments.")
     return s
 
 
 # ── slide 4 · human-in-the-loop ─────────────────────────────────────────────
 def slide4(prs):
-    s = slide_base(prs, "04 · Human-in-the-Loop",
-                   "The flywheel: uncertainty becomes training signal",
-                   "Confidence gates the outcome. What the human corrects, the system remembers — three different ways.")
+    s = slide_base(prs, "04 · Where People Come In",
+                   "When it is unsure, it asks. And it remembers your answer.",
+                   "The AI says how sure it is. If it is not sure enough, a person decides instead — and that correction makes the whole system better, three different ways.")
 
     gy = Inches(1.78)
     rect(s, Inches(0.6), gy, Inches(2.4), Inches(0.66), fill=PANEL2, outline=VIOLET)
     text(s, Inches(0.74), gy + Inches(0.09), Inches(2.15), Inches(0.5),
-         [[("RiskFinding", {"size": 11, "bold": True, "color": INK})],
-          [("+ self-reported confidence", {"size": 8, "color": MUTED})]], space_after=1)
+         [[("A decision", {"size": 11, "bold": True, "color": INK})],
+          [("+ how sure the AI says it is", {"size": 8, "color": MUTED})]], space_after=1)
     arrow(s, Inches(3.08), gy + Inches(0.25))
     rect(s, Inches(3.5), gy, Inches(2.1), Inches(0.66), fill=PANEL, outline=ACCENT)
     text(s, Inches(3.6), gy + Inches(0.18), Inches(1.9), Inches(0.32),
-         "confidence ≥ 0.60 ?", size=10.5, color=ACCENT, bold=True, align=PP_ALIGN.CENTER)
+         "at least 60% sure?", size=10.5, color=ACCENT, bold=True, align=PP_ALIGN.CENTER)
 
     rect(s, Inches(5.92), Inches(1.66), Inches(2.66), Inches(0.55), fill=PANEL, outline=LOW)
     text(s, Inches(6.06), Inches(1.77), Inches(2.4), Inches(0.32),
          [[("YES → ", {"size": 9.5, "bold": True, "color": LOW}),
-           ("auto-dispose by band", {"size": 9.5, "color": MUTED})]])
+           ("it decides on its own", {"size": 9.5, "color": MUTED})]])
     rect(s, Inches(5.92), Inches(2.31), Inches(2.66), Inches(0.55), fill=PANEL, outline=REVIEW)
     text(s, Inches(6.06), Inches(2.42), Inches(2.4), Inches(0.32),
          [[("NO → ", {"size": 9.5, "bold": True, "color": REVIEW}),
-           ("Redis review queue", {"size": 9.5, "color": MUTED})]])
+           ("it goes in a person's queue", {"size": 9.5, "color": MUTED})]])
     arrow(s, Inches(8.7), Inches(2.44))
     rect(s, Inches(9.1), Inches(2.22), Inches(3.63), Inches(0.66), fill=PANEL2, outline=REVIEW)
     text(s, Inches(9.26), Inches(2.33), Inches(3.35), Inches(0.5),
-         [[("Human sets the correct score", {"size": 10, "bold": True, "color": INK})],
-          [("nothing is hidden from the reviewer", {"size": 8, "color": MUTED})]], space_after=1)
+         [[("A person sets the right answer", {"size": 10, "bold": True, "color": INK})],
+          [("and sees everything the AI saw", {"size": 8, "color": MUTED})]], space_after=1)
 
     wy = Inches(3.16)
     rect(s, Inches(0.6), wy, Inches(6.0), Inches(1.34), fill=PANEL)
     text(s, Inches(0.78), wy + Inches(0.11), Inches(5.6), Inches(0.22),
-         "WHY GATE ON CONFIDENCE, NOT SCORE", size=9, color=FAINT, bold=True)
+         "WHY WE ASK “HOW SURE?” AND NOT “HOW BAD?”", size=9, color=FAINT, bold=True)
     text(s, Inches(0.78), wy + Inches(0.36), Inches(5.64), Inches(0.92),
-         [[("A score of 58 is not automatically uncertain — the agent may be very confident it is a "
-            "58. What matters is whether ", {"size": 9.5, "color": MUTED}),
-           ("the evidence supports the conclusion", {"size": 9.5, "color": INK, "bold": True}),
-           (". Confidence is the agent's own self-report, and the prompt tells it that low-confidence "
-            "cases go to a human — so ", {"size": 9.5, "color": MUTED}),
-           ("admitting uncertainty is the rewarded behaviour", {"size": 9.5, "color": LOW, "bold": True}),
-           (".", {"size": 9.5, "color": MUTED})]], line=1.2)
+         [[("A middling score is not automatically a doubtful one — the AI can be very sure a "
+            "customer is a plain, boring 58. What matters is whether ", {"size": 9.5, "color": MUTED}),
+           ("the evidence really backs the answer", {"size": 9.5, "color": INK, "bold": True}),
+           (". We ask the AI to rate its own certainty and we tell it plainly that shaky cases go to "
+            "a person — so ", {"size": 9.5, "color": MUTED}),
+           ("owning up to doubt is the winning move", {"size": 9.5, "color": LOW, "bold": True}),
+           (", not a failure.", {"size": 9.5, "color": MUTED})]], line=1.2)
 
     ry2 = Inches(4.68)
     rect(s, Inches(0.6), ry2, Inches(6.0), Inches(1.06), fill=PANEL)
     text(s, Inches(0.78), ry2 + Inches(0.11), Inches(5.6), Inches(0.22),
-         "WHAT THE REVIEWER SEES — NOTHING IS HIDDEN", size=9, color=FAINT, bold=True)
+         "THE PERSON SEES EVERYTHING — NOTHING IS HIDDEN", size=9, color=FAINT, bold=True)
     text(s, Inches(0.78), ry2 + Inches(0.35), Inches(5.64), Inches(0.64),
-         "The proposed score and confidence · all three specialist opinions, including where they "
-         "disagreed · the complete tool-call trace · the agent's own working notes · the memory that "
-         "was injected into the prompt.", size=9.5, color=MUTED, line=1.2)
+         "The suggested score and how sure it was · all three specialists' views, including where "
+         "they disagreed · every step it took · the notes it wrote itself · and exactly what it "
+         "remembered before starting.", size=9.5, color=MUTED, line=1.2)
 
-    label(s, Inches(6.85), Inches(3.16), Inches(5.88), "one correction → three learning paths")
+    label(s, Inches(6.85), Inches(3.16), Inches(5.88), "one correction teaches it three ways")
     paths = [
-        ("1 · human-verified episode", "future similar customers retrieve it as a few-shot example", TEAL),
-        ("2 · a lesson (frisk reflect)", "distilled and injected into every future orchestrator prompt", VIOLET),
-        ("3 · a row in customer history", "the next assessment of that customer sees what changed", CYAN),
+        ("1 · a worked example", "the next customer who looks like this gets shown your answer", TEAL),
+        ("2 · a written lesson", "turned into a rule of thumb it reads before every future case", VIOLET),
+        ("3 · a note on that person's file", "next time this customer comes round, it sees what changed", CYAN),
     ]
     for i, (h, b, c) in enumerate(paths):
         card(s, Inches(6.85), Inches(3.44) + Inches(0.6 * i), Inches(5.88), Inches(0.54),
              h, b, accent=c, bar=True, hsize=9.5, bsize=8.5)
     text(s, Inches(6.85), Inches(5.24), Inches(5.88), Inches(0.24),
-         [[("Most systems have one of these. Three means one correction improves ",
+         [[("Most systems manage one of these. Three means your single correction improves ",
             {"size": 8.5, "color": FAINT}),
-           ("similar cases, all cases, and this case", {"size": 8.5, "color": MUTED, "bold": True}),
-           (" at once.", {"size": 8.5, "color": FAINT})]])
+           ("similar cases, every case, and this one", {"size": 8.5, "color": MUTED, "bold": True}),
+           (".", {"size": 8.5, "color": FAINT})]])
 
     ay = Inches(5.62)
     rect(s, Inches(6.85), ay, Inches(5.88), Inches(1.16), fill=PANEL2, outline=LOW)
     text(s, Inches(7.05), ay + Inches(0.11), Inches(5.6), Inches(0.22),
-         "ANTI-ECHO-CHAMBER GUARD", size=9, color=LOW, bold=True)
+         "IT ONLY LEARNS FROM PEOPLE, NEVER FROM ITSELF", size=9, color=LOW, bold=True)
     text(s, Inches(7.05), ay + Inches(0.35), Inches(5.6), Inches(0.74),
-         "Episodic few-shot draws only from human-verified cases. The system never learns from its "
-         "own unreviewed output, so its mistakes cannot compound into false precedent. Every "
-         "decision — cleared as well as escalated — is written to an append-only audit log.",
+         "It only copies from cases a human actually checked. If it were allowed to learn from its "
+         "own unchecked work, one early mistake would quietly become the house rule. Every decision — "
+         "cleared or escalated — is written down permanently and cannot be edited later.",
          size=9.5, color=MUTED, line=1.2)
 
-    note(s, "This is the slide that answers 'does it improve?'. Emphasise the three paths, then the "
-            "anti-echo-chamber rule — that is the detail showing the failure mode was anticipated.")
+    note(s, "This is the slide that answers 'does it get better?'. Emphasise the three paths, then "
+            "the learn-only-from-people rule — that is the detail showing we saw the trap coming.")
     return s
 
 
 # ── slide 5 · challenges & learnings ────────────────────────────────────────
 def slide5(prs):
-    s = slide_base(prs, "05 · Challenges & Learnings",
-                   "Four things that broke, and what they taught",
-                   "Each challenge below changed the design — these are not hypotheticals, they are bugs that shipped and were fixed.")
+    s = slide_base(prs, "05 · What Broke, and What We Learned",
+                   "Four things went wrong. Each one made the design better.",
+                   "These are not hypotheticals — they are real bugs that shipped, got caught, and got fixed.")
 
-    label(s, Inches(0.6), Inches(1.72), Inches(6.6), "challenges that changed the design")
+    label(s, Inches(0.6), Inches(1.72), Inches(6.6), "what broke")
     chals = [
-        ("1 · The agent that never finished", HIGH,
-         "Runs hit the 12-step cap mid-investigation and returned score 0 at confidence 0 — which the "
-         "router read as a legitimate “uncertain” case. A silent failure disguised as a valid decision.",
-         "Fix: in the final two turns, finalize is the only bound tool. A bounded loop needs a "
-         "forced exit, not just a cap."),
-        ("2 · A deleted feature that would not die", REVIEW,
-         "Sanctions screening was cut from scope but kept appearing in output — three ghosts: a {} "
-         "default in the loader, a stray phrase in a reference file, and a stale LLM cache.",
-         "Fix: purge data, not just code. Added a scope guard to every prompt, then re-scored all 22 "
-         "customers to verify zero mentions."),
-        ("3 · “It must be rate limiting”", MED,
-         "Parallel scoring took 76–90s and I assumed throttling. The data disagreed — no request cap, "
-         "and 4 concurrent calls took 1.55s vs 1.48s for one. Real cause: serial depth, plus a tool "
-         "factory rebuilt every call (375ms vs 0.9ms).",
-         "Fix: cache the detectors. That path went from 7500ms to 5ms."),
-        ("4 · Learning from its own homework", VIOLET,
-         "Episodic retrieval would have surfaced the agent's own unreviewed decisions as precedent, "
-         "compounding any early error into permanent bias.",
-         "Fix: restrict episodic retrieval to human-verified cases only."),
+        ("1 · The investigator that never wrapped up", HIGH,
+         "It ran out of steps mid-investigation and handed back a blank “0, not sure” — which the "
+         "system happily read as a genuine answer. A failure wearing the costume of a result.",
+         "Fix: in the last two steps, the only thing it is allowed to do is finish. A time limit "
+         "needs a forced ending, not just a buzzer."),
+        ("2 · The feature we deleted that kept coming back", REVIEW,
+         "We cut watchlist screening from the project, yet it kept turning up in the output — hiding "
+         "in three places: a leftover default, a stray sentence in a reference file, and an old "
+         "cached answer.",
+         "Fix: clear the data, not just the code. Then re-ran all 22 customers to prove it was gone."),
+        ("3 · “It must be the API throttling us”", MED,
+         "Scoring several customers at once took 76–90 seconds and I blamed the provider. The "
+         "measurements said otherwise: four calls at once took 1.55s versus 1.48s for one. The real "
+         "cause was our own code rebuilding the same tools on every single call.",
+         "Fix: build them once and reuse. That step went from 7.5 seconds to 5 milliseconds."),
+        ("4 · It was about to start marking its own homework", VIOLET,
+         "It would have treated its own unchecked past decisions as precedent — turning one early "
+         "mistake into a permanent habit.",
+         "Fix: it may only learn from cases a real person signed off."),
     ]
     for i, (h, c, problem, fix) in enumerate(chals):
         cy = Inches(2.0) + Inches(1.26 * i)
@@ -531,54 +540,59 @@ def slide5(prs):
         rect(s, Inches(0.6), cy, Pt(3), Inches(1.14), fill=c, outline=None, radius=False)
         text(s, Inches(0.82), cy + Inches(0.08), Inches(6.25), Inches(0.22),
              h, size=10, color=c, bold=True)
-        text(s, Inches(0.82), cy + Inches(0.3), Inches(6.28), Inches(0.5),
+        text(s, Inches(0.82), cy + Inches(0.3), Inches(6.28), Inches(0.52),
              problem, size=8.5, color=MUTED, line=1.14)
-        text(s, Inches(0.82), cy + Inches(0.84), Inches(6.28), Inches(0.24),
+        text(s, Inches(0.82), cy + Inches(0.86), Inches(6.28), Inches(0.24),
              fix, size=8.5, color=LOW, line=1.14)
 
-    label(s, Inches(7.5), Inches(1.72), Inches(5.23), "learnings")
+    label(s, Inches(7.5), Inches(1.72), Inches(5.23), "what we learned")
     lessons = [
-        ("Give the model facts, not verdicts",
-         "Tools returning candidates the agent must judge and cite produce better reasoning than tools "
-         "returning conclusions — and the citation is auditable."),
-        ("Confidence routes better than score",
-         "A confident 58 needs no human; an unsure 30 does. Routing on certainty rather than severity "
-         "is what makes escalation meaningful."),
-        ("Measure before optimising",
-         "My first latency diagnosis was wrong, and only measurement showed it. The fix I would have "
-         "shipped would have addressed nothing."),
-        ("In compliance, the trace is the product",
-         "A correct score that cannot be explained is worthless to a regulator. Explainability is not "
-         "bolted on afterwards; it is the output."),
+        ("Hand the AI facts, not conclusions",
+         "Tools that say “this looks odd, here are the rows” get better thinking than tools that say "
+         "“this is fraud” — and you can check the answer afterwards."),
+        ("“How sure are you?” beats “how bad is it?”",
+         "A confident middling score needs nobody. A shaky low one needs a person. Routing on doubt, "
+         "not on severity, is what makes escalation mean something."),
+        ("Measure before you fix",
+         "My first explanation for the slowness was simply wrong, and only the stopwatch showed it. "
+         "The fix I nearly shipped would have changed nothing."),
+        ("Here, the explanation IS the product",
+         "A right answer nobody can explain is worthless to a regulator. Showing the working is not a "
+         "nice extra bolted on at the end — it is the thing being delivered."),
     ]
     for i, (h, b) in enumerate(lessons):
-        card(s, Inches(7.5), Inches(2.0) + Inches(0.84 * i), Inches(5.23), Inches(0.74),
+        card(s, Inches(7.5), Inches(2.0) + Inches(0.86 * i), Inches(5.23), Inches(0.76),
              h, b, hsize=10, bsize=8.5, hcolor=ACCENT, fill=PANEL2)
 
-    ny = Inches(5.44)
-    label(s, Inches(7.5), ny, Inches(5.23), "honest limits → what comes next")
+    ny = Inches(5.5)
+    label(s, Inches(7.5), ny, Inches(5.23), "what is still weak → and how we would fix it")
     nexts = [
-        ("~45–90s per customer", "batch mode overlaps customers; fewer steps per run"),
-        ("Not byte-reproducible", "pin model snapshots; store the full prompt hash"),
-        ("Episodic recall is feature-match", "similar() is deliberately vector-pluggable"),
-        ("Fixed 0.60 confidence gate", "calibrate against accumulated human corrections"),
+        ("Takes ~45–90s per customer", "faster hardware, a smaller model for the easy steps, and running many customers side by side — realistically under 15s"),
+        ("Same input can vary slightly", "lock the model version and keep a full record of every question asked"),
+        ("Finds similar cases crudely", "swap in proper meaning-based search as the case history grows"),
+        ("The 60% cut-off is a guess", "tune it against real corrections once enough have piled up"),
     ]
     for i, (lim, nxt) in enumerate(nexts):
-        ly = ny + Inches(0.26) + Inches(0.36 * i)
-        rect(s, Inches(7.5), ly, Inches(5.23), Inches(0.32),
+        ly = ny + Inches(0.26) + Inches(0.4 * i)
+        rect(s, Inches(7.5), ly, Inches(5.23), Inches(0.36),
              fill=PANEL if i % 2 == 0 else BG, outline=None)
-        text(s, Inches(7.62), ly + Inches(0.05), Inches(2.15), Inches(0.22),
+        text(s, Inches(7.62), ly + Inches(0.03), Inches(2.05), Inches(0.3),
              lim, size=8.5, color=MED, bold=True)
-        text(s, Inches(9.85), ly + Inches(0.05), Inches(2.8), Inches(0.22),
-             nxt, size=8.5, color=MUTED)
+        text(s, Inches(9.75), ly + Inches(0.03), Inches(2.88), Inches(0.32),
+             nxt, size=8, color=MUTED, line=1.1)
 
-    note(s, "Close on the challenges and learnings, not the wins. Showing that you found the silent "
-            "failure — and that you were wrong once and the data corrected you — is more convincing "
-            "than claiming it is finished.\n\n"
-            "If asked about engineering decisions: no deterministic scoring · sanctions deliberately "
-            "scoped out (the brief said “external alerts”) · Decimal money · seeded byte-identical "
-            "data generation · append-only audit of clears as well as escalations · working-memory "
-            "scratchpad evicted on every exit path.")
+    note(s, "Close on what broke and what it taught, not on the wins. Admitting you found a silent "
+            "failure — and that you were wrong once and the data corrected you — lands better than "
+            "claiming it is finished.\n\n"
+            "On latency, if pressed: the 45–90s is roughly 11 AI calls one after another. Most of it "
+            "is waiting on a shared public API. On dedicated infrastructure — the model hosted "
+            "in-house, a smaller fast model for routine steps, cached prompts, and many customers "
+            "processed side by side — the same investigation lands comfortably under 15 seconds "
+            "without changing any of the logic.\n\n"
+            "If asked about engineering choices: no hard-coded scoring formula · watchlist screening "
+            "deliberately left out of scope (the brief said “external alerts”) · exact decimal money, "
+            "never floats · the test data regenerates identically every time · a permanent record of "
+            "clears as well as escalations · the scratchpad is wiped on every exit path.")
     return s
 
 
