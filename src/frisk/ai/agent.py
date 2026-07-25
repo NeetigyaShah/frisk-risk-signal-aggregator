@@ -196,6 +196,20 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
             continue
         try:
             result = fn(**args)
+        except TypeError as e:
+            # Wrong/unknown kwargs (seen: query_transactions(offset=25) — there is no offset param).
+            # A bare Python TypeError tells the model nothing, so it burns another step guessing.
+            # Hand back the parameters the tool actually takes.
+            import inspect
+            try:
+                ok = [p for p in inspect.signature(fn).parameters]
+            except (TypeError, ValueError):
+                ok = []
+            bad = [k for k in args if k not in ok] if ok else []
+            result = {"error": f"invalid arguments: {e}",
+                      "unknown_arguments": bad,
+                      "valid_arguments": ok,
+                      "hint": "Re-call with only the valid arguments listed above."}
         except Exception as e:  # a bad tool call never kills the loop
             result = {"error": str(e)}
         _collect_seen(result, seen)

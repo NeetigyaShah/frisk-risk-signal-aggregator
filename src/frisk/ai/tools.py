@@ -213,7 +213,8 @@ def build_tools(d, cid: str):
         (query_transactions, "query_transactions", "Filter transactions by direction, txn_type, min_amount, max_amount, country, limit. Returns rows + count."),
         (aggregate_transactions, "aggregate_transactions", "Aggregate transactions. group_by in {txn_type,direction,counterparty_country,month}; metric in {sum,count,avg,max}."),
         (find_txn_patterns, "find_txn_patterns", "Advisory scan for typology CANDIDATES (structuring|layering|round_trip|dormant_spike|free). Returns candidates with strength 0-1 and evidence txn_ids. NOT a verdict — you decide if it is real."),
-        (note, "note", "Write one evolving finding/hypothesis to your scratchpad working memory."),
+        (note, "note", "Jot ONE short finding to your scratchpad — one sentence, under 15 words. "
+                       "This is a memory aid, not a report; save the full reasoning for finalize."),
         (read_notes, "read_notes", "Read back your scratchpad notes so far."),
         (finalize, "finalize", "FINAL step: emit the risk decision. score 0-100, confidence 0-1, rationale, key_signals[], evidence_refs[] (cite txn ids / document names you actually saw)."),
     ]

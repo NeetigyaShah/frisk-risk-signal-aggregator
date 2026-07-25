@@ -31,7 +31,14 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.5-flash-lite"
     anthropic_model: str = "claude-haiku-4-5-20251001"
     temperature: float = 0.0
-    max_tokens: int = 8192
+    max_tokens: int = 8192                 # Generation is the real latency driver here, not context
+                                            # size (measured: ~1.5s at <=100 output tokens vs 5.4s at
+                                            # 400, while a 25k-char PROMPT was no slower than an empty
+                                            # one). Capping this looks like the obvious fix and is NOT:
+                                            # at 1024 the model gets truncated mid-JSON on the finalize
+                                            # call and the run dies with "missing argument
+                                            # evidence_refs". The cure is shorter tool OUTPUT (see the
+                                            # note tool's description), not a hard ceiling on it.
     max_retries: int = 3
     timeout_s: int = 60
 
