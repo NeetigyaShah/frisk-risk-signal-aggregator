@@ -83,7 +83,7 @@ body.rail .nav-item, body.rail .search-btn{ justify-content:center; padding-left
 @media(max-width:1000px){ .topbar p{ display:none; } }
 
 /* ───────── content ───────── */
-#content{ padding:24px 26px 56px; min-width:0; }
+#content{ padding:24px 26px 56px; min-width:0; width:100%; max-width:1680px; margin-inline:auto; }
 .section-label{ font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
   color:var(--faint); margin:26px 0 10px; }
 .section-label:first-child{ margin-top:0; }
@@ -135,7 +135,7 @@ body.rail .nav-item, body.rail .search-btn{ justify-content:center; padding-left
 .qrow .qmain{ flex:1; min-width:0; }
 .qrow .qhead{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .qrow .qname{ font-size:15px; font-weight:700; }
-.qrow .qsum{ color:var(--muted); font-size:13px; margin-top:6px;
+.qrow .qsum{ color:var(--muted); font-size:13px; margin-top:6px; max-width:110ch;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .qrow .qsig{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
 .qconf{ width:92px; flex:0 0 auto; text-align:right; }
