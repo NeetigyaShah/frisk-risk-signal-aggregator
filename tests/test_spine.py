@@ -59,6 +59,39 @@ def test_scratchpad_evicted_after_assess():
     assert scratchpad.read("EVICT") == {}
 
 
+def test_scratchpad_survives_broker_dying_mid_run():
+    """A broker that dies AFTER startup must degrade exactly like one that was never there.
+
+    Regression: availability was probed once and cached forever, so when Redis died mid-session every
+    later call raised TimeoutError instead of falling back — the API returned 500s despite a working
+    in-memory path existing. Working memory must never be able to fail a scoring run.
+    """
+    class _Dying:
+        """Alive for the first write, then fails like a dropped connection."""
+        def __init__(self): self.calls = 0
+        def _boom(self, *a, **k):
+            self.calls += 1
+            if self.calls > 1:
+                raise ConnectionError("connection lost")
+            return True
+        hset = expire = delete = _boom
+        def hgetall(self, *a, **k): return self._boom()
+
+    import frisk.hitl.redis_conn as rc
+    saved = (rc._redis, rc._use, rc._checked_at)
+    try:
+        rc._redis, rc._use, rc._checked_at = _Dying(), True, 1e18   # pinned "up", no re-probe
+        scratchpad.start("DYING", {})
+        scratchpad.step("DYING", "read_document", "a.txt")          # broker fails here
+        scratchpad.step("DYING", "query_transactions", "35 rows")
+        assert [s["tool"] for s in scratchpad.read("DYING")["steps"]] == \
+            ["read_document", "query_transactions"]
+        scratchpad.evict("DYING")
+        assert scratchpad.read("DYING") == {}
+    finally:
+        rc._redis, rc._use, rc._checked_at = saved
+
+
 def test_per_customer_history_appends():
     store.reset()
     engine.assess(_dossier(cid="HIST"), persist=True)

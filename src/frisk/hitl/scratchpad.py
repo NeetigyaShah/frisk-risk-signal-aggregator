@@ -11,7 +11,7 @@ import json
 import uuid
 
 from frisk.config import CONFIG
-from frisk.hitl.redis_conn import client
+from frisk.hitl.redis_conn import client, mark_down
 
 KEY = "frisk:scratch:"
 _mem: dict[str, dict] = {}   # in-process fallback: cid -> {field: str}
@@ -22,12 +22,17 @@ def _k(cid: str) -> str:
 
 
 def _hset(cid: str, field: str, value: str) -> None:
+    # Working memory must never be able to fail a scoring run. If Redis drops mid-run, degrade to the
+    # in-process store instead of raising — a lost scratchpad costs nothing, a 500 costs the decision.
     r = client()
     if r:
-        r.hset(_k(cid), field, value)
-        r.expire(_k(cid), CONFIG["scratchpad_ttl_s"])
-    else:
-        _mem.setdefault(cid, {})[field] = value
+        try:
+            r.hset(_k(cid), field, value)
+            r.expire(_k(cid), CONFIG["scratchpad_ttl_s"])
+            return
+        except Exception:
+            mark_down()
+    _mem.setdefault(cid, {})[field] = value
 
 
 def start(cid: str, facts: dict | None = None) -> str:
@@ -37,17 +42,27 @@ def start(cid: str, facts: dict | None = None) -> str:
             "scratch": "", "stage": "init", "working_score": "", "confidence": ""}
     r = client()
     if r:
-        r.delete(_k(cid))
-        r.hset(_k(cid), mapping=data)
-        r.expire(_k(cid), CONFIG["scratchpad_ttl_s"])
-    else:
-        _mem[cid] = data
+        try:
+            r.delete(_k(cid))
+            r.hset(_k(cid), mapping=data)
+            r.expire(_k(cid), CONFIG["scratchpad_ttl_s"])
+            return run_id
+        except Exception:
+            mark_down()
+    _mem[cid] = data
     return run_id
 
 
 def read(cid: str) -> dict:
     r = client()
-    raw = r.hgetall(_k(cid)) if r else _mem.get(cid)
+    raw = None
+    if r:
+        try:
+            raw = r.hgetall(_k(cid))
+        except Exception:
+            mark_down()
+    if raw is None:
+        raw = _mem.get(cid)
     if not raw:
         return {}
     out = dict(raw)
@@ -105,9 +120,11 @@ def evict(cid: str) -> dict:
     snap = read(cid)
     r = client()
     if r:
-        r.delete(_k(cid))
-    else:
-        _mem.pop(cid, None)
+        try:
+            r.delete(_k(cid))
+        except Exception:
+            mark_down()
+    _mem.pop(cid, None)   # always clear the fallback too — eviction must be unconditional
     return snap
 
 
