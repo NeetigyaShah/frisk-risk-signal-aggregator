@@ -1,13 +1,12 @@
 # Demo Video — Script
 
-**Presenter: Neetigya Shah** · screen recording with voiceover · **516 words ≈ 3:45**
+**Presenter: Neetigya Shah** · screen recording with voiceover · **391 words ≈ 2:54** *(hard cap 3:00)*
 
-**The whole idea:** start a real score, then *use the 60 seconds it takes* to walk the rest of the
-product. The wait stops being dead air and becomes the tour. Come back at the end and the answer is
-sitting there waiting for you.
+**The idea:** start a real score early, then use the 60 seconds it takes to walk the rest of the
+product. The wait becomes the tour. Come back at the end and the answer is waiting.
 
-This works because a running score now survives you leaving the page — there is a ⏳ badge on
-**Ingest / Upload** while it runs, and a ✓ when it lands.
+That works because a running score survives you leaving the page — a ⏳ badge sits on
+**Ingest / Upload** while it runs, and turns ✓ when it lands.
 
 ---
 
@@ -15,18 +14,16 @@ This works because a running score now survives you leaving the page — there i
 
 ```bash
 docker ps                       # frisk-redis must say "Up"
-python -m frisk.cli demo        # writes data/demo_samples/ (already done)
 frisk serve                     # then LOAD THE DASHBOARD ONCE and let it finish
 ```
 
 1. **Load the dashboard once and let it finish.** First load scores 20 customers (1–2 min). Not on camera.
-2. **Do not restart the server after that** — a restart clears the cache and you get the warm-up screen.
+2. **Don't restart the server after that** — a restart clears the cache and you get the warm-up screen.
 3. Browser **~1400px**, zoom 100%, devtools closed, bookmarks hidden.
-4. Have `data/demo_samples/DEMO_000/` open in a file picker, ready to select all 6 files.
-5. Check OpenRouter credit. A live score is a few cents; zero credit is dead air.
+4. Have `data/demo_samples/DEMO_000/` open in a file picker, all 6 files ready to select.
+5. Check OpenRouter credit — a live score is a few cents; zero credit is dead air.
 
-**Watch the badge, not the clock.** Everything after the upload is paced by the ⏳ on the sidebar.
-When it turns ✓, wrap up whatever page you are on and go back.
+**Pace on the badge, not the clock.** When ⏳ turns ✓, wrap up whatever page you're on and go back.
 
 ---
 
@@ -34,133 +31,121 @@ When it turns ✓, wrap up whatever page you are on and go back.
 
 | Time | Section | Page | Words |
 |---|---|---|---|
-| 0:00–0:15 | Intro | Dashboard | 33 |
-| 0:15–0:40 | The problem | Dashboard | 57 |
-| 0:40–0:55 | **Start the score** | Ingest / Upload | 37 |
-| 0:55–1:30 | How the agents work *(over the wait)* | Ingest — live feed | 79 |
-| 1:30–2:10 | Review Queue | Review Queue | 95 |
-| 2:10–2:30 | Case Comparison | Case Comparison | 46 |
-| 2:30–2:55 | SAR Drafts | SAR Drafts | 53 |
-| 2:55–3:10 | Audit Trail | Audit Trail | 33 |
-| **3:10–3:45** | **Back to the result** | Ingest → case drawer | 83 |
+| 0:00–0:13 | Intro | Dashboard | 28 |
+| 0:13–0:33 | The problem | Dashboard | 46 |
+| **0:33–0:46** | Start the score ← | Ingest / Upload | 27 |
+| 0:46–1:18 | How the agents work — narrate over the live feed | Ingest — live feed | 75 |
+| 1:18–1:50 | Review Queue — when it isn't sure | Review Queue | 76 |
+| 1:50–2:04 | Case Comparison | Case Comparison | 28 |
+| 2:04–2:20 | SAR Drafts — the real deliverable | SAR Drafts | 37 |
+| 2:20–2:32 | Audit Trail | Audit Trail | 25 |
+| **2:32–2:54** | Back to the result ← | Ingest → case drawer | 49 |
 
-Timings assume ~150 wpm plus a couple of seconds per page change.
+Assumes ~150 wpm plus ~2s per page change.
 
-**The margin you're working with:** you start the score at 0:55 and it takes 50–90s, so it lands
-somewhere between **1:45 and 2:25** — during Review Queue or Case Comparison. You then have at least
-45 seconds of tour left before the payoff at 3:10. There is no version of this where you arrive back
-and it isn't ready.
+**Your margin:** you start the score at 0:33; it takes 50–90s, so it lands between **1:23 and 2:03** —
+during Review Queue or Case Comparison. Even in the slowest case you still have ~29 seconds of tour
+left before the payoff, so there's no version where you get back too early.
 
 ---
 
 ## The script
 
-### 0:00 – 0:15 · Intro  *(33 words)*
+### 0:00 – 0:13 · Intro  *(28 words)*
 *(Dashboard on screen. Don't click yet.)*
 
-> "Hi, I'm **Neetigya Shah**, and this is **Frisk** — a financial risk signal aggregator I built.
-> It reviews bank customers the way an analyst would, and shows you the evidence behind every call."
+> "Hi, I'm **Neetigya Shah**. This is **Frisk** — it reviews bank customers for financial crime the way
+> an analyst would, and shows you the evidence behind every call."
 
 ---
 
-### 0:15 – 0:40 · The problem  *(57 words)*
-*(Still on the dashboard. Slow scroll down the page.)*
+### 0:13 – 0:33 · The problem  *(46 words)*
+*(Still on the dashboard. Slow scroll.)*
 
-> "A reviewer opens one customer and finds five files that don't talk to each other — their payments,
-> their banker's notes, an ID scan. Nine out of ten alarms turn out to be nothing, and six months
-> later nobody can explain why a customer was cleared.
+> "A reviewer opens one customer and finds five files that don't talk to each other. Nine out of ten
+> alarms turn out to be nothing — and months later, nobody can explain why a customer was cleared.
 >
-> Here's twenty-two, already ranked worst-first. Let's score a fresh one, live."
+> Here's twenty-two, ranked worst-first. Let's score a fresh one."
 
 ---
 
-### 0:40 – 0:55 · Start the score ← **do this early, it buys you the whole tour**  *(37 words)*
+### 0:33 – 0:46 · Start the score ← **do this early; it buys the whole tour**  *(27 words)*
 *(Click **Ingest / Upload**. Select all six files from `DEMO_000`. Click **Score uploaded files**.)*
 
-> "This customer has never been scored. Six raw files, straight in.
+> "This customer's never been scored. Six raw files, straight in.
 >
-> That's running now. It takes about a minute — so while it works, let me show you what it's doing,
-> and the rest of the product."
+> That takes about a minute — so while it runs, let me show you what it's doing."
 
-**Once you click, don't wait.** Talk straight through into the next section.
+**Don't wait after clicking.** Talk straight into the next section.
 
 ---
 
-### 0:55 – 1:30 · How the agents work — narrate over the live feed  *(79 words)*
-*(Stay on Ingest. The step feed is filling in — point at it as you talk.)*
+### 0:46 – 1:18 · How the agents work — narrate over the live feed  *(75 words)*
+*(Stay on Ingest. Point at the step feed as it fills.)*
 
 > "You can watch it think. Three specialists went first, **at the same time** — background, money,
-> documents. Each only sees its own slice, so they can't talk each other into anything.
+> documents. Each sees only its own slice, so they can't talk each other into anything.
 >
-> Now a **lead investigator** has their three opinions and works **one step at a time**. That's the
-> important bit — you can't know which document matters until you've seen the payments.
+> Now a **lead investigator** has all three opinions, and works **one step at a time** — because you
+> can't know which document matters until you've seen the payments.
 >
-> Every step there is recorded. And it keeps running if I walk away — watch the badge."
+> Every step is recorded. And it keeps running if I walk away — watch the badge."
 
-*(Point at the ⏳ on **Ingest / Upload**, then click away to Review Queue.)*
+*(Point at the ⏳ on **Ingest / Upload**, then click to Review Queue.)*
 
 ---
 
-### 1:30 – 2:10 · Review Queue — when it isn't sure  *(95 words)*
-*(**Review Queue** → open the case. Badge still shows ⏳.)*
+### 1:18 – 1:50 · Review Queue — when it isn't sure  *(76 words)*
+*(**Review Queue** → open the case. Badge still ⏳.)*
 
-> "While that runs — here's what happens when it *isn't* confident. Instead of guessing, it handed the
-> case to a person.
+> "Here's what happens when it *isn't* confident — instead of guessing, it hands the case to a person.
 >
-> Note we gate on **how sure it is**, not how bad the score is. A confident middling score needs
-> nobody; a shaky one needs a human.
+> We gate on **how sure it is**, not how bad the score is. A confident middling score needs nobody; a
+> shaky one needs a human.
 >
-> The reviewer sees everything — where the specialists disagreed, every step, its own notes. And when
-> I correct it, that becomes a worked example, a lesson it reads before every future case, and a note
-> on this customer's file. It only ever learns from cases a person checked."
+> And when I correct it, that becomes a worked example, a lesson it reads before every future case, and
+> a note on this customer's file. It only learns from cases a person checked."
 
 ---
 
-### 2:10 – 2:30 · Case Comparison — proof it discriminates  *(46 words)*
-*(**Case Comparison** → pick the arms dealer and a cleared customer.)*
+### 1:50 – 2:04 · Case Comparison  *(28 words)*
+*(**Case Comparison** → the arms dealer beside a cleared customer.)*
 
 > "Same agent, two customers, side by side — you can see exactly which signals differ.
 >
-> That matters more than it looks. It's how you show the scoring runs on evidence and not on a vibe —
-> a reviewer can point at the gap and explain it."
+> That's how you show the scoring runs on evidence, not on a vibe."
 
 ---
 
-### 2:30 – 2:55 · SAR Drafts — the real deliverable  *(53 words)*
+### 2:04 – 2:20 · SAR Drafts — the real deliverable  *(37 words)*
 *(**SAR Drafts** → open one. Scroll it once.)*
 
-> "This is the output an analyst actually needs — a Suspicious Activity Report drafted straight from
-> the case's own evidence. What happened, with amounts and dates, the supporting evidence, the
-> recommendation.
+> "This is what an analyst actually needs — a Suspicious Activity Report drafted from the case's own
+> evidence. Amounts, dates, reasoning, recommendation.
 >
-> Marked draft, unsigned, with a signature block — because a person files it, not the AI. That's
-> normally an hour of writing."
+> Marked draft, unsigned, with a signature block, because a person files it, not the AI."
 
 ---
 
-### 2:55 – 3:10 · Audit Trail  *(33 words)*
-*(**Audit Trail**. Check the badge — should be ✓ or close.)*
+### 2:20 – 2:32 · Audit Trail  *(25 words)*
+*(**Audit Trail**. Badge should be ✓ by now.)*
 
-> "And every decision lands here — cleared as well as escalated, permanently, and it can't be edited
-> afterwards. That's the difference between a tool a bank can actually use and a clever demo."
+> "Every decision lands here — cleared as well as escalated, permanently, and it can't be edited
+> afterwards. That's what makes it usable in a bank."
 
 ---
 
-### 3:10 – 3:45 · Back to the result ← **the payoff**  *(83 words)*
-*(Badge now shows ✓. Click **Ingest / Upload** — the finished result is waiting.)*
+### 2:32 – 2:54 · Back to the result ← **the payoff**  *(49 words)*
+*(Badge shows ✓. Click **Ingest / Upload** — the result is waiting.)*
 
-> "And there it is — finished while we were talking. Escalate.
+> "And there it is, finished while we talked. Escalate.
 >
-> Look what it points at: four cash deposits, each just under the ten-thousand reporting limit, all
-> within six days. It had to name the exact rows to claim that — every reference is checked against
-> what the tools actually returned, so it can't invent evidence.
+> Four cash deposits, each just under the ten-thousand reporting limit, inside six days. It had to name
+> the exact rows — every reference is checked, so it can't invent evidence.
 >
-> No scoring formula anywhere in the code. Memory that improves it every time a human corrects it.
-> And every decision carries its own evidence.
->
-> Thanks for watching."
+> No scoring formula anywhere in the code. Thanks for watching."
 
-*(Click the result to open the case drawer. Land on the tool trace and stop there.)*
+*(Click the result to open the case drawer. Land on the tool trace and stop.)*
 
 ---
 
@@ -168,25 +153,27 @@ and it isn't ready.
 
 **Do:**
 - **Click upload early.** Everything else is paced by that badge.
-- Point with the cursor when you say "look at what it points at".
-- If the badge turns ✓ early, cut whichever section you're on short and go to the payoff.
-- If it's still running when you reach the end, spend 15 more seconds on Audit Trail — the score is worth waiting for.
+- Point with the cursor when you say "four cash deposits".
+- If the badge turns ✓ early, cut the current section short and go to the payoff.
 
 **Don't:**
 - Don't read JSON aloud. Point and summarise.
-- Don't restart the server before recording. You'll get the warm-up screen.
+- Don't restart the server before recording — you'll get the warm-up screen.
 - Don't trigger a second score. One is the demo; two is dead air.
-- Don't apologise for latency. If asked: *"about ten AI calls one after another — that's the cost of
-  it actually investigating. On dedicated infrastructure it's under fifteen seconds."*
+- Don't apologise for latency. If asked: *"about ten AI calls one after another — the cost of it
+  actually investigating. On dedicated infrastructure it's under fifteen seconds."*
 
-**If the score fails mid-record:** keep going to the end, then open any already-scored case
-(`CUST_018` is the same profile) and deliver the closing lines over that instead. Don't restart.
+**If the score fails mid-record:** carry on to the end, then open `CUST_018` (same profile) and deliver
+the closing lines over that. Don't restart.
+
+**If you're running long:** cut Case Comparison (−28 words, ~13s) — it's the least load-bearing
+section. Never cut the live investigation or the payoff.
 
 ---
 
 ## After recording
 
-- Trim dead air at the head and tail.
+- Trim dead air at head and tail.
 - Check the audio is louder than the typing.
-- Export 1080p, and confirm the **tool trace** text is legible — that's the one shot that must survive
+- Export 1080p, and confirm the **tool trace** text is legible — that's the shot that must survive
   compression.
