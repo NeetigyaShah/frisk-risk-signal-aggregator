@@ -7,6 +7,7 @@ injected-memory log; transaction-pattern candidates are computed on demand for d
 from __future__ import annotations
 
 import threading
+import time
 import uuid
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -24,6 +25,7 @@ from frisk.data import audit, store
 from frisk.data.loaders import dossier_from_files, load_customer
 from frisk.hitl import feedback
 from frisk.hitl import queue as review_queue
+from frisk.hitl import scratchpad
 from frisk.paths import PROJECT_ROOT, UPLOAD_SAMPLES
 
 FRONTEND = PROJECT_ROOT / "frontend"
@@ -233,6 +235,58 @@ def ingest(sample_id: str = Body(..., embed=True)):
 async def ingest_files(files: list[UploadFile] = File(...)):
     fmap = {f.filename: (await f.read()).decode("utf-8", "ignore") for f in files}
     return _ingest(dossier_from_files(fmap))
+
+
+# --- single upload, scored in the background so the UI can show live progress -------------------
+# A live score is ~50-90s of an agent thinking. Blocking the request for that long gives the user a
+# frozen page with no signal, so run it on a thread and let the client poll. The agent already
+# records every tool call to the scratchpad, so progress is read from there rather than plumbing a
+# second event channel through the engine.
+
+def _run_ingest_job(job_id: str, dossier) -> None:
+    cid = dossier.customer_id
+    with _JOBS_LOCK:
+        _JOBS[job_id]["customer_id"] = cid
+    try:
+        res = _ingest(dossier)
+        with _JOBS_LOCK:
+            _JOBS[job_id].update(status="complete", result=res)
+    except Exception as e:
+        with _JOBS_LOCK:
+            _JOBS[job_id].update(status="error", error=str(e))
+
+
+@app.post("/api/ingest/files/async")
+async def ingest_files_async(files: list[UploadFile] = File(...)):
+    fmap = {f.filename: (await f.read()).decode("utf-8", "ignore") for f in files}
+    dossier = dossier_from_files(fmap)
+    job_id = uuid.uuid4().hex[:12]
+    with _JOBS_LOCK:
+        _JOBS[job_id] = {"status": "running", "customer_id": dossier.customer_id,
+                         "started": time.time(), "result": None}
+    threading.Thread(target=_run_ingest_job, args=(job_id, dossier), daemon=True).start()
+    return {"job_id": job_id, "customer_id": dossier.customer_id}
+
+
+@app.get("/api/ingest/job/{job_id}")
+def ingest_job_status(job_id: str):
+    with _JOBS_LOCK:
+        j = _JOBS.get(job_id)
+        if not j:
+            return {"error": "not found"}
+        out = {k: v for k, v in j.items() if k != "started"}
+        out["elapsed"] = round(time.time() - j["started"], 1)
+        cid = j.get("customer_id")
+    # live view of what the agent is doing right now — the scratchpad is evicted when it finishes,
+    # so an empty read just means "done" (the result is already in the job).
+    if cid and out["status"] == "running":
+        try:
+            pad = scratchpad.read(cid)
+            out["stage"] = pad.get("stage") or "starting"
+            out["steps"] = pad.get("steps") or []
+        except Exception:
+            out["steps"] = []
+    return out
 
 
 _JOBS: dict = {}

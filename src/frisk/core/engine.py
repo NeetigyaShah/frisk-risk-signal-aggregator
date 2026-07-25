@@ -74,8 +74,12 @@ def assess(d: Dossier, actor: str | None = None, persist: bool = True) -> Decisi
     mem = memory.retrieve(d)
     scratchpad.start(cid, {"pep": bool(d.profile.get("pep")), "country": d.profile.get("country")})
     try:
+        # stage is what the live progress UI reads to say what is happening right now
+        scratchpad.set_stage(cid, "specialists")
         opinions = run_specialists(d, mem)
+        scratchpad.set_stage(cid, "agent")
         finding, detail = agent.score(d, mem, opinions)
+        scratchpad.set_stage(cid, "synthesize")
         conf = detail["confidence"]
         disp = route_llm(finding.score, conf)
         ts = datetime.now(timezone.utc).isoformat()

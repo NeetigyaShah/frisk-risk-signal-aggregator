@@ -522,17 +522,59 @@ async function pollBatch(job_id){
   const rev = (j.results||[]).filter(r => r.action === 'PENDING_REVIEW').length;
   if ($('bpDone')) $('bpDone').innerHTML = `✓ Complete · ${j.total} scored${rev?` · <b style="color:#f97316">${rev} routed to Human Review</b>`:''} · click a card to open the case.`;
 }
+/* A live score is ~50-90s of an agent thinking. Poll the job and show each tool call as it lands, so
+   the wait reads as work in progress rather than a frozen page. */
+const STAGE_LABEL = {init:'Reading the files', memory:'Recalling similar cases',
+                     specialists:'Three specialists reviewing in parallel',
+                     agent:'Lead investigator working through the case',
+                     synthesize:'Weighing the evidence', done:'Finishing up'};
+const TOOL_LABEL = {read_kyc:'Reading the customer profile', list_documents:'Listing documents on file',
+                    read_document:'Reading a document', query_transactions:'Filtering the payments',
+                    aggregate_transactions:'Totalling the payments',
+                    find_txn_patterns:'Scanning for known patterns', note:'Noting an observation',
+                    read_notes:'Re-reading its notes', finalize:'Reaching a decision'};
+
 async function ingestFiles(){
   const fs = $('upFiles').files; if (!fs.length) return;
   const fd = new FormData(); for (const f of fs) fd.append('files', f);
-  $('ingestResult').innerHTML = `<p style="color:var(--muted);font-size:13px">Scoring uploaded files…</p>`;
-  const d = await api('/api/ingest/files', {method:'POST', body:fd});
-  $('ingestResult').innerHTML = `<div class="card qrow fade" onclick="openCase('${d.id}')">
-    ${gauge(d.score, d.band)}
-    <div class="qmain"><div class="qhead"><b style="font-size:15px">${esc(d.name)}</b><span class="chip">${d.id}</span>
-      ${actionBadge(d.action)}<span class="chip">conf ${d.confidence.toFixed(2)}</span></div>
-      <p class="qsum">${esc(d.summary)}</p></div></div>`;
-  refreshStats();
+  $('ingestResult').innerHTML = `<div class="card card-pad"><p style="color:var(--muted);font-size:13px">Uploading…</p></div>`;
+  const job = await api('/api/ingest/files/async', {method:'POST', body:fd});
+  if (job.error){ $('ingestResult').innerHTML = `<div class="card card-pad"><p style="color:var(--high)">${esc(job.error)}</p></div>`; return; }
+  pollIngest(job.job_id, job.customer_id);
+}
+
+async function pollIngest(jobId, cid){
+  const j = await api(`/api/ingest/job/${jobId}`);
+  if (j.status === 'error'){
+    $('ingestResult').innerHTML = `<div class="card card-pad"><p style="color:var(--high)">Scoring failed: ${esc(j.error||'unknown')}</p></div>`;
+    return;
+  }
+  if (j.status === 'complete'){
+    const d = j.result;
+    $('ingestResult').innerHTML = `<div class="card qrow fade" onclick="openCase('${d.id}')">
+      ${gauge(d.score, d.band)}
+      <div class="qmain"><div class="qhead"><b style="font-size:15px">${esc(d.name)}</b><span class="chip">${d.id}</span>
+        ${actionBadge(d.action)}<span class="chip">conf ${d.confidence.toFixed(2)}</span>
+        <span class="chip">scored in ${j.elapsed}s</span></div>
+        <p class="qsum">${esc(d.summary)}</p></div></div>`;
+    refreshStats();
+    return;
+  }
+  const steps = j.steps || [];
+  const rows = steps.map((s,i) => `<div style="display:flex;gap:9px;align-items:baseline;padding:4px 0">
+      <span style="color:var(--faint);font-size:11px;min-width:18px">${i+1}</span>
+      <b style="font-size:12.5px">${esc(TOOL_LABEL[s.tool] || s.tool)}</b>
+      <span style="color:var(--muted);font-size:11.5px">${esc(String(s.detail).slice(0,70))}</span>
+    </div>`).join('');
+  $('ingestResult').innerHTML = `<div class="card card-pad">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+      <b style="font-size:14.5px">⏳ ${esc(STAGE_LABEL[j.stage] || 'Investigating')}…</b>
+      <span class="chip">${j.elapsed}s · typically 50–90s</span></div>
+    <p style="color:var(--faint);font-size:11.5px;margin:6px 0 10px">
+      ${esc(cid)} · three specialists run at once, then the lead investigator works one step at a time.</p>
+    ${rows || '<p style="color:var(--muted);font-size:12px">Starting…</p>'}</div>`;
+  clearTimeout(window._iT);
+  window._iT = setTimeout(() => pollIngest(jobId, cid), 1200);
 }
 
 /* ───────────── Audit ───────────── */

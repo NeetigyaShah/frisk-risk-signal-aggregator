@@ -50,13 +50,23 @@ def _collect_seen(result: dict, seen: set) -> None:
 
 
 def _brief(r) -> str:
+    """One human-readable line per tool result — shown live in the UI, so no raw JSON."""
     if isinstance(r, dict):
+        if "error" in r:
+            return f"no result ({r['error']})"
         if "count" in r:
-            return f"{r['count']} rows"
+            n = r["count"]
+            return f"{n} matching payment{'' if n == 1 else 's'}"
         if "candidates" in r:
-            return ", ".join(c["pattern"] for c in r["candidates"]) or "no patterns"
+            return ", ".join(c["pattern"] for c in r["candidates"]) or "no patterns found"
         if "name" in r:
             return f"read {r['name']}"
+        if "documents" in r:
+            return f"{len(r['documents'])} documents on file"
+        if "buckets" in r:
+            return f"totals across {len(r['buckets'])} groups"
+        if "ok" in r or "stored" in r:
+            return "noted"
         return json.dumps(r, default=str)[:120]
     return str(r)[:120]
 
@@ -130,6 +140,7 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
     seen: set = set()
     trace: list[AgentStep] = []
     recent: list[str] = []
+    results_seen: dict[str, int] = {}   # result-digest -> step that first returned it
     final: dict | None = None
     max_steps = CONFIG["agent_max_steps"]
 
@@ -181,15 +192,38 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
             result = {"error": str(e)}
         _collect_seen(result, seen)
         scratchpad.note(cid, name, _brief(result))
-        trace.append(AgentStep(step, name, args, _digest(result)))
-        msgs.append(ToolMessage(content=json.dumps(result, default=str)[:3000], tool_call_id=call_id))
+        scratchpad.step(cid, name, _brief(result))   # ordered feed for the live progress UI
+        rdigest = _digest(result)
+        trace.append(AgentStep(step, name, args, rdigest))
+
+        # Re-sending an identical payload is pure cost: measured on DEMO_000, 4 of 11 steps returned
+        # byte-identical data (all 35 txns fetched 4x under different args). The repeat guard below
+        # can't catch it because it compares the *question* — different args, same answer. So compare
+        # the answer: hand back a pointer instead of the payload, and say so plainly.
+        dup = results_seen.get(rdigest)
+        if dup is not None:
+            # Hand back a pointer, not the payload. NOTE: this must fall through to the budget nudge
+            # below — an earlier version returned `continue` here and the agent, never warned it was
+            # running out of steps, burned the rest of its budget re-querying and died at
+            # confidence 0. A duplicate is exactly when it most needs to hear "finalize now".
+            msgs.append(ToolMessage(
+                content=json.dumps({"duplicate_of_step": dup,
+                                    "note": f"Identical to what step {dup} returned — it is already "
+                                            "above in this conversation. Ask something new or finalize."}),
+                tool_call_id=call_id))
+            msgs.append(HumanMessage(content="That returned data you already have. Do not repeat it — "
+                                     "either drill into something genuinely new, or call finalize now."))
+        else:
+            results_seen[rdigest] = step
+            msgs.append(ToolMessage(content=json.dumps(result, default=str)[:3000], tool_call_id=call_id))
+
         # nudge toward finalize as the budget runs low, or if the model is spinning on one tool
         recent.append(name + json.dumps(args, sort_keys=True, default=str))
         remaining = max_steps - step - 1
         if remaining <= 2:
             msgs.append(HumanMessage(content=f"You have {remaining} tool call(s) left. Call finalize NOW "
                         "with your best current assessment — do not call any other tool."))
-        elif len(recent) >= 3 and len(set(recent[-3:])) == 1:
+        elif dup is not None or (len(recent) >= 3 and len(set(recent[-3:])) == 1):
             msgs.append(HumanMessage(content="You already gathered this. Stop and call finalize now."))
 
     injected = mem.get("injected", {})

@@ -33,7 +33,7 @@ def _hset(cid: str, field: str, value: str) -> None:
 def start(cid: str, facts: dict | None = None) -> str:
     """Begin a run: clear any stale key, stamp run_id + facts, set the TTL backstop. Returns run_id."""
     run_id = uuid.uuid4().hex[:12]
-    data = {"run_id": run_id, "facts": json.dumps(facts or {}), "notes": "{}",
+    data = {"run_id": run_id, "facts": json.dumps(facts or {}), "notes": "{}", "steps": "[]",
             "scratch": "", "stage": "init", "working_score": "", "confidence": ""}
     r = client()
     if r:
@@ -51,8 +51,16 @@ def read(cid: str) -> dict:
     if not raw:
         return {}
     out = dict(raw)
-    out["facts"] = json.loads(out.get("facts") or "{}")
-    out["notes"] = json.loads(out.get("notes") or "{}")
+    # the in-process fallback hands back the same objects it was given, so a field may already be
+    # decoded — only json.loads what is still a string.
+    def _dec(v, default):
+        if v in (None, ""):
+            return default
+        return json.loads(v) if isinstance(v, (str, bytes, bytearray)) else v
+
+    out["facts"] = _dec(out.get("facts"), {})
+    out["notes"] = _dec(out.get("notes"), {})
+    out["steps"] = _dec(out.get("steps"), [])
     return out
 
 
@@ -66,6 +74,22 @@ def note(cid: str, key: str, value: str) -> None:
     _hset(cid, "notes", json.dumps(notes))
     # also append to a free-text scratch log for the reviewer
     _hset(cid, "scratch", (cur.get("scratch", "") + f"\n[{key}] {value}").strip())
+
+
+def step(cid: str, tool: str, detail: str) -> None:
+    """Append one tool call to an ordered progress log.
+
+    Distinct from note(): notes are a keyed hash the agent reads back, so two `read_document` calls
+    overwrite each other. The UI needs the ordered sequence, including repeats, so it gets its own
+    append-only list. Bounded to the last 40 entries — this is a progress feed, not the audit trail.
+    """
+    cur = read(cid)
+    if not cur:
+        start(cid, {})
+        cur = read(cid)
+    log = list(cur.get("steps") or [])   # read() already decoded this
+    log.append({"tool": tool, "detail": detail})
+    _hset(cid, "steps", json.dumps(log[-40:]))
 
 
 def set_stage(cid: str, stage: str, working_score: int | None = None, confidence: float | None = None) -> None:
@@ -91,9 +115,15 @@ if __name__ == "__main__":  # self-check
     start("C9", {"pep": True})
     note("C9", "cash", "clustered just under 10k")
     set_stage("C9", "synthesize", working_score=55, confidence=0.4)
+    # the ordered feed must keep repeats — note() would collapse these two into one
+    step("C9", "read_document", "id_document.txt")
+    step("C9", "read_document", "rm_notes.txt")
+    step("C9", "query_transactions", "35 rows")
     r = read("C9")
     assert r["facts"]["pep"] is True and r["notes"]["cash"].startswith("clustered")
     assert r["stage"] == "synthesize" and r["working_score"] == "55"
+    assert [s["tool"] for s in r["steps"]] == ["read_document", "read_document", "query_transactions"]
+    assert r["steps"][1]["detail"] == "rm_notes.txt"
     snap = evict("C9")
     assert snap["notes"]["cash"].startswith("clustered")
     assert read("C9") == {}

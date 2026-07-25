@@ -47,12 +47,16 @@ class Settings(BaseSettings):
                                             # safety backstop against runaway fan-out, NOT a throttle.
 
     # --- agentic scorer + layered memory ---
-    agent_max_steps: int = 12              # max tool-calling turns before the orchestrator must finalize.
-                                            # Measured: the agent spends whatever budget it is given
-                                            # (mean 15.0 of 16) regardless of need, at ~3.2s per round-trip.
-                                            # With the pre-loaded briefing it has the core facts before
-                                            # step 1. 8 was too tight (hit the cap without finalizing ->
-                                            # false PENDING_REVIEW at confidence 0); 12 leaves headroom.
+    agent_max_steps: int = 10              # max tool-calling turns before the orchestrator must finalize.
+                                            # Measured at ~3.6s per round-trip, so this is the single
+                                            # biggest lever on latency — but it is NOT free to shrink.
+                                            # 8 was retried after adding the pre-loaded briefing, the
+                                            # finalize-only binding and the duplicate-result guard, and
+                                            # STILL failed: the agent spent all 8 on lookups and never
+                                            # reached finalize -> PENDING_REVIEW at confidence 0, which
+                                            # is a worse outcome than a slower correct answer.
+                                            # 10 finalizes reliably; the real saving came from the
+                                            # duplicate-result guard, not from squeezing this number.
     scratchpad_ttl_s: int = 3600           # Redis working-memory TTL backstop (evicted explicitly on every exit)
     memory_topk: int = 3                   # per-customer history + similar-case retrieval depth
 

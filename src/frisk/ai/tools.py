@@ -115,6 +115,16 @@ def scan_patterns(d, hint: str = "free") -> list[dict]:
 
 # --------------------------------------------------------------------------- tool factory
 
+# The model's natural wording for a filter value is not always the dataset's. Mapping the obvious
+# synonyms is far cheaper than an agent silently reasoning from an empty result set.
+_DIRECTION_ALIAS = {"inbound": "in", "incoming": "in", "credit": "in", "in": "in", "received": "in",
+                    "outbound": "out", "outgoing": "out", "debit": "out", "out": "out", "sent": "out"}
+_TYPE_ALIAS = {"cash_deposit": "cash", "cash deposit": "cash", "deposit": "cash", "cash": "cash",
+               "wire": "transfer", "wire_transfer": "transfer", "transfer": "transfer",
+               "card_payment": "card", "card": "card", "salary": "salary",
+               "direct debit": "direct_debit", "direct_debit": "direct_debit"}
+
+
 def build_tools(d, cid: str):
     txns = d.transactions
     docs = getattr(d, "documents", []) or []
@@ -137,21 +147,33 @@ def build_tools(d, cid: str):
 
     def query_transactions(direction: str = "", txn_type: str = "", min_amount: float = 0.0,
                            max_amount: float = 0.0, country: str = "", limit: int = 50) -> dict:
+        # An exact match on the model's wording is a silent-wrong-answer machine: an agent asking for
+        # direction="inbound" (data says "in") got count=0 and concluded "no cash transactions", which
+        # is the opposite of the truth. Normalise the common synonyms, and when a filter matches
+        # nothing say so explicitly rather than returning a bare empty list.
+        dirn = _DIRECTION_ALIAS.get(direction.strip().lower(), direction.strip().lower())
+        ttype = _TYPE_ALIAS.get(txn_type.strip().lower(), txn_type.strip().lower())
         rows = txns
-        if direction:
-            rows = [t for t in rows if t.direction == direction]
-        if txn_type:
-            rows = [t for t in rows if t.txn_type == txn_type]
+        if dirn:
+            rows = [t for t in rows if t.direction.lower() == dirn]
+        if ttype:
+            rows = [t for t in rows if t.txn_type.lower() == ttype]
         if min_amount:
             rows = [t for t in rows if float(t.amount) >= min_amount]
         if max_amount:
             rows = [t for t in rows if float(t.amount) <= max_amount]
         if country:
-            rows = [t for t in rows if t.counterparty_country == country]
+            rows = [t for t in rows if t.counterparty_country.upper() == country.strip().upper()]
         out = [{"id": t.id, "date": t.date, "amount": str(t.amount), "direction": t.direction,
                 "type": t.txn_type, "counterparty": t.counterparty, "cp_country": t.counterparty_country}
                for t in rows[:limit]]
-        return {"count": len(rows), "rows": out, "truncated": len(rows) > limit}
+        res = {"count": len(rows), "rows": out, "truncated": len(rows) > limit}
+        if not rows:
+            res["note"] = (f"No transaction matched this filter (of {len(txns)} total). This means the "
+                           f"FILTER found nothing — it does NOT mean the customer has no such activity. "
+                           f"Valid direction values: {sorted({t.direction for t in txns})}; "
+                           f"valid types: {sorted({t.txn_type for t in txns})}.")
+        return res
 
     def aggregate_transactions(group_by: str, metric: str = "sum") -> dict:
         buckets: dict[str, list[float]] = {}
