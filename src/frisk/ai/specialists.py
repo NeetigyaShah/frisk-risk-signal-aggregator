@@ -12,6 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from frisk.ai import memory
 from frisk.ai.providers.factory import get_provider
+from frisk.ai.providers.limiter import llm_slot
 from frisk.ai.tools import dossier_summary
 from frisk.core.models import SpecialistOpinion
 
@@ -46,7 +47,8 @@ def run_specialists(d, mem: dict) -> list[SpecialistOpinion]:
 
     def one(domain: str) -> SpecialistOpinion:
         try:
-            op = prov.complete(_prompt(d, domain, mem), SpecialistOpinion)
+            with llm_slot():
+                op = prov.complete(_prompt(d, domain, mem), SpecialistOpinion)
             op.domain = domain
             return op
         except Exception:

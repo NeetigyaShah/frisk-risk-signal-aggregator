@@ -13,6 +13,7 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 from frisk.ai.providers.factory import get_provider
+from frisk.ai.providers.limiter import llm_slot
 
 
 class SARDraft(BaseModel):
@@ -66,7 +67,8 @@ def build_prompt(dec, dossier) -> str:
 def draft(dec, dossier) -> dict:
     """Compose a SAR draft for one decision. Never raises — returns a degraded draft on failure."""
     try:
-        d = get_provider().complete(build_prompt(dec, dossier), SARDraft)
+        with llm_slot():
+            d = get_provider().complete(build_prompt(dec, dossier), SARDraft)
         out = d.model_dump()
     except Exception as e:
         out = SARDraft(

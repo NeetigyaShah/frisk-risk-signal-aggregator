@@ -100,6 +100,19 @@ _DETECTORS = {"structuring": _cand_structuring, "layering": _cand_layering,
               "round_trip": _cand_round, "dormant_spike": _cand_dormant}
 
 
+def scan_patterns(d, hint: str = "free") -> list[dict]:
+    """Run the advisory pattern detectors directly — no LangChain tool wrapping.
+
+    Used by the API's read-only "what patterns did we detect" display path (queue/analytics/
+    compare/case). Building a StructuredTool via ``build_tools`` costs ~375ms per call (Pydantic
+    schema introspection over all 9 tools) versus ~1ms for the raw detectors — a ~400x difference
+    that matters because this runs once per customer per page load. ``build_tools`` stays as-is
+    for its real job: binding the tool set the LLM agent actually calls during scoring.
+    """
+    run = _DETECTORS if hint in ("free", "") else {hint: _DETECTORS.get(hint)}
+    return [c for name, fn in run.items() if fn and (c := fn(d.transactions))]
+
+
 # --------------------------------------------------------------------------- tool factory
 
 def build_tools(d, cid: str):
@@ -154,9 +167,7 @@ def build_tools(d, cid: str):
                 "total": round(sum(float(t.amount) for t in txns), 2)}
 
     def find_txn_patterns(hint: str = "free") -> dict:
-        run = _DETECTORS if hint in ("free", "") else {hint: _DETECTORS.get(hint)}
-        cands = [c for name, fn in run.items() if fn and (c := fn(txns))]
-        return {"hint": hint, "candidates": cands}
+        return {"hint": hint, "candidates": scan_patterns(d, hint)}
 
     def note(key: str, value: str) -> dict:
         from frisk.hitl import scratchpad

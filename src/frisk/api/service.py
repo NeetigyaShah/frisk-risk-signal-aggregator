@@ -16,7 +16,7 @@ from fastapi import Body, FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from frisk.ai.tools import build_tools, dossier_summary
+from frisk.ai.tools import build_tools, dossier_summary, scan_patterns
 from frisk.config import CONFIG
 from frisk.core.engine import assess, assess_all, log_analyst_action
 from frisk.core.models import load_dossiers
@@ -83,15 +83,26 @@ def _startup():
     _ensure_started()
 
 
+_PATTERN_CACHE: dict[str, list[dict]] = {}   # customer_id -> patterns; invalidated on re-ingest
+
+
 def _patterns(dossier) -> list[dict]:
-    """Advisory typology candidates computed on demand for display (not a rule that scored)."""
+    """Advisory typology candidates computed on demand for display (not a rule that scored).
+
+    Uses scan_patterns() directly (~1ms) rather than build_tools() (~375ms — LangChain schema
+    introspection over all 9 agent tools, irrelevant for a read-only display lookup). Cached per
+    customer since a dossier's transactions never change after ingest.
+    """
     if dossier is None:
         return []
-    _, disp = build_tools(dossier, dossier.customer_id)
+    cached = _PATTERN_CACHE.get(dossier.customer_id)
+    if cached is not None:
+        return cached
     out = []
-    for c in disp["find_txn_patterns"]("free")["candidates"]:
+    for c in scan_patterns(dossier):
         out.append({"code": c["pattern"].upper(), "label": c["pattern"].replace("_", "-").title(),
                     "rationale": c["note"], "strength": c.get("strength"), "txn_ids": c.get("txn_ids", [])})
+    _PATTERN_CACHE[dossier.customer_id] = out
     return out
 
 
@@ -209,6 +220,7 @@ def _ingest(dossier):
     st = _bootstrap()
     st["decisions"][d.customer_id] = d
     st["dossiers"][d.customer_id] = dossier
+    _PATTERN_CACHE.pop(d.customer_id, None)   # dossier changed (re-ingest) -> stale patterns
     return _summary(d, dossier)
 
 

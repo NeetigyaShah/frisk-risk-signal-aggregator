@@ -41,6 +41,8 @@ class Settings(BaseSettings):
 
     # --- scale / throughput ---
     workers: int = 16                      # parallel workers (across customers) for batch scoring
+    llm_concurrency: int = 4               # max simultaneous in-flight LLM calls app-wide (avoids
+                                            # provider rate-limit/retry-backoff storms under batch load)
 
     # --- agentic scorer + layered memory ---
     agent_max_steps: int = 16              # max tool-calling turns before the orchestrator must finalize / route to human

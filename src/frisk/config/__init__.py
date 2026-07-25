@@ -37,6 +37,7 @@ CONFIG["confidence_threshold"] = settings.confidence_threshold
 CONFIG["redis_url"] = settings.redis_url
 # agentic scorer + layered memory knobs
 CONFIG["agent_max_steps"] = settings.agent_max_steps
+CONFIG["llm_concurrency"] = settings.llm_concurrency
 CONFIG["scratchpad_ttl_s"] = settings.scratchpad_ttl_s
 CONFIG["memory_topk"] = settings.memory_topk
 

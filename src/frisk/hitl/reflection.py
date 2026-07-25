@@ -9,6 +9,7 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 from frisk.ai.providers.factory import get_provider
+from frisk.ai.providers.limiter import llm_slot
 from frisk.data import store
 from frisk.hitl.feedback import all_corrections
 
@@ -29,7 +30,8 @@ def reflect(k: int = 20, created_ts: str = "") -> int:
               "1-3 SHORT, general rules-of-thumb (one sentence each) the AI should apply next time to avoid "
               "repeating the same mistakes. Respond in JSON with key lessons (a list of strings).\n\n" + summary)
     try:
-        lessons = get_provider().complete(prompt, Lessons).lessons[:3]
+        with llm_slot():
+            lessons = get_provider().complete(prompt, Lessons).lessons[:3]
     except Exception:
         lessons = []
     ids = [c["customer_id"] for c in corr]

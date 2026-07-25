@@ -13,6 +13,7 @@ import hashlib
 import json
 
 from frisk.ai.providers.factory import get_provider
+from frisk.ai.providers.limiter import llm_slot
 from frisk.ai.tools import build_tools
 from frisk.config import CONFIG
 from frisk.core.models import AgentStep, RiskFinding
@@ -96,7 +97,8 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
 
     for step in range(max_steps):
         # in the final turns, offer ONLY the finalize tool so the model must decide
-        resp = (llm_final if (max_steps - step) <= 2 else llm).invoke(msgs)
+        with llm_slot():
+            resp = (llm_final if (max_steps - step) <= 2 else llm).invoke(msgs)
         tcs = getattr(resp, "tool_calls", None) or []
         if not tcs:
             msgs.append(resp)
