@@ -146,7 +146,7 @@ body.rail .nav-item, body.rail .search-btn{ justify-content:center; padding-left
 /* ───────── overlays ───────── */
 .overlay{ position:fixed; inset:0; z-index:40; }
 .overlay-bg{ position:absolute; inset:0; background:#000000cc; backdrop-filter:blur(3px); animation:fade .18s ease; }
-.drawer-panel{ position:absolute; right:0; top:0; height:100%; width:min(780px,100%);
+.drawer-panel{ position:absolute; right:0; top:0; height:100%; width:min(980px,100%);
   background:var(--panel); border-left:1px solid var(--line); overflow-y:auto; box-shadow:-20px 0 60px #00000080;
   animation:slidein .26s cubic-bezier(.22,1,.36,1); }
 .palette-panel{ position:relative; margin:13vh auto 0; width:min(620px,92vw);
@@ -206,3 +206,41 @@ details.doc pre{ font:400 11.5px/1.55 'JetBrains Mono',monospace; color:var(--mu
 @keyframes slidein{ from{transform:translateX(26px); opacity:0} to{transform:none; opacity:1} }
 @keyframes zoom{ from{opacity:0; transform:scale(.97) translateY(-8px)} to{opacity:1; transform:none} }
 .fade{ animation:fade .2s ease; }
+
+/* ═══════════ SAR document — formal, print-ready ═══════════ */
+.sar-doc{ position:relative; background:#fbfbfa; color:#18181b; border-radius:10px; padding:40px 42px;
+  font:400 13.5px/1.72 'Times New Roman', Georgia, serif; overflow:hidden; box-shadow:0 10px 40px #00000050; }
+.sar-watermark{ position:absolute; top:44%; left:50%; transform:translate(-50%,-50%) rotate(-24deg);
+  font:900 92px/1 'Inter',sans-serif; color:#18181b; opacity:.05; letter-spacing:.08em; pointer-events:none; user-select:none; }
+.sar-head{ text-align:center; border-bottom:2.5px solid #18181b; padding-bottom:16px; margin-bottom:20px; }
+.sar-org{ display:flex; align-items:baseline; justify-content:center; gap:9px; margin-bottom:12px;
+  font-family:'Inter',sans-serif; }
+.sar-org b{ font-size:15px; font-weight:800; letter-spacing:.16em; }
+.sar-org span{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#52525b; }
+.sar-head h1{ font-size:23px; font-weight:700; letter-spacing:.01em; }
+.sar-sub{ font:400 11px/1.5 'Inter',sans-serif; color:#52525b; margin-top:6px;
+  text-transform:uppercase; letter-spacing:.1em; }
+.sar-meta{ width:100%; border-collapse:collapse; margin-bottom:24px;
+  font:400 11.5px/1.5 'Inter',sans-serif; }
+.sar-meta td{ border:1px solid #d4d4d8; padding:7px 10px; }
+.sar-meta td:nth-child(odd){ background:#f1f1ef; color:#52525b; font-weight:600; width:15%;
+  text-transform:uppercase; font-size:9.5px; letter-spacing:.07em; }
+.sar-sec{ margin-bottom:20px; }
+.sar-sec h3{ font:700 12px/1.4 'Inter',sans-serif; text-transform:uppercase; letter-spacing:.1em;
+  color:#18181b; margin-bottom:8px; display:flex; align-items:center; gap:9px; }
+.sar-num{ display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%;
+  background:#18181b; color:#fbfbfa; font-size:10.5px; font-weight:700; flex:0 0 auto; }
+.sar-sec p{ text-align:justify; hyphens:auto; }
+.sar-foot{ display:flex; gap:40px; margin-top:34px; padding-top:22px; border-top:1px solid #d4d4d8; }
+.sar-sign{ flex:1; }
+.sar-sign span{ font:600 9.5px/1 'Inter',sans-serif; text-transform:uppercase; letter-spacing:.1em; color:#52525b; }
+.sar-sign i{ display:block; border-bottom:1px solid #18181b; height:30px; }
+.sar-note{ margin-top:18px; padding-top:12px; border-top:1px dashed #d4d4d8;
+  font:400 10px/1.6 'Inter',sans-serif; color:#71717a; font-style:italic; }
+
+@media print{
+  body *{ visibility:hidden; }
+  #sarDoc, #sarDoc *{ visibility:visible; }
+  #sarDoc{ position:absolute; inset:0; margin:0; border-radius:0; box-shadow:none; padding:0; }
+  .overlay-bg{ display:none; }
+}

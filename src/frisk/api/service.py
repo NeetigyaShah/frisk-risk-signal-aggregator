@@ -147,6 +147,44 @@ def case_history(cid: str):
     return store.history(cid, k=10)
 
 
+@app.get("/api/case/{cid}/sar")
+def case_sar(cid: str):
+    """Draft a filing-ready Suspicious Activity Report narrative for one case."""
+    from frisk.ai import sar
+    st = _bootstrap()
+    d = st["decisions"].get(cid)
+    if not d:
+        return {"error": "not found"}
+    return sar.draft(d, st["dossiers"].get(cid))
+
+
+@app.get("/api/compare")
+def compare(a: str, b: str):
+    """Side-by-side comparison of two scored cases — why did one clear and the other escalate?"""
+    st = _bootstrap()
+    out = []
+    for cid in (a, b):
+        d = st["decisions"].get(cid)
+        if not d:
+            return {"error": f"unknown customer {cid}"}
+        dossier = st["dossiers"].get(cid)
+        txns = dossier.transactions if dossier else []
+        cash_in = sum(float(t.amount) for t in txns if t.direction == "in" and t.txn_type == "cash")
+        credits = sum(float(t.amount) for t in txns if t.direction == "in")
+        out.append({**_summary(d, dossier), "opinions": d.opinions, "trace": d.trace,
+                    "evidence_refs": d.evidence_refs, "tools_used": len(d.trace),
+                    "txn_count": len(txns), "cash_in": round(cash_in), "credits": round(credits),
+                    "cp_countries": sorted({t.counterparty_country for t in txns}),
+                    "documents": [x["name"] for x in (getattr(dossier, "documents", []) or [])],
+                    "kyc_complete": bool((dossier.kyc or {}).get("kyc_complete", True)) if dossier else True})
+    x, y = out
+    shared = sorted(set(x["key_signals"]) & set(y["key_signals"]))
+    return {"a": x, "b": y, "shared_signals": shared,
+            "only_a": sorted(set(x["key_signals"]) - set(y["key_signals"])),
+            "only_b": sorted(set(y["key_signals"]) - set(x["key_signals"])),
+            "score_delta": x["score"] - y["score"]}
+
+
 @app.get("/api/samples")
 def samples():
     if not UPLOAD_SAMPLES.exists():

@@ -60,10 +60,17 @@ async function refreshStats(){
      <span class="badge" style="background:#f973161f;color:#f97316">● ${STATS.review_queue} Human queue</span>`;
 }
 
-const VIEWS  = {dashboard:renderDashboard, review:renderReview, ingest:renderIngest, audit:renderAudit};
+// lazy lookup so view functions can be declared anywhere in the file
+const VIEWS = {
+  get dashboard(){ return renderDashboard; }, get review(){ return renderReview; },
+  get compare(){ return renderCompare; },     get sar(){ return renderSar; },
+  get ingest(){ return renderIngest; },       get audit(){ return renderAudit; },
+};
 const TITLES = {
   dashboard:['Dashboard','Prioritised, risk-scored triage queue'],
   review:['Review Queue','Low-confidence cases the agent routed to a person'],
+  compare:['Case Comparison','Why did one clear and the other escalate?'],
+  sar:['SAR Drafts','Auto-drafted Suspicious Activity Report narratives'],
   ingest:['Ingest / Upload','Score any subset — or every profile — in parallel'],
   audit:['Audit Trail','Append-only record of every decision'],
 };
@@ -533,6 +540,159 @@ async function renderAudit(){
         <td style="padding:11px 12px">${r.confidence >= 0 ? Number(r.confidence).toFixed(2) : '—'}</td>
         <td style="padding:11px 12px;color:var(--faint)">${esc(r.engine_path)}</td></tr>`).join('')}
       </tbody></table></div>`;
+}
+
+/* ───────────── Case Comparison ───────────── */
+let _CMP = [];
+async function renderCompare(){
+  _CMP = await api('/api/queue');
+  if (_CMP.length < 2){ $('content').innerHTML = emptyState('⚖️','Need at least two scored cases','Score a few customers first, then come back to compare them side by side.'); return; }
+  const opts = sel => _CMP.map(d => `<option value="${d.id}" ${d.id===sel?'selected':''}>${esc(d.name)} — ${d.id} (${d.score})</option>`).join('');
+  const hi = _CMP[0].id, lo = _CMP[_CMP.length-1].id;
+  $('content').innerHTML = `
+    <div class="card card-pad" style="margin-bottom:16px">
+      <div class="grid" style="grid-template-columns:1fr auto 1fr;gap:14px;align-items:end">
+        <div><p class="section-label" style="margin:0 0 6px">Case A</p>
+          <select id="cmpA" class="field" onchange="runCompare()">${opts(hi)}</select></div>
+        <div style="font-size:20px;color:var(--faint);padding-bottom:8px">vs</div>
+        <div><p class="section-label" style="margin:0 0 6px">Case B</p>
+          <select id="cmpB" class="field" onchange="runCompare()">${opts(lo)}</select></div>
+      </div>
+    </div>
+    <div id="cmpOut"></div>`;
+  runCompare();
+}
+const cmpCol = (d, other) => {
+  const diff = (v, o) => v === o ? '' : 'style="color:var(--ink);font-weight:700"';
+  return `<div class="card card-pad">
+    <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px">
+      ${gauge(d.score, d.band)}
+      <div style="min-width:0"><b style="font-size:15px">${esc(d.name)}</b>
+        <p style="color:var(--muted);font-size:12.5px;margin-top:2px">${d.id} · ${esc(d.occupation)} · ${esc(d.country)}</p>
+        <div style="margin-top:8px">${actionBadge(d.action)}</div></div>
+    </div>
+    <table class="tx" style="width:100%">
+      <tr><td style="color:var(--faint)">Confidence</td><td ${diff(d.confidence,other.confidence)}>${d.confidence.toFixed(2)}</td></tr>
+      <tr><td style="color:var(--faint)">Band</td><td ${diff(d.band,other.band)}>${bandUp(d.band)}</td></tr>
+      <tr><td style="color:var(--faint)">PEP</td><td ${diff(d.pep,other.pep)}>${d.pep?'Yes':'No'}</td></tr>
+      <tr><td style="color:var(--faint)">KYC complete</td><td ${diff(d.kyc_complete,other.kyc_complete)}>${d.kyc_complete?'Yes':'No'}</td></tr>
+      <tr><td style="color:var(--faint)">Transactions</td><td ${diff(d.txn_count,other.txn_count)}>${d.txn_count}</td></tr>
+      <tr><td style="color:var(--faint)">Cash in</td><td ${diff(d.cash_in,other.cash_in)}>£${d.cash_in.toLocaleString()}</td></tr>
+      <tr><td style="color:var(--faint)">Total credits</td><td ${diff(d.credits,other.credits)}>£${d.credits.toLocaleString()}</td></tr>
+      <tr><td style="color:var(--faint)">Counterparty countries</td><td>${d.cp_countries.join(', ')||'—'}</td></tr>
+      <tr><td style="color:var(--faint)">Tool calls</td><td ${diff(d.tools_used,other.tools_used)}>${d.tools_used}</td></tr>
+      <tr><td style="color:var(--faint)">Documents</td><td>${d.documents.length}</td></tr>
+    </table>
+    <p class="section-label" style="margin:16px 0 7px">Specialists</p>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      ${(d.opinions||[]).map(o => `<div style="display:flex;align-items:center;gap:7px;font-size:12.5px">
+        <span style="width:7px;height:7px;border-radius:50%;background:${LVL[o.risk_level]||'#71717a'};flex:0 0 auto"></span>
+        <b>${esc(o.domain)}</b><span style="color:var(--faint)">${o.tentative_score ?? ''}</span>
+        <span style="color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(o.note||'')}</span></div>`).join('')}
+    </div>
+    <p class="section-label" style="margin:16px 0 7px">AI rationale</p>
+    <p style="font-size:12.5px;color:var(--muted);line-height:1.6">${esc(d.summary)}</p>
+    <button class="btn btn-ghost btn-block" style="margin-top:14px" onclick="openCase('${d.id}')">Open full case →</button>
+  </div>`;
+};
+async function runCompare(){
+  const a = $('cmpA').value, b = $('cmpB').value;
+  if (a === b){ $('cmpOut').innerHTML = `<p style="color:#f59e0b;font-size:13px">Pick two different customers.</p>`; return; }
+  $('cmpOut').innerHTML = `<p style="color:var(--muted);font-size:13px">Comparing…</p>`;
+  const r = await api(`/api/compare?a=${a}&b=${b}`);
+  if (r.error){ $('cmpOut').innerHTML = `<p style="color:#ef4444;font-size:13px">${esc(r.error)}</p>`; return; }
+  const gap = Math.abs(r.score_delta);
+  $('cmpOut').innerHTML = `
+    <div class="card-accent card-pad" style="margin-bottom:14px;text-align:center">
+      <p class="section-label" style="margin:0 0 6px">Score gap</p>
+      <div style="font-size:38px;font-weight:900;letter-spacing:-.04em;line-height:1">${gap}<span style="font-size:18px;color:var(--faint)"> pts</span></div>
+      <p style="color:var(--muted);font-size:13px;margin-top:8px">
+        <b style="color:${riskColor(r.a.band)}">${esc(r.a.name)}</b> ${r.a.score} · ${r.a.action}
+        &nbsp;vs&nbsp; <b style="color:${riskColor(r.b.band)}">${esc(r.b.name)}</b> ${r.b.score} · ${r.b.action}</p>
+    </div>
+    <div class="grid grid-2" style="margin-bottom:14px">
+      <div class="card card-pad"><p class="section-label" style="margin:0 0 9px">Signals only in ${esc(r.a.name)}</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">${r.only_a.length ? r.only_a.map(s => `<span class="chip chip-soft">${esc(s)}</span>`).join('') : '<span style="color:var(--faint);font-size:12.5px">none</span>'}</div></div>
+      <div class="card card-pad"><p class="section-label" style="margin:0 0 9px">Signals only in ${esc(r.b.name)}</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">${r.only_b.length ? r.only_b.map(s => `<span class="chip chip-soft">${esc(s)}</span>`).join('') : '<span style="color:var(--faint);font-size:12.5px">none</span>'}</div></div>
+    </div>
+    ${r.shared_signals.length ? `<div class="card card-pad" style="margin-bottom:14px">
+      <p class="section-label" style="margin:0 0 9px">Shared signals</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${r.shared_signals.map(s => `<span class="chip">${esc(s)}</span>`).join('')}</div></div>` : ''}
+    <div class="grid grid-2">${cmpCol(r.a, r.b)}${cmpCol(r.b, r.a)}</div>`;
+}
+
+/* ───────────── SAR drafts ───────────── */
+async function renderSar(){
+  const q = await api('/api/queue');
+  const flagged = q.filter(d => ['ESCALATE','REVIEW','PENDING_REVIEW'].includes(d.action));
+  if (!flagged.length){ $('content').innerHTML = emptyState('📋','Nothing to report','No case currently warrants a Suspicious Activity Report — every customer auto-cleared.'); return; }
+  $('content').innerHTML = `
+    <p style="color:var(--muted);font-size:13.5px;margin-bottom:14px">
+      <b style="color:var(--ink)">${flagged.length}</b> case(s) may warrant a filing. Generate a draft narrative from the agent's evidence — then review, edit and sign off.</p>
+    <div class="grid" style="gap:10px">
+      ${flagged.map(d => `<div class="card qrow">
+        ${gauge(d.score, d.band)}
+        <div class="qmain"><div class="qhead"><b style="font-size:15px">${esc(d.name)}</b>
+          <span class="chip">${d.id}</span><span class="chip">${esc(d.occupation)}</span>${actionBadge(d.action)}</div>
+          <p class="qsum">${esc(d.summary)}</p></div>
+        <button class="btn btn-primary" style="flex:0 0 auto;align-self:center" onclick="openSar('${d.id}')">📋 Draft SAR</button>
+      </div>`).join('')}
+    </div>`;
+}
+async function openSar(cid){
+  $('drawer').classList.remove('hidden');
+  $('drawer-body').innerHTML = `<div class="empty"><div class="e-ico">📝</div><h3>Drafting SAR narrative…</h3>
+    <p>Composing the report from the agent's evidence, cited transactions and specialist opinions.</p></div>`;
+  const s = await api(`/api/case/${cid}/sar`);
+  if (s.error){ $('drawer-body').innerHTML = `<div class="empty"><div class="e-ico">⚠️</div><h3>Could not draft</h3><p>${esc(s.error)}</p></div>`; return; }
+  const PCOL = {HIGH:'#ef4444', MEDIUM:'#f59e0b', LOW:'#22c55e'};
+  const today = new Date().toISOString().slice(0,10);
+  const sec = (n, title, body) => `<section class="sar-sec"><h3><span class="sar-num">${n}</span>${title}</h3><p>${esc(body||'—')}</p></section>`;
+  $('drawer-body').innerHTML = `
+    <div class="dhead" style="justify-content:space-between">
+      <div><h3 style="font-size:16px;font-weight:800">Suspicious Activity Report</h3>
+        <p style="color:var(--muted);font-size:12.5px;margin-top:2px">Draft · ${s.customer_id}</p></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-ghost" onclick="window.print()">🖨 Print / PDF</button>
+        <button class="icon-btn" onclick="closeDrawer()" style="font-size:17px">✕</button></div>
+    </div>
+    <div class="dbody">
+      <div class="sar-doc" id="sarDoc">
+        <div class="sar-watermark">DRAFT</div>
+        <header class="sar-head">
+          <div class="sar-org"><b>FRISK</b><span>Financial Intelligence Unit</span></div>
+          <h1>Suspicious Activity Report</h1>
+          <p class="sar-sub">Confidential — prepared for internal review and MLRO sign-off</p>
+        </header>
+        <table class="sar-meta">
+          <tr><td>Report reference</td><td>SAR-${s.customer_id}-${today.replace(/-/g,'')}</td>
+              <td>Date prepared</td><td>${today}</td></tr>
+          <tr><td>Subject</td><td>${esc(s.subject_name)}</td>
+              <td>Customer ID</td><td>${s.customer_id}</td></tr>
+          <tr><td>Risk score</td><td>${s.score}/100 (${bandUp(s.band)})</td>
+              <td>Filing priority</td><td><b style="color:${PCOL[s.priority]||'#a1a1aa'}">${esc(s.priority)}</b></td></tr>
+          <tr><td>Prepared by</td><td>Frisk agentic analyst</td>
+              <td>Status</td><td><b style="color:#f59e0b">DRAFT — unsigned</b></td></tr>
+        </table>
+        ${sec(1,'Subject of the report', s.subject_summary)}
+        ${sec(2,'Description of suspicious activity', s.suspicious_activity)}
+        ${sec(3,'Supporting evidence', s.supporting_evidence)}
+        ${sec(4,'Analysis and rationale', s.analysis)}
+        ${sec(5,'Recommended action', s.recommended_action)}
+        ${(s.evidence_refs?.length || s.key_signals?.length) ? `<section class="sar-sec"><h3><span class="sar-num">A</span>Appendix — cited evidence</h3>
+          ${s.evidence_refs?.length ? `<p><b>Transaction / document references:</b> ${s.evidence_refs.map(esc).join(', ')}</p>` : ''}
+          ${s.key_signals?.length ? `<p style="margin-top:7px"><b>Risk indicators:</b> ${s.key_signals.map(esc).join(' · ')}</p>` : ''}
+        </section>` : ''}
+        <footer class="sar-foot">
+          <div class="sar-sign"><span>MLRO signature</span><i></i></div>
+          <div class="sar-sign"><span>Date</span><i></i></div>
+        </footer>
+        <p class="sar-note">Machine-generated draft from the case evidence. It must be reviewed, corrected
+          and signed by a qualified compliance officer before any regulatory filing.</p>
+      </div>
+      <button class="btn btn-ghost btn-block" onclick="closeDrawer();openCase('${s.customer_id}')">Open the underlying case →</button>
+    </div>`;
 }
 
 /* ───────────── ⌘K palette ───────────── */
