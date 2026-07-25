@@ -1,15 +1,29 @@
+# Frisk — Financial Risk Signal Aggregator
+# Quickest path:  ./setup.sh      (creates a venv and installs everything)
+# Manual path:    pip install -r requirements.txt
+
+# --- core ---
+pydantic>=2.6
+pydantic-settings>=2.2
+python-dotenv>=1.0
+
+# --- synthetic data generation ---
 pandas>=2.0
 numpy>=1.26
 Faker>=25.0
-pydantic>=2.6
-instructor>=1.5
-openai>=1.40
-google-genai>=1.0
-anthropic>=0.40
-langgraph>=1.0
-langchain-openai>=1.0
-langchain-core>=0.3
-langsmith>=0.10
-streamlit>=1.36
+
+# --- LLM providers (omit to run entirely on the deterministic mock provider) ---
+instructor>=1.5              # schema-validated structured output
+openai>=1.40                 # OpenAI-compatible client (OpenRouter / NVIDIA)
+langchain-openai>=1.0        # tool-calling chat model that drives the agent loop
+langchain-core>=0.3          # StructuredTool definitions
+anthropic>=0.40              # optional alternate provider
+
+# --- backend API + frontend serving ---
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9      # multipart file upload on /api/ingest/files
+redis>=5.0                   # review queue + working-memory scratchpad (in-memory fallback if absent)
+
+# --- tests ---
 pytest>=8.0
-python-dotenv>=1.0

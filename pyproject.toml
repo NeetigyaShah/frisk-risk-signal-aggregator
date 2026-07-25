@@ -17,17 +17,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# LLM cross-check is optional — the engine runs deterministically (rules-only / mock) without any of these.
+# Real LLM providers. Without these the app still runs end-to-end on the deterministic mock provider.
 llm = [
-    "instructor>=1.5",
-    "openai>=1.40",
-    "google-genai>=1.0",
-    "anthropic>=0.40",
-    "langgraph>=1.0",
-    "langchain-openai>=1.0",
-    "langchain-core>=0.3",
+    "instructor>=1.5",          # schema-validated structured output
+    "openai>=1.40",             # OpenAI-compatible client (OpenRouter, NVIDIA)
+    "langchain-openai>=1.0",    # tool-calling chat model for the agent loop
+    "langchain-core>=0.3",      # StructuredTool definitions
+    "anthropic>=0.40",          # optional alternate provider
 ]
-ui = ["streamlit>=1.36"]
 api = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "python-multipart>=0.0.9", "redis>=5.0"]
 observability = ["langsmith>=0.10"]
 dev = ["pytest>=8.0"]

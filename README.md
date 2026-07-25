@@ -1,95 +1,281 @@
-# Financial Risk Signal Aggregator
+<div align="center">
 
-An AML / financial-crime **risk-triage** prototype (HyperVerge take-home). It ingests a fragmented,
-multi-source dossier per customer and produces a **prioritised, risk-scored analyst triage queue** —
-scored end-to-end by a **fully-LLM, agentic** pipeline with a **layered memory system**, **confidence-gated
-human review**, and an **append-only investigation trace** as the audit record.
+# 🛡 Frisk — Financial Risk Signal Aggregator
+
+**An agentic AI that investigates financial-crime risk the way an analyst does — then hands you the evidence.**
+
+Ingests fragmented customer data (KYC, account, transactions, documents), runs a **fully-LLM agentic
+pipeline** over it, and produces a **prioritised, risk-scored triage queue** where every decision carries
+its own investigation trace. Low-confidence cases route to a human, and the correction teaches the system.
+
+</div>
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+---
+
+## The problem
+
+A compliance analyst opens a customer file and finds a KYC record, a CSV of transactions, a relationship
+manager's notes, an ID scan and an email thread — none of which talk to each other. They read all of it,
+decide "is this money laundering?", and move to the next of several hundred. It is slow, inconsistent
+between analysts, and the reasoning rarely survives in a form anyone can audit later.
+
+**Frisk does the first pass.** It reads everything, investigates like an analyst would, ranks the whole
+book by risk, and shows its work — so the human starts from evidence instead of a blank page.
+
+---
+
+## How it works
+
+Every customer goes through the same four stages. There is **no deterministic rules engine** — the LLM
+does the judging; the code provides tools, memory and guardrails.
+
+```
+   ┌────────────────────────────────────────────────────────────────────────────┐
+   │  1. INGEST                                                                 │
+   │     kyc.json · account.json · transactions.csv · screening.json            │
+   │     id_document.txt · rm_notes.txt · correspondence.txt      → Dossier      │
+   └────────────────────────────────────────────────────────────────────────────┘
+                                      │
+   ┌────────────────────────────────────────────────────────────────────────────┐
+   │  2. RETRIEVE MEMORY        (what do we already know?)                      │
+   │     per-customer history · similar past cases · lessons · reference notes   │
+   └────────────────────────────────────────────────────────────────────────────┘
+                                      │
+   ┌────────────────────────────────────────────────────────────────────────────┐
+   │  3. INVESTIGATE                                                            │
+   │                                                                            │
+   │     ┌── KYC specialist ──┐                                                 │
+   │     ├── Transactions  ───┼──►  AGENTIC ORCHESTRATOR                        │
+   │     └── Documents ───────┘     serial tool-calling loop, temperature 0     │
+   │        (3 parallel calls)      read_document · query_transactions          │
+   │                                find_txn_patterns · note → finalize()        │
+   └────────────────────────────────────────────────────────────────────────────┘
+                                      │
+   ┌────────────────────────────────────────────────────────────────────────────┐
+   │  4. DECIDE + LEARN                                                         │
+   │     confidence ≥ 0.60 → auto-dispose by band (clear / review / escalate)    │
+   │     confidence < 0.60 → human review queue → correction → memory            │
+   └────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1 · Ingest
+A customer folder of mixed structured + unstructured files is parsed into one typed `Dossier`.
+Money is `Decimal` throughout; missing files degrade gracefully rather than failing.
+
+### 2 · Retrieve memory — 5 tiers, 3 stores
+Before scoring, the system gathers what it already knows. This is what makes it improve over time.
+
+| Tier | What it holds | Where it lives |
+|------|---------------|----------------|
+| **Working** | the agent's notes during one investigation | Redis scratchpad (evicted on exit) |
+| **Per-customer** | this customer's assessment history | SQLite `assessments` |
+| **Episodic** | similar past cases + human corrections | case-bank (feature-match) |
+| **Semantic** | typology definitions, higher-risk reference lists | static reference files |
+| **Procedural** | "lessons learned" distilled from corrections | `lessons` table |
+
+### 3 · Investigate — specialists, then an agent
+**Three specialists run in parallel** (KYC · transactions · documents), each seeing only its own slice
+plus injected memory, each returning a schema-validated `SpecialistOpinion`.
+
+Their opinions then go to **one agentic orchestrator** — a serial tool-calling loop that can read any
+document, filter transactions, run an advisory pattern scan, and write notes, before calling `finalize()`.
+It is bounded (12 steps), citation-checked (it may only cite evidence a tool actually returned), and
+**the ordered tool-call trace becomes the audit record**.
+
+### 4 · Decide and learn
+Confidence gates the outcome. Confident cases auto-dispose by band; unsure ones go to a **real Redis
+review queue**. When a human corrects a score, that correction is stored as a *human-verified* episode
+and distilled into a lesson injected into future prompts — closing the loop.
+
+---
+
+## What you can do with it
+
+| | |
+|---|---|
+| **Dashboard** | Whole book ranked by risk, score distribution, disposition split, detected patterns |
+| **Case detail** | The full investigation: specialist opinions, tool-call trace, cited evidence, injected memory, transactions with anomalies highlighted, and the source documents |
+| **Review queue** | Low-confidence cases with a teach-the-model correction form |
+| **Case comparison** | Two customers side by side — exactly which signals differ, and why one cleared |
+| **SAR drafts** | A filing-ready Suspicious Activity Report narrative generated from the case's own evidence |
+| **Audit trail** | Append-only record of every decision |
+| **Ingest** | Upload documents, or batch-score any subset of 40 sample profiles in parallel |
+
+### The case view — the whole system on one screen
+![Case detail](docs/screenshots/case-detail.png)
+
+### Human-in-the-loop — corrections become training signal
+![Review queue](docs/screenshots/review-queue.png)
+
+### Case comparison — why did one clear and the other escalate?
+![Case comparison](docs/screenshots/case-comparison.png)
+
+### SAR draft — a real analyst deliverable
+![SAR draft](docs/screenshots/sar-draft.png)
+
+---
 
 ## Setup
 
+**One command:**
+
 ```bash
-python -m venv .venv && . .venv/Scripts/activate     # Windows: .venv\Scripts\activate
-pip install -e ".[llm,api,observability,dev]"         # installable package + optional extras
-
-frisk generate            # regenerate the 20 seeded customer folders (deterministic) + self-check
-frisk migrate             # create the relational DB (customers / assessments / lessons / cases)
-pytest                    # 14 tests (mock provider drives the tool loop — no API key needed)
-frisk serve               # backend API + custom frontend -> http://127.0.0.1:8000
-
-# handy:  frisk score --offline   (deterministic mock ranked queue)
-#         frisk samples           (40 manual-upload sample profiles)
-#         frisk reflect           (distil "lessons learned" from human corrections)
+./setup.sh          # installs everything, generates data, runs tests
+./setup.sh --run    # ...and starts the server
 ```
 
-Set `OPENROUTER_API_KEY` in `.env` for the real LLM (default `deepseek/deepseek-v4-flash`, Baidu-preferred
-routing). With no key, everything still runs on the **mock provider**. Optional review-queue broker:
-`docker run -d --name frisk-redis -p 6379:6379 redis:7-alpine` (falls back to in-memory if absent).
+<details>
+<summary><b>Manual setup</b> (if you prefer, or on Windows CMD/PowerShell)</summary>
 
-**Package layout** (`src/frisk/`): `config/` (settings + disposition policy) · `core/` (models, engine) ·
-`ai/` (providers boundary, **specialists**, **tools**, **agent**, **memory**) · `data/` (generate, loaders,
-**store**, **casebank**, **reference**, audit) · `hitl/` (Redis queue, **scratchpad**, feedback, **reflection**) ·
-`pipeline/` · `query/` · `api/`. Frontend in `frontend/`.
+```bash
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 
-## Approach — a fully-LLM agentic scorer
+pip install -e ".[llm,api,dev]"  # or: pip install -r requirements.txt
 
-There is **no deterministic scoring** — the LLM investigates and judges each customer. Per customer:
+python -m frisk.cli generate     # 20 synthetic customers
+python -m frisk.cli samples      # 40 upload samples
+python -m frisk.cli migrate      # create the database
 
-1. **Retrieve layered memory** (`ai/memory.py`) — per-customer history (relational store), similar past
-   cases (episodic case-bank), semantic cheat-sheets, and distilled "lessons".
-2. **Parallel specialists** (`ai/specialists.py`) — three memory-fed single-call analysts (KYC · transactions ·
-   documents) each return a `SpecialistOpinion` (risk level, signals, tentative score). Fast; focused context.
-3. **Agentic orchestrator** (`ai/agent.py`) — one **serial tool-calling ReAct loop** (`parallel_tool_calls=False`,
-   `temperature=0`) that gets the specialists' opinions + the original docs + **tools** (`read_kyc`,
-   `query_transactions`, `aggregate_transactions`, `find_txn_patterns` (advisory candidates), `read_document`,
-   `note`/`read_notes` scratchpad, `finalize`). It investigates, writes to working memory, and emits a
-   `RiskFinding` (score/band/confidence/rationale/**evidence_refs**). Guards are loop hygiene, not scoring:
-   evidence is citation-checked; a bounded loop / exception still routes to a human at confidence 0 (never blank).
-4. **Confidence gate + HITL** (`core/engine.py`) — score decides the band; **confidence < 0.60 → PENDING_REVIEW**
-   → a real **Redis review queue** → the Human Review panel. The reviewer's correct score is stored as a
-   **human-verified episode** and distilled by `frisk reflect` into **lessons** that feed future prompts.
-5. **Audit** — the **ordered tool-call trace** + `key_signals` + `evidence_refs` is the append-only record
-   (`data/audit.py`), plus the injected-memory log for reproducibility.
+pytest                           # 14 tests, no API key needed
+python -m frisk.cli serve        # → http://127.0.0.1:8000
+```
+</details>
 
-### Layered memory (5 tiers, 3 stores)
+**API key (optional).** Put an [OpenRouter](https://openrouter.ai/keys) key in `.env` to score with a
+real LLM:
 
-| Tier | Content | Store |
-|------|---------|-------|
-| Working | the agent's run notes | **Redis** scratchpad (evicted on every exit) |
-| Per-customer | this customer's assessment history | **relational** SQLite `assessments` (→ Postgres) |
-| Episodic | similar past cases + corrections | **case-bank** (feature-match; vector-pluggable) |
-| Semantic | typology defs, higher-risk lists | static **reference** files |
-| Procedural | "lessons learned" | `lessons` table (distilled from corrections) |
+```
+OPENROUTER_API_KEY=sk-or-v1-...
+```
 
-## Tools
+Without a key the app runs on the **deterministic mock provider** — the entire flow works end-to-end,
+just with reproducible mock scores. Default model is `deepseek/deepseek-v4-flash`; NVIDIA, Gemini and
+Anthropic are drop-in alternates in `config/settings.py`.
 
-Python · pydantic v2 · **LangChain** `ChatOpenAI` tool-calling over **OpenRouter** (deepseek-v4-flash) ·
-instructor (structured single calls) · Faker (synthetic data) · SQLite (relational + case-bank) · Redis
-(working memory + review queue) · FastAPI + vanilla-JS frontend + Chart.js · pytest.
+**Redis (optional).** `docker run -d --name frisk-redis -p 6379:6379 redis:7-alpine`.
+Falls back to an in-memory queue if absent.
 
-## Data assumptions
+> ℹ️ The first dashboard load scores all 20 customers **live** (~1–2 min, shown as a progress bar).
+> This happens once; afterwards everything is served from the store.
 
-- **20 seeded synthetic customers** (`data/generate.py`, seed 42, fixed reference date → byte-identical output).
-  No real PII. Each is a folder mixing **structured** (`kyc.json`, `account.json`, `transactions.csv`,
-  `screening.json`) + **unstructured** (`id_document.txt`, `rm_notes.txt`, `correspondence.txt`).
-- **Sanctions and adverse-media were scoped out** — the brief names only "external alerts / external data
-  sources", so `screening.json` keeps just the **PEP** fact; sanctions/adverse-media are noted as a future
-  extension. The LLM identifies risk from KYC, transactions, typology candidates, PEP, and geography.
-- Class balance is **deliberately inverted** vs the real ~0.1% suspicious rate so every band is exercised.
-- **Offline:** the mock provider drives the same agent loop deterministically (no API key), so the full
-  demo — including the human-review routing — runs with zero cost.
+### Commands
 
-## Worked example (input → output)
+```bash
+frisk serve              # backend API + frontend  → http://127.0.0.1:8000
+frisk score --offline    # ranked queue in the terminal (mock provider, no cost)
+frisk generate           # regenerate the 20 synthetic customers
+frisk samples            # regenerate the 40 upload samples
+frisk migrate            # create/upgrade the database
+frisk reflect            # distil lessons from human corrections
+```
 
-**Input — `CUST_018`:** Iranian (`IR`) *arms dealer*; transactions include a **structuring cluster**
-(≥3 cash deposits each just under the £10,000 floor within days).
+---
 
-**Output (live LLM):** the transactions specialist flags the sub-threshold cash cluster; the agent calls
-`read_kyc → query_transactions → find_txn_patterns (structuring, strength 1.0) → read_document(rm_notes) →
-finalize` and returns **score ~83–100 / HIGH → ESCALATE**, citing the exact structuring txn ids as
-`evidence_refs`. The whole tool-call trace is the audit record.
+## Worked example
 
-**Contrast — `CUST_000`:** domestic GB *teacher*, complete KYC, benign salary+card activity →
-**LOW → AUTO_CLEAR**. Same agent, opposite end of the queue.
+**Input** — `CUST_018`: an Iranian arms dealer. Four cash deposits (`$8,881 / $9,840 / $9,248 / $9,507`)
+made within six days, each individually just under the $10,000 reporting threshold.
 
-> Design spec: `docs/superpowers/specs/2026-07-24-fullllm-agentic-memory-design.md` ·
-> Implementation plan: `docs/superpowers/plans/2026-07-24-fullllm-agentic-memory.md`.
+**The agent investigates** — reads the ID document and RM notes, filters the transactions, runs the
+pattern scan, and finalizes:
+
+| | |
+|---|---|
+| **Score** | **83 / 100 → HIGH** |
+| **Disposition** | **ESCALATE** (confidence 0.85) |
+| **Key signals** | high-risk jurisdiction (Iran) · high-risk occupation · confirmed structuring · source of funds poorly evidenced |
+| **Cited evidence** | `CUST_018-S00`, `S01`, `S02`, `S03`, `rm_notes.txt` |
+| **Trace** | 12 tool calls, every one recorded |
+
+**Contrast** — `CUST_000`, a UK teacher with regular salary and domestic card spending:
+**score 5 → LOW → AUTO_CLEAR** at confidence 0.95. Same agent, opposite ends of the queue.
+
+---
+
+## Architecture
+
+```
+src/frisk/
+├── ai/
+│   ├── agent.py          the agentic orchestrator — serial tool-calling loop
+│   ├── specialists.py    3 parallel memory-fed domain analysts
+│   ├── tools.py          the tools the agent can call (facts only, never verdicts)
+│   ├── memory.py         retrieve / assemble / write-back across all 5 tiers
+│   ├── sar.py            Suspicious Activity Report drafting
+│   └── providers/        provider boundary (OpenRouter · NVIDIA · Anthropic · mock)
+├── core/
+│   ├── engine.py         assess(): memory → specialists → agent → gate → persist
+│   └── models.py         Dossier, RiskFinding, SpecialistOpinion, AgentStep…
+├── data/
+│   ├── generate.py       seeded synthetic customer generator
+│   ├── loaders.py        folder / upload / paste → Dossier
+│   ├── store.py          relational store (customers, assessments, lessons)
+│   ├── casebank.py       episodic case-bank
+│   └── reference/        semantic cheat-sheets
+├── hitl/
+│   ├── queue.py          Redis review queue
+│   ├── scratchpad.py     working memory (evicted on every exit path)
+│   ├── feedback.py       human corrections
+│   └── reflection.py     corrections → lessons
+├── api/service.py        FastAPI backend + serves the frontend
+└── frontend/             vanilla JS + Chart.js, no build step
+```
+
+**Engineering invariants**
+- No deterministic scoring — the LLM produces the score
+- The orchestrator is serial (`parallel_tool_calls=False`), specialists parallel, `temperature=0`
+- The engine always returns a valid decision — a bounded loop or exception routes to a human, never blank
+- The scratchpad is evicted on **every** exit path (complete / handoff / exception)
+- Audit = the ordered tool-call trace + cited evidence, append-only
+- Episodic few-shot draws from **human-verified** cases only (avoids learning from its own mistakes)
+- Tools return facts, never verdicts — `find_txn_patterns` yields *candidates* the LLM must judge
+- NL query never `eval`s model text — only a whitelisted filter spec
+
+📐 **[Full architecture diagrams →](docs/ARCHITECTURE_DIAGRAMS.html)** (open in a browser)
+
+---
+
+## Data & assumptions
+
+- **20 seeded synthetic customers**, byte-identical on every regeneration (seed 42). No real PII.
+- Each is a folder mixing **structured** (`kyc.json`, `account.json`, `transactions.csv`, `screening.json`)
+  and **unstructured** (`id_document.txt`, `rm_notes.txt`, `correspondence.txt`) files.
+- **Sanctions and adverse-media screening were deliberately scoped out** — the brief specifies
+  "external alerts / external data sources", so only the **PEP** flag is kept. Re-adding live watchlist
+  feeds is a natural extension.
+- Class balance is **intentionally inverted** versus the real ~0.1% suspicious rate, so every band and
+  every typology is exercised in a 20-customer demo.
+- Four AML typologies are surfaced as **advisory candidates** the LLM must judge, never as automatic
+  triggers: *structuring · layering · round-tripping · dormant-then-spike*.
+
+---
+
+## Testing
+
+```bash
+pytest              # 14 tests, mock provider, no API key or network needed
+```
+
+Covers: generator determinism · the engine always returns a valid decision · low confidence routes to
+human · the scratchpad is evicted on every exit · per-customer history · episodic recall · injected
+memory is logged · audit is append-only · specialists run in parallel · NL-query safety · batch scoring.
+
+---
+
+## Known limits
+
+- **Latency** — ~45–90s per customer live. It is ~11 sequential LLM round-trips at ~3.2s each; that
+  serial depth is the cost of a genuine investigation, not a bug. Batch mode overlaps customers.
+- **Reproducibility** — a fully-LLM score is not byte-identical run to run. Mitigated with
+  `temperature=0` plus a logged trace and injected-memory record, so any decision is reconstructable.
+- **Episodic retrieval** is feature-match, not embeddings. The `similar()` interface is
+  vector-pluggable when the case bank grows.
+
+---
+
+<div align="center">
+<sub>Built as a take-home POC. Synthetic data only — no real customer information.</sub>
+</div>

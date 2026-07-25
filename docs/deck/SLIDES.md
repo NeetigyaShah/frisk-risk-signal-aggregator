@@ -1,112 +1,221 @@
-# Financial Risk Signal Aggregator — 5-Slide Deck
+# Frisk — 5-Slide Summary Deck
 
-AML / financial-crime risk triage. HyperVerge take-home POC. Fully-LLM agentic scorer with layered memory.
-Python · pydantic v2 · LangChain (tool-calling over OpenRouter) · FastAPI · custom JS frontend.
-
----
-
-## Slide 1 — Problem Understanding and Objective
-
-- Compliance analysts triage **fragmented signals** (KYC, account, transactions, external alerts) under
-  heavy false-positive noise, with inconsistent per-analyst scoring.
-- **Objective:** join each customer's fragmented signals into one dossier, **score and prioritise** them,
-  and **explain** every decision — a triage queue an analyst can act on, not a black box.
-- **Design tension:** a false negative is catastrophic, a false positive is expensive, and the reasoning
-  must be **reconstructable** for review.
-- **North star:** a *fully-LLM, agentic* investigator that reads the whole dossier, is **honest about its
-  confidence**, routes what it is unsure about to a **human**, and **learns from the correction**.
-
-> Speaker note: We optimise for a defensible, self-improving investigation — the model does the judging, a human closes the gap, memory makes it better.
+> Dense, technical, agent-workflow focused. Each slide lists **what to show** and **what to say**.
+> Speaker notes are the `>` lines. Build with `python docs/deck/build_pptx.py`.
 
 ---
 
-## Slide 2 — Solution Architecture and Design Flow
+## Slide 1 — Problem & Objective
+
+### The analyst's reality
+A compliance analyst opens one customer and finds **five disconnected artefacts**:
+
+| Source | Format | What it hides |
+|---|---|---|
+| `kyc.json` | structured | identity, occupation, PEP status |
+| `account.json` | structured | tenure, product, jurisdiction |
+| `transactions.csv` | structured | the actual behaviour — hundreds of rows |
+| `rm_notes.txt` | **free text** | the relationship manager's unease |
+| `id_document.txt` / `correspondence.txt` | **free text** | document anomalies, admissions |
+
+They read all of it, judge "is this money laundering?", and repeat — hundreds of times.
+
+### Three failures this creates
+1. **Slow** — minutes per customer, and the queue is unordered, so the riskiest case may be read last.
+2. **Inconsistent** — two analysts score the same file differently; there is no shared calibration.
+3. **Unauditable** — the reasoning lives in someone's head. A regulator asking *"why was this cleared?"*
+   six months later gets a shrug.
+
+### Objective
+> Build an AI that does the **first pass**: reads every source, investigates like an analyst,
+> **ranks the whole book by risk**, and **shows its work** — so the human starts from evidence,
+> not a blank page.
+
+**Design constraint that shaped everything:** a false negative (missed launderer) is catastrophic;
+a false positive is merely expensive. So the system must **know when it is unsure** and escalate,
+rather than guess confidently.
+
+> Speaker note: Lead with the analyst's desk, not the tech. The problem is fragmentation +
+> inconsistency + no audit trail. Everything in the next four slides answers one of those three.
+
+---
+
+## Slide 2 — Architecture & Agent Orchestration
+
+### The pipeline — four stages, one customer at a time
 
 ```
-  data/customers/CUST_xxx/  (structured + unstructured)
-                 │
-                 ▼
-   memory.retrieve  ── per-customer history (relational) · similar cases (episodic)
-                 │        · semantic cheat-sheets · lessons (procedural)
-                 ▼
-   3 PARALLEL specialists  (KYC · transactions · documents)  memory-fed, one call each
-                 │  opinions
-                 ▼
-   AGENTIC ORCHESTRATOR  (serial tool-calling ReAct loop, temperature 0)
-     read_kyc · query/aggregate_transactions · find_txn_patterns (advisory)
-     · read_document · note/read_notes (Redis scratchpad) · finalize
-                 │  RiskFinding (score/band/confidence/evidence)
-                 ▼
-   route_llm  ── confidence < 0.60 ─► Redis review queue ─► Human panel ─► correction
-                 │                                                  │ (human-verified episode + lessons)
-                 ▼                                                  └─────────────► memory (write-back)
-   SQLite store (history) · append-only audit (the TOOL-CALL TRACE) · FastAPI + JS frontend
+ INGEST                RETRIEVE MEMORY           INVESTIGATE                DECIDE + LEARN
+ ──────                ───────────────           ───────────                ──────────────
+ kyc.json      ┐                                ┌ KYC specialist ┐
+ account.json  │       per-customer history     ├ Transactions   ┼─► AGENTIC          confidence ≥ 0.60
+ txns.csv      ┼─► Dossier ─► similar cases ──► └ Documents      ┘   ORCHESTRATOR  ─►  auto-dispose
+ *.txt docs    │       lessons learned            (3 PARALLEL,       (SERIAL tool          │
+ screening.json┘       reference notes             1 call each)       loop, temp 0)   < 0.60 │
+                                                                          │           human queue
+                                                                     finalize()            │
+                                                                          │        correction ─┘
+                                                                    RiskFinding      → memory
 ```
 
-- **Per-customer flow:** retrieve memory → parallel specialists → agentic orchestrator → confidence-gate →
-  persist + evict working memory. **No deterministic scoring, no sanctions rail, no fallback rules.**
-- **5-tier memory across 3 stores:** working (Redis) · per-customer (relational) · episodic (case-bank) ·
-  semantic (reference files) · procedural (lessons).
+### Why two different topologies
+| | Specialists | Orchestrator |
+|---|---|---|
+| **Execution** | 3 **parallel** calls | **serial** loop (`parallel_tool_calls=False`) |
+| **Sees** | only its own domain slice | all 3 opinions + full dossier + tools |
+| **Returns** | `SpecialistOpinion` (schema-validated) | `RiskFinding` via `finalize()` |
+| **Why** | speed + focused context, no cross-contamination | each step's tool result informs the next question |
 
-> Speaker note: Parallel specialists for speed and focus; one agentic orchestrator with tools + full context for depth; memory makes each run smarter than the last.
+**The key design decision:** the orchestrator is serial *because investigation is inherently
+sequential* — you cannot know which document to open until you have seen the transactions.
 
----
+### The layered memory — 5 tiers, 3 stores
+| Tier | Holds | Store | Lifetime |
+|---|---|---|---|
+| **Working** | notes during this investigation | Redis scratchpad | evicted on every exit |
+| **Per-customer** | this customer's score history | SQLite `assessments` | permanent |
+| **Episodic** | similar past cases + corrections | case-bank | permanent |
+| **Semantic** | typology definitions, risk reference lists | static files | static |
+| **Procedural** | lessons distilled from corrections | `lessons` table | grows with use |
 
-## Slide 3 — Implementation Highlights
-
-- **Hybrid topology:** three memory-fed **specialists** run in parallel (fast, focused), then a single
-  **agentic orchestrator** — a serial ReAct loop (`parallel_tool_calls=False`) over LangChain tool-calling —
-  gets their opinions + the original documents + tools and does the deep investigation.
-- **Tools return facts, never verdicts.** `find_txn_patterns` surfaces typology **candidates** with a
-  strength 0-1 (structuring / layering / round-trip / dormant-spike) and evidence txn ids — the LLM decides
-  if a candidate is real. `query_transactions` uses a whitelisted spec (never eval).
-- **Layered memory:** a Redis **scratchpad** as working memory (evicted on every exit); a relational
-  **assessments** table for per-customer history ("what changed"); an episodic **case-bank** (feature-match,
-  vector-pluggable) drawing few-shot only from **human-verified** cases; semantic cheat-sheets; and
-  **lessons** distilled from corrections.
-- **Confidence-gated HITL + teach-the-model loop:** low confidence → Redis review queue → the reviewer's
-  score becomes a human-verified episode and feeds `frisk reflect` → lessons injected into future prompts.
-- **Auditability without arithmetic drivers:** the **ordered tool-call trace** + `evidence_refs` +
-  injected-memory log is the append-only record — reconstructable and tied to evidence.
-- **Reliability as loop hygiene:** citation-check on evidence; a bounded loop / exception routes to a human
-  at confidence 0 — never blank. Offline, a **mock provider drives the same tool loop** deterministically.
-
-> Speaker note: The engineering is the harness around the model — tools, memory, the confidence gate, and the trace-as-audit — not a prompt.
+> Speaker note: The two-topology split is the core architectural claim — parallel where independent,
+> serial where dependent. And the memory table is what makes it a *system* rather than a prompt.
 
 ---
 
-## Slide 4 — Challenges and Learnings
+## Slide 3 — Input → Agent Loop → Output
 
-- **Removing the deterministic safety net:** the earlier design used rules as the source of truth. Going
-  fully-LLM means the model owns the number — so the guardrails move to *investigation hygiene* (mandatory
-  fact-gathering, citation checks, bounded loop → human) rather than a scoring formula.
-- **Echo-chamber risk:** if the system learns from its own outputs, mistakes compound. We draw episodic
-  few-shot **only from human-verified cases**, so the memory calibrates toward expert judgement.
-- **Serial vs parallel:** most models emit parallel tool calls; we force serial (`parallel_tool_calls=False`)
-  and execute only the first call per turn, so the trace is a clean, auditable investigation.
-- **Reproducibility:** a fully-LLM score isn't byte-identical run-to-run. We set `temperature=0` and **log
-  which memory was injected + the full tool trace**, so every decision is explainable after the fact.
-- **Scoping to the brief:** sanctions and adverse-media were **deliberately cut** — the brief names only
-  "external alerts / external data sources"; we kept PEP and note sanctions as a clear future extension.
+### Input: one folder, mixed formats
+```
+data/customers/CUST_018/
+├── kyc.json           {"name":"Mr Hugh Taylor","occupation":"arms dealer","nationality":"IR",...}
+├── account.json       {"country":"IR","pep":false,"tenure_days":1268,...}
+├── transactions.csv   31 rows — date, amount(Decimal), direction, counterparty, country, type
+├── screening.json     {"pep_confirmed": false}
+├── id_document.txt    OCR of the passport
+└── rm_notes.txt       "...vague about source of funds..."
+```
 
-> Speaker note: The interesting problem is making an autonomous investigator safe and auditable without a deterministic backstop.
+### The loop — a real trace from `CUST_018`
+```
+ step  tool                    what it learned
+ ────  ──────────────────────  ─────────────────────────────────────────────────────────
+  1    read_document           id_document.txt — Iranian passport, valid
+  2    read_document           rm_notes.txt — RM flags poorly evidenced source of funds
+  3    query_transactions      31 transactions, £62,174 credits
+  4-9  query_transactions ×6   filtered: cash deposits, by counterparty, by window
+ 10    find_txn_patterns       STRUCTURING candidate, strength 1.0, txn_ids S00–S03
+ 11    note                    "4 sub-threshold deposits in 6 days — deliberate"
+ 12    finalize                score 83, HIGH, ESCALATE, confidence 0.85
+```
+
+### Output: a decision that carries its own evidence
+```json
+{ "score": 83, "band": "HIGH", "action": "ESCALATE", "confidence": 0.85,
+  "key_signals": ["Iran (IR) high-risk jurisdiction",
+                  "arms dealer occupation — proliferation financing risk",
+                  "confirmed structuring: 4 sub-threshold cash deposits totalling $37k in 6 days"],
+  "evidence_refs": ["CUST_018-S00","S01","S02","S03","rm_notes.txt"],
+  "trace": [ ...12 ordered tool calls... ] }
+```
+
+### Guardrails that make the output trustworthy
+- **Citation check** — `evidence_refs` are validated against what tools actually returned; a fabricated
+  reference is rejected and re-prompted.
+- **Bounded loop** — 12 steps max; exceeding it routes to a human rather than looping forever.
+- **Never blank** — any exception still produces a valid decision routed to review.
+- **Tools return facts, never verdicts** — `find_txn_patterns` yields *candidates* with a strength
+  score; the LLM must decide whether the pattern is real and justify it.
+
+> Speaker note: Walk the trace line by line — this is the "show your work" claim made concrete.
+> Point out step 10: the tool only *suggests* structuring; the agent had to accept it and cite it.
 
 ---
 
-## Slide 5 — Demo Summary and Next Steps
+## Slide 4 — Human-in-the-Loop: the flywheel
 
-- **End-to-end demo:** the dashboard ranks 20 customers (gauges, confidence, pattern chips + charts); open a
-  case to see the **parallel specialist opinions**, the **serial tool-call trace** with cited evidence, the
-  **injected memory**, and the **per-customer history**; low-confidence cases land in the **Human Review**
-  queue where a correction **teaches** the system; the **Audit** tab is the append-only trace. Ingest lets you
-  **batch-score** any subset of samples in parallel.
-- **Worked contrast:** `CUST_018` (Iranian arms dealer) → the agent runs `read_kyc → query_transactions →
-  find_txn_patterns (structuring, strength 1.0) → read_document → finalize` → **HIGH / ESCALATE** citing the
-  structuring txn ids; `CUST_000` (domestic teacher) → **LOW / AUTO_CLEAR**. Same agent, both ends of the queue.
-- **Next steps, given more time:**
-  - **Vector-embedding** episodic recall (drop-in behind the case-bank's `similar()`), + per-customer change alerts.
-  - Re-add **external-alert feeds** (sanctions / adverse-media / World-Check) as tools the agent queries.
-  - **Confidence calibration** against labelled outcomes; richer reviewer analytics.
-  - **Case management** — assignment, SLAs, escalation workflow, and a fuller reflection cadence.
+### The gate
+```
+        RiskFinding + confidence
+                  │
+      ┌───────────┴───────────┐
+ conf ≥ 0.60              conf < 0.60
+      │                        │
+ auto-dispose            PENDING_REVIEW
+ by band                        │
+ (clear/review/escalate)   Redis queue
+                                │
+                        human sets correct score
+                                │
+              ┌─────────────────┼─────────────────┐
+      human-verified       feedback.jsonl    frisk reflect
+        episode                                    │
+              │                                 lessons
+              └──────────► MEMORY ◄─────────────────┘
+                              │
+                    injected into future prompts
+```
 
-> Speaker note: The POC proves the agentic loop + layered memory end-to-end; production is vector memory, live feeds, and tuned confidence.
+### Why confidence-gating rather than a fixed threshold on score
+A score of 58 is not automatically uncertain — the agent may be *very* confident it is a 58.
+What matters is whether **the evidence supports the conclusion**. Confidence is the agent's own
+honest self-report, and the prompt explicitly tells it that low-confidence cases go to a human —
+so admitting uncertainty is the rewarded behaviour, not a failure.
+
+### What the reviewer sees (nothing is hidden)
+- the three specialist opinions **and where they disagreed**
+- the full ordered tool-call trace
+- the agent's scratchpad notes from during the investigation
+- which memories were injected into the prompt
+
+### The flywheel — three distinct learning paths
+| Correction becomes | Effect |
+|---|---|
+| a **human-verified episode** in the case bank | future similar customers retrieve it as few-shot |
+| a **lesson** via `frisk reflect` | injected into every future orchestrator prompt |
+| a row in that customer's **history** | next assessment sees "what changed since last time" |
+
+**Anti-echo-chamber guard:** episodic few-shot draws **only from human-verified cases** — the system
+never learns from its own unreviewed output, so mistakes cannot compound into false precedent.
+
+> Speaker note: This is the slide that answers "so it improves?". Emphasise the three paths — most
+> systems have one (few-shot). And the anti-echo-chamber rule is the detail that shows rigour.
+
+---
+
+## Slide 5 — Results, Trade-offs & Next Steps
+
+### It works end-to-end
+| Metric | Result |
+|---|---|
+| Customers scored | **22** (20 seeded + uploads) |
+| Disposition split | 6 auto-cleared · 12 review · 3 escalate · 1 human queue |
+| Analyst load saved | **27%** auto-cleared with zero human time |
+| Per customer | ~11 tool calls, 45–90s live |
+| Tests | **14 passing**, no API key required (mock provider) |
+
+**Worked contrast — same agent, opposite ends:**
+`CUST_018` (arms dealer, Iran, structuring) → **83 / HIGH / ESCALATE** @ 0.85 ·
+`CUST_000` (UK teacher, salary + card spend) → **5 / LOW / AUTO_CLEAR** @ 0.95
+
+### Engineering decisions worth defending
+- **No deterministic scoring** — the LLM judges; code supplies tools, memory, guardrails.
+- **Sanctions/adverse-media deliberately scoped out** — the brief said "external alerts"; only PEP kept.
+- **Money is `Decimal`**, seeded generation is byte-identical, the audit log is append-only.
+- **The scratchpad is evicted on every exit path** — no working-memory leaks between runs.
+
+### Honest limits
+- **Latency** ~45–90s/customer — that is ~11 sequential LLM round-trips; serial depth is the cost of
+  a real investigation. Batch mode overlaps customers to hide it.
+- **Not byte-reproducible** — mitigated with `temperature=0` plus a logged trace and injected-memory
+  record, so any decision is reconstructable after the fact.
+- **Episodic retrieval is feature-match**, not embeddings — the `similar()` interface is vector-pluggable.
+
+### Next steps
+1. **Vector episodic memory** — swap feature-match for embeddings as the case bank grows.
+2. **Live watchlist feeds** — re-add sanctions/adverse-media as agent *tools* it can query.
+3. **Confidence calibration** — measure agreement against human corrections; auto-tune the threshold.
+4. **Case management** — assignment, SLAs, escalation workflow, reviewer analytics.
+
+> Speaker note: Close on the trade-offs, not the wins — showing you know where it is weak is more
+> convincing than claiming it is finished. The next steps should each map to a limit named above.
