@@ -13,6 +13,10 @@
   --sidebar:248px; --radius:14px;
 }
 *{ box-sizing:border-box; margin:0; padding:0; }
+/* Paint the background on <html> as well as <body>. <html> was transparent, so any area the
+   body did not cover (short viewport, browser-chrome mismatch, overscroll) showed as bare black
+   instead of the app background. Also guarantee both fill the window. */
+html{ background:#0b0b0c; min-height:100%; }
 html,body{ max-width:100%; }  /* no overflow-x band-aid: real overflow must be visible/fixable */
 body{
   background:var(--bg);
@@ -27,7 +31,7 @@ input,textarea,select{ font:inherit; color:inherit; }
 .hidden{ display:none !important; }
 
 /* ───────── shell ───────── */
-.shell{ display:grid; grid-template-columns:var(--sidebar) minmax(0,1fr); min-height:100vh; transition:grid-template-columns .28s cubic-bezier(.22,1,.36,1); }
+.shell{ display:grid; grid-template-columns:var(--sidebar) minmax(0,1fr); min-height:100vh; width:100%; transition:grid-template-columns .28s cubic-bezier(.22,1,.36,1); }
 body.rail .shell{ grid-template-columns:66px minmax(0,1fr); }
 .main{ min-width:0; display:flex; flex-direction:column; }
 
