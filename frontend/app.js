@@ -371,7 +371,7 @@ async function renderReview(gen = _navGen){
     <div class="grid" style="gap:12px">
       ${pend.map((c,i) => `
         <div class="card card-pad fade">
-          <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
             ${gauge(c.llm_score ?? 0, 'MED')}
             <div style="flex:1;min-width:0">
               <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -380,7 +380,7 @@ async function renderReview(gen = _navGen){
               <p style="color:var(--muted);font-size:13px;margin-top:7px;
                  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(c.reason||'')}</p>
             </div>
-            <button class="btn btn-primary" onclick="openReview(${i})" style="flex:0 0 auto">Review →</button>
+            <button class="btn btn-primary" onclick="openReview(${i})" style="flex:0 0 auto;margin-left:auto">Review →</button>
           </div>
           <div class="grid grid-3" style="margin-top:14px">
             ${(c.opinions||[]).map(o => `<div class="card card-pad" style="background:var(--panel2)">
