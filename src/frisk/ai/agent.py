@@ -91,7 +91,8 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
     # toolset is the only thing that actually works: telling the model "do not re-request these" in the
     # prompt was measured to be ignored — it still spent 15 steps re-fetching pre-loaded facts. If the
     # tool isn't offered, it can't be called, so the agent must reason from the briefing instead.
-    _PRELOADED = {"read_kyc", "list_documents", "aggregate_transactions", "find_txn_patterns"}
+    _PRELOADED = {"read_kyc", "list_documents", "aggregate_transactions", "find_txn_patterns",
+                  "read_document"}   # every document is quoted in full in the briefing
     llm = base.bind_tools([t for t in tool_objs if getattr(t, "name", "") not in _PRELOADED],
                           parallel_tool_calls=False)
     finalize_only = [t for t in tool_objs if getattr(t, "name", "") == "finalize"]
@@ -118,16 +119,23 @@ def score(d, mem: dict, opinions: list) -> tuple[RiskFinding, dict]:
         _collect_seen(txns, seen)                      # txn ids from rows
         _collect_seen({"documents": docs}, seen)       # document names
         _collect_seen({"candidates": pats}, seen)      # txn ids cited by pattern candidates
+        # The free-text files are the whole reason this is an LLM and not a rules engine, and they are
+        # small (a few hundred bytes each). Reading them one at a time cost a ~3.6s round-trip apiece
+        # and on a 3-document customer that alone exhausted the step budget before any analysis ->
+        # PENDING_REVIEW at confidence 0. Hand the text over instead of the filenames.
+        doc_text = "\n".join(
+            f"--- {x['name']} ---\n{(dispatch['read_document'](x['name']).get('text') or '')[:2500]}"
+            for x in docs)
         briefing = (
             f"\n\nPRE-LOADED FACTS (already fetched for you — do not re-request these):\n"
             f"KYC/profile: {json.dumps(kyc, default=str)}\n"
-            f"Documents on file: {json.dumps([x['name'] for x in docs])}\n"
+            f"Documents on file, in full:\n{doc_text}\n"
             f"Transaction totals by type: {json.dumps(agg.get('buckets', {}), default=str)}\n"
             f"Advisory pattern candidates: {json.dumps(pats, default=str)[:1500]}\n"
             f"Transactions ({txns.get('count')} total, first {len(txns.get('rows', []))} shown): "
             f"{json.dumps(txns.get('rows', []), default=str)[:6000]}\n"
-            f"The remaining tools are read_document (open a specific file), query_transactions "
-            f"(filter/drill into a subset), note/read_notes, and finalize. Everything above is already "
+            f"The remaining tools are query_transactions (filter/drill into a subset), note/read_notes, "
+            f"and finalize. Every document is quoted in full above and every core fact is already "
             f"known — go straight to the follow-up you actually need, then call finalize.")
     except Exception:
         briefing = ""   # any failure just means the agent fetches these itself, as before

@@ -471,6 +471,7 @@ async function renderIngest(gen = _navGen){
     <div id="batchArea" style="margin-top:16px"></div>
     <div id="ingestResult" style="margin-top:16px"></div>`;
   restoreBatch();
+  restoreIngest();
 }
 const _selected = () => [...document.querySelectorAll('.smp:checked')].map(c => c.value);
 const updateSel = () => { if ($('selCount')) $('selCount').textContent = _selected().length; };
@@ -479,6 +480,15 @@ const toggleAll = on => { document.querySelectorAll('.smp').forEach(c => c.check
 const JOB = { get id(){ return sessionStorage.getItem('frisk_job') || ''; },
               set id(v){ v ? sessionStorage.setItem('frisk_job', v) : sessionStorage.removeItem('frisk_job'); } };
 function restoreBatch(){ if (JOB.id){ $('batchArea').innerHTML = batchShell(window._bTotal||0, window._bWorkers||6); pollBatch(JOB.id); } }
+
+/* Same deal for a single upload: the score runs server-side and the job is kept for the life of the
+   process, so navigating away never cancels it — but the panel is rebuilt empty on return. Remember
+   the job id so re-entering the page reattaches to whatever is running, or shows the finished result. */
+const UJOB = { get id(){ return sessionStorage.getItem('frisk_ujob') || ''; },
+               set id(v){ v ? sessionStorage.setItem('frisk_ujob', v) : sessionStorage.removeItem('frisk_ujob'); },
+               get cid(){ return sessionStorage.getItem('frisk_ucid') || ''; },
+               set cid(v){ v ? sessionStorage.setItem('frisk_ucid', v) : sessionStorage.removeItem('frisk_ucid'); } };
+function restoreIngest(){ if (UJOB.id) pollIngest(UJOB.id, UJOB.cid); }
 
 const batchShell = (total, workers) => `<div class="card card-pad">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px">
@@ -540,39 +550,51 @@ async function ingestFiles(){
   $('ingestResult').innerHTML = `<div class="card card-pad"><p style="color:var(--muted);font-size:13px">Uploading…</p></div>`;
   const job = await api('/api/ingest/files/async', {method:'POST', body:fd});
   if (job.error){ $('ingestResult').innerHTML = `<div class="card card-pad"><p style="color:var(--high)">${esc(job.error)}</p></div>`; return; }
+  UJOB.id = job.job_id; UJOB.cid = job.customer_id;
   pollIngest(job.job_id, job.customer_id);
 }
 
 async function pollIngest(jobId, cid){
   const j = await api(`/api/ingest/job/${jobId}`);
+  // the panel only exists while the Ingest page is mounted; keep polling either way so the result is
+  // ready the moment the user comes back, and so a finished job is never lost.
+  const paint = html => { const el = $('ingestResult'); if (el) el.innerHTML = html; };
+
+  const badge = t => { const b = $('ingbadge'); if (b) b.textContent = t; };
+
+  if (j.error === 'not found'){ UJOB.id = UJOB.cid = ''; badge(''); return; }   // server restarted
   if (j.status === 'error'){
-    $('ingestResult').innerHTML = `<div class="card card-pad"><p style="color:var(--high)">Scoring failed: ${esc(j.error||'unknown')}</p></div>`;
+    UJOB.id = UJOB.cid = ''; badge('');
+    paint(`<div class="card card-pad"><p style="color:var(--high)">Scoring failed: ${esc(j.error||'unknown')}</p></div>`);
     return;
   }
   if (j.status === 'complete'){
     const d = j.result;
-    $('ingestResult').innerHTML = `<div class="card qrow fade" onclick="openCase('${d.id}')">
+    badge('✓');
+    paint(`<div class="card qrow fade" onclick="openCase('${d.id}')">
       ${gauge(d.score, d.band)}
       <div class="qmain"><div class="qhead"><b style="font-size:15px">${esc(d.name)}</b><span class="chip">${d.id}</span>
         ${actionBadge(d.action)}<span class="chip">conf ${d.confidence.toFixed(2)}</span>
         <span class="chip">scored in ${j.elapsed}s</span></div>
-        <p class="qsum">${esc(d.summary)}</p></div></div>`;
+        <p class="qsum">${esc(d.summary)}</p></div></div>`);
     refreshStats();
-    return;
+    return;   // keep UJOB.id so re-entering the page still shows this result
   }
+  badge('⏳');
   const steps = j.steps || [];
   const rows = steps.map((s,i) => `<div style="display:flex;gap:9px;align-items:baseline;padding:4px 0">
       <span style="color:var(--faint);font-size:11px;min-width:18px">${i+1}</span>
       <b style="font-size:12.5px">${esc(TOOL_LABEL[s.tool] || s.tool)}</b>
       <span style="color:var(--muted);font-size:11.5px">${esc(String(s.detail).slice(0,70))}</span>
     </div>`).join('');
-  $('ingestResult').innerHTML = `<div class="card card-pad">
+  paint(`<div class="card card-pad">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
       <b style="font-size:14.5px">⏳ ${esc(STAGE_LABEL[j.stage] || 'Investigating')}…</b>
       <span class="chip">${j.elapsed}s · typically 50–90s</span></div>
     <p style="color:var(--faint);font-size:11.5px;margin:6px 0 10px">
-      ${esc(cid)} · three specialists run at once, then the lead investigator works one step at a time.</p>
-    ${rows || '<p style="color:var(--muted);font-size:12px">Starting…</p>'}</div>`;
+      ${esc(cid)} · three specialists run at once, then the lead investigator works one step at a time.
+      Keeps running if you switch pages.</p>
+    ${rows || '<p style="color:var(--muted);font-size:12px">Starting…</p>'}</div>`);
   clearTimeout(window._iT);
   window._iT = setTimeout(() => pollIngest(jobId, cid), 1200);
 }
@@ -782,3 +804,6 @@ document.addEventListener('keydown', e => {
 });
 
 go('dashboard');
+// An upload score outlives the page it was started from — resume polling at boot, not on page
+// mount, so leaving Ingest (or reloading) never abandons a run in progress.
+restoreIngest();
