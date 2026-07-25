@@ -127,33 +127,49 @@ Every customer goes through the same four steps. There is **no scoring formula a
 no weights, no point tables, no thresholds that add up to a number. The AI makes the judgement; the code
 gives it the right tools, the right memory, and a set of rules it cannot break.
 
-```
-   ┌────────────────────────────────────────────────────────────────────────────┐
-   │  1. GATHER THE FILE                                                        │
-   │     kyc.txt · account.txt · transactions.txt                               │
-   │     id_document.txt · rm_notes.txt · correspondence.txt   → one case folder │
-   └────────────────────────────────────────────────────────────────────────────┘
-                                      │
-   ┌────────────────────────────────────────────────────────────────────────────┐
-   │  2. REMEMBER               (what do we already know?)                      │
-   │     this customer before · similar people · past lessons · the rulebook     │
-   └────────────────────────────────────────────────────────────────────────────┘
-                                      │
-   ┌────────────────────────────────────────────────────────────────────────────┐
-   │  3. INVESTIGATE                                                            │
-   │                                                                            │
-   │     ┌── background ──┐                                                     │
-   │     ├── the money  ──┼──►  THE LEAD INVESTIGATOR                           │
-   │     └── the papers ──┘     works one step at a time, never guesses ahead   │
-   │        (all three at once)  reads documents · slices the payments          │
-   │                             runs the pattern scan · then decides           │
-   └────────────────────────────────────────────────────────────────────────────┘
-                                      │
-   ┌────────────────────────────────────────────────────────────────────────────┐
-   │  4. DECIDE + LEARN                                                         │
-   │     at least 60% sure → it decides (clear / review / send up)               │
-   │     less than that    → a person decides, and their answer is remembered    │
-   └────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+%%{init: {"theme":"base","themeVariables":{
+  "clusterBkg":"transparent","clusterBorder":"#52525b","titleColor":"#a1a1aa",
+  "lineColor":"#8b8b94","edgeLabelBackground":"transparent","fontSize":"14px"}}}%%
+flowchart TD
+    FORM["<b>form-like</b><br>kyc.txt · account.txt · transactions.txt"]
+    PROSE["<b>plain English</b> — what conventional software cannot read<br>id_document.txt · rm_notes.txt · correspondence.txt"]
+    CASE(["<b>1 · GATHER THE FILE</b><br>one case folder, nothing left unread"])
+    FORM --> CASE
+    PROSE --> CASE
+
+    CASE --> MEMORY["<b>2 · REMEMBER</b> — what do we already know?<br>this customer before · similar past cases · lessons learned · the rulebook"]
+
+    MEMORY --> SP1 & SP2 & SP3
+
+    SP1["background"]
+    SP2["the money"]
+    SP3["the papers"]
+    SP1 & SP2 & SP3 --> LEAD
+
+    LEAD["<b>3 · THE LEAD INVESTIGATOR</b> — one step at a time<br>reads documents · slices the payments · scans for patterns · writes notes · then decides"]
+
+    LEAD --> GATE{"<b>4</b> · how sure<br>is it?"}
+    GATE -->|"60% or more"| AUTO["<b>it decides</b><br>clear · review · send up"]
+    GATE -->|"under 60%"| HUMAN["<b>a person decides</b><br>and sees everything the AI saw"]
+    HUMAN --> LEARN(["their answer is remembered"])
+    LEARN -.->|"teaches it, three ways"| MEMORY
+
+    classDef ingest fill:#0c4a6e,stroke:#38bdf8,stroke-width:1.5px,color:#f0f9ff
+    classDef mem fill:#115e59,stroke:#2dd4bf,stroke-width:1.5px,color:#f0fdfa
+    classDef spec fill:#4c1d95,stroke:#a78bfa,stroke-width:1.5px,color:#f5f3ff
+    classDef lead fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#eef2ff
+    classDef good fill:#14532d,stroke:#4ade80,stroke-width:1.5px,color:#f0fdf4
+    classDef warn fill:#7c2d12,stroke:#fb923c,stroke-width:1.5px,color:#fff7ed
+    classDef ask fill:#3f3f46,stroke:#e4e4e7,stroke-width:2px,color:#fafafa
+
+    class FORM,PROSE,CASE ingest
+    class MEMORY,LEARN mem
+    class SP1,SP2,SP3 spec
+    class LEAD lead
+    class AUTO good
+    class HUMAN warn
+    class GATE ask
 ```
 
 ### 1 · Gather the file
@@ -360,10 +376,59 @@ src/frisk/
 └── frontend/             plain JavaScript, no build step
 ```
 
-**What happens on one request.** `POST /api/score/{id}` → gather the file → fetch memory → open a
-scratchpad → run the three specialists at once → hand their views to the lead investigator → check how
-sure it is → save the decision and write the audit record → wipe the scratchpad (in a `finally`, so it
-happens even on a crash).
+### What happens on one request
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{
+  "primaryColor":"#1e293b","primaryTextColor":"#f8fafc","primaryBorderColor":"#64748b",
+  "actorBkg":"#1e293b","actorTextColor":"#f8fafc","actorBorder":"#94a3b8",
+  "signalColor":"#cbd5e1","signalTextColor":"#e2e8f0",
+  "labelBoxBkgColor":"#334155","labelTextColor":"#f8fafc",
+  "loopTextColor":"#e2e8f0","noteBkgColor":"#334155","noteTextColor":"#f8fafc",
+  "sequenceNumberColor":"#0f172a","activationBkgColor":"#475569","fontSize":"14px"}}}%%
+sequenceDiagram
+    autonumber
+    participant U as Browser
+    participant API as service.py
+    participant E as engine.py
+    participant M as memory.py
+    participant SP as specialists.py
+    participant A as agent.py
+    participant T as tools.py
+    participant DB as store + audit
+
+    U->>API: POST /api/score/{id}
+    API->>E: assess(customer)
+    E->>M: what do we already know?
+    M-->>E: history · similar cases · lessons · rulebook
+    E->>E: open scratchpad (working memory)
+
+    par all three at once
+        E->>SP: background specialist
+    and
+        E->>SP: money specialist
+    and
+        E->>SP: papers specialist
+    end
+    SP-->>E: three opinions
+
+    E->>A: opinions + full case folder
+    loop up to 12 steps, one at a time
+        A->>T: read a document / slice the payments / scan for patterns
+        T-->>A: facts only — never a verdict
+        A->>A: jot a note to the scratchpad
+    end
+    A-->>E: decision + how sure + the evidence it points at
+
+    alt 60% sure or more
+        E->>DB: save decision, write audit record
+    else under 60%
+        E->>DB: save + put in the review queue for a person
+    end
+    E->>E: wipe the scratchpad (in a finally — happens even on a crash)
+    E-->>API: decision
+    API-->>U: score, reasoning, and every step it took
+```
 
 The interface is plain JavaScript with no build step, so getting it running is `git clone` →
 `./setup.sh` → open a browser.
