@@ -564,8 +564,10 @@ async function pollIngest(jobId, cid){
 
   if (j.error === 'not found'){ UJOB.id = UJOB.cid = ''; badge(''); return; }   // server restarted
   if (j.status === 'error'){
-    UJOB.id = UJOB.cid = ''; badge('');
-    paint(`<div class="card card-pad"><p style="color:var(--high)">Scoring failed: ${esc(j.error||'unknown')}</p></div>`);
+    UJOB.id = UJOB.cid = ''; badge('!');
+    paint(`<div class="card card-pad" style="border-color:var(--high)">
+      <b style="font-size:14.5px;color:var(--high)">⚠ Could not score this customer</b>
+      <p style="color:var(--muted);font-size:12.5px;margin:7px 0 0">${esc(j.error||'unknown error')}</p></div>`);
     return;
   }
   if (j.status === 'complete'){
@@ -590,11 +592,13 @@ async function pollIngest(jobId, cid){
   paint(`<div class="card card-pad">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
       <b style="font-size:14.5px">⏳ ${esc(STAGE_LABEL[j.stage] || 'Investigating')}…</b>
-      <span class="chip">${j.elapsed}s · typically 50–90s</span></div>
+      <span class="chip"${j.elapsed > 120 ? ' style="color:var(--med)"' : ''}>${j.elapsed}s · typically 50–90s</span></div>
     <p style="color:var(--faint);font-size:11.5px;margin:6px 0 10px">
       ${esc(cid)} · three specialists run at once, then the lead investigator works one step at a time.
       Keeps running if you switch pages.</p>
-    ${rows || '<p style="color:var(--muted);font-size:12px">Starting…</p>'}</div>`);
+    ${rows || '<p style="color:var(--muted);font-size:12px">Starting…</p>'}
+    ${j.elapsed > 120 ? `<p style="color:var(--med);font-size:11.5px;margin-top:10px">
+      Taking longer than usual — the AI provider may be slow or out of credit.</p>` : ''}</div>`);
   clearTimeout(window._iT);
   window._iT = setTimeout(() => pollIngest(jobId, cid), 1200);
 }

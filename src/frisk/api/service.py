@@ -243,10 +243,39 @@ async def ingest_files(files: list[UploadFile] = File(...)):
 # records every tool call to the scratchpad, so progress is read from there rather than plumbing a
 # second event channel through the engine.
 
+def _provider_fault() -> str:
+    """One cheap call to check the provider is actually usable. Returns '' when healthy.
+
+    The engine deliberately never raises — it always returns a decision — so a dead API key does not
+    surface as an error, it just degrades every LLM call to a retry-and-fail. Measured: an exhausted
+    key turned a 70s score into 224s of what looked, on screen, like a hang. Better to fail in two
+    seconds with the real reason than to spin.
+    """
+    try:
+        from frisk.ai.providers import get_provider
+        m = get_provider().chat_model()
+        if m is None:
+            return ""            # mock provider — nothing to check
+        m.invoke("ping")
+        return ""
+    except Exception as e:
+        msg = str(e)
+        if "limit exceeded" in msg.lower() or "402" in msg or "insufficient" in msg.lower():
+            return "AI provider out of credit — top up the key, then try again."
+        if "401" in msg or "403" in msg or "api key" in msg.lower():
+            return "AI provider rejected the API key. Check OPENROUTER_API_KEY in .env."
+        return f"AI provider unavailable: {msg[:160]}"
+
+
 def _run_ingest_job(job_id: str, dossier) -> None:
     cid = dossier.customer_id
     with _JOBS_LOCK:
         _JOBS[job_id]["customer_id"] = cid
+    fault = _provider_fault()
+    if fault:
+        with _JOBS_LOCK:
+            _JOBS[job_id].update(status="error", error=fault)
+        return
     try:
         res = _ingest(dossier)
         with _JOBS_LOCK:
@@ -260,12 +289,21 @@ def _run_ingest_job(job_id: str, dossier) -> None:
 async def ingest_files_async(files: list[UploadFile] = File(...)):
     fmap = {f.filename: (await f.read()).decode("utf-8", "ignore") for f in files}
     dossier = dossier_from_files(fmap)
-    job_id = uuid.uuid4().hex[:12]
+    cid = dossier.customer_id
+
+    # Two scores of the SAME customer at once corrupt each other's progress: the scratchpad is keyed
+    # by customer id, so the second run's start() wipes the first run's step log and the live feed
+    # appears to reset to zero mid-investigation. Rather than let that happen, hand back the run that
+    # is already in flight — uploading the same customer twice is a double-click, not a new request.
     with _JOBS_LOCK:
-        _JOBS[job_id] = {"status": "running", "customer_id": dossier.customer_id,
+        for jid, j in _JOBS.items():
+            if j.get("customer_id") == cid and j.get("status") == "running":
+                return {"job_id": jid, "customer_id": cid, "already_running": True}
+        job_id = uuid.uuid4().hex[:12]
+        _JOBS[job_id] = {"status": "running", "customer_id": cid,
                          "started": time.time(), "result": None}
     threading.Thread(target=_run_ingest_job, args=(job_id, dossier), daemon=True).start()
-    return {"job_id": job_id, "customer_id": dossier.customer_id}
+    return {"job_id": job_id, "customer_id": cid}
 
 
 @app.get("/api/ingest/job/{job_id}")
