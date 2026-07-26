@@ -45,8 +45,12 @@ def _score_one(d):
     try:
         dec = assess(d, persist=True)
         _STATE["decisions"][dec.customer_id] = dec
-    except Exception:
-        pass
+    except Exception as e:
+        # A silent `pass` here is what let a fresh install's misconfigured provider score ZERO of
+        # 20 customers with no trace anywhere — /api/stats just quietly reported total=0. One
+        # customer's genuine failure still shouldn't kill the rest of the warm-up, but it must be
+        # visible in the server log rather than invisible.
+        print(f"! failed to score {d.customer_id}: {e}")
 
 
 def _bootstrap_bg():
