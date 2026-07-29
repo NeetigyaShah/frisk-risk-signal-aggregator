@@ -52,6 +52,8 @@
     <header class="topbar">
       <button onclick="toggleRail()" class="icon-btn">☰</button>
       <div class="crumb"><span>Frisk</span><em>/</em><b id="title">Dashboard</b></div>
+      <!-- ponytail: static badge, not wired to /api/stats — this build is pinned to FRISK_PROVIDER=mock -->
+      <span class="demo-badge" title="Scores come from the deterministic mock provider — the full agent loop, tools and trace still run, just without live LLM calls.">Demo mode — deterministic mock LLM provider</span>
       <p id="subtitle"></p>
       <div class="topstats" id="topstats"></div>
     </header>

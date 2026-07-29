@@ -84,6 +84,9 @@ body.rail .nav-item, body.rail .search-btn{ justify-content:center; padding-left
 .crumb b{ font-weight:700; }
 .topbar p{ color:var(--muted); font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0; }
 .topstats{ display:flex; gap:8px; flex:0 0 auto; }
+.demo-badge{ flex:0 0 auto; font-size:11px; font-weight:600; letter-spacing:.02em; color:var(--muted);
+  border:1px solid var(--line2); border-radius:999px; padding:3px 10px; white-space:nowrap; cursor:help; }
+@media(max-width:1200px){ .demo-badge{ display:none; } }
 @media(max-width:1000px){ .topbar p{ display:none; } }
 
 /* ───────── content ─────────
